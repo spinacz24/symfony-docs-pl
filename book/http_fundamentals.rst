@@ -255,7 +255,7 @@ informacje o żądaniu pod ręką::
 Klasa ``Request`` wykonuje dużo pracy w tle, zwalniając programistę z konieczności
 pisania rozwlekłego kodu. Na przykład, metoda ``isSecure()`` sprawdza trzy różne
 wartości w PHP wskazujące na to, czy użytkownik wykorzystuje bezpieczne połączenie
-(np. ``https``).
+(np. HTTPS).
 
 .. sidebar:: atrybuty ParameterBags i Request
 
@@ -287,11 +287,14 @@ interfejsu do tworzenia odpowiedzi, jakie mają być zwracane klientowi::
     $response = new Response();
 
     $response->setContent('<html><body><h1>Hello world!</h1></body></html>');
-    $response->setStatusCode(200);
+    $response->setStatusCode(Response::HTTP_OK);
     $response->headers->set('Content-Type', 'text/html');
 
     // prints the HTTP headers followed by the content
     $response->send();
+    
+.. versionadded:: 2.4
+    W Symfony 2.4 dodano obsługę stałych stanu HTTP.
 
 Gdyby Symfony nie oferował nic ponadto, to miałbyś już narzędzie do łatwego
 uzyskiwania dostępu do informacji żądania i obiektowo zorientowany interfejs do
@@ -302,7 +305,7 @@ możliwości Symfony, to pamiętaj, że celem aplikacji jest zawsze *interpretac
 .. tip::
 
     Klasy ``Request`` i ``Response` są częścią niezależnego komponentu włączonego
-    do Symfony o nazwie ``HttpFoundation``. Jest to komponent niezależny i może
+    do Symfony o nazwie HttpFoundation. Jest to komponent niezależny i może
     być stosowany poza Symfony, dostarczając klas dla obsługi sesji i wysyłania plików.
     
 
@@ -376,6 +379,7 @@ Można to zrobić szybko i brzydko::
     // index.php
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\HttpFoundation\Response;
+    
     $request = Request::createFromGlobals();
     $path = $request->getPathInfo(); // the URI path being requested
 
@@ -384,7 +388,7 @@ Można to zrobić szybko i brzydko::
     } elseif ($path == '/contact') {
         $response = new Response('Contact us');
     } else {
-        $response = new Response('Page not found.', 404);
+        $response = new Response('Page not found.', Response::HTTP_NOT_FOUND);
     }
     $response->send();
 
@@ -442,9 +446,16 @@ W pierwszej kolejności dodaj wpis dla ``/contact`` do pliku konfiguracji trasow
     .. code-block:: xml
        :linenos:
 
-        <route id="contact" path="/contact">
-            <default key="_controller">AcmeBlogBundle:Main:contact</default>
-        </route>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <routes xmlns="http://symfony.com/schema/routing"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
+
+            <route id="contact" path="/contact">
+                <default key="_controller">AcmeDemoBundle:Main:contact</default>
+            </route>
+        </routes>
 
     .. code-block:: php
        :linenos:
@@ -455,23 +466,25 @@ W pierwszej kolejności dodaj wpis dla ``/contact`` do pliku konfiguracji trasow
 
         $collection = new RouteCollection();
         $collection->add('contact', new Route('/contact', array(
-            '_controller' => 'AcmeBlogBundle:Main:contact',
+            '_controller' => 'AcmeDemoBundle:Main:contact',
         )));
 
         return $collection;
 
 .. note::
 
-   W tym przykładzie do określenia konfiguracji trasowania zastosowano format YAML.
-   Konfiguracja trasowania może być również napisana w innych formatach, takich
-   jak XML lub PHP.
+   W tym przykładzie do zdefiniowania konfiguracji trasowania użyto wyrażenia
+   :doc:`YAML </components/yaml/yaml_format>`. Konfiguracja trasowania może być
+   również zapisana w innych formatach, takich jak XML lub PHP.
 
 Kiedy ktoś odwiedza stronę ``/contact``, to dopasowywana jest trasa i wykonywany
-jest określony kontroler. Jak można się dowiedzieć w rozdziale :doc:`routing`,
+jest określony kontroler. Jak można się dowiedzieć w :doc:`rozdziale Trasowanie </book/routing>`,
 łańcuch ``AcmeDemoBundle:Main:contact`` jest skróconą składnią wskazującą metodę
 ``contactAction`` wewnątrz klasy o nazwie ``MainController``::
 
     // src/Acme/DemoBundle/Controller/MainController.php
+    namespace Acme\DemoBundle\Controller;
+    
     use Symfony\Component\HttpFoundation\Response;
 
     class MainController
@@ -485,7 +498,7 @@ jest określony kontroler. Jak można się dowiedzieć w rozdziale :doc:`routing
 
 W tym prostym przykładzie kontroler tworzy obiekt :class:`Symfony\\Component\\HttpFoundation\\Response`
 z kodem HTML ``<h1>Kontakt z nami</h1>``.
-W rozdziale :doc:`controller`, dowiesz się jak kontroler
+W :doc:`rozdziale Kontroler </book/controller>`,`, dowiesz się jak kontroler
 może przetwarzać szablony, umożliwiając by kod „warstwy prezentacji” (czyli cokolwiek,
 co napisane jest w HTML) był zapisany w oddzielnym pliku. Odciąża to kontroler,
 pozostawiając mu trudniejsze zadania: interakcję z bazą danych, obsługę przekazywanych
@@ -513,18 +526,18 @@ frameworka, tylko jakiejś jego części albo całości.
    single: Symfony2; komponenty
 
 
-Standalone Tools: The Symfony2 *Components*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Samodzielne narzędzia: Symfony2 Components
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Więc czym jest Symfony2? Po pierwsze, Symfony2 jest zbiorem ponad dwudziestu
 niezależnych bibliotek, które mogą być wykorzystane w jakimkolwiek projekcie PHP.
-Biblioteki te, o nazwie Symfony2 Components, zawierają pożyteczny kod dla niemal
+Biblioteki te, o nazwie Symfony2 Components, zawierają użyteczny kod dla niemal
 każdego rozwiązania, niezależnie od tego jak projekt jest tworzony. Oto kilka z nich:
 
-* :doc:`HttpFoundation</components/http_foundation/introduction>` -  zawiera klasy
+* :doc:`HttpFoundation </components/http_foundation/introduction>` -  zawiera klasy
    ``Request`` i ``Response``, jak również klasy do obsługi sesji i pobierania plików;
 
-* :doc:`Routing</components/routing/introduction>` - zaawansowany i szybki system
+* :doc:`Trasowanie </components/routing/introduction>` - zaawansowany i szybki system
    trasowania pozwalający odwzorować konkretny adres URI (np. ``/contact``) na
    informację o tym jak żądanie powinno zostać obsłużone (np. poprzez wykonanie
    metody ``contactAction()``);
@@ -532,13 +545,13 @@ każdego rozwiązania, niezależnie od tego jak projekt jest tworzony. Oto kilka
 * `Form`_ - w pełni funkcjonalna biblioteka do tworzenia formularzy i obsługi
    zgłoszeń formularza;
 
-* `Validator`_ system do tworzenia reguł dotyczących danych i sprawdzanie danych
+* `Validator`_ - system do tworzenia reguł dotyczących danych i sprawdzanie danych
    pod kątem spełniania tych reguł;;
 
-* :doc:`ClassLoader</components/class_loader>` biblioteka automatycznego ładowania
+* :doc:`ClassLoader </components/class_loader/introduction>` - biblioteka automatycznego ładowania
    klas PHP, bez konieczności wczytywanie plików klas przez funkcj PHP (``require`` itp.);;
 
-* :doc:`Templating</components/templating>` zestaw narzędzi do przetwarzania szablonów,
+* :doc:`Szablonowanie </components/templating>` - zestaw narzędzi do przetwarzania szablonów,
    obsługi dziedziczenia szablonów (czyli szablon jest kształtowany na bazie układów - *ang. layouts*)
    oraz do wykonywania innych zadań szablonu;
 
@@ -559,7 +572,7 @@ Więc czym jest ten framework Symfony2? Framework Symfony2 jest biblioteką PHP
 realizujący dwa oddzielne zadania:
 
 #. Zapewnienia wybór komponentów (czyli *Symfony2 Components*) i dodatkowych
-   bibliotek (np. `Swiftmailer`_ dla wysyłania wiadomości e-mail);
+   bibliotek (np. `Swift Mailer`_ dla wysyłania wiadomości e-mail);
 
 #. Zapewnienia sensowną konfigurację i "sklejenie" wszystkich bibliotek w całość.
 
@@ -569,7 +582,7 @@ interfejs programistyczny. Nawet sam framework jest pakietem (ang. bundle)
 
 Symfony2 dostarcza potężny zestaw narzędzi do szybkiego tworzenia aplikacji
 internetowych, bez narzucania programiście rozwiązań w zakresie funkcjonalności
-aplikacji. Zwykły użytkownik może szybko rozpocząć programowanie, stosując okreśłoną
+aplikacji. Zwykły użytkownik może szybko rozpocząć programowanie, stosując określoną
 dystrybucje Symfony2, która dostarcza framework z sensownymi domyślnymi ustawieniami.
 Dla bardziej zaawansowanych użytkowników praktycznie nie ma ograniczeń.
 
@@ -584,4 +597,4 @@ Dla bardziej zaawansowanych użytkowników praktycznie nie ma ograniczeń.
 .. _`Validator`: https://github.com/symfony/Validator
 .. _`Security`: https://github.com/symfony/Security
 .. _`Translation`: https://github.com/symfony/Translation
-.. _`Swiftmailer`: http://swiftmailer.org/
+.. _`Swift Mailer`: http://swiftmailer.org/
