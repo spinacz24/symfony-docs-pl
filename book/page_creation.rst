@@ -9,7 +9,7 @@ Tworzenie stron w Symfony2
 
 Procedura tworzenia stron w Symfony2 składa sie z dwóch etapów
 
-  * *Utworzenie trasy*: Trasa (*ang. route*) odpowiada części adresu URL określającej
+  * *Utworzenie trasy*: Trasa (*ang. route*) odpowiada części lokalizatora URL określającej
     ścieżkę dostępu do zasobu (np. ``/about``) i wyznacza też kontroler, który Symfony2
     ma wykonać, gdy ścieżka dostępu przychodzącego żądania HTTP zostanie dopasowany do
     wzorca trasy;

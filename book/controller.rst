@@ -68,7 +68,7 @@ który przechowuje indywidualny kod aplikacji:
 #. Odsyłane są do klienta nagłówki HTTP i zawartość obiektu ``Response`.
 
 Tworzenie strony sprowadza się do utworzenie kontrolera (#3) i wykonania trasy,
-która odwzorowuje adres URL do tego kontrolera (#2).
+która odwzorowuje ścieżkę URL do tego kontrolera (#2).
 
 .. note::
 
@@ -89,7 +89,8 @@ Prosty kontroler
 
 Ogólnie rzecz biorąc, kontrolerem może być dowolne wywołanie kodu PHP (funkcja,
 metoda obiektu czy domknięcie), to jednak w Symfony2 :term:`kontroler` jest zazwyczaj
-pojedynczą metodą w obiekcie kontrolera. Kontrolery są też nazywane *akcjami*.
+pojedynczą metodą w obiekcie kontrolera. W tym znaczeniu kontrolery są też nazywane
+*akcjami*.
 
 .. code-block:: php
     :linenos:
@@ -115,7 +116,7 @@ pojedynczą metodą w obiekcie kontrolera. Kontrolery są też nazywane *akcjami
     kontrolerów (akcji). Zazwyczaj klasa kontrolera przechowuje kilka kontrolerów
     (akcji) (np. ``updateAction``, ``deleteAction`` itd.)
 
-Kontroler jest bardzo prosty, ale przeanalizujmy go:
+Kontroler jest bardzo prosty, przeanalizujmy go:
 
 * *linia 3*: Symfony2 korzysta z funkcjonalności przestrzeni nazw PHP 5.3, aby
   nazwać całą klasę kontrolera. Słowo kluczowe ``use`` importuje klasę ``Response``,
@@ -128,7 +129,7 @@ Kontroler jest bardzo prosty, ale przeanalizujmy go:
 
 * *linia 8*: Każda nazwa akcji w klasie kontrolera posiada przyrostek ``Action``
   i odwołuje się do konfiguracji trasowania poprzez nazwę akcji (``index``).
-  W następnym rozdziale utworzymy trasę, która będzie odwzorowywac adres URL do
+  W następnym rozdziale utworzymy trasę, która będzie odwzorowywać URL do
   akcji. Nauczysz się jak wieloznaczniki (*ang. placeholders*) trasy (``{name}``)
   stają się argumentami metody akcji (``$name``).
 
@@ -137,8 +138,8 @@ Kontroler jest bardzo prosty, ale przeanalizujmy go:
 .. index::
    single: kontroler; trasa
 
-Odwzorowanie adresu URL do kontrolera
--------------------------------------
+Odwzorowanie URL do kontrolera
+------------------------------
 
 Nowy kontroler zwraca prostą stronę HTML. Aby móc zobaczyć tą stronę w przeglądarce,
 trzeba utworzyć trasę (*ang. route*) odwzorowującą wzorzec ścieżki URL do kontrolera:

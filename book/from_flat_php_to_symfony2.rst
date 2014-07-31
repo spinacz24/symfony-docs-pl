@@ -6,9 +6,9 @@ Symfony2 versus zwykły PHP
 
 **Dlaczego Symfony2 jest lepszy niż otworzenie pliku i pisanie zwykłego PHP?**
 
-Jeśli nigdy jeszcze nie używałeś frameworka PHP, nie jesteś zaznajomiony z filozofią
-MVC lub po prostu zastanawiasz się dlaczego tyle rozgłosu jest wokół Symfony2, to
-ten rozdział jest dla Ciebie. Zamiast wmawiać Ci, że Symfony2 pozwala tworzyć
+Jeśli jeszcze nigdy Drogi Czytelnku nie używałeś frameworka PHP i nie jesteś zaznajomiony
+z filozofią MVC lub gdy tylko zastanawiasz się dlaczego tyle rozgłosu jest wokół Symfony2,
+to ten rozdział jest dla Ciebie. Zamiast wmawiać Ci, że Symfony2 pozwala tworzyć
 oprogramowanie szybciej i lepiej niż przez pisanie skryptów w zwykłym PHP, pokażemy
 Ci to na przykładach.
 
@@ -23,7 +23,7 @@ uzyskać kontrolę nad kodem.
 Prosty blog w zwykłym PHP
 -------------------------
 
-W tym rozdziale zbudujemy symboliczną aplikacje bloga używając tylko zwykłego PHP.
+W tym rozdziale zbudujemy przykladową aplikacje bloga używając tylko zwykłego PHP.
 Aby rozpocząć, utworzymy plik, który będzie wyświetlał wpisy bloga, które zostały
 utrwalona w bazie danych. Kod napisany w zwykłym PHP jest szybki, lecz pogmatwany:
 
@@ -424,8 +424,8 @@ działać jak mechanizm Symfony2 do obsługi i trasowania żądań.
 .. tip::
 
    Inną zaletą kontrolera wejściowego jest możliwość stosowania elastycznych
-   adresów URL. Proszę zauważyć, że adres URL do strony wpisu bloga może być
-   zmieniony z ``/show`` na ``/read`` tylko przez zmianę kodu w jednym miejscu.
+   adresów URL. Proszę zauważyć, że ścieżka URL do strony wpisu bloga może być
+   zmieniona z ``/show`` na ``/read`` tylko przez zmianę kodu w jednym miejscu.
    Przedtem musiał by być zmieniony cały plik aby można było zmienić nazwę strony.
    W Symfony2 adresy URL są bardziej elastyczne.
 
@@ -464,7 +464,7 @@ zawartością:
         }
     }
     
-Następnie `pobierz Composer`_ i następnie uruchom następujące polecenie, które
+Następnie `pobierz Composer`_ i uruchom następujące polecenie, które
 załaduje Symfony do katalogu ``vendor/``:
 
 .. code-block:: bash
@@ -722,7 +722,7 @@ od zwykłego PHP do Symfony2, ułatwiła nam życie:
   tylko kilka);
 
 * Dzięki komponentowi ``Routing`` aplikacja posiada teraz **przyjazne, w pełni
-  elastyczne adresy URL**;
+  elastyczne ściezki URL**;
 
 * Architektura Symfony2 ukierunkowana na HTTP daje dostęp do zaawansowanych narzędzi,
   takich jak buforowanie HTTP wspierane przez wewnętrzną pamięć podręczną HTTP

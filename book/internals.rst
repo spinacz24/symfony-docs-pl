@@ -453,8 +453,8 @@ i profiler internetowy są już skonfigurowane w sensowny sposób.
 
     Profiler zbiera informacje o wszystkich żądaniach (prostych żądaniach, przekierowaniach,
     wyjątkach, żądaniach Ajax, żądaniach ESI oraz dla wszystkich metod HTTP i wszystkich
-    formatach). Oznacza to, że dla pojedynczego adresu URL można mieć kilka powiązanych danych
-    (po jednym na każdą zewnętrzną parę żądanie-odpowiedź).
+    formatach). Oznacza to, że dla pojedynczej ścieżki URL można mieć kilka
+    powiązanych danych (po jednej na każdą zewnętrzną parę żądanie-odpowiedź).
 
 .. index::
    single: profiler; wizualizacja

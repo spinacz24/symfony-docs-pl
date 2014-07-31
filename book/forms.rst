@@ -203,8 +203,8 @@ Przykład dla Symfony 2.3:
 .. note::
 
     W tym przykładzie założono, że formularz jest zgłaszany w żądaniu "POST" i na
-    ten sam adres URL, który został w nim wyświetlony. Dowiesz się później, jak
-    można zmienić metodę żądania i docelowy adres URL formularza.
+    ten sam URL, który został w nim wyświetlony. Dowiesz się później, jak
+    można zmienić metodę żądania i docelowy URL formularza.
     
 
 To jest to! Przez wydrukowanie ``form_widget(form)``, zostanie w formularzu

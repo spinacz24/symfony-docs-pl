@@ -718,19 +718,20 @@ nie muszą być obecne w odpowiedzi ``304`` (zobacz
 Różnicowanie odpowiedzi
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Dotąd zakładaliśmy, że każdy adres URI ma dokładnie jedną reprezentację docelowego
-zasobu. Domyślnie buforowanie HTTP jest realizowane z wykorzystaniem   adresu URI
+Dotąd zakładaliśmy, że każdy identyfikator URI ma dokładnie jedną reprezentację docelowego
+zasobu. Domyślnie buforowanie HTTP jest realizowane z wykorzystaniem identyfikatora URI
 jako klucza buforu. Jeśli dwie osoby żądają tego samego adresu URI buforowanego
 zasobu, druga osoba otrzyma wersję buforowaną.
 
-Czasem to nie wystarcza i różne wersje tego samego adresu URI muszą zostać buforowane
-na podstawie jednej lub większej ilości wartości nagłówkowych żądania. Na przykład,
-jeśli kompresuje się strony, gdy klient ją obsługuje, każdy podany adres URI ma dwie
-reprezentacje: jedna dla klienta obsługujacego kompresję i drugą gdy tak nie jest.
-Oznaczenie jest realizowane przez wartość nagłówka żądania ``Accept-Encoding``.
+Czasem to nie wystarcza i różne wersje tego samego identyfikatora URI muszą zostać
+buforowane na podstawie jednej lub większej ilości wartości nagłówkowych żądania.
+Na przykład, jeśli kompresuje się strony, gdy klient ją obsługuje, każdy podany
+identyfikator URI ma dwie reprezentacje: jedna dla klienta obsługujacego kompresję
+i drugą gdy tak nie jest. Oznaczenie jest realizowane przez wartość nagłówka żądania
+``Accept-Encoding``.
 
 W takim przypadku potrzeba bufora do przechowywania zarówno wersji odpowiedzi
-skompresowanej jak i nieskompresowanej dla określonego adresu URI i zwracania
+skompresowanej jak i nieskompresowanej dla określonego identyfikatora URI i zwracania
 ich w oparciu o wartość ``Accept-Encoding``. Jest to realizowane przez użycie
 nagłówka odpowiedzi ``Vary``, który jest listą rozdzielanych przecinkiem różnych
 nagłówków, których wartości wyzwalają określoną dla siebie reprezentację żądanego
@@ -836,9 +837,9 @@ z pamięcią podręczną bramy. W Symfony2 wykorzystany jest tylko jeden znaczni
 
 .. note::
 
-    Proszę zwrócić uwagę, że każdy znacznik ESI ma w pełni kwalifikowany adres URL.
-    Znacznik ESI reprezentuje fragment strony, który można pobrać poprzez dany
-    adres URL.
+    Proszę zwrócić uwagę, że każdy znacznik ESI ma w pełni kwalifikowany lokalizator URL.
+    Znacznik ESI reprezentuje fragment strony, który można pobrać poprzez określony
+    URL.
 
 Podczas obsługi żądania, pamięć podręczna bramy pobiera całą stronę ze swojego bufora
 lub żąda jej z zaplecza aplikacji. Jeśli odpowiedź zawiera jeden lub więcej znaczników
@@ -970,9 +971,9 @@ W ESI pełna strona będzie ważna przez 600 sekund, ale buforowany komponent wi
 tylko przez 60 sekund.
 
 Podczas stosowania odniesienia do kontrolera znacznik ESI powinien odwoływać się do
-osadzonej akcji jak do dostępnego adresu URL, tak więc pamięć podręczna może pobierać
+osadzonej akcji jak do dostępnego URL, tak więc pamięć podręczna może pobierać
 wskazaną treść niezależnie od reszty strony. Symfony2 dba o wygenerowanie unikatowego
-adresu URL dla każdego odniesienia do kontrolera i jest w stanie wyznaczyć każdy taki
+URL dla każdego odniesienia do kontrolera i jest w stanie wyznaczyć każdy taki
 adres właściwie, dzięki nasłuchowi (*ang. listner*), który musi być włączony w konfiguracji:
 
 .. configuration-block::
@@ -1021,8 +1022,8 @@ minimum.
 Helper ``render_esi`` obsługuje dwie użyteczne opcje:
 
 * ``alt``: używaną jako atrybut ``alt`` w znaczniku ESI, który umożliwia określenie
-  alternatywnego adresu URL używanego jeśli nie zostanie znaleziony zasób pod adresem
-  podanym w ``src``;
+  alternatywnego lokalizatora URL używanego jeśli nie zostanie znaleziony zasób pod
+  adresem podanym w ``src``;
 
 * ``ignore_errors``: jeśli ma wartość ``true``, to atrybut ``onerror`` zostanie
   dodany do ESI z wartością ``continue``, wskazującą, że w przypadku awarii pamięć
@@ -1053,7 +1054,7 @@ zasób, to oznacza, że ustawiono zbyt odległą datę wygaśnięcia.
 
 Właściwie wszystkie odwrotne proxy zapewniają sposób opróżnienia danych z pamięci
 podręcznej, ale należy unikać tego jak to tylko możliwe. Najbardziej standardowym
-sposobem oczyszczenia pamięci podręcznej dla określonego adresu URL jest dostarczenie
+sposobem oczyszczenia pamięci podręcznej dla określonego URL jest dostarczenie
 do niej żądania ze specjalną metodą HTTP, ``PURGE``.
 
 Oto jak można skonfigurować odwrotne proxy Symfony2 aby obsługiwało metodę HTTP

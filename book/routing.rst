@@ -118,7 +118,7 @@ Teraz, kiedy odwiedzi się ``/blog/moj-post``, zostanie uruchomiony kontroler
 
 To jest właśnie zadanie mechanizmu trasowania Symfony2: odwzorować ścieżkę URL żądania
 na kontroler. W dalszej części artykułu podanych jest  wiele sztuczek, które sprawiają,
-że odwzorowanie nawet najbardziej skomplikowanych adresó URL staje się łatwe.
+że odwzorowanie nawet najbardziej skomplikowanych adresów URL staje się łatwe.
 
 
 .. index::
@@ -128,8 +128,9 @@ Trasowanie - pod maską
 ----------------------
 
 Kiedy do aplikacji wysłane jest żądanie, zawiera ono dokładny adres do
-"zasobu", który klient żąda. Ten adres nazywany jest ścieżką URL (lub ścieżką URI)
-i może to być ``/kontakt``, ``/blog/informacje`` lub cokolwiek innego. Weźmy za
+"zasobu", który klient żąda. Ten adres nazywany jest lokalizatorem URL
+(lub identyfikatorem URI) i zawiera ścieżkę do zasobu, taką jak ``/kontakt``,
+``/blog/informacje`` lub cokolwiek innego. Weźmy za
 przykład poniższe żądanie HTTP:
 
 .. code-block:: text
@@ -144,7 +145,7 @@ mniej więcej tak:
 
 #. Rdzeń Symfony2 (czyli :term:`Kernel`) odpytuje mechaniz trasowania o treść żądania;
 
-#. Mechanizm trasowania dopasowuje ścieżkę zawarta w przychodzącym adresie URL do
+#. Mechanizm trasowania dopasowuje ścieżkę zawartą w przychodzącym adresie URL do
    konkretnej trasy i zwraca informacje o trasie, łącznie z nazwą kontrolera, który
    powinien zostać uruchomiony;
 
@@ -249,8 +250,8 @@ oraz z tablicy ``defaults`` przechowującej wartości domyślne:
 
         return $collection;
 
-Ta trasa dopasowuje do stronę główną aplikacji (``/``) i odwzorowuje kontroler
-``AcmeDemoBundle:Main:homepage``. Ciąć znakowy ``_controller`` jest zamieniany
+Trasa ta dopasowuje stronę główną aplikacji (``/``) i odwzorowuje kontroler
+``AcmeDemoBundle:Main:homepage``. Ciąg znakowy ``_controller`` jest zamieniany
 na nazwę odpowiedniej funkcji PHP, która następnie zostaje wykonana.
 Ten proces będzie wyjaśniony w sekcji :ref:`controller-string-syntax`.
 

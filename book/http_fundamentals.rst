@@ -73,7 +73,7 @@ W „języku HTTP”, to żądanie HTTP będzie wyglądać następująco:
 
 Ten prosty komunikat przekazuje wszystkie niezbędne informacje dokładnie określające
 żądany przez klienta zasób. Pierwsza linia żądania HTTP jest najważniejsza i zawiera
-dwie rzeczy: adres URI i metodę HTTP.
+dwie rzeczy: identyfikator URI i metodę HTTP.
 
 URI (np. ``/``, ``/contact`` itd.) jest unikalnym adresem lub lokalizacją
 identyfikującą żądany przez klienta zasób. Metoda HTTP (np. ``GET``) określa co
@@ -361,8 +361,8 @@ Na przykład:
     ``/contact`` czy ``/blog``.
     
 Teraz każde żądanie jest obsługowane dokładnie w taki sam sposób. Zamiast
-pojedynczych adresów URL wykonujących różne pliki PHP, jest *zawsze* wykonywany
-kontroler wejścia a trasowanie różnych adresów URL do różnych części aplikacji
+pojedynczych lokalizatorów URL wskazujących różne pliki PHP, jest *zawsze* wykonywany
+kontroler wejścia a trasowanie różnych ścieżek URL do różnych części aplikacji
 wykonywane jest wewnętrznie. Rozwiązuje to obydwa problemy wynikające z pierwotnego
 rozwiązania. Prawie wszystkie współczesne aplikacje internetowe tak robią – włączając
 w to WordPress.
@@ -373,7 +373,7 @@ Bądź zorganizowany
 
 Ale jak wiedzieć, która strona powinna być wygenerowana przez kontroler i jak można
 wykonać generowanie każdej strony w sposób jasny? Tak czy owak, trzeba sprawdzić
-przychodzące adresy URI i wykonać różne części kodu, w zależności od tej wartości.
+przychodzące identyfikatory URI i wykonać różne części kodu, w zależności od tej wartości.
 Można to zrobić szybko i brzydko::
 
     // index.php
@@ -411,7 +411,7 @@ Przychodzące żądania są interpretowane przez trasowanie (ang. routing) i prz
 są do funkcji (metody) kontrolera, który zwraca obiekt Response.
 
 Każda "strona" witryny jest zdefiniowana w pliku konfiguracji trasowania, który 
-odwzorowuje adresy URL na funkcje PHP. Zadaniem każdej takiej funkcji
+odwzorowuje ścieżkę URL na funkcje PHP. Zadaniem każdej takiej funkcji
 PHP, nazywanej :term:`kontrolerem<kontroler>`, jest wykorzystanie informacji z żądania
 (wraz z wielu innymi narzędziami udostępnionymi w Symfony) dla utworzenia i
 zwrócenia obiektu ``Response``. Innymi słowami, kontroler jest tą częścią kodu,
@@ -538,7 +538,7 @@ każdego rozwiązania, niezależnie od tego jak projekt jest tworzony. Oto kilka
    ``Request`` i ``Response``, jak również klasy do obsługi sesji i pobierania plików;
 
 * :doc:`Trasowanie </components/routing/introduction>` - zaawansowany i szybki system
-   trasowania pozwalający odwzorować konkretny adres URI (np. ``/contact``) na
+   trasowania pozwalający odwzorować konkretny identyfikator URI (np. ``/contact``) na
    informację o tym jak żądanie powinno zostać obsłużone (np. poprzez wykonanie
    metody ``contactAction()``);
 
