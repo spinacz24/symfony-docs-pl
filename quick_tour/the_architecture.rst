@@ -5,22 +5,22 @@ Architektura
 ============
 
 Jestem pełen uznania dla Ciebie! Miałem obawy, że nie znajdziesz sie tutaj po
-lekturze trzech pierwszych części przewodnika? Twoje starania zostaną niedługo
+lekturze trzech pierwszych części przewodnika. Twoje starania zostaną niedługo
 nagrodzone. Pierwsze trzy części nie zagłębiały się za głęboko w architekturę frameworka.
 Bo to ona sprawia, że ​​Symfony2 wyróżnia się z tłumu innych frameworków.
 Zanurzmy się więc teraz w architekturę Symfony2.
 
-Zrozumienie Struktury Katalogów
--------------------------------
+Struktura katalogów
+-------------------
 
 Struktura katalogów Symfony2 jest dość elastyczna, ale struktura katalogów
 dystrybucji *Standard Edition* odzwierciedla typową oraz rekomendowaną strukturę
 aplikacji Symfony2:
 
-* ``app/``:    Konfiguracja aplikacji;
-* ``src/``:    Kod PHP projektu;
-* ``vendor/``: Biblioteki zewnętrzne;
-* ``web/``:    Katalog główny serwera.
+* ``app/``:    konfiguracja aplikacji;
+* ``src/``:    kod PHP projektu;
+* ``vendor/``: biblioteki zewnętrzne;
+* ``web/``:    katalog główny serwera.
 
 Katalog ``web/``
 ~~~~~~~~~~~~~~~~
@@ -39,7 +39,7 @@ umiejscowiony jest :term:`kontroler wejścia <kontroler wejścia>`::
     $kernel->loadClassCache();
     $kernel->handle(Request::createFromGlobals())->send();
 
-P pierwszej kolejności jądro oczekuje istnienie pliku ``bootstrap.php.cache``,
+W pierwszej kolejności jądro oczekuje istnienie pliku ``bootstrap.php.cache``,
 który inicjuje framework oraz rejestruje ``autoloader`` (zobacz niżej).
 
 Jak każdy kontroler wejścia, ``app.php`` używa klasy jądra ``AppKernel`` do
@@ -61,7 +61,7 @@ Ta klasa musi implementować dwie metody:
 * ``registerContainerConfiguration()`` wczytuje konfigurację aplikacji
   (więcej na ten temat później).
 
-Autoładowanie jest obsługiwane automatycznie poprzez `Composer`_, co oznacza, że
+Automatyczne ładowanie jest obsługiwane poprzez `Composer`_, co oznacza, że
 można użyć dowolnych  klas PHP nie robiąc nic. Jeśli potrzeba więcej elastyczności,
 to można rozszerzyć autoloader w pliku ``app/autoload.php``. Wszystkie zależności
 są przechowywane w katalogu ``vendor/``, ale jest to tylko konwencja. Można je
@@ -74,18 +74,18 @@ w swoich projektach.
     Symfony ma również komponent autoładowania - czytaj ":doc:`/components/class_loader`".
 
 
-Zrozumienie systemu pakietów
-----------------------------
+Systemu pakietów
+----------------
 
 Rozdział ten wprowadza do jedenej z największych i najpotężniejszych cech Symfony2 -
 systemu :term:`pakietów <pakiet>`.
 
 Pakiet jest czymś w rodzaju wtyczki w innych programach. Więc dlaczego został nazwany
 pakietem (*ang. bundle*) a nie wtyczką (*ang. plugin*)? To dlatego, że wszystko w Symfony2
-należy do jakiegoś pakietu, od funkcji rdzenia frameworka po kod napisany dla Twojej aplikacji.
+należy do jakiegoś pakietu, od funkcji rdzenia frameworka po kod napisany dla aplikacji.
 Pakiety są obywatelem numer jeden w Symfony2. Zapewnia to elastyczność w używaniu
 wbudowanych pakietów funkcyjnych rozpowszechnianych przez osoby trzecie lub w dystrybucji
-Twoich własnych pakietów. Stwarza to możliwość łatwego doboru i wyboru odpowiednich
+własnych pakietów. Stwarza to możliwość łatwego doboru i wyboru odpowiednich
 dla swojej aplikacji funkcjonalności i umożliwia łatwą optymalizację całości.
 Tak na koniec - w Symfony2 Twój kod jest tak samo ważny jak kod frameworka.
 
@@ -322,8 +322,8 @@ Podczas tworzenia aplikacji, dużo rzeczy może pójść źle. Pliki dzienników
 znajdujące się w katalogu ``app/logs/``, informują o wszystkich żądaniach
 i mogą pomóc w naprawieniu napotkanych problemów.
 
-Sosowanie interfejsu linii poleceń
-----------------------------------
+Stosowanie interfejsu linii poleceń
+-----------------------------------
 
 Każda aplikacja posiada narzędzie interfejsu linii poleceń (``app/console``)
 który pomaga w utrzymywaniu aplikacji. Udostęþnia on polecenia które zwiększają
@@ -336,7 +336,7 @@ Uruchom go bez żadnych argumentów aby dowiedzieć się więcej o jego możliwo
 
     php app/console
 
-Opcja ``--help`` pomaga w poznaniu dostęþnych poleceń:
+Opcja ``--help`` pomaga w poznaniu dostępnych poleceń:
 
 .. code-block:: bash
 
@@ -345,14 +345,15 @@ Opcja ``--help`` pomaga w poznaniu dostęþnych poleceń:
 Podsumowanie
 ------------
 
-Nazwij mnie szaleńcem, bo twierdzę, że po przeczytaniu tego przewodnika powinieneś czuć
-się komfortowo w pracy z Symfony2. Wszystko w Symfony2 jest zaprojektowane tak by sprostać Twoim
-oczekiwaniom. Zatem, zmieniaj nazwy, przenoś katalogi zgodnie z swoimi upodobaniami.
+Sądzę, że po przeczytaniu tego przewodnika uważny czytelnik powinieneś czuć
+się komfortowo w pracy z Symfony2. Wszystko w Symfony2 jest zaprojektowane tak by
+sprostać oczekiwaniom programisty. Zatem, zmieniaj nazwy, przenoś katalogi zgodnie
+z swoimi potrzebami.
 
-I to wszystko jeśli chodzi o szybkie wprowadzenie. Musisz się jeszcze dużo nauczyć
-o Symfony2 by stać się mistrzem, od testowania do wysyłania poczty e-mail. Gotowy
-jesteś do dokopania się do tych tematów? Nie musisz specjalnie szukać - przejdź
-do oficjalnej książki i wybierz dowolny temat.
+To wszystko jeśli chodzi o szybkie wprowadzenie w tematyke Symfony 2. Musisz się
+jeszcze dużo nauczyć o Symfony2 by stać się mistrzem, od testowania do wysyłania
+poczty e-mail. Chcesz zapoznać sie z tymi tematami? Nie musisz specjalnie
+szukać - przejdź do oficjalnej książki i wybierz tam dowolny temat.
 
 
 .. _`standardy`:               http://groups.google.com/group/php-standards/web/psr-0-final-proposal

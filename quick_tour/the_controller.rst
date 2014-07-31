@@ -5,10 +5,10 @@ Kontroler
 =========
 
 Wciąż z nami po pierwszych dwóch częściach? Zaczynasz się uzależniać od Symfony2!
-Bez zbędnych ceregieli, zobacz co kontrolery potrafią zrobić dla Ciebie.
+Bez zbędnych ceregieli, zobacz co potrafią zrobić kontrolery.
 
-Formaty Używania
-----------------
+Używanie formatów
+-----------------
 
 Obecnie, aplikacje internetowe powinna dostarczać coś więcej niż tylko
 strony HTML. Od XML dla kanałów RSS lub usług internetowych, do JSON dla żądań Ajax,
@@ -31,8 +31,8 @@ Popraw wydajność definicji tras przez dodanie domyślnej wartości xml dla zmi
         return array('name' => $name);
     }
 
-Dzięki wykorzystaniu formatu zapytania (określonego jako wartość ``_format``),
-Symfony2 automatycznie wybierze odpowiedni szablon, w tym przypadku ``hello.xml.twig``:
+Dzięki użyciu stosowanego formatu żądania (określonego jako wartość ``_format``),
+Symfony2 automatycznie wybiera odpowiedni szablon, w tym przypadku ``hello.xml.twig``:
 
 .. code-block:: xml+php
 
@@ -61,7 +61,7 @@ użyć w ścieżce trasy wieloznacznika {_format}::
         return array('name' => $name);
     }
 
-Kontroler będzie teraz również wywoływany dla ścieżek URL takich jak ``/demo/hello/Fabien.xml``
+Kontroler będzie teraz również wywoływany dla ściezek URL takich jak ``/demo/hello/Fabien.xml``
 lub ``/demo/hello/Fabien.json``.
 
 Wpis ``requirements`` określa wyrażenie regularne, jakie wieloznacznik musi dopasować.
@@ -80,7 +80,7 @@ Metoda ``generateUrl()`` jest identyczna z funkcją ``path()`` którą użyliśm
 Jako argumenty, przyjmuje nazwę trasy oraz tablicę parametrów i zwraca związany
 przyjazny adres URL.
 
-Możesz także w łatwy sposób przekazać akcję do innej akcji używając metodę ``forward()``.
+Można także w łatwy sposób przekazać akcję do innej akcji używając metodę ``forward()``.
 Wewnętrznie Symfony2 wykonuje "pod-żądanie" oraz zwraca z niego obiekt ``Response``::
 
     $response = $this->forward('AcmeDemoBundle:Hello:fancy', array('name' => $name, 'color' => 'green'));
@@ -88,8 +88,8 @@ Wewnętrznie Symfony2 wykonuje "pod-żądanie" oraz zwraca z niego obiekt ``Resp
     // zrób coś z obiektem Response lub też zwróć go bezpośrednio
 
 
-Pobieranie informacji z zapytania
----------------------------------
+Pobieranie informacji z żądania
+-------------------------------
 
 Poza wartościami wieloznaczników tras kontroler ma również dostęp do obiektu
 ``Request``::
@@ -116,7 +116,7 @@ zmienną ``app.request``:
 Utrzymywanie danych w sesji
 ---------------------------
 
-Pomimo że protokół HTTP jest bezstanowy, Symfony2 dostarcza przyjemny obiekt sesji,
+Pomimo że protokół HTTP jest bezstanowy, Symfony2 dostarcza pomocny obiekt sesji,
 który reprezentuje klienta (może to być realna osoba używająca przeglądarki, bot
 lub usługa internetowa). Symfony2 przechowuje w pliku cookie atrybuty sesji pomiędzy
 dwoma żądaniami, wykorzystując natywną sesję PHP.
@@ -195,7 +195,7 @@ która wystarcza dla potrzeb większości powszechnych zastosowań:
                     path:   /demo/secured/logout
                     target: /demo/
 
-Taka konfiguracja wymaga od użytkowników zalogowania się dla dowolnego adresu URL
+Taka konfiguracja wymaga od użytkowników zalogowania się dla dowolnego URL
 zaczynającego się od ``/demo/secured/`` i określa dwóch właściwych użytkowników:
 ``user`` i ``admin``. Ponadto użytkownik ``admin`` ma rolę ``ROLE_ADMIN``, która
 obejmuje też rolę ``ROLE_USER`` (zobacz na ustawienie ``role_hierarchy``).
@@ -225,7 +225,7 @@ Buforowanie zasobów
 Gdy tylko witryna zacznie generować więcej ruchu, zachodzi potrzeba uniknnięcia
 ciągłego generowania tych samych zasobów. Symfony2 używa nagłówków buforowania
 HTTP do zarządzania zasobami pamięci podręcznej. Dla prostych strategi buforowania,
-mozna użyć wygodnej adnotacji ``@Cache()``::
+można użyć wygodnej adnotacji ``@Cache()``::
 
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;

@@ -1,5 +1,5 @@
-Szybkie wprowadzenie
-====================
+Krótki kurs
+===========
 
 .. toctree::
    :maxdepth: 1

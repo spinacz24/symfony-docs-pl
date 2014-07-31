@@ -4,8 +4,8 @@
 Widok (View)
 ============
 
-Po przeczytaniu pierwszej części tego kursu, zdecydowałeś że możesz poświęcić
-kolejne 10 minut dla Symfony2. Wspaniały wybór! W drugiej części, nauczysz się
+Po przeczytaniu pierwszej części tego poradnika, dobrze jest poświęcić
+kolejne 10 minut dla Symfony2. W drugiej części, nauczysz się
 więcej na temat silnika szablonów Symfony2, `Twig`_. Twig jest elastycznym,
 szybkim oraz bezpiecznym systemem szablonów PHP. Sprawia że szablony
 są bardo czytelne oraz zwięzłe. Czyni je także bardziej przyjaznymi dla
@@ -226,10 +226,10 @@ Tworzenie odnośników pomiędzy stronami
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Skoro mowa o aplikacjach internetowych, to tworzenie odnośników pomiędzy stronami
-jest koniecznością. Zamiast umieszczania w szablonach sztywnych adresów URL,
-można zastosować funkcję ``path``, która wie jak wygenerować adres URL na podstawie
-konfiguracji trasowania. W ten sposób wszystkie adresy URL mogą być łatwo aktualizowane
-tylko przez zmianę konfiguracji:
+jest koniecznością. Zamiast umieszczania w szablonach sztywnych lokalizatorów URL,
+można zastosować funkcję ``path``, która wie jak wygenerować URL na podstawie
+konfiguracji trasowania. W ten sposób wszystkie lokalizatory URL mogą być łatwo
+aktualizowane tylko przez zmianę konfiguracji:
 
 .. code-block:: html+jinja
 
@@ -254,7 +254,7 @@ wieloznaczników określonymi w ścieżce trasy::
 
 .. tip::
 
-    Funkcja ``url`` generuje bezwzględny adres URL: ``{{ url('_demo_hello', {
+    Funkcja ``url`` generuje bezwzględny lokalizator URL: ``{{ url('_demo_hello', {
     'name': 'Thomas' }) }}``.
 
 Dołączanie zasobów: obrazów, skryptów JavaScript i arkuszy stylów

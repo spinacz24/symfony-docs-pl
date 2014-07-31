@@ -6,11 +6,12 @@ Obraz ogólny
 
 Zacznij korzystać z Symfony2 w 10 minut! Ten rozdział poprowadzi Cię przez kilka
 z najważniejszych koncepcji Symfony2 i wyjaśni, jak można rozpocząć
-szybko pracę, pokazując prosty przykład projektu w działaniu.
+szybko pracę, pokazując w działaniu prosty przykład projektu.
 
-Jeśli kiedykolwiek używałeś frameworka aplikacji internetowej, to z Symfony2 powinieneś
-czuć się jak w domu.
-Jeśli nie, to zapraszamy do poznania zupełnie nowego sposobu tworzenia aplikacji internetowych.
+Jeśli czytelnik kiedykolwiek używał frameworka aplikacji internetowej, to z Symfony2
+powinien czuć się jak w domu.
+Jeśli nie, to zapraszamy do poznania zupełnie nowego sposobu tworzenia aplikacji
+internetowych.
 
 .. tip::
 
@@ -36,16 +37,16 @@ Apache) wraz z PHP 5.3.3 lub ​​wersją wyższą.
         $ php -S localhost:80 -t /path/to/www
 
     gdzie "/path/to/www" jest ścieżką do jakiegoś katalogu na Twoim komputerze,
-    który będzie wyodrębniał Symfony w taki sposób, że ewentualny adres URL do
-    aplikacji będzie miał postać "http://localhost/Symfony/app_dev.php". Możesz
+    który będzie wyodrębniał Symfony w taki sposób, że ewentualny lokalizator URL
+    do aplikacji będzie miał postać "http://localhost/Symfony/app_dev.php". Możesz
     również najpierw wyodrębnić Symfony a następnie uruchomić serwer internetowy
     w katalogu "web" Symfony. Jeśli to zrobisz, to adres do aplikacji będzie miał
     postać "http://localhost/app_dev.php".
 
 
-Gotowy? Pobierz "`Symfony2 Standard Edition`_", jest to :term:`dystrybucja` Symfony,
-która jest skonfigurowana do najczęstszych zastosowań i zawiera także przykładowy kod
-pokazujący, jak używać Symfony2 (archiwum z *vendors*).
+Pobierz "`Symfony2 Standard Edition`_", jest to :term:`dystrybucja` Symfony,
+która jest skonfigurowana dla najczęstszych zastosowań i zawiera także przykładowy
+kod pokazujący, jak używać Symfony2 (archiwum z *vendors*).
 
 Po rozpakowaniu archiwum, struktura katalogów ``Symfony/`` wygląda następująco:
 
@@ -102,7 +103,7 @@ Po rozpakowaniu archiwum, struktura katalogów ``Symfony/`` wygląda następują
         # uruchomienie serwera wbudowanego
         $ php ./app/console server:run
 
-    Adres URL Twojej aplikacji będzie miał postać "http://localhost:8000/app_dev.php"
+    Lokalizator URL Twojej aplikacji będzie miał postać "http://localhost:8000/app_dev.php"
 
 
 Sprawdzanie konfiguracji
@@ -110,7 +111,7 @@ Sprawdzanie konfiguracji
 
 Symfony2 posiada wizualny tester konfiguracji serwera, który pomaga uniknąć
 problemów, które pochodzą z serwera lub błędu w konfiguracji samego PHP. Wywołaj
-następujący adres URL, aby uruchomić diagnostykę dokonanej instalacji.
+następujący lokalizator URL, aby uruchomić diagnostykę dokonanej instalacji.
 
 .. code-block:: text
 
@@ -118,13 +119,13 @@ następujący adres URL, aby uruchomić diagnostykę dokonanej instalacji.
 
 .. note::
 
-    Wszystkie podane w przykładach adresy URL zakładają, że katalogiem głównym
-    serwera internetowego na Twoim komputerze jest katalog
+    We wszystkich podanych w przykładach ścieżek URL zakłada się, że katalogiem
+    głównym serwera internetowego na Twoim komputerze jest katalog
     `ścieżka/do/instalacji/Symfony/web`. Jeśli postępowałeś
     zgodnie z podaną wyżej instrukcją i rozpakowałeś pliki w katalogu `Symfony`,
-    zlokalizowanym w katalogu głównym serwera internetowego, to w adresie URL,
-    bezpośrednio po `localhost` dodaj `/Symfony/web` we wszystkich adresach URL
-    podawanych tu w przykładach, tak jak to:
+    zlokalizowanym w katalogu głównym serwera internetowego, to w lokalizatorze URL,
+    bezpośrednio po `localhost` dodaj `/Symfony/web` we wszystkich lokalizatorach
+    URL podawanych tu w przykładach, tak jak to:
 
     .. code-block:: text
 
@@ -157,7 +158,8 @@ Zrozumieć podstawy
 ------------------
 
 Jednym z głównych celów frameworka jest dostosowanie się do tzw.
-`zasady seperacji zagadnień (ang. separation of concerns) <http://en.wikipedia.org/wiki/Separation_of_concerns>`_.
+`zasady seperacji zagadnień
+(ang. separation of concerns) <http://en.wikipedia.org/wiki/Separation_of_concerns>`_.
 Dzięki temu kod jest dobrze zorganizowany, unikając mieszania zapytań do bazy danych,
 znaczników HTML i logiki biznesowej w tym samym skrypcie, umożliwiając tym swobodny
 rozwój aplikacji w czasie. Aby osiągnąć ten cel z Symfony, musisz najpierw nauczyć
@@ -168,9 +170,9 @@ się kilku podstawowych koncepcji i terminów.
     Chcesz dowodu na to, że używanie frameworka jest lepsze niż mieszanie wszystkiego
     w tym samym skrypcie? Przeczytaj rozdział z podręcznika ":doc:`/book/from_flat_php_to_symfony2`".
 
-Standardowa dystrybucja wyposażona jest w przykładowy kod, który można użyć, aby dowiedzieć się 
-więcej o głównych koncepcjach Symfony2. Przejdź do następującego adresu URL, zostaniesz powitany
-przez Symfony2 (zamiast *Fabien* wpisz swoje imię):
+Standardowa dystrybucja wyposażona jest w przykładowy kod, który można użyć, aby
+dowiedzieć się więcej o głównych koncepcjach Symfony2. Przejdź do następującego
+URL, zostaniesz powitany przez Symfony2 (zamiast *Fabien* wpisz swoje imię):
 
 .. code-block:: text
 
@@ -192,7 +194,7 @@ Trasowanie
 ~~~~~~~~~~
 
 System trasowania (*ang. routing*), nazywany też polskiej literaturze "systemem przekierowań",
-w Symfony2 obsługuje żądania klienta, dopasowując ścieżkę dostępu (zawartą w adresie URL)
+w Symfony2 obsługuje żądania klienta, dopasowując ścieżkę dostępu (zawartą w URL)
 do skonfigurowanych wzorców tras i przekazaniu sterowania właściwemu kontrolerowi.
 Domyślnie wzorce te są zdefiniowane w pliku ``app/config/routing.yml``. Kiedy jest
 się w :ref:`środowisku<quick-tour-big-picture-environments>` programistycznym
@@ -279,7 +281,7 @@ konfiguracji trasowania: ``AcmeDemoBundle:Welcome:index``. Ten ciąg znaków jes
 Klasa ``WelcomeController`` rozszerza wbudowaną klasę :class:`Controller`,
 która dostarcza użytecznych skrótowych metod, takich jak metoda
 `render() <http://api.symfony.com/2.0/Symfony/Bundle/FrameworkBundle/Controller/Controller.html#render()>`_
-ładująca i renderująca szablon (``AcmeDemoBundle:Welcome:index.html.twig``).
+ładującą i renderującą szablon (``AcmeDemoBundle:Welcome:index.html.twig``).
 Zwracaną wartością jest obiekt ``Response`` wypełniony zrenderowaną zawartością strony.
 Jeżeli wystąpi taka potrzeba, to obiekt ``Response`` może zostać zmodyfikowany przed
 przesłaniem go do przeglądarki::
@@ -305,7 +307,7 @@ lub nawet zwracać zawartość obrazu JPG nagłówka z ``Content-Type image/jpg`
    
 Nazwa szablonu ``AcmeDemoBundle:Welcome:index.html.twig``, to logiczna nazwa
 odwołująca się do pliku ``Resources/views/Welcome/index.html.twig`` wewnątrz
-``AcmeDemoBundle` (umieszczonego w ``src/Acme/DemoBundle``). Niżej zawarty rozdział
+``AcmeDemoBundle` (umieszczonego w ``src/Acme/DemoBundle``). Dalszy rozdział
 o pakietach wyjaśnia, dlaczego jest to takie użyteczne.
 
 Teraz ponownie zajrzyj do konfiguracji tras i znajdź klucz ``_demo``:
@@ -429,7 +431,7 @@ jest zoptymalizowany dla środowiska produkcyjnego:
    
    http://localhost/Symfony/web/app.php/demo/hello/Fabien
 
-Jeśli używa się Apache z włączoną opcją mod_rewrite, to można pominąć w adresie
+Jeśli używa się Apache z włączoną opcją mod_rewrite, to można pominąć w lokalizatorze
 URL część ``app.php``:
 
 .. code-block:: text
@@ -438,7 +440,7 @@ URL część ``app.php``:
    
 Co nie mniej ważne, na serwerach produkcyjnych powinno się wskazać katalog główny
 serwera WWW na katalog web/ w celu zabezpieczenia swojej instalacji i aby mieć lepszy
-adres URL, wyglądający tak:
+lokalizator URL, wyglądający tak:
 
 .. code-block:: text
    
@@ -467,14 +469,14 @@ W rzeczywistości konfigurację można dziedziczyć z innej konfiguracji:
       intercept_redirects: false
 
 W tym przykładzie, środowisko programistyczne (ktore ładuje plik konfiguracyjny
-``config_dev.yml``) importuje globalny plik ``config.yml`` i go modyfikuje, udostępniając
+``config_dev.yml``) importuje globalny plik ``config.yml`` i modyfikuje go, udostępniając
 pasek debugowania.
 
 
 Podsumowanie
 ------------
 
-Gratulacje! Miałaś przedsmak kodowania Symfony2. To nie było tak trudne, prawda?
+Gratulacje! Miałeś Czytelniku przedsmak kodowania Symfony2. To nie było tak trudne, prawda?
 Jest dużo więcej do odkrycia, ale teraz trzeba zobaczyć, jak Symfony2 sprawia,
 że ​​naprawdę łatwo jest wdrożyć strony internetowe. Jeśli chcesz się dowiedzieć
 więcej o Symfony2, zacznij lekturę następnej część przewodnika: ":doc:`the_view`.
