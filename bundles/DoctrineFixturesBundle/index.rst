@@ -39,7 +39,7 @@ Zaktualizuj biblioteki dostawców:
 
     $ php composer.phar update
 
-Jeżeli wszystko działa, to teraz można znaleźć ppliki pakietu ``DoctrineFixturesBundle``
+Jeżeli wszystko działa, to teraz można znaleźć pliki pakietu ``DoctrineFixturesBundle``
 w katalogu ``vendor/doctrine/doctrine-fixtures-bundle``.
 
 .. note::

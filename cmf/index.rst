@@ -7,12 +7,22 @@
 Dokumentacja Symfony CMF
 ************************
 
+.. toctree::
+   :hidden:
+   
+   quick_tour/index
+   book/index
+   components/index
+   cookbook/index
+   reference/index
+
+
 Jest to polska dokumentacja dystrybucji frameworka Symfony o nazwie
 `Symfony Content Management Framework`_. Dystrybucję tą będziemy w skrócie
 nazywać *Symfony CMF*, nie wdając się teraz w dywagacje, co to jest *Content Management
 Framework*. Nadmienię tu tylko, że do tego typu platform programistycznych
-(opartych na PHP) zalicza sie takie systemy jak `Drupal`_, `ez Publish`_  czy
-`MODx`_. Temat ten rozwinięty jest w sekcji :ref:`why-another-cms`.
+(opartych na PHP) zalicza sie takie systemy jak `Drupal`_ czy `ez Publish`_.
+Temat ten rozwinięty jest w sekcji :ref:`why-another-cms`.
 
 Dokumentacja ta w zasadzie jest tłumaczeniem oficjalnej dokumentacji
 `Symfony Content Management Framework`_, publikowanej na stronie
@@ -25,111 +35,57 @@ liderów otwartego oprogramowania upowszechniających koncepcję `rozdzielonego 
 (*ang. decoupled CMS*). Możesz dowiedzieć się więcej o projekcie czytając
 stronę `about`_.
 
-Misja
------
+:doc:`Krótki kurs <quick_tour/index>`
+-------------------------------------
 
-    Projekt Symfony CMF ułatwia programistom dodawać funkcjonalność CMS do aplikacji
-    zbudowanej z frameworka PHP Symfony2. Kluczowe pryncypia tworzenia aplikacji
-    związane ze zbiorem pakietów, to skalowalność, użyteczność, dokumentacja
-    i testowanie.
+Najlepszym sposobem rozpoczęcia pracy z Symfony CMF jest lektura krótkich
+artykułów składajacych sie na :doc:`krótki kurs Symfony CMF <quick_tour/index>`.
+Wprowadzą Cie one w kod, filozofię i architekturę projektu Symfony CMF.
 
-.. _why-another-cms:
+:doc:`Podręcznik <book/index>`
+------------------------------
 
-Dlaczego jeszcze jeden CMS?
----------------------------
-
-Właściwie uważamy, że ten projekt jest **frameworkiem systemu zarządzania treścią**
-(*ang. Content Management Framework - CMF*) a nie **systemem zarządzania treścią**
-(*ang. Content Management System - CMS*). Powodem tego jest fakt, że tylko
-**dostarczamy narzędzia do budowy własnego CMS**. Istnieje wiele rozwiązań CMS już
-gotowych, ale na ogół są to monolityczne pakiety dostosowane do potrzeb końcowych
-użytkowników. Wiele z nich posiada bagaż starszych rozwiązań, co czyni je mniej
-niż **idealnymi do tworzenia wysoko zindywidualizowanych aplikacji**, w przeciwieństwie
-do `Symfony2`_.
-
-Do kogo kierowany jest ten system?
-----------------------------------
-
-Istnieją dwie główne grupy odbiorców:
-
-#. Programiści, którzy mają zbudowane już aplikacje z Symfony2 i potrzebują
-   szybkiego sposobu na dodanie obsługi zarządzania treścią. Czy to będą zaawansowane
-   funkcjonalności CMS, takie jak treść znaczeniowa, edycja wierszowa dokumentu,
-   dostawa wielokanałowa itd., lub tylko kilka stron zawartości dla takich elementów
-   jak strona „O nas” lub „Kontakt”.
-
-#. Programiści, którzy potrzebują zbudować wysoko zindywidualizowane autorskie
-   rozwiązanie dostarczania treści, które nie jest gotową aplikacją CMS przeznaczoną
-   do rozpowszechniania jako gotowy system, ewentualnie możliwy do dostosowania
-   przez użytkownika.
+Jest to biblia Symfony CMF. Jest to podręcznik dla każdego użytkownika CMF,
+który warto zawsze mieć pod ręką.
 
 
-:doc:`/cmf/getting_started/index`
----------------------------------
+:doc:`Pakiety <bundles/index>`
+------------------------------
 
-Właśnie rozpocząłeś naukę o CMF? Chcesz dowiedzieć się czy CMF nadaje się do Twojego
-pierwszego projektu? Rozpocznij tutaj.
+Looking for some in depth information about a CMF Bundle? Want to know if you
+can use a bundle independently and how to do it? In this case the bundles
+section is the right place for you!
 
-.. include:: /cmf/getting_started/maps.rst.inc 
 
-Poradniki
----------
+:doc:`Komponenty <components/index>`
+------------------------------------
 
-Chcesz dowiedzieć się więcej o CMF i o tym jak każda część systemu może zostać
-skonfigurowana? Te poradniki są dla każdego.
+The Symfony CMF believes in a concept where bundles integrate library
+(components) into the framework. The components can be used in any PHP
+project, even when they are not using Symfony.
 
-.. toctree::
-   :maxdepth: 1
 
-   tutorials/choosing_a_storage_layer
-   tutorials/installing_cmf_core
-   tutorials/installing_configuring_doctrine_phpcr_odm
-   tutorials/installing_configuring_inline_editing
-   tutorials/creating_cms_using_cmf_and_sonata
-   tutorials/using_blockbundle_and_contentbundle
-   tutorials/handling_multilang_documents
+:doc:`Informator <reference/index>`
+-----------------------------------
 
-Pakiety
--------
+Ever wondered what configuration options you have available to you in files
+such as ``app/config/config.yml``? In this section, all available
+configuration is broken down per bundle.
 
-Szukasz szczegółowszych informacji o pakietach CMF? Potrzebujesz poznać listę
-wszystkich opcji konfiguracyjnych pakietu? Chcesz wiedzieć, czy można stosować
-pakiet niezależnie i jak to zrobić? W takim przypadku to miejsce jest dla Ciebie.
 
-.. include:: /cmf/bundles/map.rst.inc
-   
-Receptariusz
-------------
+:doc:`Receptariusz <cookbook/index>`
+------------------------------------
 
-Specjalne rozwiązania dla specjalnych potrzeb, które wykraczają poza standardowe
-zastosowania.
+The cookbook consist of articles about advanced concepts of the Symfony CMF.
 
-.. toctree::
-   :maxdepth: 1
-
-   cookbook/phpcr_odm_custom_documentclass_mapper
-   cookbook/using_a_custom_route_repository
-   cookbook/installing_cmf_sandbox
-
-Komponenty
-----------
-
-Szukasz jakiejś informacji o komponentach niskiego poziomu Symfony CMF?
-
-.. toctree::
-   :maxdepth: 1
-
-   components/routing
 
 Współpraca
 ----------
 
-.. toctree::
-   :maxdepth: 1
+Do you want to contribute to the Symfony CMF? Start reading these articles!
 
-   contributing/code
-   contributing/license
-   contributing/docs
+:doc:`Współpraca <contributing/index>`
+
 
 .. _`ez Publish`: http://pl.wikipedia.org/wiki/EZ_publish
 .. _`Drupal`: http://pl.wikipedia.org/wiki/Drupal
