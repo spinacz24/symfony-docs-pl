@@ -184,7 +184,7 @@ jest ``ContentController`` dostarczany przez ten pakiet.
 
 .. tip::
 
-    Aby poznać więcej przykładów, proszę zobaczyć `CMF sandbox`_ i specjalne
+    Aby poznać więcej przykładów, proszę zapoznać się z `piaskownicą CMF`_ i specjalne
     konfiguratory testowe trasowania.
 
 .. tip::
@@ -272,58 +272,59 @@ przykładzie, jeśli istnieje pasujący dokument trasy na ścieżce ``/routes/pr
 sprawdzi czy ``/routes/projects`` ma pasujący wzorzec. Jeśli nie, to w celu dopasowania
 wzorca sprawdzany jest szczytowy dokument na ścieżce ``/routes``.
 
-Oczywiście można mieć wiele parametrów, jak w zwykłych trasach Symfony. Semantyka,
+Oczywiście można stosować wiele parametrów, jak w zwykłych trasach Symfony. Semantyka,
 zasady wzorców, wartości domyślne i wymagania są dokładnie te same jak w rdzennych
 trasach.
 
-Your controller can expect the ``$id`` parameter as well as the ``$contentDocument``
-as you set a content on the route. The content could be used to define an intro
-section that is the same for each project or other shared data. If you don't
-need content, you can just not set it in the route document.
+Kontroler może oczekiwać parametru ``$id`` jak też ``$contentDocument``, w zależności
+od ustawiono treść w trasie. Treść może zostać wykorzystana do określenia sekcji
+wstępu. Jeśli nie potrzebuje się treści, można po prostu nie ustawiać dokumentu trasy.
 
 .. _component-route-generator-and-locales:
 
-.. sidebar:: Locales
+.. sidebar:: Ustawienia regionalne
 
-    You can use the ``_locale`` default value in a Route to create one Route
-    per locale, all referencing the same multilingual content instance. The
-    ``ContentAwareGenerator`` respects the ``_locale`` when generating routes
-    from content instances. When resolving the route, the ``_locale`` gets
-    into the request and is picked up by the Symfony2 locale system.
+    W Route można wykorzystać wartość domyślną ``_locale`` do stworzenia odrębnej
+    trasy dla każdego języka, wszystko odwołujące się do tej samej instancji treści
+    wielojęzycznej. ``ContentAwareGenerator`` respektuje ustawienia ``_locale``
+    podczas generowania tras dla instancji treści. Podczas przetwarzania
+    trasy, wartość ``_locale`` jest kojarzona z żądaniem i jest pobierana przez
+    system ustawień regionalnych Symfony2.
 
-    Make sure you configure the valid locales in the configuration so that the
-    bundle can optimally handle locales. The
-    :ref:`configuration reference <reference-config-routing-locales>` lists
-    some options to tweak behaviour and performance.
+    Upewnij się, że w konfiguracji ustawiona została prawidłowa wartość, tak aby
+    pakiet mógł optymalnie obsługiwać języki. W :ref:`configuration reference
+    <reference-config-routing-locales>` zestawiono kilka opcji umożliwiających
+    dostosowanie zachowanie i wydajność.
 
 .. note::
 
-    Under PHPCR-ODM, Routes should not be translatable documents, as one
-    Route document represents one single url, and serving several translations
-    under the same url is not recommended.
+    W PHPCR-ODM, trasy nie powinny być dokumentami tłumaczonymi, ponieważ dokument
+    Route reprezentuje jeden pojedynczy URL i obsługuje kilka tłumaczeń pod tym
+    samym adresem URL, co nie jest zalecane.
 
-    If you need translated URLs, make the ``locale`` part of the route name and
-    create one route per language for the same content. The route generator will
-    pick the correct route if available.
+    Jeśli potrzeba przetłumaczyć lokalizatory URL, trzeba wykonać część ``locale``
+    nazwy trasy i utworzyć jedną trasę na język dla tej samej treści. Generator
+    trasy będzie wybierać prawidłową trasę, jeśli jest dostępna.
 
-Sonata Doctrine PHPCR-ODM Admin classes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Klasy Doctrine PHPCR-ODM Admin
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If the SonataDoctrinePHPCRAdminBundle_ is loaded in the application kernel,
-route and redirect route documents can be administrated in sonata admin. For
-instructions on how to configure Sonata, see `configuring sonata admin`_.
+Jeśli pakiet SonataDoctrinePHPCRAdminBundle_ jest załadowany w kernelu aplikacji,
+dokumenty trasy i przekierowania trasy mogą być administrowane w administratorze
+Sonata. W celu poznania szczegółów, proszę przeczytać instrukcję
+`konfiguracji administratora Sonata`_.
 
-By default, ``use_sonata_admin`` is automatically set based on whether
-SonataDoctrinePHPCRAdminBundle is available, but you can explicitly
-disable it to not have it even if sonata is enabled, or explicitly enable to
-get an error if Sonata becomes unavailable.
+Domyślnie, opcja ``use_sonata_admin`` jest automatycznie ustawiana na podstawie
+tego, czy dostępny jest pakiet SonataDoctrinePHPCRAdminBundle, ale można jawnie
+to wyłączyć, nawet jeśli Sonata jest włączona lub jawnie włączyć, co spowoduje
+błąd, gdy Sonata staje się niedostępna.
 
-Sonata admin is using the ``content_basepath`` to show the tree of content to
-select the route target.
+Administrator Sonata używa ``content_basepath`` drzewa treści do wyboru docelowej
+trasy.
 
-The root path to add Routes defaults to the first entry in ``route_basepaths``,
-but you can overwrite this with the ``admin_basepath`` if you need a different
-base path.
+Główna ścieżka dodaje domyślne trasy do pierwszego wpisu w ``route_basepaths``,
+ale można zastąpić to przez ``admin_basepath``, jeśli potrzebuje się innej ścieżki
+bazowej.
 
 .. configuration-block::
 
@@ -381,39 +382,39 @@ base path.
 
 .. _bundle-routing-entity:
 
-Doctrine ORM integration
-------------------------
+Integracja Doctrine ORM
+-----------------------
 
-Alternatively, you can use the `Doctrine ORM`_ provider by specifying the
-``persistence.orm`` part of the configuration. It does a similar job but, as
-the name indicates, loads ``Route`` entities from an ORM database.
+Alternatywnie można użyć dostawcę `Doctrine ORM`_ przez określenie części
+``persistence.orm`` konfiguracji. Działa to podobnie, ale jak nazwa wskazuje,
+ładuje to encję ``Route`` dla bazy danych ORM.
 
 .. caution::
 
-    You must install the CoreBundle to use this feature if your application
-    does not have at least DoctrineBundle 1.3.0.
+    Trzeba zainstalować pakiet CoreBundle aby skorzystać z tej funkcjonalności,
+    jeśli w aplikacji nie jest zainstalowany pakiet DoctrineBundle w wersji
+    co najmniej 1.3.0.
 
 .. _bundles-routing-dynamic-generator:
 
-URL generation with the DynamicRouter
--------------------------------------
+Generowanie ścieżek URL z DynamicRouter
+---------------------------------------
 
-Apart from matching an incoming request to a set of parameters, a Router is
-also responsible for generating an URL from a route and its parameters. The
-``DynamicRouter`` adds more power to the
-`URL generating capabilities of Symfony2`_.
+Oprócz dopasowywania przychodzących żadań w celu ustawienia parametrów, router
+jest również odpowiedzialny za generowanie adresów URL z trasy i jej parametrów.
+``DynamicRouter`` powiększa `możliwości generowania ścieżek URL Symfony2`_.
 
 .. tip::
 
-    All Twig examples below are given with the ``path`` function that generates
-    the URL without domain, but will work with the ``url`` function as well.
+    Niżej podane przykłady są przedstawione z funkcją ``path``, która generuje
+    URL bez domeny, ale będą również działać z funkcja ``url``.
 
-    Also, you can specify parameters to the generator, which will be used if
-    the route contains a dynamic pattern or otherwise will be appended as
-    query string, just like with the standard routing.
+    Można też określić parametry dla generatora, które będą użyte, jeśli trasa
+    zawiera dynamiczny wzorzec lub w inny sposób będzie dodawana jako łańcuch
+    zapytania, podobnie jak w standardowym trasowaniu.
 
-You can use a ``Route`` object as the name parameter of the generating method.
-This will look as follows:
+Można zastosować obiekt ``Route`` jako parametr nazwy metody generującej.
+Będzie to wyglądać tak:
 
 .. configuration-block::
 
@@ -429,9 +430,9 @@ This will look as follows:
             Read on
         </a>
 
-When using the PHPCR-ODM persistence layer, the repository path of the route
-document is considered the route name. Thus you can specify a repository path
-to generate a route:
+Podczas używania warstwy utrwalania PHPCR-ODM, ścieżka repozytorium dokumentu
+trasy jest traktowana jako nazwa trasy. Ścieżkę repozytorium do generowania trasy
+można określić w taki sposób:
 
 .. configuration-block::
 
@@ -449,15 +450,15 @@ to generate a route:
 
 .. caution::
 
-    It is dangerous to hardcode paths to PHPCR-ODM documents into your
-    templates. An admin user could edit or delete them in a way that your
-    application breaks. If the route must exist for sure, it probably
-    should be a statically configured route. But route names could come from
-    code for example.
+    Niebezpieczne jest sztywne kodowanie ścieżek do dokumentów PHPCR-ODM
+    w szablonach. Użytkownik admin może edytować lub kasować je tak, że
+    aplikacja zostanie uszkodzona. Jeśli trasa musi na pewno istnieć, to
+    prawdopodobnie powinna być trasą skonfigurowana statycznie, ale nazwy
+    tras mogą pochodzić na przykład z kodu.
 
-The ``DynamicRouter`` uses a URL generator that operates on the
-``RouteReferrersInterface``. This means you can also generate a route from any
-object that implements this interface and provides a route for it:
+``DynamicRouter`` wykorzystuje generator URL, który działa na ``RouteReferrersInterface``.
+Oznacza to, że można również wygenerować trasę z dowolnego obiektu, który implementuje
+interfejs i zapewnia dla niego trasę:
 
 .. configuration-block::
 
@@ -475,12 +476,12 @@ object that implements this interface and provides a route for it:
 
 .. tip::
 
-    If there are several routes for the same content, the one with the locale
-    matching the current request locale is preferred
+    Jeśli istnieje kilka tras dla tej samej treści, to preferowane jest jedno z
+    dopasowań językowych bieżącego żądania.
 
-Additionally, the generator also understands the ``content_id`` parameter with
-an empty route name and tries to find a content implementing the
-``RouteReferrersInterface`` from the configured content repository:
+Dodatkowo generator rozumie również parametr ``content_id`` z pustą nazwą trasy
+i próbuje znaleźć treść implementująca ``RouteReferrersInterface`` ze skonfigurowanego
+repozytorium treści:
 
 .. configuration-block::
 
@@ -501,36 +502,34 @@ an empty route name and tries to find a content implementing the
 
 .. note::
 
-    To be precise, it is enough for the content to implement the
-    ``RouteReferrersReadInterface`` if writing the routes is not desired. See
-    :ref:`contributing-bundles-interface_naming` for more on the naming scheme.)
+    Dla uściślenia, to wystarczy aby treść implementowała ``RouteReferrersReadInterface``,
+    jeśli pisanie tras nie jest pożądane. Dla uzyskania więcej informacji o nazewnictwie,
+    proszę przeczytać :ref:`contributing-bundles-interface_naming`.
 
-For the implementation details, please refer to the
-:ref:`component-routing-generator` section in the the cmf routing component
-documentation.
+Dla poznania szczegółów implementacyjnych, proszę zapoznać się z rozdziałem
+:ref:`component-routing-generator` w dokumentacji komponentu trasowania.
 
-.. sidebar:: Dumping Routes
+.. sidebar:: Zrzut tras
 
-    The ``RouterInterface`` defines the method ``getRouteCollection`` to get
-    all routes available in a router. The ``DynamicRouter`` is able to provide
-    such a collection, however this feature is disabled by default to avoid
-    dumping large numbers of routes. You can set
-    ``cmf_routing.dynamic.route_collection_limit`` to a value bigger than 0
-    to have the router return routes up to the limit or ``false`` to disable
-    limits and return all routes.
+    ``RouterInterface`` definiuje metodę ``getRouteCollection`` uzyskującą wszystkie
+    dostępne trasy w routerze. ``DynamicRouter`` jest w stanie dostarczyć taka
+    kolekcję , jednak ta funkcjonalność jest domyślnie wyłączona, aby uniknąć
+    zrzucania dużej ilości tras. Można ustawić ``cmf_routing.dynamic.route_collection_limit``
+    na wartość większa niż 0, aby mieć router zwracający trasy do określonego limitu
+    albo ``false``, aby wyłączyć ograniczenie i zwracać wszystko.
 
-    With this option activated, tools like the ``router:debug`` command or the
-    `FOSJsRoutingBundle`_ will also show the routes coming from the database.
+    Przy aktywowaniu tej opcji, narzędzia takie jak polecenie ``router:debug``
+    lub `FOSJsRoutingBundle`_ będą dalej pokazywać trasy pochodzące z bazy danych.
 
-    For the case of `FOSJsRoutingBundle`_, if you use the upcoming version 2 of
-    the bundle, you can configure ``fos_js_routing.router`` to
-    ``router.default`` to avoid the dynamic routes being included.
+    W przypadki `FOSJsRoutingBundle`_, jeśli użyje się nadchodząca wersje 2 tego
+    pakietu, to można skonfigurować ``fos_js_routing.router`` na ``router.default``,
+    aby uniknąć dołączania dynamicznych tras.
 
-Handling RedirectRoutes
------------------------
+Obsługiwanie RedirectRoutes
+---------------------------
 
-This bundle also provides a controller to handle ``RedirectionRouteInterface``
-documents. You need to configure the route enhancer for this interface:
+Pakiet ten zawiera również kontroler obsługujacy dokumenty ``RedirectionRouteInterface``.
+Trzeba skonfigurować ulepszacz trasy dla tego interfejsu:
 
 .. configuration-block::
 
@@ -566,14 +565,14 @@ documents. You need to configure the route enhancer for this interface:
             ),
         ));
 
-RouteReferrersInterface Sonata Admin Extension
-----------------------------------------------
+Rozszerzenie RouteReferrersInterface Sonata Admin
+-------------------------------------------------
 
-This bundle provides an extension to edit referring routes for content that
-implements the ``RouteReferrersInterface``.
+Pakiet ten zawiera rozszerzenie dla edycji tras odnoszących się do treści, które
+implementują ``RouteReferrersInterface``.
 
-To enable the extensions in your admin classes, simply define the extension
-configuration in the ``sonata_admin`` section of your project configuration:
+W celu włączenia tego rozszerzenia w klasach administratora, wystarczy zdefiniować
+konfiguracje rozszerzenia w sekcji ``sonata_admin`` konfiguracji projektu:
 
 .. configuration-block::
 
@@ -610,19 +609,19 @@ configuration in the ``sonata_admin`` section of your project configuration:
             ),
         ));
 
-See the `Sonata Admin extension documentation`_ for more information.
+W celu uzyskania więcej informacji, przeczytaj `dokumentację rozszerzenia Sonata Admin`_.
 
-Customize the DynamicRouter
----------------------------
+Dostosowywanie DynamicRouter
+----------------------------
 
-Read on in the chapter :doc:`customizing the dynamic router <dynamic_customize>`.
+Ptzeczuyaj rozdział :doc:`Dostosowywanie dynamicznego routera <dynamic_customize>`.
 
-.. _`CMF sandbox`: https://github.com/symfony-cmf/cmf-sandbox
-.. _`CMF Routing component`: https://github.com/symfony-cmf/Routing
+.. _`piaskownicą CMF`: https://github.com/symfony-cmf/cmf-sandbox
+.. _`komponentu CMF Routing`: https://github.com/symfony-cmf/Routing
 .. _`Doctrine ORM`: http://www.doctrine-project.org/projects/orm.html
 .. _`PHPCR-ODM`: http://www.doctrine-project.org/projects/phpcr-odm.html
-.. _`Sonata Admin extension documentation`: http://sonata-project.org/bundles/admin/master/doc/reference/extensions.html
-.. _`URL generating capabilities of Symfony2`: http://symfony.com/doc/current/book/routing.html#generating-urls
-.. _SonataDoctrinePHPCRAdminBundle: http://sonata-project.org/bundles/doctrine-phpcr-admin/master/doc/index.html
-.. _`configuring sonata admin`: http://sonata-project.org/bundles/doctrine-phpcr-admin/master/doc/reference/configuration.html
+.. _`dokumentację rozszerzenia Sonata Admin`: http://sonata-project.org/bundles/admin/master/doc/reference/extensions.html
+.. _`możliwości generowania ścieżek URL Symfony2`: http://symfony.com/doc/current/book/routing.html#generating-urls
+.. _`SonataDoctrinePHPCRAdminBundle`: http://sonata-project.org/bundles/doctrine-phpcr-admin/master/doc/index.html
+.. _`konfiguracji zaplecza administracyjnego Sonata`: http://sonata-project.org/bundles/doctrine-phpcr-admin/master/doc/reference/configuration.html
 .. _`FOSJsRoutingBundle`: https://github.com/FriendsOfSymfony/FOSJsRoutingBundle
