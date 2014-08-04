@@ -1,7 +1,7 @@
 .. _bundle-routing-customize:
 
-Dostosowywanie Dynamic Router
-=============================
+Dostosowywanie dynamicznego routera
+===================================
 
 ``DynamicRouter`` został zbudowany po to, aby był dostosowywany. Wstrzykiwane mogą
 być zarówno dopasowania tras jak i usługi generowania URL. Dostarczony dopasowywacz

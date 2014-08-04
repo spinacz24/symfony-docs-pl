@@ -611,10 +611,10 @@ konfiguracje rozszerzenia w sekcji ``sonata_admin`` konfiguracji projektu:
 
 W celu uzyskania więcej informacji, przeczytaj `dokumentację rozszerzenia Sonata Admin`_.
 
-Customize the DynamicRouter
----------------------------
+Dostosowywanie DynamicRouter
+----------------------------
 
-Read on in the chapter :doc:`customizing the dynamic router <dynamic_customize>`.
+Ptzeczuyaj rozdział :doc:`Dostosowywanie dynamicznego routera <dynamic_customize>`.
 
 .. _`piaskownicą CMF`: https://github.com/symfony-cmf/cmf-sandbox
 .. _`komponentu CMF Routing`: https://github.com/symfony-cmf/Routing
