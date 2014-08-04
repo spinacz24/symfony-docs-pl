@@ -16,82 +16,83 @@ to ten pakiet może się nie nadawać i należy zapoznać się z
 Instalacja
 ----------
 
-Można zainstalować pakiet `poprzez Composer`_ uzywając pakietu
+Można zainstalować pakiet `poprzez Composer`_ używając pakietu
 `symfony-cmf/routing-auto-bundle`_.
 
 Możliwości
 ----------
 
-Imagine you are going to create a forum application that has two routeable
-content documents - a category and the topics. These documents are called
-``Category`` and ``Topic``, and they are called *content documents*.
+Proszę sobie wyobrazić, że mamy zamiar utworzyć aplikację forum, która ma dwa
+trasowane dokumenty treści: kategorię i tematy. Dokumenty maja nazwy ``Category``
+i ``Topic`` i są nazywane *dokumentami treści*.
 
-If you create a new category with the title "My New Category", the
-RoutingAutoBundle will automatically create the route
-``/forum/my-new-cateogry``. For each new ``Topic`` it could create a route
-like ``/forum/my-new-category/my-new-topic``. This URL resolves to a special
-type of route that is called an *auto route*.
+Jeśli utworzymy nową kategorię z tytułem "My New Category", RoutingAutoBundle
+będzie automatycznie tworzyć trasę ``/forum/my-new-cateogry``. Dla każdej nowej
+kategorii  ``Topic`` będzie to tworzyć trasę podobna do tej
+``/forum/my-new-category/my-new-topic``. Ta ścieżka URL rozwiązuje specjalny typ
+trasy, który nazywa się *automatyczną trasą*.
 
-By default, when you update a content document that has an auto route, the
-corresponding auto route will also be updated. When deleting a content
-document, the corresponding auto route will also be deleted.
+Domyślnie, podczas aktualizowania dokumentu treści, który ma automatyczne trasowanie,
+zostanie zaktualizowana odpowiadająca mu automatyczna trasa. Podczas usuwania dokumentu
+treści, usuwana jest odpowiadająca mu trasa automatyczna.
 
-If required, the bundle can also be configured to do extra stuff, like, for
-example, leaving a ``RedirectRoute`` when the location of a content document
-changes or automatically displaying an index page when an unconfigured
-intermediate path is accessed (for example, listing all the children when requesting
-``/forum`` instead of returning a ``404``).
+Jeśli jest to wymagane, pakiet można również skonfigurować do robienia dodatkowych
+rzeczy, jak na przykład, opuszczenia ``RedirectRoute`` podczas zmiany położenia
+dokumentu treści lub automatycznego wyświetlania strony indeksowej, gdy dostępna
+jest nieskonfigurowana ścieżka pośrednia (np. listująca wszystkie dokumenty podrzędne
+przy żądaniu ``/forum``, zamiast zwracania strony ``404``).
 
-Why not Simply Use a Single Route?
-----------------------------------
+Dlaczego po prostu nie użyć pojedynczej trasy?
+----------------------------------------------
 
-Of course, our fictional forum application could use a single route with a
-pattern ``/forum/my-new-forum/{topic}``, which could be handled by a controller.
-Why not just do that?
+Oczywiście nasza fikcyjna aplikacja forum może używać pojedynczej trasy w wzorcem
+``/forum/my-new-forum/{topic}``, która może być obsługiwana przez kontroler.
+Dlaczego po prostu tego nie zrobić?
 
-#. By having a route for each page in the system, the application has a
-   knowledge of which URLs are accessible. This can be very useful, for
-   example, when specifying endpoints for menu items that are used when generating
-   a site map;
-#. By separating the route from the content you allow the route to be
-   customized independently of the content, for example, a topic may have
-   the same title as another topic but might need a different URL;
-#. Separate route documents are translateable - this means you can have a URL
-   for *each language*, "/welcome" and "/bienvenue" would each reference the
-   same document in English and French respectively. This would be difficult
-   if the slug was embedded in the content document;
-#. By decoupling route and content the application doesn't care *what* is
-   referenced in the route document. This means that you can easily replace the
-   class of the document referenced.
+#. Mając trasę dla każdej strony w systemie, aplikacja ma wiedzę o dostępnych
+   ścieżkach URL. Może to być bardzo pomocne, na przykład, podczas określania
+   punktów końcowych dla elementów menu, które są używane podczas generowania
+   mapy witryny;
+#. Oddzielając trasę od treści, umożliwia się, aby trasa mogla być dostosowywana
+   niezależnie od treści, na przykład, temat może mieć ten sam tytuł jak inny temat,
+   ale wymaga innego URL;
+#. Oddzielne dokumenty tras są możliwe do tłumaczenia – co oznacza, że dla
+   *każdego języka* można mieć odrębna ścieżkę URL, na przykład,"/welcome"
+   i "/powitanie" by każda z nich przywoływała ten sam dokument, odpowiednio
+   w języku angielskim i polskim. Byłoby to trudne, gdyby alias (*ang. slug*)
+   został osadzony w dokumencie treści;
+#. Dzięki oddzieleniu trasy od treści aplikację nie obchodzi *do czego* odwołuje
+   się dokument trasy. Oznacza to, że można łatwo wymienić klasę danego dokumentu.
 
-Usage
------
+Stosowanie
+----------
 
-The diagram below shows a fictional URL for a forum topic. The first 6 elements
-of the URL are called the *content path*. The last element is called the *content name*.
+Poniższy diagram pokazuje fikcyjna ścieżkę URL dla tematu forum. Pierwsze 6 elementów
+tej ścieżki nosi nazwę *ścieżki treści (ang. content path )*. Następny element nazywa
+się *nazwą treści (ang. content name)*.
 
 .. image:: ../../_images/bundles/routing_auto_post_schema.png
 
-The content path is further broken down into *path units* and *path elements*. A
-path unit is a group of path elements and path elements are simply documents
-in the PHPCR tree.
+Ścieżka treści jest podzielona na *jednostki ścieżki (ang. path units)* i *elementy
+ścieżki (ang. path elements)*. Jednostka ścieżki jest grupą elementów ścieżki
+a elementy ścieżki są po prostu dokumentami w drzewie PHPCR.
 
 .. note::
 
-    Although path elements can be of any document class in this case, only
-    objects which extend the :class:`Symfony\\Component\\Routing\\Route`
-    object will be considered when matching a URL.
+    Chociaż w tym przypadku elementy ścieżki mogą być dowolna klasą dokumentu,
+    to tylko obiekty rozszerzające klasę :class:`Symfony\\Component\\Routing\\Route`
+    będą brane pod uwagę w czasie dopasowywania ścieżki URL.
 
-    The default behavior is to use ``Generic`` documents when generating a content
-    path, and these documents will result in a 404 when accessed directly.
+    Domyślnym zachowaniem podczas generowania ścieżki treści  jest użycie dokumentu
+    ``Generic``. Dokumenty te będą powodować błąd 404 podczas bezpośredniego dostępu.
 
-Internally, each path unit is built up by a *builder unit*. Builder units
-contain one *path provider* class and two actions classes - one action to take
-if the provided path exists in the PHPCR tree, the other if it does not. The
-goal of each builder unit is to generate a path and then provide a route
-object for each element in that path.
+Wewnętrznie każda jednostka ścieżki jest budowana przez *konstruktora jednostek*.
+Konstruktor jednostek zawiera jedną klasę *dostawcy ścieżekr* i dwie akcje – jedna
+akcja podejmowana jest gdy dostarczona ścieżka istnieje w drzewie PHPCR, a druga
+w przeciwnym przypadku. Celem każdego konstruktora jednostek jest generowanie ścieżki
+i dostarczenie następnie obiektu trasy  dla każdego elementu tej ścieżki.
 
-The configuration for the example above could be as follows:
+Konfiguracja dla powyższego przykładu może wyglądać tak:
 
 .. configuration-block::
 
@@ -204,8 +205,8 @@ The configuration for the example above could be as follows:
             ),
         ));
 
-The ``Topic`` document would then need to implement the methods named above as
-follows::
+Następnie trzeba będzie utworzyć dokument ``Topic`` implementujący wyżej wymienionych
+metody, w ten sposób::
 
     // src/Acme/ForumBundle/Document/Topic.php
     namespace Acme\ForumBundle\Document;
@@ -231,31 +232,31 @@ follows::
         }
     }
 
-After persisting this object, the route will be created. Of course, you need to make
-the properties editable and then you have a fully working routing system.
+Po utrwaleniu tego obiektu zostanie utworzona trasa. Oczywiście trzeba wykonać
+edytowalne właściwości, co w konsekwencji da w pełni sprawny system trasowania.
 
 .. note::
 
-    Any mapping applied to an object will also apply to subclasses of that
-    object. Imagine you have 2 documents, ``ContactPage`` and ``Page``, which
-    both extend ``AbstractPage``. When you map the ``AbstractPage`` class, it
-    will be applied to both documents.
+    Wszystkie odwzorowania do obiektu będą miały również zastosowanie do podklas
+    tego obiektu. Wyobraź sobie, ze mamy 2 dokumenty, ``ContactPage`` i ``Page``,
+    które obydwa rozszerzają klase ``AbstractPage``. Podczas odwzorowania  klasy
+    ``AbstractPage``, będzie ono również skutkowało na te dwa dokumenty.
 
-Provided Providers and Action
------------------------------
-
-The RoutingAutoBundle comes with a couple path providers and actions by
-default. Read more about them in the other sections:
+Dostarczani dostawcy i akcje
+----------------------------
+Pakiet RoutingAutoBundle dostarczany jest wraz z kilkoma dostawcami ścieżek
+i akcjami, które są domyślne.
+Przeczytaj więcej na ten temat w rozdziałach:
 
 * :doc:`providers`
 * :doc:`exists_actions`
 * :doc:`not_exists_actions`
 
-Customization
--------------
+Dostosowanie
+------------
 
-Besides the default providers and actions, you can also create your own. Read more about
-that in :doc:`customization`.
+Oprócz domyślnych dostawców i akcji, można również tworzyć własne. Przeczytaj na
+ten temat w :doc:`customization`.
 
-.. _`with composer`: http://getcomposer.org/
+.. _`poprzez Composer`: http://getcomposer.org/
 .. _`symfony-cmf/routing-auto-bundle`: https:/packagist.org/packages/symfony-cmf/routing-auto-bundle
