@@ -86,10 +86,10 @@ a elementy ścieżki są po prostu dokumentami w drzewie PHPCR.
     Domyślnym zachowaniem podczas generowania ścieżki treści  jest użycie dokumentu
     ``Generic``. Dokumenty te będą powodować błąd 404 podczas bezpośredniego dostępu.
 
-Wewnętrznie każda jednostka ścieżki jest budowana przez *konstruktora jednostek*.
-Konstruktor jednostek zawiera jedną klasę *dostawcy ścieżekr* i dwie akcje – jedna
+Wewnętrznie każda jednostka ścieżki jest budowana przez *budowniczego jednostek*.
+Budowniczy jednostek zawiera jedną klasę *dostawcy ścieżekr* i dwie akcje – jedna
 akcja podejmowana jest gdy dostarczona ścieżka istnieje w drzewie PHPCR, a druga
-w przeciwnym przypadku. Celem każdego konstruktora jednostek jest generowanie ścieżki
+w przeciwnym przypadku. Celem każdego budowniczego jednostek jest generowanie ścieżki
 i dostarczenie następnie obiektu trasy  dla każdego elementu tej ścieżki.
 
 Konfiguracja dla powyższego przykładu może wyglądać tak:

@@ -1,5 +1,5 @@
 .. index::
-    single: dostawcy ścieżek; RoutingAutoBundle
+    single: RoutingAutoBundle; dostawcy ścieżek
     
 Dostawcy ścieżek
 ----------------
@@ -11,8 +11,8 @@ W łańcuchu ścieżek treści muszą najpierw zostać skonfigurowani **bazowi**
 Powodem tego jest to, że ścieżki dostarczane przez nich odpowiadają bezpośrednio
 istniejącej ścieżce, czyli mają bezwzględne odniesienie.
 
-specified (bazowy dostawca)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Dostawca ``specified`` (bazowy dostawca)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Jest to najbardziej podstawowy dostawca ścieżek i zawsze pozwala określić dokładną
 (stałą) ścieżkę.
@@ -44,11 +44,11 @@ Opcje
 .. caution::
 
     W systemie automatycznych tras nigdy nie należy określać bezwzględnych ścieżek.
-    Jeśli konstruktor jednostek jest pierwszą treścią łańcucha ścieżek, to jest
+    Jeśli budowniczy jednostek jest pierwszą treścią łańcucha ścieżek, to jest
     zrozumiałe, że jest to bazowa ścieżki bezwzględna.
 
-content_object (dostawca bazowy)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Dostawca ``content_object`` (dostawca bazowy)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Dostawca obiektu treści próbuje dostarczać ścieżkę z obiektu implementującego
 ``RouteReferrersInterface`` pochodzącego z metody wskazanej w dokumentu treści.
@@ -89,8 +89,8 @@ Opcje
     W czasie pisania tego artykułu tłumaczone obiekty nie były obsługiwane,
     ale poprawka dla tej funkcjonalności jest już stworzona.
 
-content_method
-~~~~~~~~~~~~~~
+Dostawca ``content_method``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Dostawca ``content_method`` pozwala, aby obiekt treści (np. ``Topic`` forum)
 określał ścieżkę wykorzystując jedna ze swoich metod. Jest to dość mocny sposób
@@ -153,8 +153,8 @@ przykładzie::
         }
     }
 
-content_datetime
-~~~~~~~~~~~~~~~~
+Dostawca ``content_datetime``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Dostawca ``content_datettime`` będzie dostarczał ścieżkę z obiektu ``DateTime``
 otrzymywanego przez wskazanie metody  w dokumencie treści.
