@@ -3,9 +3,9 @@
 Symfony2 - polska dokumentacja
 ##############################
 
-Jest to polskie tłumczenie oficjalnej dokumentacji platformy aplikacyjnej Symfony,
-publikowanej na stronach http://symfony.com/, rozszerzone o polskojęzyczne artykuły
-tam nie ujęte.  
+Jest to polskie tłumczenie oficjalnej dokumentacji platformy aplikacyjnej Symfony2,
+publikowanej na stronach http://symfony.com/, rozszerzone o tłumaczenia dokumentacji
+pakietów osób trzecich i polskojęzyczne artykuły tam nie ujęte.  
 
 
 :doc:`Krótki kurs </quick_tour/index>`
@@ -28,6 +28,12 @@ Podręcznik jest kierowany do wszystkich użytkowników Symfony2, którzy zazwyc
 chcą go mieć pod ręka.
 
 .. include:: /book/map.rst.inc
+
+.. toctree::
+   :maxdepth: 2
+
+   /book/index
+   
 
 :doc:`Receptariusz </cookbook/index>`
 =====================================
