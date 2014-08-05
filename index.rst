@@ -27,13 +27,13 @@ Jest to biblia Symfony, przygotowana przez zespół rdzenia tego projektu.
 Podręcznik jest kierowany do wszystkich użytkowników Symfony2, którzy zazwyczaj
 chcą go mieć pod ręka.
 
-.. include:: /book/map.rst.inc
 
 .. toctree::
    :hidden:
 
    /book/index
    
+.. include:: /book/map.rst.inc
 
 :doc:`Receptariusz </cookbook/index>`
 =====================================
