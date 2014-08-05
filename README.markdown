@@ -1,12 +1,17 @@
-Symfony Polska Dokumentacja
-=====================
+Polska dokumentacja Symfony 2
+=============================
 
-Polska dokumentacja jest automatycznie generowana i dostępna online na http://symfony-docs.pl/
-Oryginalna dokumentacja jest automatycznie generowana i dostępna online na http://symfony.com/doc/current/
+Jest to polskojęzyczna dokumentacja Symfony 2 zawierająca tłumaczenie oficjalnej dokumentacji frameworka Symfony 2 oraz dokumentacji pakietów tworzonych przez osoby trzecie. Jest to efekt pracy grupy tłumaczy realizujących projekt "symfony-docs-pl",
+utrzymywany w repozytorium https://github.com/symfony-docs-pl/symfony-docs-pl.
+
+Dokumentacja ta publikowana jest obecnie pod adresami:
+* http://symfony-docs.pl/
+* http://symfony2-docs-pl.readthedocs.org/
+
 
 Współpraca
 -----------
 
-Kochamy autorów! Aby uzyskać więcej informacji w jaki sposób można przyczynić się do rozwoju
-dokumentacji Symfony, przeczytaj [Contributing to the Documentation](http://symfony.com/doc/current/contributing/documentation/overview.html) 
+Dokumentacja Symfony tworzona jest przez społeczność autorów skupioną wokół tego projektu. Pomoc w utrzymaniu dokumentacji jest bardzo potrzebna i doceniana.
+Proszę przeczytać [Contributing to the Documentation](http://symfony.com/doc/current/contributing/documentation/overview.html) 
 lub dla polskiej wersji [Współpraca przy dokumentacji](http://symfony-docs.pl/contributing/documentation/overview.html)

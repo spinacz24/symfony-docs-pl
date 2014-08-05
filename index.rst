@@ -30,7 +30,7 @@ chcą go mieć pod ręka.
 .. include:: /book/map.rst.inc
 
 .. toctree::
-   :maxdepth: 2
+   :hidden:
 
    /book/index
    
