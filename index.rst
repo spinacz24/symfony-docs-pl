@@ -16,9 +16,11 @@ To zajmie Ci trochę czasu, ale warto go poświęcić. Krok, po kroku będziemy 
 świat Symfony. Uważaj, można się uzależnić od Symfony.
 
 .. toctree::
-   :maxdepth: 2
+   :hidden:
 
    /quick_tour/index
+
+.. include:: /quick_tour/map.rst.inc
    
 :doc:`Podręcznik </book/index>`
 ===============================
@@ -109,3 +111,9 @@ i dokumentacji Symfony2
    /contributing/code/index
    /contributing/documentation/index
    /contributing/community/index
+   
+Indeksy, słowniki i tabele
+==========================
+
+* :ref:`genindex`
+* :ref:`search`   
