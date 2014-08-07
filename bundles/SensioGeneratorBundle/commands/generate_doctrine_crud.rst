@@ -5,7 +5,7 @@
    single: polecenia konsoli; generate:doctrine:crud
    single: generowanie kontrolera CRUD
    
-Generowanie kontrolera CRUD opartego na encje Doctrine
+Generowanie kontrolera CRUD opartego na encji Doctrine
 ------------------------------------------------------
 
 Stosowanie
@@ -21,15 +21,16 @@ operacji na modelu.
 *  Edytowanie istniejącego rekordu;
 *  Usuwanie istniejącego rekodu.
 
-By default the command is run in the interactive mode and asks questions to determine
-the entity name, the route prefix or whether or not to generate write actions:
+Domyślnie polecenie to jest uruchamiane w trybie interaktywnym i zadaje pytania
+w celu określenia nazwy encji, przedrostka trasy lub czy należy wygenerować akcje
+zapisu:
 
 .. code-block:: bash
    
    $ php app/console generate:doctrine:crud
    
-To deactivate the interactive mode, use the --no-interaction option but don't forget
-to pass all needed options:
+Aby wyłączyć tryb interaktywny, trzeba zastosować opcję ``--no-interaction``, nie
+zapominając przekazać inne potrzebne opcje:
 
 .. code-block:: bash
    
@@ -39,32 +40,31 @@ to pass all needed options:
 Dostępne opcje
 ~~~~~~~~~~~~~~
 
-*  ``--entity``: The entity name given as a shortcut notation containing the bundle
-   name in which the entity is located and the name of the entity. For example:
-   ``AcmeBlogBundle:Post``:
+*  ``--entity``: Nazwa encji, podana w notacji skrótowej, zawierająca nazwę pakietu
+   w którym umieszczona jest encja i nazwę encji. Na przykład ``AcmeBlogBundle:Post``:
    
    .. code-block:: bash
       
       $ php app/console generate:doctrine:crud --entity=AcmeBlogBundle:Post
 
-*  ``--route-prefix``: The prefix to use for each route that identifies an action:
+*  ``--route-prefix``: Przedrostek używany dla każdej trasy, która identyfikuje akcję:
       
    .. code-block:: bash
       
       $ php app/console generate:doctrine:crud --route-prefix=acme_post
       
 
-*  ``--with-write``: (**no**) [values: yes|no] Whether or not to generate the new,
-   create, edit, update and delete actions:
+*  ``--with-write``: (**no**) [wartości: yes|no] Czy generować akcje 'new',
+   'create', 'edit', 'update' i 'delete':
    
    .. code-block:: bash
       
       $ php app/console generate:doctrine:crud --with-write
       
-*  ``--format``: (**annotation**) [values: yml, xml, php or annotation] Determine
-   the format to use for the generated configuration files like routing. By default,
-   the command uses the annotation format. Choosing the annotation format expects
-   the SensioFrameworkExtraBundle is already installed:
+*  ``--format``: (**adnotacja**) [wartości: yml, xml, php lub annotation] Określenie
+   formatu, jaki zostanie użyty do generowania plików konfiguracyjnych, takich jak
+   trasowanie. Domyślnie w poleceniu stosowane są adnotacje. Wybór formatu adnotacji
+   wymaga wcześniejszego zainstalowania pakietu SensioFrameworkExtraBundle:
    
    .. code-block:: bash
    
