@@ -1,7 +1,7 @@
 .. index::
     single: RoutingAutoBundle; akcje nie istniejącej ścieżki
 
-Akcje nie istniejacej ścieżki
+Akcje nie istniejącej ścieżki
 -----------------------------
 
 Sa to domyślne akcje wykonywane jeśli ścieżka dostarczona przez ``path_provider``

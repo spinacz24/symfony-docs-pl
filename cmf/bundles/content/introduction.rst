@@ -8,7 +8,7 @@ ContentBundle
     Pakiet ContentBundle dostarcza dokument dla statycznej treści i kontroler
     do renderowania każdej treści, która wymaga specjalnej obsługi w kontrolerze.
 
-W celu wprowadzenia proszę zapoznac się z artykułem ":doc:`../../book/static_content`"
+W celu wprowadzenia proszę zapoznać się z artykułem ":doc:`../../book/static_content`"
 w rozdziale "Podręcznik CMF Symfony".
 
 Instalacja
