@@ -5,7 +5,7 @@ Jest to polskojęzyczna dokumentacja Symfony 2 zawierająca tłumaczenie oficjal
 utrzymywany w repozytorium https://github.com/symfony-docs-pl/symfony-docs-pl.
 
 Dokumentacja ta publikowana jest obecnie pod adresami:
-* http://symfony-docs.pl/
+* http://symfony-docs.pl/ (na razie nie aktualizowane)
 * http://symfony2-docs-pl.readthedocs.org/
 
 
