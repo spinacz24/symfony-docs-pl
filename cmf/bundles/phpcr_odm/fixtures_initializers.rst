@@ -26,8 +26,8 @@ w repozytorium.
 .. note::
 
     Potrzebna jest koncepcja ścieżek, ponieważ nie ma żadnych oddzielnych "tabel"
-    jak w relacyjnych bazach danych. Aby była możliwość dodania dokumentu, musi
-    być podana w repozytorium ścieżka rodzica.
+    jak w relacyjnych bazach danych. Dodawanie dokumentu wymaga wcześniejszego
+    podania w repozytorium ścieżki rodzica 
 
 Inicjatory implementują ``Doctrine\Bundle\PHPCRBundle\Initializer\InitializerInterface``.
 Jeśli nie jest potrzebna specjalna logika i chce się utworzyć zwykłe węzły PHPCR
@@ -277,7 +277,7 @@ do metody ``migrate()`` migratora.
 Ładowanie danych testowych
 --------------------------
 
-Aby móc stosować polecenie ``doctrine:phpcr:fixtures:load``, trzeba dodatkowo
+Do stosowania polecenia ``doctrine:phpcr:fixtures:load``, trzeba dodatkowo
 zainstalować `DoctrineFixturesBundle`_, co jest odpowiednikiem
 `Doctrine data-fixtures`_ w Symfony2.
 

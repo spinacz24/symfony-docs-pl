@@ -66,7 +66,7 @@ przykłady zakładają, że wykorzystuje się Jackalope Doctrine
 DBAL. Pełna dokumentacja jest publikowana wa :doc:`dziale informatora
 <../../reference/configuration/phpcr_odm>`.
 
-Aby wykorzystywać Jackalope Doctrine DBAL, trzeba skonfigurować połączenie z baza
+Do wykorzystywania Jackalope Doctrine DBAL, trzeba skonfigurować połączenie z bazą
 danych w pakiecie DoctrineBundle. Zobacz `dokumentację Symfony2 Doctrine`_ w celu
 poznania szczegółów. Prosty przykład:
 
@@ -447,7 +447,7 @@ Zrzut węzłów w katalogu ``/cms/simple`` łącznie z ich właściwościami:
 Prosta kopia bezpieczeństwa i przywracanie danych
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Aby wyeksportować dane repozytorium do pliku można użyć:
+Dla wyeksportowania do pliku danych repozytorium  można użyć:
 
 .. code-block:: bash
 

@@ -84,7 +84,7 @@ Wiele menadżerów dokumentów
 Jeśli używa się ODM, można również skonfigurować wiele menadżerów dokumentów.
 
 Wewnątrz sekcji odm w opcji ``document_managers`` można dodać nazwane wpisy.
-Aby użyć sesję inną niż domyślna, trzeba określić atrybut sesji.
+Użycie innej sesji niż domyślna wymaga określenia atrybutu sesji.
 
 .. configuration-block::
 
