@@ -147,7 +147,7 @@ w celu uzyskania więcej informacji.
 Trasowanie treści
 ~~~~~~~~~~~~~~~~~
 
-Aby włączyć system trasowania w tryb automatycznego przekazywania żądań do
+Dla włączenia systemu trasowania w tryb automatycznego przekazywania żądań do
 kontrolera blogu, gdy treść ``Blog`` lub ``Post``  zostaje związana z trasą,
 dodajmy następujący kod w podsekcji sekcji ``controllers_by_class`` sekcji
 ``cmf_routing_extra`` w głównym pliku konfiguracyjnym:
