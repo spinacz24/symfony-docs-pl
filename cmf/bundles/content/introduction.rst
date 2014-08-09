@@ -151,7 +151,7 @@ Pakiet RoutingBundle zapewnia wydajne narzędzia do konfigurowania tego, jak mog
 być odwzorowywane do kontrolerów i szablonów dynamiczne trasy  i ich treść.
 
 Załóżmy, że chcemy obsłużyć dokument ``StaticContent`` z domyślnym kontrolerem
-``ContentController``. Aby to osiągnąć, trzeba użyć opcji konfiguracyjnej
+``ContentController``. Dla osiągniecia tego, trzeba użyć opcji konfiguracyjnej
 ``cmf_routing.dynamic.controllers_by_class``:
 
 .. configuration-block::
