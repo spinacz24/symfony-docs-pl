@@ -161,8 +161,8 @@ Dodawanie nowej strony
 
 Teraz już wiesz, że przepływ żądania może rozpocząć się od dodania nowej strony.
 W Symfony CMF Standard Edition dane są przechowywane w plikach danych, które są
-ładowane podczas wykonywania polecenia ``doctrine:phpcr:fixtures:load``. Aby dodać
-nową stronę, wystarczy edytować taki plik, który znajduje się w katalogu
+ładowane podczas wykonywania polecenia ``doctrine:phpcr:fixtures:load``. W celu
+dodania nowej strony, wystarczy edytować taki plik, który znajduje się w katalogu
 ``src/Acme/DemoBundle/Resources/data``:
 
 .. code-block:: yaml
@@ -186,8 +186,8 @@ Edytowanie na żywo
 ------------------
 
 Teraz przyszedł czas aby stanąć w roli administratora witryny i edytować treść
-przy użyciu interfejs sieciowego. Aby to zrobić, kliknij "Admin Login" i zastosuj
-przydzielone uprawnienia.
+przy użyciu interfejs sieciowego. W celu zrobienia tego, kliknij "Admin Login"
+i zastosuj przydzielone uprawnienia.
 
 Zobaczysz, że na stronie pojawił sie dodatkowy górny pasek:
 
