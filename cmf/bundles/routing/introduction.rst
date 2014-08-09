@@ -43,7 +43,7 @@ ChainRouter
 
 ChainRouter może zastąpić domyślny system trasowania na implementację udostępniającą
 łańcuch routerów. Nie trasuje on niczego samodzielnie, lecz tylko zapewnia wykonywanie
-pętli po połączonych routerach. Aby obsłużyć standardową konfigurację tras Symfony,
+pętli po połączonych routerach. Dla obsłużenia standardowej konfigurację tras Symfony,
 można wstawić do łańcucha domyślny router Symfony.
 
 Można skonfigurować usługi trasowania, tak aby można było je używać w łańcuchu,

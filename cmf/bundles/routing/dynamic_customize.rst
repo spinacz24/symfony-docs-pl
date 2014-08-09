@@ -113,7 +113,7 @@ dostarcza proste rozwiązanie przy wykorzystaniu repozytorium ODM.
 Zastępowanie domyślnego dostawcy CMF
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Aby zastąpić domyślny ``RouteProvider`` należy zmodyfikować konfiguracje
+Zastąpienie domyślnego ``RouteProvider`` wymaga zmodyfikowania konfiguracji
 w następujący sposób:
 
 .. configuration-block::
