@@ -21,7 +21,7 @@ Wprowadzenie do tematyki pakietu można znaleźć w rozdziale :doc:`Getting star
 
 .. tip::
 
-    Aby poznać przykład instalacji pakietu, sprawdź `Symfony CMF Standard Edition`_
+    Dla poznania przykładu instalacji pakietu, sprawdź `Symfony CMF Standard Edition`_
 
 Instalacja
 ----------
