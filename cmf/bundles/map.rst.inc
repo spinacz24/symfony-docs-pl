@@ -1,7 +1,7 @@
 Kluczowe pakiety
 ~~~~~~~~~~~~~~~~
 
-Większość pakietów Symfony CMF dostarcza jakąś funkcjonalności, integruje bibliotekę
+Większość pakietów Symfony CMF dostarcza jakąś funkcjonalność, integruje bibliotekę
 lub wprowadza zupełnie nową koncepcję.
 
 * :doc:`block/index`

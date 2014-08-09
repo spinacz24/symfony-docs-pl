@@ -25,7 +25,7 @@ Standard Edition dla domyślnego trasowania, treści i menu.
 
 .. tip::
    
-   Aby dowiedzieć się więcej o trasowaniu, proszę przeczytać ":doc:`routing`".
+   W celu uzyskania więcej inforamcji o trasowaniu, proszę przeczytać ":doc:`routing`".
    Więcej informacji o przechowywaniu danych można znaleźć w ":doc:`static_content`".
    W końcu, aby poznać szczegółu tworzenia menu, proszę przeczytać
    ":doc:`structuring_content`".
@@ -76,8 +76,8 @@ W celu utworzenia strony, użyj obiektu
 
 W obiekcie Page można również ustawić inne opcje (np. tags).
 
-Wszystkie strony są przechowywane w prostej strukturze drzewa. Aby ustawić pozycje,
-trzeba użyć ``setPosition``. Pierwszy argument jest dokumentem nadrzędnym, drugi
+Wszystkie strony są przechowywane w prostej strukturze drzewa. W celu ustawienia
+pozycji, trzeba użyć ``setPosition``. Pierwszy argument jest dokumentem nadrzędnym, drugi
 nazwą strony. Nazwy te są wykorzystywane w ścieżce URL. Na przykład, można mieć
 następująca strukturę drzewa:
 
@@ -92,7 +92,7 @@ W tym przypadku mamy 4 strony: ``/cms/simple``, ``about``, ``blog`` i
 ``symfony-cmf-is-great``.
 Strona domowa ma ścieżkę ``/``. Strona ``symfony-cmf-is-great`` jest jest stroną
 podrzędną ``blog`` i tym samym ma ścieżkę ``/blog/symfony-cmf-is-great``.
-Aby utworzyć taką strukturę zrób to::
+Dla utworzenia takiej struktury zrób to::
 
     // // src/Acme/MainBundle/DataFixtures/PHPCR/LoadSimpleCms.php
     namespace Acme\DemoBundle\DataFixtures\PHPCR;

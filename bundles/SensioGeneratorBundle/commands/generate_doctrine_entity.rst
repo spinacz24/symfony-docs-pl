@@ -31,22 +31,22 @@ Polecenie to można uruchomić w trybie zwykłym (nieinteraktywnym) używając o
 Dostępne opcje
 ~~~~~~~~~~~~~~
 
-*  ``--entity``: The entity name given as a shortcut notation containing the bundle
-   name in which the entity is located and the name of the entity. For example: ``AcmeBlogBundle:Post``:
+*  ``--entity``: Nazwa encji, podana w notacji skrótowej, zawierająca nazwę pakietu
+   w którym umieszczona jest encja i nazwę encji. Na przykład ``AcmeBlogBundle:Post``:
    
    .. code-block:: bash
       
       $ php app/console generate:doctrine:entity --entity=AcmeBlogBundle:Post
       
-*  ``--fields``: The list of fields to generate in the entity class:
+*  ``--fields``: Lista pól generowanych w klasie encji:
 
    .. code-block:: bash
       
       $ php app/console generate:doctrine:entity --fields="title:string(100) body:text"
       
-*  ``--format``: (**annotation**) [wartości: yml, xml, php or annotation]
-   This option determines the format to use for the generated configuration files
-   like routing. By default, the command uses the annotation format:
+*  ``--format``: (**annotation**) [wartości: yml, xml, php lub annotation]
+   Opcja określa format jaki ma być zastosowany przy generowaniu plików konfiguracyjnych,
+   takich jak trasowanie. Domyślnie polecenie wykorzystuje format adnotacji:
    
    .. code-block:: bash
       

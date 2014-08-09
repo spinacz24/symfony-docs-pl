@@ -140,7 +140,7 @@ Własna akcja kontrolera może wyglądać następująco::
 Konfigurowanie kontrolera dla trasy
 -----------------------------------
 
-Aby skonfigurować, który kontroler jest używany dla trasy, można skonfigurować
+Dla skonfigurowania, który kontroler jest używany dla trasy, można skonfigurować
 *ulepszcze tras*. Wiele z nich działa na trasach implementujących interfejs
 ``RouteObjectInterface``. Interfejs ten powiadamia, że trasa jest poinformowana
 o swojej treści i zwraca ta treść w metodzie ``getRouteContent()``.
@@ -184,7 +184,7 @@ jest ``ContentController`` dostarczany przez ten pakiet.
 
 .. tip::
 
-    Aby poznać więcej przykładów, proszę zapoznać się z `piaskownicą CMF`_ i specjalne
+    Dla poznania więcej przykładów, proszę zapoznać się z `piaskownicą CMF`_ i specjalne
     konfiguratory testowe trasowania.
 
 .. tip::
@@ -242,7 +242,7 @@ Powyższy przykład powinien prawdopodobnie być wykonany jako konfiguracja tras
 w pliku konfiguracyjnym Symfony, chyba że końcowy użytkownik powinien zmieniać
 ścieżkę URL lub kontroler.
 
-Aby połączyć treść do tej trasy, trzeba po prostu ustawić to w dokumencie::
+Przyłączenie treści do tej trasy wymaga tylko ustawienia w dokumencie tego::
 
     use Symfony\Cmf\Bundle\ContentBundle\Doctrine\Phpcr\Content;
 

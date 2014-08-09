@@ -73,7 +73,7 @@ Ten typ formularza obsługuje edycję kolekcji ``ReferenceMany`` na dokumentach
 PHPCR-ODM. Jest to pole wyboru z dodatkiem ``referenced_class`` wymagająca opcji,
 która określa  klasę przywoływanego dokumentu docelowego.
 
-Aby używać ten typ formularza trzeba również określić listę możliwych celów
+Używanie tego typ formularza wymaga również określenie listy możliwych celów
 referencyjnych w postaci tablicy identyfikatorów PHPCR-ODM lub ścieżek PHPCR.
 
 Minimalny kod wymagany do użycia tego typu wygląda następująco::

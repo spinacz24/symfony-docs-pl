@@ -10,8 +10,7 @@ w konfiguracji ustawień regionalnych.
 Konfiguracja tłumaczeń
 ----------------------
 
-Aby była możliwość używania tłumaczonych dokumentów, należy skonfigurować
-dostępne języków:
+Stosowanie tłumaczeń dokumentów wymaga skonfigurowanie dostępnych języków:
 
 .. configuration-block::
 
@@ -99,7 +98,7 @@ regionalnych, aby uniknąć żądań wstrzykujących niepożądane rzeczy do rep
 Tłumaczenia dokumentów
 ----------------------
 
-Aby ustawić tłumaczenie dokumentu, trzeba zdefiniować atrybut ``translator``
+Ustawienie tłumaczenia dokumentu wymaga zdefiniowania atrybutu ``translator``
 w odwzorowaniu dokumentu i wymaga odwzorowania pola ``locale``. Następnie można
 użyć atrybut ``translated`` we wszystkich polach, które powinny różnić się w
 zależności od języka.

@@ -1,0 +1,70 @@
+I18n dla etykiet menu
+=====================
+
+Załóżmy, że mamy już działający system tłumaczeń.
+
+Tworzenie szablonów
+-------------------
+
+Po pierwsze, trzeba utworzyć szablon rozszerzający `knp_menu.html.twig`
+i dodać filtr `trans` Twiga. W tym przykładzie, szablon jest zlokalizowany w
+``src/Acme/MainBundle/Resources/views/Default/knp_menu.html.twig``. Umożliwia
+to zmianę domeny i parametrów dla translatora przez dodatki elementu.
+
+.. code-block:: jinja
+   
+   {% extends 'knp_menu.html.twig' %}
+   {% block label %}{{ item.label|trans(item.getExtra('translation_params', {}), item.getExtra('translation_domain', 'messages')) }}{% endblock %}
+
+Dołączanie szablonu
+-------------------
+
+Alternatywa A: I18n dla wszystkich menu
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Jeśli chce się przetłumaczyć całe menu, trzeba zmienić domyślny szablon:
+
+.. code-block:: yaml
+   
+   # app/config/config.yml
+   knp_menu:
+      twig:
+         template: AcmeMainBundle:Default:knp_menu.html.twig
+
+Alternatywa B: I18n tylko dla wybranych menu
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Jeśli chce się przetłumaczyć tylko konkretne menu, trzeba dodać do wywołania
+``knp_menu_render`` parametr ``template``.
+
+.. code-block:: jinja
+   
+   {{ knp_menu_render('name_of_your_menu', {'template': 'AcmeMainBundle:Default:knp_menu.html.twig'}) }}
+
+Dodawanie informacji o domenie translacjnej w kontrolerze
+---------------------------------------------------------
+
+W klasie Builder trzeba dodać dodatki. Na przykład, załóżmy, że mamy dwa elementy
+menu, Start i Logowanie.
+
+.. code-block:: php
+   
+   <?php
+   $menu = $factory->createItem('root');
+        
+   $menu->addChild('Start', array('route' => 'homepage'));        
+   $menu->addChild('Logowanie', array('route' => 'login'));
+
+W celu przetłumaczenia tych elementów, trzeba dodać parametr domeny translacyjnej używając
+setExtra(s):
+
+.. code-block:: php
+   
+   <?php
+   $menu = $factory->createItem('root');
+   
+   // wyszukiwanie dla "Start" w Acme/DemoBundle/Resources/translations/AcmeDemoBundle.locale.yml
+   $menu->addChild('Start', array('route' => 'homepage'))->setExtra('translation_domain', 'AcmeDemoBundle'); 
+   // wyszukiwanie dla "Logowanie" in Acme/AdminBundle/Resources/translations/AcmeAdminBundle.locale.yml      
+   $menu->addChild('Logowanie', array('route' => 'login'))->setExtra('translation_domain', 'AcmeLoginBundle');
+

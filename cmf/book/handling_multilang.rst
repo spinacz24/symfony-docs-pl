@@ -155,8 +155,8 @@ Sonata PHPCR-ODM Admin
    w poradniku "Tworzenie CMS".
 
 Pierwszym krokiem jest skonfigurowanie zaplecza administracyjnego Sonata. Można
-umieścić przełącznik językowy LuneticsLocaleBundle na pasku ``topnav``. Aby to zrobić,
-trzeba skonfigurować szablon dla ``user_block``:
+umieścić przełącznik językowy LuneticsLocaleBundle na pasku ``topnav``. Do zrobienia
+tego trzeba skonfigurować szablon dla ``user_block``:
 
 .. configuration-block::
 

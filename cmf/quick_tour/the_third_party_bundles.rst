@@ -119,7 +119,7 @@ wyodrębniania tytułu z obiektu treści przez CmfSeoBundle:
 
 Znacznik ``%%content_title%%`` zostanie zamieniony przez tytuł wyodrębniony z obiektu
 treści. Ostatnia rzecza, którą trzeba zrobić, jest wykorzystanie tytułu w elemencie
-*title*. Aby to zrobić, zamień linię znacznika ``<title>`` w szablonie
+*title*. W celu zrobienia tego, zamień linię znacznika ``<title>`` w szablonie
 ``src/Acme/DemoBundle/Resources/views/layout.html.twig`` na to:
 
 .. code-block:: html+jinja

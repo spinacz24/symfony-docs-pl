@@ -10,7 +10,7 @@ podstawie Symfony CMF.
 Podstawa CMF
 ------------
 
-Jak już to zostało powiedziane, router jest podstawą. Aby to zrozumieć trzeba
+Jak już to zostało powiedziane, router jest podstawą. Dla zrozumienia tego trzeba
 mieć pojęcie o tym co CMS próbuje robić. W zwykłej aplikacji Symfony, trasa
 odnosi się do kontrolera, który obsługuje określone encje. Inna trasa odnosi
 się do innego kontrolera, który obsługuje inną encje. W ten sposób trasa jest
@@ -59,7 +59,7 @@ ma 2 dokumenty w drzewie PHPCR tree: ``contact`` i ``team``.
 
 Można potrzebować kilka przedrostków lub kilka tras. Na przykład, można chcieć
 używać zarówno ``DynamicRouter`` dla tras stron, ale także statycznego trasowania
-z Symfony dla niestandardowej logiki. Aby to umożliwić CMF dostarcza ``ChainRouter``.
+z Symfony dla niestandardowej logiki. W celu umożliwienia tego CMF dostarcza ``ChainRouter``.
 Router ten łączy trasy z wielu routerów i zatrzymuje się gdy trasa zostanie dopasowana.
 
 Domyślnie``ChainRouter`` zastępuje router Symfony i tylko ma rdzenny router w swoim
