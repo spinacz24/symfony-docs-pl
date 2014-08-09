@@ -104,8 +104,8 @@ W celu poznania więcej informacji proszę przeczytać `dokumentację PHPCR-ODM`
 
 .. _bundle-core-child-admin-extension:
 
-Używanie modeli podrzędnych: rozszerzenie Child Sonata Admin
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Używanie modeli potomnych: rozszerzenie Child Sonata Admin
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Rozszerzenie to ustawia domyślnego rodzica, dla każdej nowej instancji obiektu,
 jeśli parametr ``parent`` znajduje się w ścieżce URL.
