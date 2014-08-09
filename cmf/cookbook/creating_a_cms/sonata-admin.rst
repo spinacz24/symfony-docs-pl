@@ -592,7 +592,7 @@ Sonata Admin, aby wyświetlił blok:
             ),
         ));
 
-Aby wyświetlić dokumenty w drzewie pulpitu administracyjnego, należy poinformować
+Dla wyświetlenia dokumentów w drzewie pulpitu administracyjnego, należy poinformować
 o tym Sonata Admin:
 
 .. configuration-block::
