@@ -233,8 +233,8 @@ Przyjrzyjmy się powyższemu przykładowi bardziej szczegółowo:
   odpowiedzialny za obsługę procesu utrwalania obiektów w PHPCR i pobierania ich
   z PHPCR.
 * **linia 12** W tej linii pobierany jest dokument główny dla zadań – jak każdy
-  dokument,dokument zadania musi mieć element nadrzędny. Aby utworzyć ten dokument
-  główny, można skonfigurować :ref:`inicjalizator repozytorium <phpcr-odm-repository-initializers>`,
+  dokument,dokument zadania musi mieć element nadrzędny. W celu utworzenia tego dokumentu
+  głównego, można skonfigurować :ref:`inicjalizator repozytorium <phpcr-odm-repository-initializers>`,
   który zostanie wykonany podczas uruchomienia ``doctrine:phpcr:repository:init``.
 * **linie 14-16** W tej sekcji utworzona została instancja i wykonywana jest praca
   z obiektem ``$task``, tak jak ze zwykłym obiektem PHP.

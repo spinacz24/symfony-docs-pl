@@ -191,7 +191,7 @@ przeglądania witryny. Ogólnie, uproszczony proces jest następujący:
   pakietu AcmeMainBundle.
 
 To jest bardzo uproszczony obraz bardzo prostego CMS zbudowanego na bazie CMF Symfony.
-Aby w pełni zrozumieć wszystkie możliwości CMF, kontynuuj lekturę dalszych rozdziałów
+Dla zrozumienia wszystkich możliwości CMF, kontynuuj lekturę dalszych rozdziałów
 niniejszego podręcznika.
 
 Jeśli chcesz przejrzeć zawartość bazy danych PHPCR możesz użyć następujących poleceń:
@@ -205,7 +205,7 @@ Jeśli chcesz przejrzeć zawartość bazy danych PHPCR możesz użyć następuj�
 Powyższy przykład pokazuje odpowiednio podsumowanie, szczegółowy widok oraz podsumowanie
 węzła i wszystkie jego węzły potomne (zamiast rozpoczynać wyświetlenie drzewa od korzenia).
 
-Aby poznać wszystkie możliwości obejrzyj wyjścia parametru ``--help``:
+Dla poznania wszystkie możliwości obejrzyj wyjścia parametru ``--help``:
 
 .. code-block:: bash
 

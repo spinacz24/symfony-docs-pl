@@ -165,7 +165,7 @@ Rzeczywisty proces dopasowania jest dokładnie taki sam jak w standardowym mecha
 trasowania Symfony2. Jednak ``DynamicRouter`` dodatkowo jest w stanie określić który
 kontroler i szablon ma być użyty na podstawie dopasowanego obiektu ``Route``.
 
-``DynamicRouter`` domyślnie jest wyłączony. Aby go aktywować, wystarczy dodać
+``DynamicRouter`` domyślnie jest wyłączony. Do aktywowania, wystarczy dodać
 następujący zapis do pliku konfiguracyjnego:
 
 .. configuration-block::
@@ -228,7 +228,7 @@ jest realizowany można znaleźć w
 
 .. note::
 
-    Aby mieć dostawcę znajdującego trasy, potrzeba również dostarczyć dane z magazynu
+    W celu posiadania dostawcy znajdującego trasy, potrzeba również dostarczyć dane z magazynu
     danych. W PHPCR-ODM jest to robione albo przez interfejs administracyjny albo
     przez konfiguratory treści (ang. fixtures).
 
@@ -495,7 +495,7 @@ Więcej szczgółów mozna znaleźć w
 Uwagi końcowe
 -------------
 
-Aby uzyskać więcej informacji o komponencie Routing Symfony CMF, proszę przeczytać:
+W celu uzyskania więcej informacji o komponencie Routing Symfony CMF, proszę przeczytać:
 
 * :doc:`../components/routing/introduction` dla poznania więcej rzeczywistych implementacji funkcjonalnych,
 * :doc:`../bundles/routing/introduction` dla zapoznania się z integracją pakietów Symfony2 z pakietem Routing;
