@@ -27,8 +27,8 @@ do stosu ścieżki. Na przykład, następujący dostawca będzie dodawał ście�
         }
     }
 
-Aby zastosować dostawcę ścieżek musimy go zarejestrować w kontenerze i dodać tag
-``cmf_routing_auto.provider`` oraz ustawić odpowiednio **alias**:
+Zastosowanie dostawcy ścieżek wymaga zarejestrowania go w kontenerze i dodania tagu
+``cmf_routing_auto.provider`` oraz odpowiedniego ustawienia opcji **alias**:
 
 .. configuration-block::
 
