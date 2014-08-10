@@ -1,5 +1,5 @@
-Wykorzystywanie zdarzeń do umożliwienia rozszerzania menu
-=========================================================
+Wykorzystywanie zdarzeń dla umożliwienia rozszerzania menu
+==========================================================
 
 Jeśli chce się podłączać różne części systemu do budowy menu, dobrym sposobem jest
 wykorzystanie podejścia opartego na komponencie EventDispatcher  Symfony2.
