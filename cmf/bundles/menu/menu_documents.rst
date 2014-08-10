@@ -119,7 +119,7 @@ Węzeł standardowego menu implementuje ``PublishTimePeriodInterface`` i
 :doc:`dokumentacją procesu publikowania <../core/publish_workflow>`.
 
 .. versionadded:: 1.1
-    ``MenuContentVoter`` dodany został w CmfMenuBundle 1.1.
+    W CmfMenuBundle 1.1 dodano ``MenuContentVoter``.
 
 ``MenuContentVoter`` decyduje, że węzeł menu nie jest publikowany, jeśli treść
 jest wskazana jako niepublikowana.
