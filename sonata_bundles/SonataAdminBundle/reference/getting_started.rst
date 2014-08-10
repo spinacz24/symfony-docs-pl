@@ -109,7 +109,7 @@ będzie wyglądać podobnie do tego:
        }
    }
 
-Implementowanie tycz trzech funkcji jest pierwszym krokiem do utworzenia klasy Admin.
+Implementowanie tych trzech funkcji jest pierwszym krokiem do utworzenia klasy Admin.
 Dostępne są inne opcje, pozwalające dostosować sposób, w jaki model jest pokazywany
 i obsługiwany. Omówione zostaną one w bardziej zaawansowanych rozdziałach tego podręcznika.
 
@@ -117,7 +117,7 @@ Krok 3: Utworzenie usługi Admin
 -------------------------------
 
 Teraz, po utworzeniu klasy Admin, trzeba stworzyć dla niej usługę. Usługa ta musi
-mieć znacznik ``sonata.admin``, który jest sposobem pozwalającym, aby SonataAdminBundle
+mieć tag ``sonata.admin``, który jest sposobem pozwalającym, aby SonataAdminBundle
 wiedział, że ta konkretna usługa reprezentuje klasę Admin:
 
 Wewnątrz folderu  ``Acme/DemoBundle/Resources/config/`` utwórzmy nowy plik ``admin.xml``
@@ -277,7 +277,7 @@ pewne, że Twoja aplikacja wymaga takiej możliwości. Projekt Sonata zawiera pa
 Prosimy zapoznać się z rozdziałem :doc:`security` tej dokumentacji w celu poznania
 więcej szczegółów.
 
-Powinieneś być już teraz gotowy Drogi czytelniku do rozpoczęcia pracy z SonataAdminBundle.
+Powinieneś być już teraz gotowy Drogi Czytelniku do rozpoczęcia pracy z SonataAdminBundle.
 Możesz teraz odwzorowywać dodatkowe modele lub zapoznać się z  zaawansowanymi
 możliwościami pakietu. Następne rozdziały są poświęcone określonym funkcjonalnościom
 pakietu, wyjaśniając głębiej szczegóły dotyczące konfiguracji i tego co można osiągnąć
