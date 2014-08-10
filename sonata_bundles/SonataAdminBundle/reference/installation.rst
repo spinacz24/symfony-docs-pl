@@ -2,7 +2,7 @@ Instalacja
 ==========
 
 Pakiet SonataAdminBundle można zainstalować na każdym etapie życia projektu, czy
-to w czystej instalacji Symfony2 lub w istniejącym projekcie.
+to w czystej instalacji Symfony2 czy też w istniejącym projekcie.
 
 Pobranie kodu
 -------------
@@ -90,19 +90,19 @@ włączyć także SonataAdminBundle:
 
 .. note::
     Począwszy od wersji 2.3, nie jest już wymagany pakiet SonatajQueryBundle ponieważ
-    aktywa sa dostępne w tym pakiecie. Pakiet ten jest również zarejestrowany w bower.io,
+    aktywa są dostępne w tym pakiecie. Pakiet ten jest również zarejestrowany w bower.io,
     więc można użyć bower do obsługi aktywów.
 
 Konfigurowanie zależności SonataAdminBundle
 -------------------------------------------
 
 Będzie trzeba też skonfigurować zależności SonataAdminBundle. Dla każdego z wyżej
-wymienionych pakietów sprawdzić odpowiednie pliki instrukcji instalacji i konfiguracji,
+wymienionych pakietów trzeba sprawdzić odpowiednie instrukcje instalacji i konfiguracji,
 aby zobaczyć co trzeba zmienić w konfiguracji Symfony2.
 
 SonataAdminBundle dostarcza w SonataBlockBundle obsługę bloku wykorzystywanego
-w panelach administracyjnych. W celu korzystania z tego, upewnij się, że właczona
-jest konfiguracja pakietu SonataBlockBundle:
+w panelach administracyjnych. W celu korzystania z tej mozliwości, upewnij się,
+że włączona jest konfiguracja pakietu SonataBlockBundle:
 
 .. configuration-block::
 
@@ -141,8 +141,8 @@ pamięci podręcznej:
 
 W tym momencie instalacja Symfony2 powinna być w pełni funkcjonalna, nie pokazując
 błedów z SonataAdminBundle lub jego zależności. SonataAdminBundle jest zainstalowany,
-ale jeszcze nie skonfigurowany (więcej na ten temat znajduje się w następnym rozdziale),
-więc nie jesteś w stanie go jeszcze używać.
+ale jeszcze nie skonfigurowany (więcej na ten temat znajdziesz się w następnym rozdziale),
+więc nie można jeszcze pakietu używać.
 
 Jeśli w tym momencie lub podczas instalacji pojawiły się jakieś błędy, nie panikuj.
 
