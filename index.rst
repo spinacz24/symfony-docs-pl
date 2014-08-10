@@ -11,7 +11,7 @@ pakietów osób trzecich i polskojęzyczne artykuły tam nie ujęte.
 :doc:`Krótki kurs </quick_tour/index>`
 ======================================
 
-Co może być coś lepszego dla uzupełnienia swojej wiedzy, niż wypróbowanie Symfony?
+Co może być lepszego dla uzupełnienia swojej wiedzy, niż wypróbowanie Symfony?
 To zajmie Ci trochę czasu, ale warto go poświęcić. Krok, po kroku będziemy tu odkrywać
 świat Symfony. Uważaj, można się uzależnić od Symfony.
 
@@ -66,7 +66,7 @@ Symfony zbudowany jest z pakietów. Dowiedz się o nich więcej.
 Bardzo ważnymi pakietami są pakiety `projektu Sonata <http://sonata-project.org/>`_
 Wprawdzie oficjalna dokumentacja Symfony2 nie zawiera dokumentacji tych pakietów,
 to w tym polskim tłumaczeniu dokumentacji Symfony2 dołączamy tłumaczenie dokumentacji
-kilku najważniejszych pakietów projektu Sonat.  
+kilku najważniejszych pakietów projektu Sonata.  
 
 .. toctree::
    :maxdepth: 1
