@@ -1,6 +1,6 @@
 .. index::
     single: rdzeń CMF; pakiety; proces publikowania
-    single: elektory publikowania
+    single: wyborcy publikowania
     single: procedura kontroli publikacji
 
 Proces publikowania
@@ -14,7 +14,7 @@ może być realizowane nawet, gdy nie jest umieszczona żadna zapora i zatem kon
 bezpieczeństwa nie ma żadnego tokenu (zobacz `Uwierzytelnianie w Symfony2`_).
 
 Proces publikowania jest również związany z procesem bezpieczeństwa:
-pakiet CoreBundle rejestruje **elektory** (obiekty *voters*), które
+pakiet CoreBundle rejestruje **wyborców** (obiekty *voters*), które
 przekazują weryfikację bezpieczeństwa do procesu publikowania. Oznacza to, że
 jeśli zawsze ma się zaporę, można po prostu użyć zwykły kontekst bezpieczeństwa
 oraz funkcję ``is_granted`` Twig, aby sprawdzić publikacje.
@@ -48,7 +48,7 @@ Metoda ta jest używana też podczas wykonywania `procedur kontrolnych ACL`_: pi
 argumentem jest pożądana akcja, drugim obiekt treści, na którym chce się wykonać
 akcję.
 
-Obecnie jedynymi akcjami obsługiwanymi przez elektory są ``VIEW``
+Obecnie jedynymi akcjami obsługiwanymi przez wyborców są ``VIEW``
 i ``VIEW_ANONYMOUS``. Posiadanie prawa do wglądu oznacza, że bieżącemu użytkownikowi
 wolno oglądnąć tą treść, dlatego że jest opublikowana albo z powodu jego specyficznych
 uprawnień. W niektórych kontekstach aplikacja może nie chcieć pokazywać niepublikowaną
@@ -178,12 +178,12 @@ czy kontekst bezpieczeństwa zna bieżącego użytkownika i czy temu użytkownik
 przydzielona jest rola omijająca. Jeśli tak, to udzielany jest dostęp, w przeciwnym
 razie zostaje delegowana klasa
 :class:`Symfony\\Component\\Security\\Core\\Authorization\\AccessDecisionManager`,
-która wywołuje wszystkie elektory z żądanymi atrybutami, obiekt i token.
+która wywołuje wszystkich wyborców z żądanymi atrybutami, obiekt i token.
 
 Menadżer decyzji jest skonfigurowany dla zgodnych głosowań wg reguły
-"zezwól, jeśli wszyscy się wstrzymują". Oznacza to, że gdy tylko jeden elektor
+"zezwól, jeśli wszyscy się wstrzymują". Oznacza to, że gdy tylko jeden wyborca
 powie ``ACCESS_DENIED``, będzie to wystarczające do uznania treści za nieopublikowaną.
-Jeśli wszystkie elektory nie dadzą głosu (na przykład, gdy
+Jeśli wszystkie obiekty wyborców nie dadzą głosu (na przykład, gdy
 treść w pytaniu nie implementuje jakiejkolwiek funkcjonalności procesu publikowania)
 treść jest nadal uważana za publikowaną.
 
@@ -255,10 +255,10 @@ Poniżej znajduje się przykład implementacji procesu publikowania::
         }
     }
 
-Elektory publikowania
-~~~~~~~~~~~~~~~~~~~~~
+Wyborcy publikowania
+~~~~~~~~~~~~~~~~~~~~
 
-Elektor publikowania musi implementować
+Wyborca publikowania musi implementować
 :class:`Symfony\\Component\\Security\\Core\\Authorization\\Voter\\VoterInterface`.
 Przekazany zostanie obiekt treści i trzeba zdecydować, czy będzie on publikowany
 zgodnie z jego zasadami. Pakiet CoreBundle udostępnia kilka ogólnych eletorów
@@ -267,17 +267,17 @@ kątem posiadania interfejsu oferującego potrzebne metody. Jeśli treść imple
 ten interfejs, to sprawdzany jest parametr i zwracany jest głos ``ACCESS_GRANTED``
 lub ``ACCESS_DENIED``, w przeciwnym razie zwracany jest ``ACCESS_ABSTAIN``.
 
-Głosowania mają być zgodne. Każdy elektor zwraca głos ``ACCESS_GRANTED``,
-jeśli jego kryteria są spełnione, lecz jeśli jakiś elektor zwróci
+Głosowania mają być zgodne. Każdy wyborca zwraca głos ``ACCESS_GRANTED``,
+jeśli jego kryteria są spełnione, lecz jeśli jakiś wyborca zwróci
 ``ACCESS_DENIED``, treść jest uważana za nie opublikowaną.
 
-Można również zaimplementować :ref:`własne elektory <bundle-core-workflow-custom-voters>`
+Można również zaimplementować :ref:`właśni wyborcy <bundle-core-workflow-custom-voters>`
 w celu uzyskania dodatkowych zachowań publikacji.
 
 PublishableVoter
 ................
 
-Elektor ten sprawdza w ``PublishableReadInterface`` czy interfejs ten ma metodę,
+Wyborca ten sprawdza w ``PublishableReadInterface`` czy interfejs ten ma metodę,
 która zwraca wartość logiczną.
 
 * **isPublishable**: Czy obiekt powinien być uznany za publikację.
@@ -285,7 +285,7 @@ która zwraca wartość logiczną.
 TimePeriodVoter
 ...............
 
-Elektor ten sprawdza w ``PublishTimePeriodReadInterface`` czy określona została
+Wyborca ten sprawdza w ``PublishTimePeriodReadInterface`` czy określona została
 data początkowa i końcowa. Data o wartości null oznacza "zawsze rozpoczęte" lub
 odpowiednio "nigdy się nie kończy".
 
@@ -294,17 +294,17 @@ odpowiednio "nigdy się nie kończy".
 
 .. _bundle-core-workflow-custom-voters:
 
-Własne elektory publikowania
-............................
+Właśni wyborcy publikowania
+...........................
 
-Do budowania elektorów z własną logiką trzeba zaimplementować
+Do budowania wyborców z własną logiką trzeba zaimplementować
 :class:`Symfony\\Component\\Security\\Core\\Authentication\\Voter\\VoterInterface`
 oraz zdefiniować usługę z tagiem ``cmf_published_voter``. Podobny jest on do tagu
-``security.voter``, ale dodaje indywidualny elektor do procesu publikowania.
-Podobnie jak w przypadku elektorów bezpieczeństwa, można określić priorytet,
+``security.voter``, ale dodaje indywidualnego wyborcę do procesu publikowania.
+Podobnie jak w przypadku wyborców bezpieczeństwa, można określić priorytet,
 choć jest ograniczenie stosowania, gdyż decyzja o dostępie musi być jednomyślna.
 Jeśli ma się więcej kosztownych procedur kontrolnych, można obniżyć priorytet tych
-elektorów.
+wyborców.
 
 .. configuration-block::
 
@@ -341,11 +341,11 @@ elektorów.
 
 Procedura kontroli procesu publikowania tworzy w locie
 :class:`Symfony\\Component\\Security\\Core\\Authentication\\Token\\AnonymousToken`,
-jeśli kontekst bezpieczeństwa ma wartość none. Oznacza to, ze elektory muszą być
-zdolne do obsłużenia takiej sytuacji podczas udzielania dostępu użytkownikowi.
+jeśli kontekst bezpieczeństwa ma wartość none. Oznacza to, że obiekty wyborców muszą
+być zdolne do obsłużenia takiej sytuacji podczas udzielania dostępu użytkownikowi.
 Również podczas udzielania dostępu kontekstowi bezpieczeństwa, najpierw muszą one
 sprawdzić, czy kontekst ten ma token a jeśli nie, to nie mogą kontekstu tego
-wywoływać, aby uniknąć wywołania wyjątku. W przypadku, w którym elektor daje dostęp,
+wywoływać, aby uniknąć wywołania wyjątku. W przypadku, w którym wyborca daje dostęp,
 gdy obecny użytkownik spełnia jakieś wymagania, to musi zwrócić ``ACCESS_DENIED``,
 jeśli nie ma aktualnego użytkownika.
 

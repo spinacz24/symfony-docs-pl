@@ -40,6 +40,7 @@ lub wprowadza zupełnie nową koncepcję.
   * :doc:`menu/menu_factory`
   * :doc:`menu/menu_provider`
   * :doc:`menu/voters`
+  * :doc:`menu/sonata_admin`
 
 * :doc:`routing/index`
 
