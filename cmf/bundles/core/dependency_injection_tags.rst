@@ -14,7 +14,7 @@ Tag cmf_request_aware
     że żądanie jest `usługą synchronizowaną`_.
 
 Gdy pracuje się z wersją 1.0 CMF w Symfony 2.2 i ma się usługi, które wymagają
-żądania (np. dla procesu publikowania lub elektorów pozycji bieżącego menu),
+żądania (np. dla procesu publikowania lub wyborców pozycji bieżącego menu),
 można oflagować usługi tagiem ``cmf_request_aware``, aby otrzymać wstrzykiwanie
 rdzennego odbiornika żądania. Każda klasa używana w tak oflagowanej usłudze musi
 mieć metodę ``setRequest``, inaczej otrzyma się błąd krytyczny::
@@ -35,11 +35,11 @@ Tag cmf_published_voter
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Wykorzystywany do aktywowania
-:ref:`własnych elektorów <bundle-core-workflow-custom-voters>` dla
+:ref:`własnych wyborców <bundle-core-workflow-custom-voters>` dla
 :doc:`procesu publikowania <publish_workflow>`. Oflagowanie usługi tym tagiem
 integruje ``cmf_published_voter`` ją z decezją dostępu procesu publikacji.
 
-Tag ten ma atrybut ``priority``. Im niższy numer priorytetu, tym wcześniej elektor
+Tag ten ma atrybut ``priority``. Im niższy numer priorytetu, tym wcześniej wyborca
 będzie pobierany do głosowania.
 
 .. _`usługą synchronizowaną`: http://symfony.com/doc/current/cookbook/service_container/scopes.html#a-using-a-synchronized-service
