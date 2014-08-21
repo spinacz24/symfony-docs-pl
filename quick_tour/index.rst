@@ -2,7 +2,7 @@ Krótki kurs
 ===========
 
 .. toctree::
-   :hidden:
+   :maxdepth: 2
 
    the_big_picture
    the_view
