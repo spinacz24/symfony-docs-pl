@@ -20,7 +20,7 @@ dokumentację. Oto lista oficjalnych repozytoriów *master* tłumaczeń:
 * *francuski*:   https://github.com/gscorpio/symfony-docs-fr
 * *włoski*:  https://github.com/garak/symfony-docs-it
 * *japoński*: https://github.com/symfony-japan/symfony-docs-ja
-* *polski*:   http://github.com/ampluso/symfony-docs-pl
+* *polski*:   http://github.com/symfony-docs-pl/symfony-docs-pl
 * *portugalski (brazylijski)*:  https://github.com/andreia/symfony-docs-pt-BR
 * *rumuński*: http://github.com/sebio/symfony-docs-ro
 * *rosyjski*:  http://github.com/avalanche123/symfony-docs-ru
@@ -40,11 +40,12 @@ to bardzo prost proces:
 
 * Przedstaw się na `Symfony docs mailing-list`_;
 * *(opcjonalnie)* Spytaj nad którymi dokumentami możesz pracować;
-* Zrób forka repozytorium *master* dla Twojego języka (kliknij w "Fork") na
-  swojej stronie GitHuba);
+* Wykonaj rozgałezienie projektu (*ang. fork*) repozytorium *master* dla swojego
+  języka (kliknij w "Fork" na stronie repozytorium głównego na GitHub);
 * Przetłumacz kilka dokumentów;
-* Poproś o pull request (kliknij w "Pull Request" na swojej stronie GitHuba);
-* Lider zaakceptuje Twoje zmiany i zmerguje je do głównego repozytorium;
+* Poproś o zaktualizowanie głównego repozytorium (kliknij w "Pull Request" na
+  swojej stronie GitHuba);
+* Lider zaakceptuje Twoje zmiany i włączy je je do głównego repozytorium;
 * Dokumentacja strony jest aktualizowana z głównego repozyrotium co noc.
 
 .. _translations-adding-a-new-language:

@@ -52,7 +52,7 @@ procedurę.
     informacje dotyczące konfiguracji katalogu głównego serwera znajdziesz w dokumentacji
     serwera, który używasz. Poniżej podane są odnośniki do odpowiedniej dokumentacji:
     
-    * dla serwera Apache HTTP jest to dokumentacja`Apache's DirectoryIndex`_
+    * dla serwera Apache HTTP jest to dokumentacja `Apache's DirectoryIndex`_
     * dla Nginx jest to dokumentacja umiejscawiania `Nginx HttpCoreModule`_
 
 Zanim zaczniesz: utwórz pakiet
@@ -64,9 +64,9 @@ odpowiedzialnych za konkretne funkcjonalności.
 
 Pakiet to nic innego jak katalog, który przechowuje wszystko wszystko co związane
 jest z określoną funkcjonalnością, włączając w to klasy PHP, konfigurację, a nawet
-arkusze stylów i pliki Javascript (zobacz :ref:`System pakietów<page-creation-bundles>`).
+arkusze stylów i pliki Javascript (zobacz :ref:`System pakietów <page-creation-bundles>`).
 
-Aby utworzyć pakiet o nazwie ``AcmeHelloBundle`` (cwiczebny pakiet, który będziemy
+Aby utworzyć pakiet o nazwie ``AcmeHelloBundle`` (ćwiczebny pakiet, który będziemy
 budować tym rozdziale), wykonaj poniższe polecenie i postępuj ze wskazówkami
 na ekranie (stosując wszystkie domyślne opcje):
 
@@ -74,7 +74,7 @@ na ekranie (stosując wszystkie domyślne opcje):
 
     php app/console generate:bundle --namespace=Acme/HelloBundle --format=yml
 
-Tworzy to katalog pakietu o lokalizacji ``src/Acme/HelloBundle``. Zostanie też
+Tworzy to katalog pakietu w lokalizacji ``src/Acme/HelloBundle``. Zostanie też
 automatycznie dodana linia w pliku ``app/AppKernel.php`` rejestrujaca pakiet w jądrze::
 
     // app/AppKernel.php
@@ -281,7 +281,7 @@ Opcjonalny krok 3: Utwórz szablon
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Szablony umożliwiają przeniesienie całej prezentacji (czyli kodu HTML) do oddzielnego
-pliku i wielokrotne wykorzystywania fragmentół układu strony. Zamiast pisać kod
+pliku i wielokrotne wykorzystywania fragmentów układu strony. Zamiast pisać kod
 HTML wewnątrz kontrolera, należy wygenerować szablon:
 
 .. code-block:: php
