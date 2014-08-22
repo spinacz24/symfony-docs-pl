@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 Rejestrowanie własnego renderera
 ================================
 
@@ -5,6 +8,7 @@ Rejestracja własnego renderera w dostawcy rendererów jest prostą sprawa, spro
 się do utworzenia otagowanej usługi z nazwą ``knp_menu.renderer``:
 
 .. code-block:: yaml
+   :linenos:
    
    # src/Acme/MainBundle/Resources/config/services.yml
    services:
@@ -20,6 +24,7 @@ Jeśli renderer rozszerza ListRenderer, potrzeba dostarczyć instancję Matcher.
 Konfiguracja jest następująca:
 
 .. code-block:: yaml
+   :linenos:
    
    # src/Acme/MainBundle/Resources/config/services.yml
    services:

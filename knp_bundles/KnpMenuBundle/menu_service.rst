@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 Tworzenie menu jako usług
 =========================
 
@@ -10,11 +13,10 @@ zależności potrzebnych dla menu, zamiast wstrzykiwania całego kontenera usłu
 Prowadzi to do kodu, który jest wygodniejszy w testowaniu i potencjalnie możliwym
 do wielokrotnego zastosowania. Wadą jest trochę więcej pracy w stworzeniu konfiguracji.
 
-Zacznijmy od utworzenia buildera dla menu. Można utworzyć tyle menu, ile potrzeba,
-więc można mieć w aplikacji tylko jedną lub tylko kilka klas buildera:
+Zacznijmy od utworzenia budowniczego (*ang. builder*) dla menu. Można utworzyć tyle
+ menu, ile potrzeba, więc można mieć w aplikacji tylko jedną lub tylko kilka klas
+ budowniczego::
 
-.. code-block:: php
-   
    <?php
    // src/Acme/MainBundle/Menu/MenuBuilder.php
    
@@ -46,10 +48,11 @@ więc można mieć w aplikacji tylko jedną lub tylko kilka klas buildera:
       }
    }
 
-Następnie zarejestrujemy dwie usługi: jedną dla buildera menu i drugą dla obiektu
+Następnie zarejestrujemy dwie usługi: jedną dla budowniczego menu i drugą dla obiektu
 menu utworzonego przez metodę ``createMainMenu``:
 
 .. code-block:: yaml
+   :linenos:
    
    # src/Acme/MainBundle/Resources/config/services.yml
    services:
@@ -79,10 +82,8 @@ powyżej w kluczu ``alias``:
    {{ knp_menu_render('main') }}
 
 Przypuśćmy, że potrzebujemy utworzyć drugie menu dla paska bocznego. Zaczniemy od
-dodania nowej metody do buildera:
-
-.. code-block:: php
-   
+dodania nowej metody do budowniczego::
+  
    <?php
    // src/Acme/MainBundle/Menu/MenuBuilder.php
    
@@ -106,6 +107,7 @@ dodania nowej metody do buildera:
 Utworzymy teraz usługę *tylko* dla nowego menu, nadając mu nazwę, powiedzmy ``sidebar``:
 
 .. code-block:: yaml
+   :linenos:
    
    # src/Acme/MainBundle/Resources/config/services.yml
    services:
@@ -128,12 +130,13 @@ Wyłączenie dostawców rdzennego menu
 -----------------------------------
 
 W celu wspólnego używania różnych dostawców menu (na przykład, jeden oparty na kontenerze,
-drugi oparty na builderze) wykorzystywany jest dostawca łańcuchowy.
+drugi oparty na budowniczym) wykorzystywany jest dostawca łańcuchowy.
 Jednak nie jest on używany gdy dostępny jest tylko jeden dostawca ze względu na
 spadek wydajności związany z obsługą opakowaniem. Jeśli nie chce się używać wbudowanych
 dostawców, można je wyłączyć w konfiguracji:
 
 .. code-block:: yaml
+   :linenos:
    
    #app/config/config.yml
    knp_menu:

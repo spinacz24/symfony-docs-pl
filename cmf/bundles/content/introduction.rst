@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: treść; pakiety
     single: ContentBundle
@@ -75,6 +78,7 @@ Na przykład, bardzo prosty szablon wygląda tak:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# src/Acme/BlogBundle/Resources/views/Post/index.html.twig #}
         {% extends '::layout.html.twig' %}
@@ -90,6 +94,7 @@ Na przykład, bardzo prosty szablon wygląda tak:
         {%- endblock %}
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- src/Acme/BlogBundle/Resources/views/Post/index.html.php -->
         <?php $view->extend('::layout.html.twig') ?>
@@ -112,6 +117,7 @@ Dla skonfigurowania domyślnego szablonu trzeba użyć opcji ``default_template`
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
 
@@ -120,6 +126,7 @@ Dla skonfigurowania domyślnego szablonu trzeba użyć opcji ``default_template`
             default_template: AcmeBlogBundle:Content:static.html.twig
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -133,6 +140,7 @@ Dla skonfigurowania domyślnego szablonu trzeba użyć opcji ``default_template`
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.yml
 
@@ -157,6 +165,7 @@ Załóżmy, że chcemy obsłużyć dokument ``StaticContent`` z domyślnym kontr
 .. configuration-block::
 
     .. code-block:: yaml
+       :lienos:
 
         # app/config/config.yml
 
@@ -167,6 +176,7 @@ Załóżmy, że chcemy obsłużyć dokument ``StaticContent`` z domyślnym kontr
                     Symfony\Cmf\Bundle\ContentBundle\Doctrine\Phpcr\StaticContent: cmf_content.controller:indexAction
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -183,6 +193,7 @@ Załóżmy, że chcemy obsłużyć dokument ``StaticContent`` z domyślnym kontr
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.yml
 

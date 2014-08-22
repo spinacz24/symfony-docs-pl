@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
    KnpMenuBundle
 
@@ -58,6 +61,7 @@ Dodaj następujące dwa wpisy przestrzeni nazw do wywołania `registerNamespaces
 w autoloaderze:
 
 .. code-block:: php
+   :linenos:
    
    <?php
    // app/autoload.php
@@ -74,6 +78,7 @@ Krok 3 - rejestracja pakietu
 Dla rozpocząć stosowania pakietu, zarejestruj go w jądrze:
 
 .. code-block:: php
+   :linenos:
    
    <?php
    // app/AppKernel.php
@@ -92,6 +97,7 @@ Pakiet dostarczany jest z rozsądną konfiguracją domyślną, która jest wykaz
 Jeśli pominie się ten krok, użyta będzie konfiguracja domyślna.
 
 .. code-block:: yaml
+   :linenos:
    
    # app/config/config.yml
    knp_menu:
@@ -120,10 +126,8 @@ W celu utworzenia menu, najpierw trzeba stworzyć nowa klasę w katalogu `Menu` 
 pakietów. Klasa ta, zwana `Builder` w naszym przykładzie, będzie mieć jedną metodę
 dla każdego menu, które trzeba zbudować.
 
-Przykładowo klasa buildera może wyglądać tak:
+Przykładowo klasa buildera może wyglądać tak::
 
-.. code-block::
-   
    <?php
    // src/Acme/DemoBundle/Menu/Builder.php
    namespace Acme\DemoBundle\Menu;
@@ -243,6 +247,7 @@ Jeśli woli się stosować szablony PHP, do renderowania i pobrania menu z szabl
 można użyć helpera szablonowania, podobnie jak w Twig.
 
 .. code-block:: php
+   :linenos:
    
    // Retrieves an item by its path in the main menu
    $item = $view['knp_menu']->get('AcmeDemoBundle:Builder:main', array('child'));

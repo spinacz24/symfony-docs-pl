@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: wytwórnia menu; MenuBundle
 
@@ -156,6 +159,7 @@ Usługa musi być oflagowana jako detektor zdarzeń:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         services:
             acme_demo.listener.menu_referrer_listener:
@@ -169,6 +173,7 @@ Usługa musi być oflagowana jako detektor zdarzeń:
                         method: onCreateMenuItemFromNode
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services">
@@ -182,6 +187,7 @@ Usługa musi być oflagowana jako detektor zdarzeń:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         use Symfony\Component\DependencyInjection\Definition;
         use Symfony\Component\DependencyInjection\Reference;

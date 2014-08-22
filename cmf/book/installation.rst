@@ -9,7 +9,7 @@ Symfony CMF Standard Edition (SE) jest dystrybucją opartą na wszystkich głów
 komponentach potrzebnych we wszystkich najczęstszych przypadkach zastosowania
 Symfony CMF.
 
-Tematem tego kursu jest instalacja pakietów CMF z minimalnie konieczną konfiguracją
+Tematem tego rozdziału jest instalacja pakietów CMF z minimalnie konieczną konfiguracją
 i zilustrowanie działania aplikacji Symfony 2 kilkoma przykładami.
 
 Następnie uzyska się krótkie wprowadzenie na temat zainstalowanych pakietów.

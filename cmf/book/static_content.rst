@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: treść statyczna; podręcznik
     single: CmfContentBundle

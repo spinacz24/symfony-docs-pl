@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: menu; pakiety
     single: MenuBundle
@@ -102,6 +105,7 @@ Oto dokument ``main-menu`` określony w poprzednim przykładzie.
 Będzie to renderować nieuporządkowaną listę w następujący sposób:
 
 .. code-block:: html
+   :linenos:
 
     <ul>
         <li class="first">

@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: wielojezyczność; SimpleCmsBundle
 

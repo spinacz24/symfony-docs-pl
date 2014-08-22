@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: wielojęzyczność; DoctrinePHPCRBundle
 
@@ -15,6 +18,7 @@ Stosowanie tłumaczeń dokumentów wymaga skonfigurowanie dostępnych języków:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         doctrine_phpcr:
@@ -27,6 +31,7 @@ Stosowanie tłumaczeń dokumentów wymaga skonfigurowanie dostępnych języków:
                 locale_fallback: hardcoded
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -55,6 +60,7 @@ Stosowanie tłumaczeń dokumentów wymaga skonfigurowanie dostępnych języków:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('doctrine_phpcr', array(
@@ -106,6 +112,7 @@ zależności od języka.
 .. configuration-block::
 
     .. code-block:: php
+       :linenos:
 
         <?php
 
@@ -142,6 +149,7 @@ zależności od języka.
         }
 
     .. code-block:: xml
+       :linenos:
 
         <doctrine-mapping>
             <document class="MyPersistentClass"
@@ -154,6 +162,7 @@ zależności od języka.
         </doctrine-mapping>
 
     .. code-block:: yaml
+       :linenos:
 
         MyPersistentClass:
           translator: attribute

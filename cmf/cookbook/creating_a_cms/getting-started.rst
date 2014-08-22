@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 Rozpoczynamy
 ------------
 
@@ -23,6 +26,7 @@ Jeśli masz zamiar przerobić cały ten poradnik, to możesz zaoszczędzić troc
 czasu dodając teraz wszystkie wymagane pakiety.
 
 .. code-block:: javascript
+   :linenos:
 
     {
         ...
@@ -249,6 +253,7 @@ Dodajmy konfiguracji kontenera usługi następujący kod:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/BasicCmsBundle/Resources/config/services.yml
         services:
@@ -261,6 +266,7 @@ Dodajmy konfiguracji kontenera usługi następujący kod:
                     - { name: doctrine_phpcr.initializer }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme\BasicCmsBundle\Resources\services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -291,6 +297,7 @@ Dodajmy konfiguracji kontenera usługi następujący kod:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/BasicCmsBundle/Resources/config/services.php
         $container
@@ -340,6 +347,7 @@ danych dla naszego CMS.
 Potrzebna jest instalacja następującego pakietu:
 
 .. code-block:: javascript
+   :linenos:
 
     {
         ...

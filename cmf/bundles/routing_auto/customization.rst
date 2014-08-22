@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: RoutingAutoBundle; dostosowywanie
 
@@ -33,6 +36,7 @@ Zastosowanie dostawcy ścieżek wymaga zarejestrowania go w kontenerze i dodania
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         services:
             acme_cms.path_provider.foobar:
@@ -42,6 +46,7 @@ Zastosowanie dostawcy ścieżek wymaga zarejestrowania go w kontenerze i dodania
                     - { name: cmf_routing_auto.provider, alias: "foobar"}
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services">
@@ -55,6 +60,7 @@ Zastosowanie dostawcy ścieżek wymaga zarejestrowania go w kontenerze i dodania
         </container>
 
     .. code-block:: php
+       :linenos:
 
         use Symfony\Component\DependencyInjection\Definition;
 
@@ -111,6 +117,7 @@ Zapisy rejestrujące w konfiguracji DI wyglądają tak:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         services:
             cmf_routing_auto.not_exists_action.throw_exception:
@@ -120,6 +127,7 @@ Zapisy rejestrujące w konfiguracji DI wyglądają tak:
                     - { name: cmf_routing_auto.not_exists_action, alias: "throw_exception"}
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services">
@@ -133,6 +141,7 @@ Zapisy rejestrujące w konfiguracji DI wyglądają tak:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         use Symfony\Component\DependencyInjection\Definition;
 

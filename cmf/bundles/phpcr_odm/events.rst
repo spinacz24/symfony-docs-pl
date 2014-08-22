@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: zdarzenia; DoctrinePHPCRBundle
 
@@ -28,6 +31,7 @@ trzeba zastosować taka konfigurację:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         services:
             acme_search.listener.search:
@@ -41,6 +45,7 @@ trzeba zastosować taka konfigurację:
                         - { name: doctrine_phpcr.event_subscriber }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/SearchBundle/Resources/config/services.xml -->
         <?xml version="1.0" ?>
@@ -58,6 +63,7 @@ trzeba zastosować taka konfigurację:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         $container
             ->register(

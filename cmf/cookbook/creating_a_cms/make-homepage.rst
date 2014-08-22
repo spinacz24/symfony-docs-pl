@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 Dokument witryny i strona domowa
 --------------------------------
 
@@ -60,6 +63,7 @@ Inicjowanie dokumentu witryny
 Gdzie znajduje sie dokument ``Site``? Hierarchia dokumentów wygląda tak:
 
 .. code-block:: text
+   :linenos:
 
     ROOT/
         cms/
@@ -133,6 +137,7 @@ jak poniżej:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/BasicCmsBundle/Resources/config/config.yml
         services:
@@ -143,6 +148,7 @@ jak poniżej:
                     - { name: doctrine_phpcr.initializer }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/BasicCmsBUndle/Resources/config/config.php
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -164,6 +170,7 @@ jak poniżej:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/BasicCmsBundle/Resources/config/config.php
 

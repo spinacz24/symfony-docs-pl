@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: menu; pierwsze kroki
     single: CmfMenuBundle
@@ -70,11 +73,13 @@ jest menu ``simple``, to główny węzeł menu musi być przechowywany w ``/cms/
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         cmf_menu:
             menu_basepath: /cms/menu
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" encoding="UTF-8" ?>
 
@@ -86,6 +91,7 @@ jest menu ``simple``, to główny węzeł menu musi być przechowywany w ``/cms/
         </container>
 
     .. code-block:: php
+       :linenos:
 
         $container->loadFromExtension('cmf_menu', array(
             'menu_basepath' => '/cms/menu',

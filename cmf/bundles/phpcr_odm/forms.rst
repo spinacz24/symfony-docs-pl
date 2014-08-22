@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: typy formularzy; DoctrinePHPCRBundle
 
@@ -119,6 +122,7 @@ do sprawdzenia czy  dokument ``Id`` lub ``Nodename`` i pole ``Parent`` są wła�
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/BlogBundle/Resources/config/validation.yml
         Acme\BlogBundle\Entity\Author:
@@ -126,6 +130,7 @@ do sprawdzenia czy  dokument ``Id`` lub ``Nodename`` i pole ``Parent`` są wła�
                 - Doctrine\Bundle\PHPCRBundle\Validator\Constraints\ValidPhpcrOdm
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/Acme/BlogBundle/Entity/Author.php
 
@@ -141,6 +146,7 @@ do sprawdzenia czy  dokument ``Id`` lub ``Nodename`` i pole ``Parent`` są wła�
         }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- Resources/config/validation.xml -->
         <?xml version="1.0" ?>
@@ -156,6 +162,7 @@ do sprawdzenia czy  dokument ``Id`` lub ``Nodename`` i pole ``Parent`` są wła�
         </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/BlogBundle/Entity/Author.php
 

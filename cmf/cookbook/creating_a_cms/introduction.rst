@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: poradnik, tworzenie CMS, RoutingAuto, PHPCR-ODM
     single: MenuBundle, SonataAdmin, SonataDoctrineAdminBundle

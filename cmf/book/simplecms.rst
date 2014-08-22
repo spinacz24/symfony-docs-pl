@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: SimpleCms
 
@@ -33,7 +36,7 @@ Standard Edition dla domyślnego trasowania, treści i menu.
 Dokument strony
 ---------------
 
-SimpleCmsBundle dostarcza klasę o nazwie ``Page``, która rozszerza rdzenna klasę
+SimpleCmsBundle dostarcza klasę o nazwie ``Page``, która rozszerza rdzenną klasę
 ``Route`` oraz dostarcza właściwości do przechowywania treści. Pakiet ten
 implementuje też ``NodeInterface``, dzięki czemu może być wykorzystywany w menu.
 To podejście "trzy w jednym" jest kluczową koncepcją pakietu SimpleCmsBundle.
@@ -82,6 +85,7 @@ nazwą strony. Nazwy te są wykorzystywane w ścieżce URL. Na przykład, można
 następująca strukturę drzewa:
 
 .. code-block:: text
+   :linenos:
 
     /cms/simple/
         about/

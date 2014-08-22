@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 Kontrolery i szablony
 ---------------------
 
@@ -11,6 +14,7 @@ Można odwzorować domyślny kontroler dla wszystkich instancji ``Page``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         cmf_routing:
@@ -20,6 +24,7 @@ Można odwzorować domyślny kontroler dla wszystkich instancji ``Page``:
                     Acme\BasicCmsBundle\Document\Page: Acme\BasicCmsBundle\Controller\DefaultController::pageAction
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -40,6 +45,7 @@ Można odwzorować domyślny kontroler dla wszystkich instancji ``Page``:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('cmf_routing', array(
@@ -88,6 +94,7 @@ Dodamy odpowiedni szablon Twiga (zwróć uwagę, że to działa, bo użyliśmy a
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# src/Acme/BasicCmsBundle/Resources/views/Default/page.html.twig #}
         <h1>{{ page.title }}</h1>
@@ -100,6 +107,7 @@ Dodamy odpowiedni szablon Twiga (zwróć uwagę, że to działa, bo użyliśmy a
         </ul>
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- src/Acme/BasicCmsBundle/Resources/views/Default/page.html.twig -->
         <h1><?php echo $page->getTitle() ?></h1>

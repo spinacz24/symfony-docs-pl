@@ -1,16 +1,20 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 Wykorzystywanie zdarzeń dla umożliwienia rozszerzania menu
 ==========================================================
 
 Jeśli chce się podłączać różne części systemu do budowy menu, dobrym sposobem jest
 wykorzystanie podejścia opartego na komponencie EventDispatcher  Symfony2.
 
-Utworzenie buildera menu
-------------------------
+Utworzenie budowniczego menu
+----------------------------
 
-Builder menu tworzy podstawowy element menu i następnie wysyła zdarzenie, aby
-umożliwić innym częściom aplikacji dodać do niego więcej rzeczy.
+Budowniczy menu (*ang. menu builder*) tworzy podstawowy element menu i następnie
+wysyła zdarzenie, aby umożliwić innym częściom aplikacji dodać do niego więcej rzeczy.
 
 .. code-block:: php
+   :linenos:
    
    <?php
    // src/Acme/DemoBundle/Menu/MainBuilder.php
@@ -50,6 +54,7 @@ Obiekt zdarzenia pozwala przekazać trochę danych do obiektu nasłuchu. W tym p
 będzie posiadać utworzone menu i wytwórnię.
 
 .. code-block:: php
+   :linenos:
    
    <?php
    // src/Acme/DemoBundle/Event/ConfigureMenuEvent.php
@@ -99,7 +104,7 @@ będzie posiadać utworzone menu i wytwórnię.
    Zgodnie z najlepszymi praktykami Symfony2, pierwszy segment nazwy zdarzenia
    jest aliasem pakietu, co pozwala uniknąć konfliktu nazewniczego.
 
-Teraz nasz builder dostarcza hak. Przyjrzyjmy się jak można go użyć.
+Teraz nasz budowniczy dostarcza hak. Przyjrzyjmy się jak można go użyć.
 
 Utworzenie obiektu nasłuchu
 ---------------------------
@@ -108,6 +113,7 @@ Utworzenie obiektu nasłuchu
 Można zarejestrować dla zdarzenia tyle nasłuchów, ile się chce. Dodajmy jeden.
 
 .. code-block:: php
+   :linenos:
    
    <?php
    // src/Acme/OtherBundle/EventListener/ConfigureMenuListener.php
@@ -133,6 +139,7 @@ Można zarejestrować dla zdarzenia tyle nasłuchów, ile się chce. Dodajmy jed
 Teraz możemy zarejestrować nasłuch.
 
 .. code-block:: yaml
+   :linenos:
    
    services:
       acme_other.configure_menu_listener:

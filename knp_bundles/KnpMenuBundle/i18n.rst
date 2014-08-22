@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 I18n dla etykiet menu
 =====================
 
@@ -25,6 +28,7 @@ Alternatywa A: I18n dla wszystkich menu
 Jeśli chce się przetłumaczyć całe menu, trzeba zmienić domyślny szablon:
 
 .. code-block:: yaml
+   :linenos:
    
    # app/config/config.yml
    knp_menu:
@@ -48,6 +52,7 @@ W klasie Builder trzeba dodać dodatki. Na przykład, załóżmy, że mamy dwa e
 menu, Start i Logowanie.
 
 .. code-block:: php
+   :linenos:
    
    <?php
    $menu = $factory->createItem('root');
@@ -56,10 +61,8 @@ menu, Start i Logowanie.
    $menu->addChild('Logowanie', array('route' => 'login'));
 
 W celu przetłumaczenia tych elementów, trzeba dodać parametr domeny translacyjnej używając
-setExtra(s):
-
-.. code-block:: php
-   
+setExtra(s)::
+  
    <?php
    $menu = $factory->createItem('root');
    

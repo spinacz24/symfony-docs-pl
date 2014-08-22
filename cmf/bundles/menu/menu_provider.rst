@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: wytwórnia menu; MenuBundle
     single: dostawca menu; MenuBundle
@@ -15,6 +18,7 @@ Domyślną ścieżką jest ``/cms/menu``, więc w poniższym przykładzie strukt
 dokumentu ``main-menu`` i ``side-menu`` są obie prawidłowymi nazwami menu:
 
 .. code-block:: text
+   :linenos:
 
     ROOT
         cms:
