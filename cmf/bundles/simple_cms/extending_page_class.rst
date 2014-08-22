@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: rozszerzanie klasy Page; SimpleCmsBundle
 
@@ -15,6 +18,7 @@ dla własnej klasy dokumentu:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         cmf_simple_cms:
             persistence:
@@ -22,6 +26,7 @@ dla własnej klasy dokumentu:
                     document_class: Acme\DemoBundle\Document\MySuperPage
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" charset="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services">
@@ -37,6 +42,7 @@ dla własnej klasy dokumentu:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         $container->loadFromExtension('cmf_simple_cms', array(
             'persistence' => array(

@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: warstwa bazy danych
     single: PHPCR-ODM
@@ -95,6 +98,7 @@ w tym w YAML, XML lub bezpośrednio w klasie ``Task`` przy pomocy adnotacji:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/Acme/TaskBundle/Document/Task.php
         namespace Acme\TaskBundle\Document;
@@ -128,6 +132,7 @@ w tym w YAML, XML lub bezpośrednio w klasie ``Task`` przy pomocy adnotacji:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/TaskBundle/Resources/config/doctrine/Task.odm.yml
         Acme\TaskBundle\Document\Task:
@@ -140,6 +145,7 @@ w tym w YAML, XML lub bezpośrednio w klasie ``Task`` przy pomocy adnotacji:
             parent_document: parentDocument
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/TaskBundle/Resources/config/doctrine/Task.odm.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>

@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: RoutingAuto; pakiety
     single: RoutingAutoBundle
@@ -97,6 +100,7 @@ Konfiguracja dla powyższego przykładu może wyglądać tak:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         cmf_routing_auto:
@@ -123,6 +127,7 @@ Konfiguracja dla powyższego przykładu może wyglądać tak:
                         not_exists_action: create
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -166,6 +171,7 @@ Konfiguracja dla powyższego przykładu może wyglądać tak:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('cmf_routing_auto', array(

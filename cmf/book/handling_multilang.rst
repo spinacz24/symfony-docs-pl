@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     double: wielojęzyczność; cmf
 
@@ -93,6 +96,7 @@ tłumaczenie zawsze odbywa się na poziomie dokumentu, a nie w indywidualnych po
 tłumaczeń.
 
 .. code-block:: php
+   :linenos:
 
     <?php
 
@@ -216,6 +220,7 @@ Teraz pozostało tylko zaktualizowanie tras Sonaty, aby reagowały na wskazania 
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
 
@@ -251,6 +256,7 @@ Teraz pozostało tylko zaktualizowanie tras Sonaty, aby reagowały na wskazania 
                 permanent: true
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" encoding="UTF-8" ?>
         <routes xmlns="http://symfony.com/schema/dic/routing">
@@ -281,6 +287,7 @@ Teraz pozostało tylko zaktualizowanie tras Sonaty, aby reagowały na wskazania 
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
 

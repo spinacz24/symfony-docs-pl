@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: Przegląd
 
@@ -92,8 +95,8 @@ bliżej przepływowi żądania HTTP w aplikacji Symfony CMF:
 
 Przede wszystkim widzimy na tej ilustracji typowy dla Symfony przepływ żądania
 złożony z białych bloków. Tworzony jest obiekt ``Request``, który przekazywany
-jest do routera. Tam wykonywany jest kod kontrolera, który wykorzystuje modele
-do wygenerowania widoku umieszczanego w odpowiedzi.
+jest do routera. Następnie wykonywany jest kod kontrolera, który wykorzystuje
+modele do wygenerowania widoku umieszczanego w odpowiedzi.
 
 Na ilustracji widać też, że w CMF dodano nowe elementy przetwarzania zaznaczone
 tu na zielono. W następnych rozdziałach dowiemy się o tym więcej.
@@ -123,7 +126,7 @@ programista może zmienić trasy. W CMS można chcieć, aby to administrator mó
 zmieniać trasy w swojej witrynie. Dlatego w Symfony CMF wprowadzono DynamicRouter.
 
 DynamicRouter ładuje z bazy danych kilka tras, które prawdopodobnie odpowiadają
-żądaniu i następnie starają się znaleźć dokładne dopasowanie. Trasy w bazie danych
+żądaniu i następnie stara się znaleźć dokładne dopasowanie. Trasy w bazie danych
 można edytować, usuwać i tworzyć następne, wykorzystując interfejs administracyjny,
 więc wszystko jest pod kontrola administratora.
 
@@ -143,15 +146,15 @@ Kontroler
 
 Podczas dopasowywania trasy wykonywany jest kontroler. Kontroler zwykle tylko pobiera
 obiekt Content z trasy i renderuje go. Ponieważ jest on zawsze taki sam, CMF wykorzystuje
-ogólny kontroler. Może on być zastąpiony przez ustawienie konkretnego kontrolera
+ogólny kontroler. Można go zastąpić ustawiając konkretny kontroler
 dla trasy lub obiektu Content.
 
 Widok
 ~~~~~
 
 Korzystając z RoutingBundle można skonfigurować obiekty Content, tak aby  były
-renderowane przez określony szablon lub kontroler. Kontroler ogólny będzie następnie
-renderował ten szablon.
+renderowane przez określony szablon lub kontroler. Szablon taki zostanie następnie
+zrenderowany przez kontroler ogólny.
 
 Zobacz również jak stosuje się obiekt Menu, dostarczany przez KnpMenuBundle i jak
 można go zintegrować z biblioteka Create.js dla edytowania dokumentów na żywo.
@@ -166,6 +169,7 @@ dodania nowej strony, wystarczy edytować taki plik, który znajduje się w kata
 ``src/Acme/DemoBundle/Resources/data``:
 
 .. code-block:: yaml
+   :linenos:
 
     # src/Acme/MainBundle/Resources/data/pages.yml
     Symfony\Cmf\Bundle\SimpleCmsBundle\Doctrine\Phpcr\Page:
@@ -207,7 +211,7 @@ będzie zaktualizowana.
 Wnioski końcowe
 ---------------
 
-Dotarliśmy do końca wprowadzenia do Symfony CMF. Jest jeszcze dużo więcej poznania,
+Dotarliśmy do końca wprowadzenia do Symfony CMF. Jest jeszcze dużo więcej do poznania,
 ale już można było zobaczyć, jak Symfony CMF stara się ułatwić życie programiście
 dostarczając kilka pakietów CMS. Jeśli chcesz kontynuować naukę, zapoznaj się z
 następnym rozdziałem: ":doc:`the_model`".

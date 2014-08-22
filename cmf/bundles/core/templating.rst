@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: szablonowanie; CoreBundle
 
@@ -117,6 +120,7 @@ Przykłady kodu
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {% set page = cmf_find('/some/path') %}
 
@@ -154,6 +158,7 @@ Przykłady kodu
         {% endif %}
 
     .. code-block:: html+php
+       :linenos:
 
         <?php $page = $view['cmf']->find('/some/path') ?>
 

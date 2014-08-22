@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: trasowanie; DynamicRouter
 
@@ -31,6 +34,7 @@ aby określała zaplecze dostawcy tras dynamicznego routera w łańcuchu router�
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         cmf_routing:
@@ -44,6 +48,7 @@ aby określała zaplecze dostawcy tras dynamicznego routera w łańcuchu router�
                         enabled: true
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -62,6 +67,7 @@ aby określała zaplecze dostawcy tras dynamicznego routera w łańcuchu router�
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('cmf_routing', array(
@@ -329,6 +335,7 @@ bazowej.
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         cmf_routing:
@@ -342,6 +349,7 @@ bazowej.
                         content_basepath: ~
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -364,6 +372,7 @@ bazowej.
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('cmf_routing', array(
@@ -419,11 +428,13 @@ Będzie to wyglądać tak:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# myRoute is an object of class Symfony\Component\Routing\Route #}
         <a href="{{ path(myRoute) }}>Read on</a>
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- $myRoute is an object of class Symfony\Component\Routing\Route -->
         <a href="<?php echo $view['router']->generate($myRoute) ?>">
@@ -437,11 +448,13 @@ można określić w taki sposób:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# Create a link to / on this server #}
         <a href="{{ path('/cms/routes') }}>Home</a>
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- Create a link to / on this server -->
         <a href="<?php echo $view['router']->generate('/cms/routes') ?>">
@@ -463,11 +476,13 @@ interfejs i zapewnia dla niego trasę:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# myContent implements RouteReferrersInterface #}
         <a href="{{ path(myContent) }}>Read on</a>
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- $myContent implements RouteReferrersInterface -->
         <a href="<?php echo $view['router']->generate($myContent) ?>">
@@ -486,12 +501,14 @@ repozytorium treści:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         <a href="{{ path(null, {'content_id': '/cms/content/my-content'}) }}>
             Read on
         </a>
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- $myContent implements RouteReferrersInterface -->
         <a href="<?php echo $view['router']->generate(null, array(
@@ -534,6 +551,7 @@ Trzeba skonfigurować ulepszacz trasy dla tego interfejsu:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         cmf_routing:
@@ -542,6 +560,7 @@ Trzeba skonfigurować ulepszacz trasy dla tego interfejsu:
                     Symfony\Cmf\Component\Routing\RedirectRouteInterface: cmf_routing.redirect_controller:redirectAction
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -556,6 +575,7 @@ Trzeba skonfigurować ulepszacz trasy dla tego interfejsu:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         $container->loadFromExtension('cmf_routing', array(
             'dynamic' => array(
@@ -577,6 +597,7 @@ konfiguracje rozszerzenia w sekcji ``sonata_admin`` konfiguracji projektu:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         sonata_admin:
@@ -587,6 +608,7 @@ konfiguracje rozszerzenia w sekcji ``sonata_admin`` konfiguracji projektu:
                         - Symfony\Cmf\Component\Routing\RouteReferrersInterface
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <config xmlns="http://sonata-project.org/schema/dic/admin">
@@ -597,6 +619,7 @@ konfiguracje rozszerzenia w sekcji ``sonata_admin`` konfiguracji projektu:
         </config>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('sonata_admin', array(

@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: model; wprowadzenie
 
@@ -8,7 +11,7 @@ W tej części kursu dowiesz się więcej o domyślnej warstwie magazynowania da
 
 .. note::
 
-    Rozdział ten dotyczy warstwy magazynowania PHPCR, ale CMF moze też działać
+    Rozdział ten dotyczy warstwy magazynowania PHPCR, ale CMF może też działać
     z innymi systemami magazynowania - nie jest uzależniony od konkretnego
     systemu magazynowania danych.
 
@@ -17,7 +20,7 @@ Poznajmy PHPCR
 
 PHPCR_ przechowuje wszystkie dane w strukturze wielkiego drzewa. Można to porównać
 do systemu plików, w którym każdy plik i katalog zawierają dane. Oznacz to, że
-wszystkie dane przechowywane w PHPCR maja relację z co najmniej jedną inną daną:
+wszystkie dane przechowywane w PHPCR maja relację z co najmniej jedną inną daną -
 swoim rodzicem. Istnieje także odwrotna relacja – można również uzyskać dane podrzędne
 jakiegoś elementu danych.
 
@@ -75,8 +78,8 @@ Tworzenie strony w kodzie
 
 Teraz masz już trochę więcej wiedzy o PHPCR i znasz narzędzie do interakcji z tym
 repozytorium, możesz używać go samodzielnie. W poprzednim rozdziale utworzyliśmy
-stronę używając pliku yaml, który parsowany był przez SimpleCmsBundle. Teraz przyszedł
-czas na utworzenie strony, robiąc to samemu.
+stronę używając pliku yaml, który parsowany był przez SimpleCmsBundle.
+Teraz przyszedł czas na samodzielne utworzenie strony.
 
 Po pierwsze, musisz utworzyć nowy obiekt DataFixture i dodać go do nowej strony.
 Zrobisz to, tworząc nową klasę AcmeDemoBundle::
@@ -92,8 +95,8 @@ Zrobisz to, tworząc nową klasę AcmeDemoBundle::
     {
         public function getOrder()
         {
-            // ustalenie priorytetu kolejnosci wywolania funkcja ładującej klasę
-            // (niższe wartości maja wyzszy priorytet)
+            // ustalenie priorytetu kolejnosci wywołania funkcja ładującej klasę
+            // (niższe wartości maja wyższy priorytet)
             return 10;
         }
 
@@ -110,8 +113,8 @@ Lecza najpierw trzeba utworzyć nowy dokument strony::
     // ...
     public function load(ObjectManager $documentManager)
     {
-        $page = new Page(); // create a new Page object (document)
-        $page->setName('new_page'); // the name of the node
+        $page = new Page(); // tworzy nowy obiekt (dokument) Page
+        $page->setName('new_page'); // nazwa węzła
         $page->setLabel('Another new Page');
         $page->setTitle('Another new Page');
         $page->setBody('I have added this page myself!');
@@ -129,7 +132,7 @@ go jako węzeł nadrzędny::
         // pobranie dokumentu głownego (/cms/simple)
         $simpleCmsRoot = $documentManager->find(null, '/cms/simple');
 
-        $page->setParentDocument($simpleCmsRoot); // set the parent to the root
+        $page->setParentDocument($simpleCmsRoot); // ustawienie dokumentu nadrzędnego jako root
     }
 
 Na koniec musimy poinformować menadżera dokumentów aby utrwalił nasz dokument strony
@@ -139,8 +142,8 @@ w repozytorium, używając API Doctrine::
     public function load(ObjectManager $documentManager)
     {
         // ...
-        $documentManager->persist($page); // add the Page in the queue
-        $documentManager->flush(); // add the Page to PHPCR
+        $documentManager->persist($page); // dodanie strony do kolejki
+        $documentManager->flush(); // dodanie strony do PHPCR
     }
 
 Teraz musisz wykonać polecenie ``doctrine:phpcr:fixtures:load`` i następnie odwiedzić

@@ -64,6 +64,7 @@ następująco:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         services:
             acme_core.my_router:
@@ -72,6 +73,7 @@ następująco:
                     - { name: router, priority: 300 }
 
     .. code-block:: xml
+       :linenos:
 
         <service id="acme_core.my_router" class="%my_namespace.my_router_class%">
             <tag name="router" priority="300" />
@@ -79,6 +81,7 @@ następująco:
         </service>
 
     .. code-block:: php
+       :linenos:
 
         $container
             ->register('acme_core.my_router', '%acme_core.my_router')

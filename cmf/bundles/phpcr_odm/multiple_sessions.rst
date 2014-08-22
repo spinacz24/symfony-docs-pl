@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: wielosesyjność; DoctrinePHPCRBundle
 
@@ -17,6 +20,7 @@ Wiele sesji PHPCR
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         doctrine_phpcr:
@@ -33,6 +37,7 @@ Wiele sesji PHPCR
                             # ...
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -57,6 +62,7 @@ Wiele sesji PHPCR
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('doctrine_phpcr', array(
@@ -89,6 +95,7 @@ Użycie innej sesji niż domyślna wymaga określenia atrybutu sesji.
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         odm:
@@ -99,6 +106,7 @@ Użycie innej sesji niż domyślna wymaga określenia atrybutu sesji.
                     # ... configuration as above
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -116,6 +124,7 @@ Użycie innej sesji niż domyślna wymaga określenia atrybutu sesji.
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('doctrine_phpcr', array(
@@ -138,6 +147,7 @@ Pełny przykład wygląda następujaco:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         doctrine_phpcr:
             # configure the PHPCR sessions
@@ -190,6 +200,7 @@ Pełny przykład wygląda następujaco:
                             SandboxMagnoliaBundle: ~
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -251,6 +262,7 @@ Pełny przykład wygląda następujaco:
         </container>
 
     .. code-block:: php
+       ;linenos:
 
         // app/config/config.php
         $container->loadFromExtension('doctrine_phpcr', array(

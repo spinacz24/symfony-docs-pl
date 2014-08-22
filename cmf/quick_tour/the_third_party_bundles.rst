@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: społeczność; krótki kurs
 
@@ -15,6 +18,7 @@ Rozpocznijmy od omówienia MenuBundle. Jeśli odwiedzi się stronę, można zoba
 ładne menu. Renderowanie tego menu znajduje się w układzie AcmeDemoBundle:
 
 .. code-block:: html+jinja
+   :linenos:
 
     <!-- src/Acme/DemoBundle/Resources/views/layout.html.twig -->
 
@@ -27,18 +31,18 @@ Rozpocznijmy od omówienia MenuBundle. Jeśli odwiedzi się stronę, można zoba
         </div>
     </nav>
 
-Ja widać, menu jest renderowane przez znacznik ``knp_menu_render``. Może się to
+Jak widać, menu jest renderowane przez znacznik ``knp_menu_render``. Może się to
 wydawać trochę dziwne, że mówimy o CmfMenuBundle a nie o KnpMenuBundle ale w
-rzeczywistości CmfMenuBundle jest cienka warstwą na szczycie KnpMenuBundle.
+rzeczywistości CmfMenuBundle jest cieńką warstwą na szczycie KnpMenuBundle.
 
-Zwykle argumentem ``knp_menu_render()`` jest nazwa renderowanego menu,
-ale gdy używa się CmfMenuBundle, jest nim identyfikator węzła. W tym przypadku
-menu zawiera wszystkie implementowane ``NodeInterface`` znajdujące się wewnątrz
-``/cms/simple`` (ponieważ ścieżką bazową w Standard Edition jest ``/cms``).
+Zwykle argumentem ``knp_menu_render()`` jest nazwą renderowanego menu,
+ale gdy używa się CmfMenuBundle, jest nią identyfikator węzła. W tym przypadku
+menu zawiera wszystkie implementowane interfejsy wężła ``NodeInterface`` znajdujące
+się wewnątrz ``/cms/simple`` (ponieważ ścieżką bazową w Standard Edition jest ``/cms``).
 
 .. note::
 
-   Oprócz dołączenia  dostawca menu PHPCR, CmfMenuBundle również dostarcza klas
+   Oprócz dołączenia dostawcy menu PHPCR, CmfMenuBundle również dostarcza klas
    interfejsu administracyjnego. W celu poznania szczegółów zobacz rozdział dotyczacy
    `Sonata Admin`_.
 
@@ -46,7 +50,8 @@ CreateBundle
 ------------
 
 O pakiecie tym była już mowa w pierwszym rozdziale. Integruje on bibliotekę
-CreatePHP_ (używaną przez bibliotekę `Create.js`_) z Symfony2 używając FOSRestBundle_.
+`CreatePHP`_ (używaną przez bibliotekę `Create.js`_) z Symfony2. która z kolei
+wykorzystuje `FOSRestBundle`_.
 
 Biblioteka Create.js działa przy wykorzystaniu warstwy REST. Wszystkie elementy
 na stronie uzyskują `mapowanie RDFa`_, które powiadamia Create.js jak odwzorować
@@ -57,6 +62,7 @@ Renderowanie treści z mapowanie RDFa może być bardzo proste, jak widać to w
 Standard Edition:
 
 .. code-block:: html+jinja
+   :linenos:
 
     {% block main %}
     {% createphp cmfMainContent as="rdf" %}
@@ -64,7 +70,7 @@ Standard Edition:
     {% endcreatephp %}
     {% endblock %}
 
-Wyświetli to obiekt zawartości z wykorzystaniem elementów `<div>`. Można to również
+Wyświetli to obiekt treści z wykorzystaniem elementów `<div>`. Można to również
 całkowicie przerobić używając funkcji ``createphp_*``.
 
 BlockBundle
@@ -75,7 +81,7 @@ Jeśli odwiedzisz główną stronę Standard Edition, zobaczysz trzy bloki:
 .. image:: ../_images/quick_tour/3rd-party-bundles-homepage.png
 
 Bloki te można edytować i wykorzystywać zgodnie z własnymi potrzebami.
-Są one dostarczane przez BlockBundle, który jest cienka warstwą na szczycie
+Są one dostarczane przez BlockBundle, który jest cieńką warstwą na szczycie
 SonataBlockBundle_. Zapewnia możliwość przechowywania bloków przy wykorzystaniu
 PHPCR i dodaje niektóre powszechnie używane bloki.
 
@@ -112,6 +118,7 @@ Teraz można skonfigurować standardowy tytuł. Tytuł ten bedzie wykorzystywany
 wyodrębniania tytułu z obiektu treści przez CmfSeoBundle:
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/config.yml
     cmf_seo:
@@ -132,6 +139,7 @@ Niektóre strony, jak strona logowania, nie wykorzystują obiektu treści. W tak
 przypadkach można skonfigurować domyślny tytuł:
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/config.yml
     sonata_seo:
@@ -152,8 +160,8 @@ Interfejs administracyjny Sonata
 --------------------------------
 
 Wyjaśniliśmy, że  CMF został oparty na bazie danych, w celu uczynienia go możliwym
-do edycji przez administratora bez zmieniania kodu. Lecz nie powiedzieliśmy jak
-administrator będzie mógł zarządzać witryna. Teraz przyszedł czas aby odsłonić ten
+do edycji przez administratora, bez zmieniania kodu. Lecz nie powiedzieliśmy jak
+administrator będzie mógł zarządzać witryną. Teraz przyszedł czas aby odsłonić ten
 sposób – wykorzystanie SonataAdminBundle_. Wszystkie pakiety CMF, które definiują
 edytowalne elementy zapewniają również integrację z pakietem Sonata Admin, tak aby
 można było elementy te edytować z poziomu interfejsu dostarczanego przez ten pakiet.
@@ -163,6 +171,7 @@ podczas instalacji SonataDoctrinePHPCRAdminBundle_. W konfiguracji można wyłą
 klasę Adin. Na przykład, aby wyłączyć klasę Admin w MenuBundle trzeba zrobić tak:
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/config.yml
     cmf_menu:
@@ -174,6 +183,7 @@ Można również włączyć albo wyłączyć wszystkie klasy Admin CMF przez sko
 tego w pakiecie ``cmf_core``:
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/config.yml
     cmf_core:

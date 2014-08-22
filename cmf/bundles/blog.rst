@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: blog; pakiety
     single: BlogBundle
@@ -47,6 +50,7 @@ Przykład:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config.yml
         cmf_blog:
@@ -59,6 +63,7 @@ Przykład:
                 post: Symfony\Cmf\Bundle\BlogBundle\Document\Post # Optional
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <config xmlns="http://cmf.symfony.com/schema/dic/blog"
@@ -74,6 +79,7 @@ Przykład:
         </config>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('cmf_blog', array(
@@ -115,6 +121,7 @@ Można zawrzeć wartość domyślną w głównym pliku konfiguracji, jak niżej:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         imports:
@@ -123,6 +130,7 @@ Można zawrzeć wartość domyślną w głównym pliku konfiguracji, jak niżej:
         # ...
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <imports>
@@ -132,6 +140,7 @@ Można zawrzeć wartość domyślną w głównym pliku konfiguracji, jak niżej:
         <!-- ... -->
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $loader->import('config.php');
@@ -155,6 +164,7 @@ dodajmy następujący kod w podsekcji sekcji ``controllers_by_class`` sekcji
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         cmf_routing_extra:
@@ -167,6 +177,7 @@ dodajmy następujący kod w podsekcji sekcji ``controllers_by_class`` sekcji
                     Symfony\Cmf\Bundle\BlogBundle\Document\Post: cmf_blog.blog_controller:viewPostAction
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <config xmlns="http://cmf.symfony.com/schema/dic/blog">
@@ -180,6 +191,7 @@ dodajmy następujący kod w podsekcji sekcji ``controllers_by_class`` sekcji
         </config>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('cmf_routing_extra', array(
@@ -202,6 +214,7 @@ Sonata Admin
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         sonata_admin:
@@ -216,6 +229,7 @@ Sonata Admin
                             - cmf_post.admin
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <config xmlns="http://example.org/schema/dic/sonata_admin">
@@ -231,6 +245,7 @@ Sonata Admin
         </config>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('sonata_admin', array(
@@ -259,6 +274,7 @@ aby włączyć edytowanie blogu z poziomu przeglądarki drzewa. Eksponujmy trasy
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         fos_js_routing:
@@ -269,6 +285,7 @@ aby włączyć edytowanie blogu z poziomu przeglądarki drzewa. Eksponujmy trasy
                 - admin_bundle_blog_blog_edit
 
     .. code-block:: xml
+       :linenos;
 
         <!-- app/config/config.xml -->
         <config xmlns="http://example.org/schema/dic/fos_js_routing">
@@ -279,6 +296,7 @@ aby włączyć edytowanie blogu z poziomu przeglądarki drzewa. Eksponujmy trasy
         </config>
 
     .. code-block:: php
+       :linenos;
 
         // app/config/config.php
         $container->loadFromExtension('fos_js_routing', array(
@@ -304,6 +322,7 @@ rozszerzenie układu aplikacji. Najprościej jest utworzyć następujący plik:
 .. configuration-block::
 
     .. code-block:: jinja
+       :linenos;
 
         {# app/Resources/CmfBlogBundle/views/default_layout.html.twig #}
         {% extends "MyApplicationBundle::my_layout.html.twig" %}
@@ -312,6 +331,7 @@ rozszerzenie układu aplikacji. Najprościej jest utworzyć następujący plik:
         {% endblock %}
 
     .. code-block:: php
+       :linenos;
 
         <!-- app/Resources/CmfBlogBundle/views/default_layout.html.twig -->
         <?php $view->extend('MyApplicationBundle::my_layout.html.twig') ?>

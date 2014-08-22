@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. _bundle-routing-customize:
 
 Dostosowywanie dynamicznego routera
@@ -44,6 +47,7 @@ Dostawca trasy musi implementować ``RouteProviderInterface``. Poniższa klasa
 dostarcza proste rozwiązanie przy wykorzystaniu repozytorium ODM.
 
 .. code-block:: php
+   :linenos:
 
     // src/Acme/DemoBundle/Repository/RouteProvider.php
     namespace Acme\DemoBundle\Repository;
@@ -119,6 +123,7 @@ w następujący sposób:
 .. configuration-block::
 
    .. code-block:: yaml
+      :linenos:
 
        # app/config/config.yml
        cmf_routing:
@@ -127,6 +132,7 @@ w następujący sposób:
                route_provider_service_id: acme_demo.provider.endpoint
 
    .. code-block:: xml
+      :linenos:
 
        <!-- app/config/config.xml -->
        <?xml version="1.0" encoding="UTF-8" ?>
@@ -140,6 +146,7 @@ w następujący sposób:
        </container>
 
    .. code-block:: php
+      :linenos:
 
        // app/config/config.php
        $container->loadFromExtension('cmf_routing', array(

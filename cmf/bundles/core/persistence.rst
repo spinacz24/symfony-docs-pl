@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: wielojęzyczność; CoreBundle
 
@@ -14,12 +17,14 @@ dodać następujący kod do głównego pliku konfiguracyjnego:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         cmf_core:
             persistence:
                 phpcr: ~
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" charset="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services">
@@ -33,6 +38,7 @@ dodać następujący kod do głównego pliku konfiguracyjnego:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         $container->loadFromExtension('cmf_core', array(
             'persistence' => array(
@@ -64,6 +70,7 @@ wszystkich dokumentów:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         cmf_core:
             persistence:
@@ -71,6 +78,7 @@ wszystkich dokumentów:
                     translation_strategy: attribute
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" charset="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services">
@@ -86,6 +94,7 @@ wszystkich dokumentów:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         $container->loadFromExtension('cmf_core', array(
             'persistence' => array(
@@ -124,6 +133,7 @@ konfigurację rozszerzenia w sekcji ``sonata_admin`` konfiguracji projektu:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:  
 
         # app/config/config.yml
         sonata_admin:
@@ -135,6 +145,7 @@ konfigurację rozszerzenia w sekcji ``sonata_admin`` konfiguracji projektu:
                         - Doctrine\ODM\PHPCR\HierarchyInterface
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" charset="UTF-8" ?>
@@ -150,6 +161,7 @@ konfigurację rozszerzenia w sekcji ``sonata_admin`` konfiguracji projektu:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('sonata_admin', array(
@@ -182,6 +194,7 @@ konfigurację rozszerzenia w sekcji ``sonata_admin`` konfiguracji projektu:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         sonata_admin:
@@ -192,6 +205,7 @@ konfigurację rozszerzenia w sekcji ``sonata_admin`` konfiguracji projektu:
                         - Symfony\Cmf\Bundle\CoreBundle\Translatable\TranslatableInterface
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" charset="UTF-8" ?>
@@ -208,6 +222,7 @@ konfigurację rozszerzenia w sekcji ``sonata_admin`` konfiguracji projektu:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('sonata_admin', array(

@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: renderowanie; SimpleCmsBundle
 
@@ -15,6 +18,7 @@ Prosty przykład takiego szablonu może wyglądać tak:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {% block content -%}
             <h1>{{ page.title }}</h1>
@@ -29,6 +33,7 @@ Prosty przykład takiego szablonu może wyglądać tak:
         {%- endblock %}
 
     .. code-block:: html+php
+       :linenos:
 
         <?php $view['slots']->start('content') ?>
         <h1><?php $page->getTitle() ?></h1>
@@ -47,6 +52,7 @@ RDF, umożliwiając edytowanie treści, jak również stosowanie tagów we front
 części aplikacji. Najbardziej prostą postacią jest następujący blok Twig:
 
 .. code-block:: jinja
+   :linenos:
 
     {% block content %}
         {% createphp page as="rdf" %}

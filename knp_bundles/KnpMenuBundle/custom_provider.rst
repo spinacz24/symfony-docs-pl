@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 Rejestrowanie własnego dostawcy
 ===============================
 
@@ -5,10 +8,7 @@ Rejestracja własnego dostawcy menu umożliwia zasilać menu własnymi danymi,
 udostępnianymi przez kod. Mogą one na przykład pochodzić z repozytorium PHPCR
 i tworzyć odpowiednie elementy menu.
 
-Utwórzmy pierwszą klasę dostawcy w katalogu Provider pakietu:
-
-
-.. code-block:: php
+Utwórzmy pierwszą klasę dostawcy w katalogu Provider pakietu::
    
    <?php
    
@@ -79,6 +79,7 @@ Utwórzmy pierwszą klasę dostawcy w katalogu Provider pakietu:
 Następnie konfigurujemy serwis likując go do nowego dostawcy.
 
 .. code-block:: yaml
+   :linenos:
    
    services:
       acme_demo_menu.provider:

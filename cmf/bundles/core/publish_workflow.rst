@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: rdzeń CMF; pakiety; proces publikowania
     single: wyborcy publikowania
@@ -63,6 +66,7 @@ nazwa tej roli to ``ROLE_CAN_VIEW_NON_PUBLISHED``.
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:  
 
         # app/config/security.yml
         security:
@@ -70,6 +74,7 @@ nazwa tej roli to ``ROLE_CAN_VIEW_NON_PUBLISHED``.
                 ROLE_EDITOR: ROLE_CAN_VIEW_NON_PUBLISHED
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -83,6 +88,7 @@ nazwa tej roli to ``ROLE_CAN_VIEW_NON_PUBLISHED``.
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -126,6 +132,7 @@ lub metody ``$view['cmf']->isPublished``:
 .. configuration-block::
 
     .. code-block:: jinja
+       :linenos:
 
         {# check if document is published, regardless of current users role #}
         {% if cmf_is_published(page) %}
@@ -142,6 +149,7 @@ lub metody ``$view['cmf']->isPublished``:
         {% endif %}
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- check if document is published, regardless of current users role -->
         <?php if ($view['cmf']->isPublished($page)) : ?>
@@ -309,6 +317,7 @@ wyborców.
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         services:
             acme.security.publishable_voter:
@@ -317,6 +326,7 @@ wyborców.
                     - { name: cmf_published_voter, priority: 30 }
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services">
@@ -328,6 +338,7 @@ wyborców.
         </container>
 
     .. code-block:: php
+       :linenos:
 
         use Symfony\Component\DependencyInjection\Definition;
 
@@ -384,6 +395,7 @@ konfiguracje rozszerzenia w sekcji ``sonata_admin`` konfiguracji projektu:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         sonata_admin:
@@ -397,6 +409,7 @@ konfiguracje rozszerzenia w sekcji ``sonata_admin`` konfiguracji projektu:
                         - Symfony\Cmf\Bundle\CoreBundle\PublishWorkflow\PublishTimePeriodInterface
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -418,6 +431,7 @@ konfiguracje rozszerzenia w sekcji ``sonata_admin`` konfiguracji projektu:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('sonata_admin', array(

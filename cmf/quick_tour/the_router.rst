@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: router; wprowadzenie
 
@@ -19,17 +22,17 @@ jest ograniczony przez ten mechanizm.
 
 Lecz jeśli spojrzy się na istotę CMS, to system taki musi obsługiwać tylko jeden
 typ encji - treść. Więc większość tras nie musi być już związana kontrolerem,
-jako ze potrzebny jest tylko jeden kontroler. Obiekt Route jest związany z określonym
-obiektem Content, który z kolei odwołuje się do określonego szablony i kontrolera.
+jako że potrzebny jest tylko jeden kontroler. Obiekt Route jest związany z określonym
+obiektem Content, który z kolei odwołuje się do określonego szablonu i kontrolera.
 
 Inne części CMF są również powiązane z routerem. Oto dwa przykłady: menu jest
 tworzone poprzez wygenerowanie określonych tras przy użyciu routera a bloki są
-wyświetlane do określonych tras (ponieważ są związane z szablonem).
+wyświetlane dla określonych tras (ponieważ są związane z szablonem).
 
 Ładowanie tras z drzewa PHPCR
 -----------------------------
 
-W pierwszym rozdziale już dowiedzieliśmy się, że trasy są ładowane z z bazy danych
+W pierwszym rozdziale już dowiedzieliśmy się, że trasy są ładowane z bazy danych
 przy użyciu specjalnego obiektu ``DynamicRouter``. W ten sposób nie wszystkie trasy
 muszą zostać załadowane dla poszczególnego żądania.
 
@@ -39,6 +42,7 @@ wiesz, że można pobrać stronę ``quick_tour`` z PHPCR stosując ścieżkę
 Kilka innych przykładów:
 
 .. code-block:: text
+   :linenos:
 
     /cms
         /simple
@@ -47,8 +51,8 @@ Kilka innych przykładów:
                 /team    # /contact/team Route
                 /docs    # /docs Route
 
-Jedyna rzeczą, którą musi zrobić router, to poprzedzenie trasy określonym przedrostkiem
-ścieżki i załadowanie dokumentu. W przypadku SimpleCmsBundle, wszystkie ścieżki są
+Jedyna rzeczą, którą musi zrobić router, to poprzedzić trasy określonym przedrostkiem
+ścieżki i załadować dokument. W przypadku SimpleCmsBundle, wszystkie ścieżki są
 poprzedzane przedrostkiem ``/cms/simple``.
 
 Ja widać, trasa taka jak ``/contact/team``, która składa się z 2 "jednostek adresowych",
@@ -57,15 +61,16 @@ ma 2 dokumenty w drzewie PHPCR tree: ``contact`` i ``team``.
 Łączenie wielu tras
 -------------------
 
-Można potrzebować kilka przedrostków lub kilka tras. Na przykład, można chcieć
+Może być potrzebnych kilka przedrostków lub kilka tras. Na przykład, można chcieć
 używać zarówno ``DynamicRouter`` dla tras stron, ale także statycznego trasowania
-z Symfony dla niestandardowej logiki. W celu umożliwienia tego CMF dostarcza ``ChainRouter``.
+z Symfony dla niestandardowej logiki. W celu umożliwienia takiego rozwiazania CMF
+dostarcza ``ChainRouter``.
 Router ten łączy trasy z wielu routerów i zatrzymuje się gdy trasa zostanie dopasowana.
 
 Domyślnie``ChainRouter`` zastępuje router Symfony i tylko ma rdzenny router w swoim
 łańcuchu. Można dodać do łańcucha więcej routerów w konfiguracji lub przez oznaczenie
-usług routera. Na przykład, używany przez SimpleCmsBundle jest usługą zarejestrowana
-przez pakiet i oznaczony jako ``cmf_routing.router``.
+usług routera. Na przykład, router używany przez SimpleCmsBundle jest usługą
+zarejestrowaną przez pakiet i oznaczoną jako ``cmf_routing.router``.
 
 Tworzenie nowej trasy
 ---------------------
@@ -77,6 +82,7 @@ umieścić nowe trasy w ``/cms/routes``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
 
@@ -84,17 +90,20 @@ umieścić nowe trasy w ``/cms/routes``:
         cmf_routing:
             chain:
                 routers_by_id:
-                    # the standard DynamicRouter
+                    # standardowy DynamicRouter
                     cmf_routing.dynamic_router: 200
 
-                    # the core symfony router
+                    # rdzenny router Symfony
                     router.default: 100
             dynamic:
                 persistence:
                     phpcr:
                         route_basepath: /cms/routes
+                templates_by_class:
+                     Symfony\Cmf\Bundle\SimpleCmsBundle\Doctrine\Phpcr\Page: AcmeDemoBundle:Page:index.html.twig
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -103,10 +112,10 @@ umieścić nowe trasy w ``/cms/routes``:
 
             <config xmlns="http://cmf.symfony.com/schema/dic/routing">
                 <chain>
-                    <!-- the standard DynamicRouter -->
+                    <!-- standardowy DynamicRouter -->
                     <router-by-id id="cmf_routing.dynamic_router">200</router-by-id>
 
-                    <!-- the core symfony router -->
+                    <!-- rdzennycrouter Symfony -->
                     <router-by-id id="router.default">100</router-by-id>
                 </chain>
 
@@ -114,20 +123,24 @@ umieścić nowe trasy w ``/cms/routes``:
                     <persistence>
                         <phpcr route-basepath="/cms/routes" />
                     </persistence>
+                    <tempaltes_by_class>
+                        <Symfony\Cmf\Bundle\SimpleCmsBundle\Doctrine\Phpcr\Page = "AcmeDemoBundle:Page:index.html.twig"  />
+                    </tempaltes_by_class>
                 </dynamic>
             </config>
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('cmf_routing', array(
             'chain' => array(
                 'routers_by_id' => array(
-                    // the standard DynamicRouter
+                    // standardowy DynamicRouter
                     'cmf_routing.dynamic_router' => 200,
 
-                    // the core symfony router
+                    // rdzenny router Symfony
                     'router.default' => 100,
                 ),
             ),
@@ -136,6 +149,9 @@ umieścić nowe trasy w ``/cms/routes``:
                     'phpcr' => array(
                         'route_basepath' => '/cms/routes',
                     ),
+                ),
+                'tempaltes_by_class' => array(
+                     'Symfony\Cmf\Bundle\SimpleCmsBundle\Doctrine\Phpcr\Page' => `AcmeDemoBundle:Page:index.html.twig`,
                 ),
             ),
         ));
@@ -157,8 +173,8 @@ Dodajmy nowy obiekt ``Route`` do drzewa używając Doctrine::
             $routesRoot = $documentManager->find(null, '/cms/routes');
 
             $route = new Route();
-            // set $routesBase as the parent and 'new-route' as the node name,
-            // this is equal to:
+            // ustawienie $routesBase jako rodzica a 'new-route' jako nazwy węzła,
+            // jest to równoważne:
             // $route->setName('new-route');
             // $route->setParentDocument($routesRoot);
             $route->setPosition($routesRoot, 'new-route');
@@ -166,8 +182,8 @@ Dodajmy nowy obiekt ``Route`` do drzewa używając Doctrine::
             $page = $documentManager->find(null, '/cms/routes/quick_tour');
             $route->setContent($page);
 
-            $documentManager->persist($route); // put $route in the queue
-            $documentManager->flush(); // save it
+            $documentManager->persist($route); // wstawienie $route do kolejki
+            $documentManager->flush(); // zapisanie tego
         }
     }
 
@@ -176,8 +192,7 @@ naszą stronę ``quick_tour``, gdy przejdzie się do ``/new-route``.
 
 .. tip::
 
-    When doing this in a real app, you may want to use a ``RedirectRoute``
-    instead.
+    Gdy będzie się to robić w prawdziwej aplikacji, to zamiast tego można użyć RedirectRoute.
 
 .. TODO napisz coś o templates_by_class, itd.
 

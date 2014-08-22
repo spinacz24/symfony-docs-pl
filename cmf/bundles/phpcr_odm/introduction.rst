@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: PHPCR; pakiety
     single: DoctrinePHPCRBundle
@@ -42,6 +45,7 @@ Jeśli chce się używać PHPCR-ODM, dodatkowo trzeba zażądać
 ``doctrine/phpcr-odm``
 
 .. code-block:: javascript
+   :linenos:
 
     require: {
         ...
@@ -71,6 +75,7 @@ danych w pakiecie DoctrineBundle. Zobacz `dokumentację Symfony2 Doctrine`_ w ce
 poznania szczegółów. Prosty przykład:
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/parameters.yml
     parameters:
@@ -85,6 +90,7 @@ poznania szczegółów. Prosty przykład:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         doctrine:
@@ -96,6 +102,7 @@ poznania szczegółów. Prosty przykład:
                 password: "%database_password%"
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -118,6 +125,7 @@ poznania szczegółów. Prosty przykład:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $configuration->loadFromExtension('doctrine', array(
@@ -137,6 +145,7 @@ Po skonfigurowaniu Doctrine DBAL, można skonfigurować Jackalope:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         doctrine_phpcr:
@@ -156,6 +165,7 @@ Po skonfigurowaniu Doctrine DBAL, można skonfigurować Jackalope:
                 password: admin
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -186,6 +196,7 @@ Po skonfigurowaniu Doctrine DBAL, można skonfigurować Jackalope:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('doctrine_phpcr', array(
@@ -249,6 +260,7 @@ załadowane zostaną usługi ODM.
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         doctrine_phpcr:
@@ -257,6 +269,7 @@ załadowane zostaną usługi ODM.
                 auto_generate_proxy_classes: "%kernel.debug%"
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -272,6 +285,7 @@ załadowane zostaną usługi ODM.
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('doctrine_phpcr', array(
@@ -315,6 +329,7 @@ pokazania informacji na pasku narzędziowym Symfony2:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         doctrine_phpcr:
@@ -325,6 +340,7 @@ pokazania informacji na pasku narzędziowym Symfony2:
                     profiling: true
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -343,6 +359,7 @@ pokazania informacji na pasku narzędziowym Symfony2:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.yml
         $container->loadFromExtension('doctrine_phpcr', array(

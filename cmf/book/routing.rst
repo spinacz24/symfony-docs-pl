@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: trasowanie; pierwsze kroki
     single: CmfRoutingBundle
@@ -45,7 +48,7 @@ Komponent Symfony CMF Routing został stworzony zgodnie z tymi wymaganiami.
 
 W rdzeniu komponentu Routing Symfony CMF umieszczony jest ``ChainRouter``.
 Używany jest on w miejsce domyślnego systemu trasowania Symfony2 i podobnie jak
-router Symfony2 router jest odpowiedzialny za określanie, który kontroler ma
+router Symfony2, jest odpowiedzialny za określanie, który kontroler ma
 obsługiwać poszczególne żądania.
 
 ``ChainRouter`` działa zgodnie z zestawem priorytetowych  strategii trasowania –
@@ -57,6 +60,7 @@ konkretnego kontrolera przychodzących żądań, co jest wykonywane w ten sposó
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         cmf_routing:
@@ -71,6 +75,7 @@ konkretnego kontrolera przychodzących żądań, co jest wykonywane w ten sposó
                     router.default: 100
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -97,6 +102,7 @@ konkretnego kontrolera przychodzących żądań, co jest wykonywane w ten sposó
             </config>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('cmf_routing', array(
@@ -122,6 +128,7 @@ ich kolejność jest nieokreślona.  Tagowana usługa wygląda podobnie do tego:
 .. configuration-block::
 
     .. code-block:: yaml
+       "linenos:
 
         services:
             my_namespace.my_router:
@@ -130,12 +137,14 @@ ich kolejność jest nieokreślona.  Tagowana usługa wygląda podobnie do tego:
                     - { name: router, priority: 300 }
 
     .. code-block:: xml
+       :linenos:
 
         <service id="my_namespace.my_router" class="%my_namespace.my_router_class%">
             <tag name="router" priority="300" />
         </service>
 
     .. code-block:: php
+       :linenos:
 
         $container
             ->register('my_namespace.my_router', '%my_namespace.my_router_class%')
@@ -171,6 +180,7 @@ następujący zapis do pliku konfiguracyjnego:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         cmf_routing:
@@ -178,6 +188,7 @@ następujący zapis do pliku konfiguracyjnego:
                 enabled: true
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -191,6 +202,7 @@ następujący zapis do pliku konfiguracyjnego:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('cmf_routing', array(
@@ -218,7 +230,7 @@ dostawca `PHPCR-ODM`_ ładuje obiekty ``Route`` ze ścieżką z żądania i ze w
 ścieżkami nadrzędnymi aby dopuścić niektóre segmenty ścieżki będące parametrami.
 
 W celu uzyskania bardziej szczegółowych informacji na temat tej implementacji
-i jak można to dostosować lub rozszerzyć proszę zapoznać się z
+i jak można to dostosować lub rozszerzyć, proszę zapoznać się z
 :doc:`../bundles/routing/introduction`.
 
 ``DynamicRouter`` jest w stanie dopasować przychodzące żądanie do obiektu Route
@@ -269,6 +281,7 @@ Oto przykład skonfigurowania powyżej omówionych opcji:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         cmf_routing:
@@ -282,6 +295,7 @@ Oto przykład skonfigurowania powyżej omówionych opcji:
                     Symfony\Cmf\Bundle\ContentBundle\Document\StaticContent: CmfContentBundle:StaticContent:index.html.twig
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -310,6 +324,7 @@ Oto przykład skonfigurowania powyżej omówionych opcji:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('cmf_routing', array(
@@ -352,7 +367,7 @@ Proszę mieć na uwadze, że obiekt Route może implementować wyżej omawiany i
 ale nadal nie będzie zwracał jakiejkolwiek instancji modelu. W takim przypadku nie
 zostanie dostarczony żaden powiązany obiekt.
 
-Ponadto, trasy implementujące ten interfejs mogą mogą mieć własną nazwę trasy,
+Ponadto, trasy implementujące ten interfejs mogą mieć własną nazwę trasy,
 zamiast domyślnej nazwy zgodnej z rdzeniem Symfony i mogą zawierać dowolne znaki.
 Pozwala to, przykładowo, ustawić ścieżkę jako nazwę trasy.
 
@@ -370,6 +385,7 @@ być skonfigurowany tak:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         cmf_routing:
@@ -378,6 +394,7 @@ być skonfigurowany tak:
                     Symfony\Cmf\Component\Routing\RedirectRouteInterface: cmf_routing.redirect_controller:redirectAction
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -396,6 +413,7 @@ być skonfigurowany tak:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('cmf_routing', array(
@@ -500,7 +518,7 @@ W celu uzyskania więcej informacji o komponencie Routing Symfony CMF, proszę p
 * :doc:`../components/routing/introduction` dla poznania więcej rzeczywistych implementacji funkcjonalnych,
 * :doc:`../bundles/routing/introduction` dla zapoznania się z integracją pakietów Symfony2 z pakietem Routing;
 * stronę komponentu `Routing`_ Symfony2;
-* :doc:`../book/handling_multilang` w celu poznania kilku uwag o trasowaniu wielojezycznym;
+* :doc:`../book/handling_multilang` w celu poznania kilku uwag o trasowaniu wielojęzycznym;
 
 .. _`Doctrine ORM`: http://www.doctrine-project.org/projects/orm.html
 .. _`PHPCR-ODM`: http://www.doctrine-project.org/projects/phpcr-odm.html

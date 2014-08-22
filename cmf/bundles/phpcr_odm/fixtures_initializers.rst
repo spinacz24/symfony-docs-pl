@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: inicjatory; DoctrinePHPCRBundle
     single: konfiguratory testowania; DoctrinePHPCRBundle
@@ -47,6 +50,7 @@ Usługa wykorzystująca ogólny inicjator wygląda nazstępująco:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/ContentBundle/Resources/config/services.yml
         acme_content.phpcr.initializer:
@@ -59,6 +63,7 @@ Usługa wykorzystująca ogólny inicjator wygląda nazstępująco:
                 - { name: "doctrine_phpcr.initializer" }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/ContentBundle/Resources/config/services.xml -->
         <service id="acme_content.phpcr.initializer"
@@ -73,6 +78,7 @@ Usługa wykorzystująca ogólny inicjator wygląda nazstępująco:
         </service>
 
     .. code-block:: php
+       :linenos:
 
         use Symfony\Component\DependencyInjection\Definition
 
@@ -159,6 +165,7 @@ Zdefiniujmy usługę dla inicjatora:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/BasicCmsBundle/Resources/config/config.yml
         services:
@@ -169,6 +176,7 @@ Zdefiniujmy usługę dla inicjatora:
                     - { name: doctrine_phpcr.initializer }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/BasicCmsBUndle/Resources/config/config.php
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -190,6 +198,7 @@ Zdefiniujmy usługę dla inicjatora:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/BasicCmsBundle/Resources/config/config.php
 
@@ -215,6 +224,7 @@ jednoznacznie identyfikującym migratora. Istnieje opcjonalna klasa
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/ContentBundle/Resources/config/services.yml
         acme.demo.migration.foo:
@@ -225,6 +235,7 @@ jednoznacznie identyfikującym migratora. Istnieje opcjonalna klasa
                 - { name: "doctrine_phpcr.migrator", alias: "acme.demo.migration.foo" }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/ContentBundle/Resources/config/services.xml -->
         <?xml version="1.0" ?>
@@ -241,6 +252,7 @@ jednoznacznie identyfikującym migratora. Istnieje opcjonalna klasa
         </container>
 
     .. code-block:: php
+       :linenos:
 
         use Symfony\Component\DependencyInjection\Definition
 

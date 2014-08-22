@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 Trasowanie i automatyczne trasowanie
 ------------------------------------
 
@@ -29,6 +32,7 @@ Instalacja
 Upewnij się, że masz zainstalowany następujący pakiet:
 
 .. code-block:: javascript
+   :linenos:
 
     {
         ...
@@ -76,6 +80,7 @@ Dodajmy go do konfiguracji aplikacji:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # /app/config/config.yml
         cmf_routing:
@@ -90,6 +95,7 @@ Dodajmy go do konfiguracji aplikacji:
                         route_basepath: /cms/routes
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <container xmlns="http://symfony.com/schema/dic/services">
@@ -107,6 +113,7 @@ Dodajmy go do konfiguracji aplikacji:
        </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('cmf_routing', array(
@@ -137,6 +144,7 @@ Auto Routing Configuration
 Create the following file in your applications configuration directory:
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/routing_auto.yml
     cmf_routing_auto:
@@ -189,12 +197,14 @@ Teraz trzeba będzie dołączyć tą konfigurację:
 .. configuration-block::
     
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         imports:
             - { resource: routing_auto.yml }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/BasicCmsBUndle/Resources/config/config.yml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -208,6 +218,7 @@ Teraz trzeba będzie dołączyć tą konfigurację:
         </container>
     
     .. code-block:: php
+       :linenos:
 
         // src/Acme/BasicCmsBundle/Resources/config/config.php
 

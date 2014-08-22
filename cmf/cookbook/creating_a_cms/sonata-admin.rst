@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 Zaplecze administracyjne - Sonata Admin
 ---------------------------------------
 
@@ -9,6 +12,7 @@ Instalacja
 Upewnij się, że masz zainstalowany następujący pakiet:
 
 .. code-block:: javascript
+   :linenos:
 
     {
         ...
@@ -46,6 +50,7 @@ w konfiguracji głównej:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
 
@@ -58,6 +63,7 @@ w konfiguracji głównej:
                     contexts: [admin]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -72,6 +78,7 @@ w konfiguracji głównej:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('sonata_block', array(
@@ -88,6 +95,7 @@ i wymaga następujących wpisów w pliku trasowania:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
 
@@ -101,6 +109,7 @@ i wymaga następujących wpisów w pliku trasowania:
             prefix: /admin
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -123,6 +132,7 @@ i wymaga następujących wpisów w pliku trasowania:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -153,6 +163,7 @@ Brak tłumaczeń? Odkomentuj translator w pliku konfiguracyjnym:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
 
@@ -162,6 +173,7 @@ Brak tłumaczeń? Odkomentuj translator w pliku konfiguracyjnym:
             translator:      { fallback: "%locale%" }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -178,6 +190,7 @@ Brak tłumaczeń? Odkomentuj translator w pliku konfiguracyjnym:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -200,6 +213,7 @@ RoutingAutoBundle a nie przez administratora. Można wyłączyć administratora 
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         cmf_routing:
@@ -212,6 +226,7 @@ RoutingAutoBundle a nie przez administratora. Można wyłączyć administratora 
                         use_sonata_admin: false
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -227,6 +242,7 @@ RoutingAutoBundle a nie przez administratora. Można wyłączyć administratora 
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('cmf_routing', array(
@@ -330,6 +346,7 @@ Teraz wystarczy zarejestrować te klasy w konfiguracji kontenera wstrzykiwania z
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
             # src/Acme/BasicCmsBundle/Resources/config/config.yml
             services:
@@ -355,6 +372,7 @@ Teraz wystarczy zarejestrować te klasy w konfiguracji kontenera wstrzykiwania z
                         - [setRouteBuilder, ['@sonata.admin.route.path_info_slashes']]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/BasicCmsBundle/Resources/config/config.yml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -405,6 +423,7 @@ Teraz wystarczy zarejestrować te klasy w konfiguracji kontenera wstrzykiwania z
         </container>
 
     .. code-block:: php
+       :linenos:
 
             // src/Acme/BasicCmsBundle/Resources/config/config.php
             use Symfony\Component\DependencyInjection\Reference;
@@ -482,6 +501,7 @@ Jednak trzeba załadować trasy pakietów TreeBundle i FOSJsRoutingBundle:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         cmf_tree:
@@ -492,6 +512,7 @@ Jednak trzeba załadować trasy pakietów TreeBundle i FOSJsRoutingBundle:
             resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -507,6 +528,7 @@ Jednak trzeba załadować trasy pakietów TreeBundle i FOSJsRoutingBundle:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -527,6 +549,7 @@ Sonata Admin, aby wyświetlił blok:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
 
@@ -546,6 +569,7 @@ Sonata Admin, aby wyświetlił blok:
                     - { position: right, type: sonata.admin.block.admin_list }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -569,6 +593,7 @@ Sonata Admin, aby wyświetlił blok:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('sonata_block', array(
@@ -598,6 +623,7 @@ o tym Sonata Admin:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         sonata_doctrine_phpcr_admin:
             document_tree_defaults: [locale]
@@ -613,6 +639,7 @@ o tym Sonata Admin:
                 # ...
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services">
@@ -636,6 +663,7 @@ o tym Sonata Admin:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         $container->loadFromExtension('sonata_doctrine_phpcr_admin', array(
             'document_tree_defaults' => array('locale'),
