@@ -28,7 +28,7 @@ od zabezpieczenia aplikacji podstawowym uwierzytelnianiem HTTP.
 
 .. note::
 
-    Dostępny jest `komponent bezpieczeństwa Symfony`_, będący samodzielną biblioteką
+    Dostępny jest `komponent Security`_, będący samodzielną biblioteką
     PHP, która może być zastosowana wewnątrz dowolnego projektu PHP.
 
 .. index::
@@ -54,7 +54,7 @@ użytkownika o podanie poświadczenia, stosując podstawowe uwierzytelnianie HTT
         security:
             firewalls:
                 secured_area:
-                    pattern:    ^/
+                    pattern:   ^/
                     anonymous: ~
                     http_basic:
                         realm: "Secured Demo Area"
@@ -327,11 +327,11 @@ Po pierwsze, włączymy logowanie formularzowe kontrolowane przez zaporę:
         security:
             firewalls:
                 secured_area:
-                    pattern:    ^/
+                    pattern:   ^/
                     anonymous: ~
                     form_login:
-                        login_path:  login
-                        check_path:  login_check
+                        login_path: login
+                        check_path: login_check
 
     .. code-block:: xml
        :linenos:
@@ -348,7 +348,7 @@ Po pierwsze, włączymy logowanie formularzowe kontrolowane przez zaporę:
             <config>
                 <firewall name="secured_area" pattern="^/">
                     <anonymous />
-                    <form-login login_path="login" check_path="login_check" />
+                    <form-login login-path="login" check-path="login_check" />
                 </firewall>
             </config>
         </srv:container>
@@ -444,13 +444,9 @@ formularz logowania (np. ``/login``) i drugi obsługujący zgłoszenie formularz
 
     Nie potrzeba implementować kontrolera dla adresu URL ``/login_check``, jako że
     zapora będzie automatycznie przechwytywać i przetwarzać każde zgłoszenie formularza
-    kierowane na ten adres URL.
-
-.. versionadded:: 2.1
-    Od wersji Symfony 2.1 musi się mieć skonfigurowane trasy dla kluczy
-    ``login_path``, ``check_path`` i ``logout``. Klucze te mogą być nazwami tras
-    (tak jak pokazano w tym przykładzie) lub adresami URL, które się znajdują w
-    trasach dla nich skonfigurowanych.
+    kierowane na ten adres URL. Jednak *musi się* mieć trasę dla tego URL (jak
+    pokazano tutaj), a także jeszcze jedną dla ścieżki wylogowania (zobacz
+    :ref:`book-security-logging-out`).
 
 Proszę zauważyć, że nazwa trasy logowania nie jest istotna. To co jest istotne,
 to adres URL trasy (``/login``) dopasowujący wartość konfiguracyjną ``login_path``,
@@ -463,13 +459,13 @@ Następnie trzeba stworzyć kontroler, który będzie wyświetlał formularz log
     namespace Acme\SecurityBundle\Controller;
 
     use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+    use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\Security\Core\SecurityContext;
 
     class SecurityController extends Controller
     {
-        public function loginAction()
+        public function loginAction(Request $request)
         {
-            $request = $this->getRequest();
             $session = $request->getSession();
 
             // get the login error if there is one
@@ -553,6 +549,12 @@ Na koniec, stworzymy odpowiedni szablon.
             <button type="submit">login</button>
         </form>
 
+.. caution::
+
+    Ten formularz logowania nie jest obecnie chroniony przed atakami CSRF. O tym
+    jak można zabezpieczyć formularz logowania można przeczytać
+    w :doc:`/cookbook/security/csrf_in_login_form`.
+
 .. tip::
 
     Zmienna ``error`` przekazywana do szablonu jest instancją
@@ -570,7 +572,7 @@ I to jest to! Po zgłoszeniu formularza system bezpieczeństwa automatycznie spr
 poświadczenie użytkownika i albo uwierzytelnia użytkownika lub wysyła użytkownikowi
 z powrotem formularz logowania, w którym może zostać wyświetlony komunikat o błędzie.
 
-Przyjrzyjmy się procesowi:
+Przyjrzyjmy się całemu procesowi:
 
 #. Użytkownik próbuje uzyskać dostęp do zasobu chronionego;
 #. Zapora inicjuje automatycznie przetwarzanie poprzez przekierowanie użytkownika
@@ -720,6 +722,13 @@ znajdziesz w artykule
     na wielu zaporach trzeba jawnie określić odrębne
     ref:`konteksty bezpieczeństwa<reference-security-firewall-context>`
     dla każdej zapory. Dla większości zastosowań wystarczy tylko jedna główna zapora.
+    
+     **5. Trasowanie stron błędów nie jest objęte przez zapory**
+
+    Ponieważ trasowanie realizowane jest *przed* procesem uwierzytelniania i autoryzacji,
+    trasowanie stron błędów nie jest objęte jakakolwiek zaporą. Oznacza to, że nie
+    można sprawdzić bezpieczeństwo a nawet dostęp do obiektu użytkownika na tych
+    stronach. Więcej informacji na :doc:`/cookbook/controller/error_pages`. 
 
     
 .. index::
@@ -749,8 +758,8 @@ W tym rozdziale skupimy się nad tym, jak zabezpieczyć różne zasoby
 (tj. adresy URL, wywołania metod itd.) przez różne role. Później dowiesz się
 więcej o tym, jak tworzone są role i jak są przypisywane użytkownikom.
 
-Zabezpieczenie określonych wzorców adresu URL
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Zabezpieczenie określonych wzorców URL
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Najprostszym sposobem zabezpieczenia części aplikacji jest użycie zabezpieczenia
 całego wzorca URL. Widzieliśmy to już w pierwszym rozdziale, gdzie wszystko co
@@ -820,16 +829,17 @@ znaleźć jeden pasujący do bieżącego żądania. Jak tylko taki wpis zostanie
 to wyszukiwanie zostaje zakończone - oznacza to, że wzięty będzie pod uwagę tylko
 pierwszy dopasowany wpis ``access_control``.
 
-Węzeł ``access_control`` posiada kilka opcji, które konfigurują dwie różne rzeczy:
-(a) :ref:`dopasowują przychodzącego żądania do zapisu listy kontroli
-dostępu<security-book-access-control-matching-options>`
+Każdy ``access_control`` posiada kilka opcji, które konfigurują dwie różne rzeczy:
+#. :ref:`dopasowują przychodzącego żądania do zapisu listy kontroli
+dostępu <security-book-access-control-matching-options>`
 i
-(b) :ref:`nakładają jakieś ograniczenia, które powinny zostać wyegzekwowane na
+#. :ref:`nakładają jakieś ograniczenia, które powinny zostać wyegzekwowane na
 dopasowanym adresie URL<security-book-access-control-enforcement-options>`:
 
 .. _security-book-access-control-matching-options:
 
-**(a) Opcje dopasowujące**
+1. Opcje dopasowujące
+.....................
 
 Symfony2 tworzy instancję :class:`Symfony\\Component\\HttpFoundation\\RequestMatcher`
 dla każdego wpisu access_control, który określa czy dana reguła kontroli dostępu
@@ -912,15 +922,18 @@ to ``access_control`` będzie dopasować każdy ``ip``, ``host`` lub ``method``:
 
 .. _security-book-access-control-enforcement-options:
 
-**(b) Egzekwowanie ograniczeń**
+2. Egzekwowanie ograniczeń
+..........................
 
 Po tym jak Symfony2 określi, który wpis ``access_control`` zostanie użyty
 (jeśli w ogóle), to następnie wymusza ograniczenie dostępu na podstawie opcji
-``role`` i ``requires_channel``:
+``role``, ``allow_if`` i ``requires_channel``:
 
 * ``role``: Jeśli użytkownik nie ma przydzielonej określonej roli (ról), to dostęp
   zostaje zabroniony (wewnętrznie zrzucany jest wyjątek
   :class:`Symfony\\Component\\Security\\Core\\Exception\\AccessDeniedException`;
+  
+* ``allow_if`` Jeśli wyrażenie zwraca false, wówczas dostęp jest zabroniony;  
    
 * ``requires_channel``: Jeśli kanał przychodzącego żądania (np. ``http``)
   nie zostaje dopasowany do tej wartości (np. ``https``), użytkownik zostanie
@@ -958,13 +971,21 @@ widoczny tylko z bufora zaufanego odwrotnego proxy.
     było tworzyć oddzielna regułę dla każdego adresu IP z użyciem klucza ``ip``
     a nie ``ips``.
 
+.. caution::
+
+    Jak można przeczytać w wyjaśnieniu poniższego przykładu, opcja ``ip`` nie ogranicza
+    się do określonego adresu IP. Zamiast tego, zastosowanie klucza ``ip`` oznacza,
+    że zapis ``access_control`` będzie dopasowywany tylko do tego adresu IP,
+    a sprawdzenie dostępu użytkowników do tego adresu z innego adresu IP będzie
+    dalej kontynuowane w dół listy ``access_control``.
+
+
 Oto przykład, jak można zabezpieczyć przed dostępem z zewnątrz wszystkie trasy
 ESI rozpoczynające się przedrostkiem ``/esi``:
 
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         # app/config/security.yml
         security:
@@ -974,25 +995,31 @@ ESI rozpoczynające się przedrostkiem ``/esi``:
                 - { path: ^/esi, roles: ROLE_NO_ACCESS }
 
     .. code-block:: xml
-       :linenos:
 
             <access-control>
-                <rule path="^/esi" role="IS_AUTHENTICATED_ANONYMOUSLY" ips="127.0.0.1, ::1" />
+                <rule path="^/esi" role="IS_AUTHENTICATED_ANONYMOUSLY"
+                    ips="127.0.0.1, ::1" />
                 <rule path="^/esi" role="ROLE_NO_ACCESS" />
             </access-control>
 
     .. code-block:: php
-       :linenos:
 
             'access_control' => array(
-                array('path' => '^/esi', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'ips' => '127.0.0.1, ::1'),
-                array('path' => '^/esi', 'role' => 'ROLE_NO_ACCESS'),
+                array(
+                    'path' => '^/esi',
+                    'role' => 'IS_AUTHENTICATED_ANONYMOUSLY',
+                    'ips' => '127.0.0.1, ::1'
+                ),
+                array(
+                    'path' => '^/esi',
+                    'role' => 'ROLE_NO_ACCESS'
+                ),
             ),
 
 Oto jak to działa dla adresu ``/esi/something`` przychodzącego z adresu IP ``10.0.0.1``:
 
 * Pierwsza reguła kontroli dostępu zostaje zignorowana, jako że ``path`` wprawdzie
-  pasuje, ale nie dopasowuje jednego z wymienionych adresów ``ip``;
+  pasuje, ale nie zgadza się z jednym z wymienionych adresów ``ip``;
 
 * Druga reguła kontroli dostępu zostaje włączona (jedynym ograniczeniem jest ``path``,
   które pasuje) - jako że użytkownik nie może mieć roli ``ROLE_NO_ACCESS``, której
@@ -1010,14 +1037,69 @@ pętli zwrotnej IPv6):
 * Druga reguła kontroli dostępu nie jest sprawdzana, bo dopasowana została już
   pierwsza reguła.
 
+.. index::
+   single: bezpieczeństwo; zabezpieczenie przez wyrażenie
+
+.. _book-security-allow-if:
+
+Zabezpieczenie z wyrażeniem
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.4
+    Możliwość zastosowania ``allow_if`` została wprowadzona w Symfony 2.4.
+
+Przy dopasowaniu ``access_control``, można odmówić dostępu  za pomocą klucza
+``roles`` lub zastosowania bardziej złożonej logiki z wyrażeniem zawierającym
+klucz ``allow_if``:
+
+.. configuration-block::
+
+    .. code-block:: yaml
+
+        # app/config/security.yml
+        security:
+            # ...
+            access_control:
+                -
+                    path: ^/_internal/secure
+                    allow_if: "'127.0.0.1' == request.getClientIp() or has_role('ROLE_ADMIN')"
+
+    .. code-block:: xml
+
+            <access-control>
+                <rule path="^/_internal/secure"
+                    allow-if="'127.0.0.1' == request.getClientIp() or has_role('ROLE_ADMIN')" />
+            </access-control>
+
+    .. code-block:: php
+
+            'access_control' => array(
+                array(
+                    'path' => '^/_internal/secure',
+                    'allow_if' => '"127.0.0.1" == request.getClientIp() or has_role("ROLE_ADMIN")',
+                ),
+            ),
+
+W przypadki, w którym użytkownik próbuje uzyskać dostęp do jakiegokolwiek ścieżki
+URL rozpoczynającej się od ``/_internal/secure``, dostęp będzie udzielany, jeśli
+adresem IP jest `127.0.0.1`` lub jeśli użytkownik ma rolę ``ROLE_ADMIN``.
+
+Wewnątrz wyrażenia ma się dostęp do wielu różnych zmiennych i funkcji, w tym
+``request`` - obiektem Symfony
+:class:`Symfony\\Component\\HttpFoundation\\Request` (zobacz
+:ref:`component-http-foundation-request`).
+
+Dla poznania innych funkcji i zmiennych zobacz
+:ref:`functions and variables <book-security-expression-variables>`.
 
 .. index::
    single: bezpieczeństwo; zabezpieczenie przez kanał
 
-.. _book-security-securing-channel:   
+.. _book-security-securing-channel:
+ 
    
-Zabezpieczanie przez kanał
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Wymuszanie kanału
+~~~~~~~~~~~~~~~~~
 
 Można również zażądać aby użytkownik otrzymał dostęp do adresu URL poprzez SSL.
 Wystarczy użyć argument ``requires_channel`` we wpisie ``access_control``:
@@ -1057,8 +1139,8 @@ Wystarczy użyć argument ``requires_channel`` we wpisie ``access_control``:
 Zabezpieczanie kontrolera
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Ochrona aplikacja w oparciu o wzorce URL jest łatwa, ale może nie być dostatecznie
-funkcjonalna w niektórych przypadkach. Gdy jest to konieczne, to można łatwo wymusić
+Ochrona aplikacja w oparciu o wzorce URL jest łatwa, ale w niektórych przypadkach
+może nie być dostatecznie funkcjonalna. Gdy jest to konieczne, można łatwo wymusić
 autoryzację wewnątrz kontrolera::
 
     // ...
@@ -1075,24 +1157,28 @@ autoryzację wewnątrz kontrolera::
 
 .. _book-security-securing-controller-annotations:
 
-Można również wybrać do zainstalowania i opcjonalnego stosowania pakiet
-``JMSSecurityExtraBundle``, który może zabezpieczyć kontroler przy użyciu adnotacji::
+.. versionadded:: 2.5
+    Metoda ``createAccessDeniedException`` zoatała wprowadzona w Symfony 2.5.
+
+Metoda :method:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller::createAccessDeniedException()`
+tworzy specjalny obiekt :class:`Symfony\\Component\\Security\\Core\Exception\\AccessDeniedException`,
+który ostatecznie wywołuje odpowiedź 403 HTTP.
+
+Dzięki pakietowi SensioFrameworkExtraBundle można łatwo zabezpieczyć kontroler używając adnotacji::
 
     // ...
-    use JMS\SecurityExtraBundle\Annotation\Secure;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
     /**
-     * @Secure(roles="ROLE_ADMIN")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function helloAction($name)
     {
         // ...
     }
 
-W celu poznania więcej informacji proszę się zapoznać z dokumentacja
-`JMSSecurityExtraBundle`_. Jeżeli stosuje się Symfony Standard Distribution,
-to ten pakiet jest dostępny domyślnie. Jeżeli nie, to pakiet ten można łatwo pobrać
-i zainstalować.
+Więcej informacji można znaleźć w
+:doc:`dokumentacji FrameworkExtraBundle </bundles/SensioFrameworkExtraBundle/annotations/security>`.
 
 .. index::
    pair: bezpieczeństwo; usługi
@@ -1107,7 +1193,7 @@ z od jednego użytkownika do drugiego. Można ograniczyć możliwość użycia t
 nie ważne gdzie będzie to użyte, od – do użytkowników mających określoną rolę.
 
 Więcej informacji o tym, jak można użyć komponentu zabezpieczeń do zabezpieczenia
-różnych serwisów i metod w swojej aplikacji znajdziesz w artykule
+różnych serwisów i metod w swojej aplikacji znajduje sie w artykule
 :doc:`Jak zabezpieczyć dowolną usługę lub metodę w swojej aplikacji</cookbook/security/securing_services>`.
 
 .. index::
@@ -1115,12 +1201,12 @@ różnych serwisów i metod w swojej aplikacji znajdziesz w artykule
    single: bezpieczeństwo; kontrolne listy dostępowe
    single: ACL 
 
-Kontrolne listy dostępowe (ACL): zabezpieczenie poszczególnych obiektów bazy danych
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Listy kontroli dostępu (ACL): zabezpieczenie poszczególnych obiektów bazy danych
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Wyobraź sobie, że projektujemy system blogu, w którym użytkownicy mogą dodawać
 komentarze do wpisów. Teraz chcemy, aby użytkownik mógł edytować swoje komentarze,
-ale nie innych użytkowników. Będziesz chciał również, jako administrator, mieć
+ale nie innych użytkowników. Będziemy chcieć również, aby administrator, miał
 możliwość edytowania wszystkich komentarzy.
 
 Komponent bezpieczeństwa dostarczany jest z opcjonalny systemem list kontroli
@@ -1130,7 +1216,7 @@ Bez ACL można zabezpieczyć system tak, aby tylko niektórzy użytkownicy mogli
 edytować wszystkie komentarze. Natomiast z ACL, można ograniczyć lub uniemożliwić
 dostęp do określonych komentarzy.
 
-Aby uzyskać więcej informacji, przeczytać artykuł
+Więcej informacji znajduje sie w artykule
 :doc:`Jak używac kontrolnych list dostępowych (ACL)</cookbook/security/acl>`.
 
 .. index::
@@ -1218,6 +1304,7 @@ w jakiejkolwiek bazie danych. Faktyczny obiekt użytkownika dostarczany jest tu
 przez Symfony (:class:`Symfony\\Component\\Security\\Core\\User\\User`).
 
 .. tip::
+
     Każdy dostawca użytkownika może załadować użytkowników bezpośrednio
     z konfiguracji przez określenie parametru konfiguracji użytkowników
     i wyszczególnienie w nim użytkowników.
@@ -1251,7 +1338,7 @@ przez utworzenie klasy *User* i skonfigurowanie dostawcy encji
 .. tip::
 
     Dostępny jest wysokiej jakości pakiet otwartego źródła, który umożliwia
-    przechowywanie użytkowników poprzez Doctrine ORM lub ODM. Czytaj więcej
+    przechowywanie użytkowników poprzez Doctrine ORM lub ODM. Więcej informacji
     na `FOSUserBundle`_ na GitHub.
 
 Przy takim podejściu, należy najpierw stworzyć własną klasę User, która będzie
@@ -1283,12 +1370,6 @@ O ile chodzi o system bezpieczeństwa, to istnieje tylko wymóg stworzenia włas
 klasy użytkownika implementującej interfejs :class:`Symfony\\Component\\Security\\Core\\User\\UserInterface`.
 Oznacza to, że pojęcie "użytkownika" jest wystarczające, tak długo, jak długo implementuje ten interfejs.
 
-.. versionadded:: 2.1
-    W Symfony 2.1 usunięta została z interfejsu ``UserInterface`` metoda ``equals``.
-    Jeśli zachodzi potrzeba zastąpienia domyślnej implementacji logiki porównywań,
-    to potrzeba zaimplementować nowy interfejs
-    :class:`Symfony\\Component\\Security\\Core\\User\\EquatableInterface`.
-    
 .. note::
 
     Obiekt użytkownika zostanie serializowany i zapisany w sesji podczas przetwarzania
@@ -1468,15 +1549,16 @@ przykładzie). Najpierw skonfigurujemy koder dla tego użytkownika:
 
 W tym przypadku użyliśmy silniejszego algorytmu ``sha512``. Ponadto ponieważ mamy
 jasno określony algorytm (``sha512``) jako łańcuch tekstowy, system bedzie domyślnie
-haszował podane hasło 5000 razy z rzędu i następnie zakoduje je jako *base64*.
-Innymi słowani, hasło zostało bardzo ukryte, tak więc zakodowane tak hasło nie
+mieszał podane hasło 5000 razy z rzędu i następnie zakoduje je jako *base64*.
+Innymi słowami, hasło zostało bardzo ukryte, tak więc zakodowane tak hasło nie
 może być rozkodowane (tzn. nie można określić hasła z zakodowanego hasła).
 
-.. versionadded:: 2.2
-    Od wersji Symfony 2.2 można równieź użyć kodera haseł
-    :ref:`PBKDF2<reference-security-pbkdf2>` i :ref:`BCrypt<reference-security-bcrypt>`.
+.. tip::
 
-Ustalenie hasła zakodowanego
+    Możliwe jest również stosowanie różnych algorytmów mi mieszających na bazie
+    "user-by-user". Więcej informacji w :doc:`/cookbook/security/named_encoders`.
+
+Ustalenie zakodowanego hasła
 ............................
 
 Jeśli ma się jakiś formularz rejestracyjny dla użytkowników, to zachodzi potrzeba
@@ -1499,7 +1581,7 @@ można zawsze określić w następujący sposób w kontrolerze::
 Pobieranie obiektu użytkownika
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Po uwierzytelnieniu obiekt ``User`` bieżącego użytkowanika może on być dostępny
+Po uwierzytelnieniu obiekt ``User`` bieżącego użytkowanika może być dostępny
 poprzez usługę ``security.context``. Od wnętrza kontrolera wygląda to tak::
 
     public function indexAction()
@@ -1615,57 +1697,6 @@ Teraz wszystkie mechanizmy uwierzytelniania będą używać ``chain_provider``,
 ponieważ jest on określony jako pierwszy. Z kolei ``chain_provider`` będzie próbował
 załadować użytkowników z pozostałych źródeł: od dostawców ``in_memory`` i ``user_db``.
 
-.. tip::
-
-    Jeśli nie masz powodów, aby oddzielać użytkowników ``in_memory`` od użytkowników
-    ``user_db``, to możesz dokonać połączenia obu źródeł w jednego dostawcę:
-
-    .. configuration-block::
-
-        .. code-block:: yaml
-           :linenos:
-
-            # app/config/security.yml
-            security:
-                providers:
-                    main_provider:
-                        memory:
-                            users:
-                                foo: { password: test }
-                        entity:
-                            class: Acme\UserBundle\Entity\User,
-                            property: username
-
-        .. code-block:: xml
-           :linenos:
-
-            <!-- app/config/security.xml -->
-            <config>
-                <provider name=="main_provider">
-                    <memory>
-                        <user name="foo" password="test" />
-                    </memory>
-                    <entity class="Acme\UserBundle\Entity\User" property="username" />
-                </provider>
-            </config>
-
-        .. code-block:: php
-           :linenos:
-
-            // app/config/security.php
-            $container->loadFromExtension('security', array(
-                'providers' => array(
-                    'main_provider' => array(
-                        'memory' => array(
-                            'users' => array(
-                                'foo' => array('password' => 'test'),
-                            ),
-                        ),
-                        'entity' => array('class' => 'Acme\UserBundle\Entity\User', 'property' => 'username'),
-                    ),
-                ),
-            ));
-
 Można też skonfigurować zaporę lub poszczególne mechanizmy uwierzytelniania do
 stosowania określonego dostawcy. Jeśli dostawca nie jest określony jawnie,
 to jak poprzednio, zawsze stosowany będzie pierwszy dostawca:
@@ -1721,13 +1752,22 @@ HTTP, to system uwierzytelniania będzie używał użytkowników ``in_memory``. 
 użytkownik spróbuje zalogować się poprzez logowanie formularzowe, to wybrany będzie
 dostawca ``user_db`` (ponieważ taki dostawca jest dostawcą domyślnym dla zapory w ogóle).
 
-Więcej inforamcji o dostawcach użytkowników i konfiguracji zapory znajdziesz
+Więcej inforamcji o dostawcach użytkowników i konfiguracji zapory znajduje się
 w artykule :doc:`/reference/configuration/security`.
+
+
+
+
+
+
+
 
 .. index::
    single: bezpieczeństwo; role
    single: role
    single: autoryzacja; role
+
+.. _book-security-role-hierarchy:
 
 Role
 ----
@@ -1737,11 +1777,11 @@ przypisany zestaw ról i z kolei każdy zasób wymaga jednej lub więcej ról ab
 mieć do niego dostęp. Jeżeli użytkownik ma wymagane role, to dostęp jest udzielony.
 W przeciwnym razie dostęp jest zabroniony.
 
-Role są bardzo proste i są to w przede wszystkim łańcuchy tekstowe, które można
+Role są bardzo proste - są to łańcuchy tekstowe, które można
 sobie wymyślić i używać w razie potrzeby (jakby były obiektami wewnętrznymi).
-Na przykład, jeśli chcesz wprowadzić ograniczenia dostępu do części administracyjnej
-sekcji blogu na swojej witrynie, to możesz chronić tą sekcję stosując rolę
-``ROLE_BLOG_ADMIN``. Nie musisz definiować tej roli nigdzie – wystarczy
+Na przykład, jeśli chce się wprowadzić ograniczenia dostępu do części administracyjnej
+sekcji blogu na witrynie, to można chronić tą sekcję stosując rolę
+``ROLE_BLOG_ADMIN``. Nie trzeba definiować tej roli nigdzie – wystarczy
 rozpocząć ją używać.
 
 .. note::
@@ -1750,6 +1790,8 @@ rozpocząć ją używać.
     się przedrostkiem ``ROLE_``. Jeśli zdefiniuje się własne role stosując
     dedykowana klasę ``Role`` (bardziej zaawansowane), nie trzeba wówczas stosować
     przedrostka ``ROLE_``.
+
+.. _book-security-role-hierarchy:
 
 Role hierarchiczne
 ~~~~~~~~~~~~~~~~~~
@@ -1792,10 +1834,225 @@ W powyższej konfiguracji użytkownicy z rolą ``ROLE_ADMIN`` będą również m
 ``ROLE_USER``. Rola ``ROLE_SUPER_ADMIN`` ma role ``ROLE_ADMIN``,
 ``ROLE_ALLOWED_TO_SWITCH`` i ``ROLE_USER`` (odziedziczoną z ``ROLE_ADMIN``).
 
+.. index::
+   single: bezpieczeństwo; kontrola dostępu
+   single: kontrola dostępu
+
+
+Kontrola dostępu
+----------------
+
+Teraz, gdy ma się użytkownika i role, można pójść dalej, niż autoryzacja w oparciu
+o wzorzec URL.
+
+Kontrola dostępu w kontrolerze
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ochrona aplikacji na podstawie wzorców URL jest łatwa, ale w niektórych przypadkach
+może się okazać nie wystarczającą. Gdy zajdzie konieczność, można łatwo wymusić
+autoryzację wewnątrz kontrolera::
+
+    // ...
+    use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
+    public function helloAction($name)
+    {
+        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException();
+        }
+
+        // ...
+    }
+
+.. caution::
+
+   Zapora musi być aktywna, w przeciwnym razie, podczas wywoływania metody
+   ``isGranted()`` zostanie zrzucony wyjątek.. Zawsze dobrym pomysłem jest,
+   posiadanie głównej zapory obejmującej wszystkie ścieżki URL (tak jak
+   pokazano to w tym rozdziale).
+
+.. index::
+   single: kontrola dostępu; z wyrażeniami 
+
+.. _book-security-expressions:
+
+Złożona kontrola dostępu z wyrażeniami
+--------------------------------------
+
+.. versionadded:: 2.4
+   Funkcjonalność wyrażeń została wprowadzona w Symfony 2.4.
+
+W uzupełnieniu roli takiej jak ``ROLE_ADMIN``, metoda ``isGranted`` akceptuje
+również obiekt :class:`Symfony\\Component\\ExpressionLanguage\\Expression`::
+
+    use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+    use Symfony\Component\ExpressionLanguage\Expression;
+    // ...
+
+    public function indexAction()
+    {
+        if (!$this->get('security.context')->isGranted(new Expression(
+            '"ROLE_ADMIN" in roles or (user and user.isSuperAdmin())'
+        ))) {
+            throw new AccessDeniedException();
+        }
+
+        // ...
+    }
+
+W tym przykładzie, jeśli bieżący użytkownik ma rolę ``ROLE_ADMIN`` lub jeśli metoda
+``isSuperAdmin()`` obiektu bieżącego użytkownika zwraca ``true``, to dostęp zostanie
+udzielony (uwaga: obiekt użytkownika może nie mieć metody ``isSuperAdmin``, ale
+jakąś inną tożsamą metodę – metoda ``isSuperAdmin`` została wymyślona na potrzeby
+tego przykładu).
+
+W kodzie tym użyto *wyrażenia dostępowego* (instancji klasy Expression, którą tu
+w skrócie będziemy nazywać po prostu *wyrażeniem*) – o składni języka wyrażeń
+można dowiedzieć się więcej w :doc:`/components/expression_language/syntax`.
+
+.. _book-security-expression-variables:
+
+Wewnątrz *wyrażeń* ma się dostęp do kilku zmiennych::
+
+* ``user``: obiekt użytkownika (lub ciąg ``anon``, jeśli nie ma uwierzytelniania);
+* ``roles``: tablica ról jakie posiada użytkownik, w tym z
+  :ref:`ról hierarchicznych <book-security-role-hierarchy>`, ale bez atrybutów
+  ``IS_AUTHENTICATED_*`` (zobacz funkcje poniżej);
+* ``object``: obiekt (jeśli występuje), który jest przekazywany jako drugi argument
+  do ``isGranted``;
+* ``token``: obiekt tokenu;
+* ``trust_resolver``: obiekt
+  :class:`Symfony\\Component\\Security\\Core\\Authentication\\AuthenticationTrustResolverInterface`,
+  w którym prawdopodobnie bedzie wyykorzystywana jakaś funkcja ``is_*`` (omówione poniżej).
+
+Dodatkowo w wewnątrz *wyrażeń* ma się dostęp do kilku funkcji:
+
+* ``is_authenticated``: zwraca ``true`` jeśli użytkownik został uwierzytelniony
+  poprzez mechanizmy "pamiętaj mnie" lub "pełne" uwierzytelnianie – czyli zwraca
+  true, jeśli użytkownik jest zalogowany;
+* ``is_anonymous``: równowazne z zastosowaniem ``IS_AUTHENTICATED_ANONYMOUSLY``
+  w funkcji ``isGranted``;
+* ``is_remember_me``: podobnie, ale równoważne z ``IS_AUTHENTICATED_REMEMBERED``,
+  patrz niżej;
+* ``is_fully_authenticated``: podobnie, ale nie jest równoważne z ``IS_AUTHENTICATED_FULLY``,
+  patrz niżej;
+* ``has_role``: sprawdza, czy użytkownik posiada określona rolę – równoważne z
+  wyrażeniem takim jak ``'ROLE_ADMIN' in roles``.
+
+.. sidebar:: ``is_remember_me`` jest różne w zależnosci od zaznaczenia ``IS_AUTHENTICATED_REMEMBERED``
+
+    Funkcje ``is_remember_me`` i ``is_authenticated_fully`` są *podobne* w wykorzystaniu
+    ``IS_AUTHENTICATED_REMEMBERED`` i ``IS_AUTHENTICATED_FULLY`` w funkcji ``isGranted``,
+    ale nie są **tożsame**. Następujący przykład pokazuje różnice::
+
+        use Symfony\Component\ExpressionLanguage\Expression;
+        // ...
+
+        $sc = $this->get('security.context');
+        $access1 = $sc->isGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $access2 = $sc->isGranted(new Expression(
+            'is_remember_me() or is_fully_authenticated()'
+        ));
+
+    Tutaj, ``$access1`` i ``$access2`` będą miały tą samą wartość. W przeciwieństwie
+    do zachowania ``IS_AUTHENTICATED_REMEMBERED`` i ``IS_AUTHENTICATED_FULLY``,
+    funkcja ``is_remember_me`` *tylko* zwraca ``true``, jeśli uzytkownik jest
+    uwierzytelniony poprzez ciasteczko remember-me cookie a ``is_fully_authenticated``
+    *tylko* zwraca ``true``, jeśli użytkownik jest rzeczywiście zalogowany podczas
+    sesji (czyli jest pełnoprawny).
+
+Kontrola dostępu w innych usługach
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+W istocie w Symfony można zabezpieczyć wszystko stosując strategie podobną do omówionej
+w poprzednim rozdziale. Na przykład załóżmy, że mamy jakąś usługę (np. klasę PHP),
+której zadaniem jest wysłanie wiadomości email od jednego użytkownika do drugiego.
+Można ograniczyć korzystanie z tej klasy – bez względu gdzie jest ona używana, użyć
+ją może tylko użytkownik posiadający określoną role.
+
+Więcej informacji o tym jak można wykorzystać komponent Security do zabezpieczenia
+różnych usług i metod w swojej aplikacji znajduje się w
+:doc:`/cookbook/security/securing_services`.
+
+.. _book-security-template:
+
+Kontrola dostępu w szablonach
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Jeśli chce się sprawdzić, czy bieżący użytkownik posiada jakąś rolę wewnątrz
+szablonu, należy użyć wbudowaną w Twig funkcję pomocniczą:
+
+.. configuration-block::
+
+    .. code-block:: html+jinja
+
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="...">Delete</a>
+        {% endif %}
+
+    .. code-block:: html+php
+
+        <?php if ($view['security']->isGranted('ROLE_ADMIN')): ?>
+            <a href="...">Delete</a>
+        <?php endif; ?>
+
+.. note::
+
+    W przypadku użycia tej funkcji gdy na zaporze *nie ma* określonych ścieżek URL,
+    zostanie zrzucony wyjątek. Więc jeszcze raz, zawsze dobrym pomysłem jest posiadanie
+    głównej zapory, która obejmuje wszystkie ścieżki URL (tak jak pokazano to w
+    tym rozdziale).
+
+.. _book-security-template-expression:
+
+.. versionadded:: 2.4
+    Funkcjonalność *wyrażeń dostępowych* została wprowadzona w Symfony 2.4.
+
+Mozna również uzyć wyrażeń dostępowych w szablonach:
+
+.. configuration-block::
+
+    .. code-block:: html+jinja
+
+        {% if is_granted(expression(
+            '"ROLE_ADMIN" in roles or (user and user.isSuperAdmin())'
+        )) %}
+            <a href="...">Delete</a>
+        {% endif %}
+
+    .. code-block:: html+php
+
+        <?php if ($view['security']->isGranted(new Expression(
+            '"ROLE_ADMIN" in roles or (user and user.isSuperAdmin())'
+        ))): ?>
+            <a href="...">Delete</a>
+        <?php endif; ?>
+
+Więcej informacji o wyrazeniach dostępowych znajduje się w :ref:`book-security-expressions`.
+
+Listy kontroli dostępu (ACL) - zabezpieczanie poszczególnych obiektów w bazie danych
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Proszę sobie wyobrazić, że zaprojektowaliśmy system bloga, gdzie użytkownicy mogą
+komentować wpisy. Teraz chcemy, aby użytkownik mógł edytować własne komentarze,
+ale nie komentarze innych usług. Ponadto chcemy, aby administrator mógł edytować
+wszystkie blogi.
+
+Komponent Security dostarczany jest z opcjonalny systemem list kontroli dostępu
+(ang. Access Control Lists - ACL), które można wykorzystać, gdy zachodzi potrzeba
+kontroli dostępu do poszczególnych instancji obiektu w swoim systemie.
+Bez ACL można zabezpieczyć system tak, aby tylko niektórzy użytkownicy mogli edytować
+wszystkie komentarze. Natomiast z ACL, można ograniczyć lub uniemożliwić dostęp
+do określonych komentarzy.
+
+Więcej informacji można znaleźć w artykule :doc:`/cookbook/security/acl`.
 
 .. index::
    single: bezpieczeństwo; wylogowanie
    single: wylogowanie
+
+.. _book-security-logging-out:
 
 Wylogowanie
 -----------
@@ -1807,7 +2064,7 @@ parametr konfiguracyjny ``logout``:
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
+       :linenos:  
 
         # app/config/security.yml
         security:
@@ -1821,7 +2078,7 @@ parametr konfiguracyjny ``logout``:
 
     .. code-block:: xml
        :linenos:
-
+         
         <!-- app/config/security.xml -->
         <config>
             <firewall name="secured_area" pattern="^/">
@@ -1839,7 +2096,7 @@ parametr konfiguracyjny ``logout``:
             'firewalls' => array(
                 'secured_area' => array(
                     // ...
-                    'logout' => array('path' => '/logout', 'target' => '/'),
+                    'logout' => array('path' => 'logout', 'target' => '/'),
                 ),
             ),
             // ...
@@ -1870,12 +2127,6 @@ Należy pamiętać, że nie potrzeba implementować kontrolera dla trasy adresu 
 ``/logout`` gdyż o wszystko troszczy się zapora. Zdawać sobie trzeba jednak sprawę,
 że należy utworzyć trasę, tak aby można było używać jej do generowania adresu URL:
 
-.. caution::
-
-    Od Symfony 2.1, musi się mieć trasę odpowiadającą ścieżce wylogowania. Bez
-    tej trasy wylogowanie nie będzie działało.
-    
-
 .. configuration-block::
 
     .. code-block:: yaml
@@ -1887,21 +2138,20 @@ Należy pamiętać, że nie potrzeba implementować kontrolera dla trasy adresu 
 
     .. code-block:: xml
        :linenos:
-
+       
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
-
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
             <route id="logout" path="/logout" />
-
         </routes>
 
-    .. code-block:: php
-       :linenos:  
-
+    ..  code-block:: php
+        :linenos:
+        
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
@@ -1915,198 +2165,6 @@ Gdy użytkownik zostanie wylogowany, to nastąpi przekierowany do miejsca okreś
 w parametrze ``target`` (np. do ``homepage``). Więcej informacji o konfiguracji
 wylogowania znajdziesz w artykule
 :doc:`Informacja o konfiguracji bezpieczeństwa</reference/configuration/security>`.
-
-.. index::
-   single: bezpieczeństwo; kontrola dostępu
-   single: szablonowanie; kontrola dostępu
-
-.. _book-security-template:
-
-Kontrola dostępu w szablonach
------------------------------
-
-Jeśli chce się sprawdzić, czy bieżący użytkownik ma rolę wewnątrz szablonu,
-to należy użyć wbudowanej funkcji pomocniczej ``is_granted()``:
-
-.. configuration-block::
-
-    .. code-block:: html+jinja
-       :linenos:
-
-        {% if is_granted('ROLE_ADMIN') %}
-            <a href="...">Delete</a>
-        {% endif %}
-
-    .. code-block:: html+php
-       :linenos:
-
-        <?php if ($view['security']->isGranted('ROLE_ADMIN')): ?>
-            <a href="...">Delete</a>
-        <?php endif; ?>
-
-.. note::
-
-    Jeśli używasz tej funkcji a nie ma adresu URL pod którym aktywna jest zapora,
-    to zostanie zrzucony wyjątek. Tak więc dobrym pomysłem jest posiadanie głównej
-    zapory, która zawiera wszystkie adresy URL (tak jak pokazano to w tym rozdziale).
-    
-.. index::
-   pair: kontroler; bezpieczeństwo
-   single: kontroler; kontrola dostępu
-   single: bezpieczeństwo; kontrola dostępu 
-
-Kontrola dostępu w kontrolerze
-------------------------------
-
-Jeśli chce się sprawdzić, czy bieżący użytkownik ma rolę w kontrolerze, to trzeba
-użyć metody kontekstu bezpieczeństwa
-:method:`Symfony\\Component\\Security\\Core\\SecurityContext::isGranted`::
-
-    public function indexAction()
-    {
-        // show different content to admin users
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            // ... load admin content here
-        }
-
-        // ... load other regular content here
-    }
-
-.. note::
-
-    Zapora musi być aktywna, w przeciwnym razie zostanie zrzucony wyjątek,
-    gdy wywoływana będzie metoda ``isGranted``. Przeczytaj uwagę dotyczącą tego
-    zagadnienia w szablonach, umieszczonąw poprzednim rozdziale.
-
-.. index::
-   single: bezpieczeństwo; personifikacja użytkownika
-
-Personifikacja użytkownika
---------------------------
-
-Czasami zachodzi potrzeba przełączenia się z jednego użytkownika na innego,
-bez konieczności wylogowywania się i ponownego logowania (na przykład podczas
-debugowania lub próby poznania błędów, jakie widzi użytkownik w swojej sesji
-a których nie można odtworzyć inaczej). Można to łatwo zrobić przez aktywowanie
-podsłuchiwacza zapory ``switch_user``:
-
-.. configuration-block::
-
-    .. code-block:: yaml
-       :linenos:
-
-        # app/config/security.yml
-        security:
-            firewalls:
-                main:
-                    # ...
-                    switch_user: true
-
-    .. code-block:: xml
-       :linenos:
-
-        <!-- app/config/security.xml -->
-        <config>
-            <firewall>
-                <!-- ... -->
-                <switch-user />
-            </firewall>
-        </config>
-
-    .. code-block:: php
-       :linenos:
-
-        // app/config/security.php
-        $container->loadFromExtension('security', array(
-            'firewalls' => array(
-                'main'=> array(
-                    ...,
-                    'switch_user' => true
-                ),
-            ),
-        ));
-
-
-Aby przełączyć się na innego użytkownika, wystarczy dodać łańcuch zapytania
-z parametrem ``_switch_user`` i nazwą użytkownika jako wartością tego parametru
-w bieżącym adresie URL:
-
-.. code-block:: text
-
-    http://example.com/somewhere?_switch_user=thomas
-
-Aby przełączyć się z powrotem na oryginalnego użytkownika, trzeba użyć specjanej
-nazwy użytkownika, ``_exit``:
-
-.. code-block:: text
-
-    http://example.com/somewhere?_switch_user=_exit
-
-Podczas personifikacji, użytkownik jest dostarczany ze specjalną rolą o nazwie
-``ROLE_PREVIOUS_ADMIN``. W szablonie, na przykład, rola ta może być używana do
-wyświetlania łączy do istniejących personifikacji:
-
-.. configuration-block::
-
-    .. code-block:: html+jinja
-       :linenos:
-
-        {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-            <a href="{{ path('homepage', {_switch_user: '_exit'}) }}">Exit impersonation</a>
-        {% endif %}
-
-    .. code-block:: html+php
-       :linenos:
-
-        <?php if ($view['security']->isGranted('ROLE_PREVIOUS_ADMIN')): ?>
-            <a
-                href="<?php echo $view['router']->generate('homepage', array('_switch_user' => '_exit') ?>"
-            >
-                Exit impersonation
-            </a>
-        <?php endif; ?>
-
-Oczywiście funkcjonalność ta może być udostępnione tylko wąskiej grupie użytkowników.
-Domyślnie dostęp jest zastrzeżony dla użytkowników posiadających rolę
-``ROLE_ALLOWED_TO_SWITCH``. Nazwa tej roli może być zmodyfikowana w ustawieniu
-``role``. W celu zapewnienia dodatkowego bezpieczeństwa można również zmienić
-nazwę parametru zapytania  w ustawieniu ``parameter``:
-
-.. configuration-block::
-
-    .. code-block:: yaml
-       :linenos:
-
-        # app/config/security.yml
-        security:
-            firewalls:
-                main:
-                    # ...
-                    switch_user: { role: ROLE_ADMIN, parameter: _want_to_be_this_user }
-
-    .. code-block:: xml
-       :linenos:
-
-        <!-- app/config/security.xml -->
-        <config>
-            <firewall>
-                <!-- ... -->
-                <switch-user role="ROLE_ADMIN" parameter="_want_to_be_this_user" />
-            </firewall>
-        </config>
-
-    .. code-block:: php
-       :linenos:
-
-        // app/config/security.php
-        $container->loadFromExtension('security', array(
-            'firewalls' => array(
-                'main'=> array(
-                    // ...
-                    'switch_user' => array('role' => 'ROLE_ADMIN', 'parameter' => '_want_to_be_this_user'),
-                ),
-            ),
-        ));
 
 .. index::
    single: bezpieczeństwo; uwierzytelnianie bezstanowe
@@ -2164,9 +2222,6 @@ Symfony 2 nie będzie tworzyć pliku cookie):
 
 Narzędzia
 ---------
-
-.. versionadded:: 2.2
-    W Symfony 2.2 zostały dodane klasy ``StringUtils`` i ``SecureRandom``
 
 Komponent bezpieczeństwa Symfony dostarczany jest z kolekcją przyjemnych narzędzi
 związanych z bezpieczeństwem. Narzędzia te używane są przez Symfony, ale można je
@@ -2247,12 +2302,14 @@ tematach w Receptariuszu.
 Dalsza lektura
 --------------
 
-* :doc:`Forcing HTTP/HTTPS </cookbook/security/force_https>`
-* :doc:`Blacklist users by IP address with a custom voter </cookbook/security/voters>`
-* :doc:`Access Control Lists (ACLs) </cookbook/security/acl>`
+* :doc:`Wymuszanie HTTP/HTTPS </cookbook/security/force_https>`
+* :doc:`Personifikacja użytkownika </cookbook/security/impersonating_user>`
+* :doc:`Czarna lista użytkowników poprzez adres Ip z własnym wyborcą </cookbook/security/voters>`
+* :doc:`Listy kontroli dostępu (ACL) </cookbook/security/acl>`
 * :doc:`/cookbook/security/remember_me`
+* :doc:`Jak ograniczyć zapory do określonego hosta </cookbook/security/host_restriction>`
 
-.. _`komponent bezpieczeństwa Symfony`: https://github.com/symfony/Security
+.. _`komponent Security`: https://github.com/symfony/Security
 .. _`JMSSecurityExtraBundle`: http://jmsyst.com/bundles/JMSSecurityExtraBundle/1.2
 .. _`FOSUserBundle`: https://github.com/FriendsOfSymfony/FOSUserBundle
 .. _`interfejs Serializable`: http://php.net/manual/en/class.serializable.php
