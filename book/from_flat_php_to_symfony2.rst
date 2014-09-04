@@ -84,8 +84,6 @@ się kilka problemów, które należy wziąć pod uwagę:
      abstakcyjną warstwę dostępu do baz danych i `mapowanie obiektowo-relacyjne`_
      (*ang. Object-Relational Mapping - ORM*).
 
-Bierzmy się więc do pracy nad rozwiązaniem tych problemów.
-
 Odizolowanie prezentacji
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -457,7 +455,7 @@ zawartością:
 
     {
         "require": {
-            "symfony/symfony": "2.3.*"
+            "symfony/symfony": "2.4.*"
         },
         "autoload": {
             "files": ["model.php","controllers.php"]
@@ -502,11 +500,15 @@ do poprawienia naszego blogu:
         $response = show_action($request->query->get('id'));
     } else {
         $html = '<html><body><h1>Page Not Found</h1></body></html>';
-        $response = new Response($html, 404);
+        $response = new Response($html, Response::HTTP_NOT_FOUND);
     }
 
     // echo the headers and send the response
     $response->send();
+    
+.. versionadded:: 2.4
+    Obsługa stałych kodu statusu HTTP zostały dodane w Symfony 2.4.
+
 
 Kontrolery są teraz odpowiedzialne za zwrócenie obiektu ``Response``.
 Aby to ułatwić, można dodać nową funkcję ``render_template()``, która nawiasem
