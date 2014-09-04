@@ -28,7 +28,7 @@ od zabezpieczenia aplikacji podstawowym uwierzytelnianiem HTTP.
 
 .. note::
 
-    Dostępny jest `komponent Security`_, będący samodzielną biblioteką
+    Dostępny jest `komponent bezpieczeństwa Symfony`_, będący samodzielną biblioteką
     PHP, która może być zastosowana wewnątrz dowolnego projektu PHP.
 
 .. index::
@@ -986,6 +986,7 @@ ESI rozpoczynające się przedrostkiem ``/esi``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -995,7 +996,8 @@ ESI rozpoczynające się przedrostkiem ``/esi``:
                 - { path: ^/esi, roles: ROLE_NO_ACCESS }
 
     .. code-block:: xml
-
+       :linenos:
+       
             <access-control>
                 <rule path="^/esi" role="IS_AUTHENTICATED_ANONYMOUSLY"
                     ips="127.0.0.1, ::1" />
@@ -1003,6 +1005,7 @@ ESI rozpoczynające się przedrostkiem ``/esi``:
             </access-control>
 
     .. code-block:: php
+       :linenos:
 
             'access_control' => array(
                 array(
@@ -1055,6 +1058,7 @@ klucz ``allow_if``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -1065,6 +1069,7 @@ klucz ``allow_if``:
                     allow_if: "'127.0.0.1' == request.getClientIp() or has_role('ROLE_ADMIN')"
 
     .. code-block:: xml
+       :linenos:
 
             <access-control>
                 <rule path="^/_internal/secure"
@@ -1072,6 +1077,7 @@ klucz ``allow_if``:
             </access-control>
 
     .. code-block:: php
+       :linenos:
 
             'access_control' => array(
                 array(
@@ -1986,12 +1992,14 @@ szablonu, należy użyć wbudowaną w Twig funkcję pomocniczą:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {% if is_granted('ROLE_ADMIN') %}
             <a href="...">Delete</a>
         {% endif %}
 
     .. code-block:: html+php
+       :linenos:
 
         <?php if ($view['security']->isGranted('ROLE_ADMIN')): ?>
             <a href="...">Delete</a>
@@ -2014,6 +2022,7 @@ Mozna również uzyć wyrażeń dostępowych w szablonach:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {% if is_granted(expression(
             '"ROLE_ADMIN" in roles or (user and user.isSuperAdmin())'
@@ -2022,6 +2031,7 @@ Mozna również uzyć wyrażeń dostępowych w szablonach:
         {% endif %}
 
     .. code-block:: html+php
+       :linenos:
 
         <?php if ($view['security']->isGranted(new Expression(
             '"ROLE_ADMIN" in roles or (user and user.isSuperAdmin())'
@@ -2309,7 +2319,7 @@ Dalsza lektura
 * :doc:`/cookbook/security/remember_me`
 * :doc:`Jak ograniczyć zapory do określonego hosta </cookbook/security/host_restriction>`
 
-.. _`komponent Security`: https://github.com/symfony/Security
+.. _`komponent bezpieczeństwa Symfony`: https://github.com/symfony/Security
 .. _`JMSSecurityExtraBundle`: http://jmsyst.com/bundles/JMSSecurityExtraBundle/1.2
 .. _`FOSUserBundle`: https://github.com/FriendsOfSymfony/FOSUserBundle
 .. _`interfejs Serializable`: http://php.net/manual/en/class.serializable.php
