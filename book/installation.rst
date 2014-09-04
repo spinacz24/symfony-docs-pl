@@ -136,13 +136,8 @@ standardowej Symfony:
 
 .. code-block:: bash
    
-   $ php composer.phar create-project symfony/framework-standard-edition /path/to/webroot/Symfony 2.1.x-dev
+   $ php composer.phar create-project symfony/framework-standard-edition /path/to/webroot/Symfony dev-master
    
-.. note::
-   
-   W celu skonkretyzowania wersji trzeba zamienić ``2.1.x-dev`` na łańcuch odpowiadający
-   najnowszej wersji Symfony (np. ``2.1.1-dev``). Dla poznania szczegółów przeczytaj
-   sytronę `Symfony Installation`_.
 
 .. note::
    
@@ -189,10 +184,10 @@ W systemie uniksowym można użyć w terminalu jedno z poniższych poleceń (zam
 .. code-block:: bash
 
    # dla pliku .tgz
-   $ tar -zxvf Symfony_Standard_Vendors_2.2.###.tgz
+   $ tar -zxvf Symfony_Standard_Vendors_2.4.###.tgz
    
    # dla pliku .zip
-   $ unzip Symfony_Standard_Vendors_2.2.###.zip
+   $ unzip Symfony_Standard_Vendors_2.4.###.zip
 
 Jeśli pobrałeś archiwum *without vendors*, to koniecznie przeczytaj następny rozdział.
 
@@ -266,7 +261,7 @@ aktualizujące:
    symboliczne.
 
 
-Konfiguracja i ustawienie
+Konfiguracja i ustawienia
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 W tym momęcie wszystkie zewnętrzne biblioteki umiejscowione są w katalogu ``vendor/``.
@@ -312,14 +307,16 @@ Jeśli są jakieś problemy, rozwiąż je teraz, zanim przejdziesz dalej.
     
    **1. Użycie ACL na systemach obsługujących ``chmod +a``**
 
-   Wiele systemów umożliwia użycie polecenia ``chmod +a``. Spróbuj najpierw tego
-   i jeżeli wystąpi błąd, spróbuj następnego sposobu:
+   Wiele systemów pozwalają używać polecenia ``chmod +a``. Najpierw spróbuj zastosować
+   to polecenie i gdy zwrócony zostanie błąd, spróbuj metody następnej. Tutaj najpierw
+   próbujemy ustalić użytkownika serwera internetowego i ustawić go jako ``APACHEUSER``:
    
    .. code-block:: bash
       
       $ rm -rf app/cache/*
       $ rm -rf app/logs/*
       
+      $ APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data' | grep -v root | head -1 | cut -d\  -f1`
       $ sudo chmod +a "www-data allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
       $ sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
    
@@ -327,13 +324,15 @@ Jeśli są jakieś problemy, rozwiąż je teraz, zanim przejdziesz dalej.
       
    Niektóre systemy nie obsługują polecenia ``chmod +a``, ale obsługują inne narzędzie
    o nazwie ``setfacl``. Możesz spróbować `włączyć obsługę ACL`_ na partycji i
-   zainstalować ``setfacl`` (w Ubuntu jest on zainstalowany domyślnie), a następnie
-   uruchomić polecenia podobne do tych:
+   zainstalować ``setfacl`` (w Ubuntu jest on zainstalowany domyślnie).
+   Tutaj najpierw próbujemy ustalić użytkownika serwera internetowego i ustawić
+   go jako ``APACHEUSER``:
    
    .. code-block:: bash
       
-      $ sudo setfacl -R -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs
-      $ sudo setfacl -dR -m u:www-data:rwx -m u:`whoami`:rwx app/cache app/logs
+      $ APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data' | grep -v root | head -1 | cut -d\  -f1`
+      $ sudo setfacl -R -m u:"$APACHEUSER":rwX -m u:`whoami`:rwX app/cache app/logs
+      $ sudo setfacl -dR -m u:"$APACHEUSER":rwX -m u:`whoami`:rwX app/cache app/logs
       
    W systemie takim jak Ubuntu, można to zrobić też inaczej:
     
