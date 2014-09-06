@@ -38,7 +38,8 @@ chcą go mieć pod ręka.
 
 .. include:: book/map.rst.inc
 
-**:doc:`Receptariusz </cookbook/index>`**
+:doc:`Receptariusz </cookbook/index>`
+=====================================
 
 
 Ten dział w oryginale nosi nazwę „Cookbook”, czyli „książka kucharska" - u nas "Receptariusz".
