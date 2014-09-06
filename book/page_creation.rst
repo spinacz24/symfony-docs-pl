@@ -135,7 +135,7 @@ podczas generowania ``AcmeHelloBundle``:
         $collection = new RouteCollection();
         $collection->addCollection(
             $loader->import('@AcmeHelloBundle/Resources/config/routing.php'),
-            '/',
+            '/'
         );
 
         return $collection;
@@ -836,15 +836,15 @@ Można zrzucić domyślną konfigurację pakietu w formacie yaml do konsoli uży
 polecenia ``config:dump-reference``. Oto przykład zrzutu domyślnej konfiguracji
 FrameworkBundle:
 
-.. code-block:: text
+.. code-block:: bash
 
-    app/console config:dump-reference FrameworkBundle
+    $ app/console config:dump-reference FrameworkBundle
 
 Może również zostać użyty alias rozszerzenia (klucz konfiguracyjny):
 
-.. code-block:: text
+.. code-block:: bash
 
-    app/console config:dump-reference framework
+    $ app/console config:dump-reference framework
 
 .. note::
 

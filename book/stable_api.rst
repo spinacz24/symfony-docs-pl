@@ -22,7 +22,8 @@ też wszelki kod nie oznaczony tym znacznikiem nie jest częścią stabilnego AP
 
     Wszystkie pakiety osób trzecich również powinny udostępniać swoje stabilne API.
 
-Począwszy od Symfony 2.0, podane poniżej komponenty posiadają stabilne API:
+Dla najnowszej stabilnej wersji Symfony następujące komponenty posiadają API
+oznaczone jako publiczne:
 
 * BrowserKit
 * ClassLoader
@@ -31,6 +32,7 @@ Począwszy od Symfony 2.0, podane poniżej komponenty posiadają stabilne API:
 * DependencyInjection
 * DomCrawler
 * EventDispatcher
+* Filesystem
 * Finder
 * HttpFoundation
 * HttpKernel

@@ -96,17 +96,18 @@ pojedynczą metodą w obiekcie kontrolera. W tym znaczeniu kontrolery są też n
     :linenos:
 
     // src/Acme/HelloBundle/Controller/HelloController.php
-
     namespace Acme\HelloBundle\Controller;
+
     use Symfony\Component\HttpFoundation\Response;
 
     class HelloController
     {
         public function indexAction($name)
         {
-          return new Response('<html><body>Hello '.$name.'!</body></html>');
+            return new Response('<html><body>Hello '.$name.'!</body></html>');
         }
     }
+
 
 .. tip::
 
@@ -347,10 +348,10 @@ Używaj tego! Zobacz :doc:`/cookbook/templating/render_without_controller`.
 .. index::
    single: kontroler; podstawowa klasa kontrolera
 
-Podstawowa klasa kontrolera
----------------------------
+Bazowa klasa kontrolera
+-----------------------
 
-Symfony2 udostępnia klasę ``Controller`` będącą klasą podstawową (bazową) dla kontrolerów
+Symfony2 udostępnia klasę ``Controller`` będącą klasą bazową dla kontrolerów
 aplikacji. Pomaga ona w najbardziej typowych zadaniach kontrolera i daje klasie
 kontrolera dostęp do każdego potrzebnego zasobu. Rozszerzając klasę ``Controller``
 można skorzystać z kilku metod pomocniczych (helperów).
@@ -378,7 +379,7 @@ Dodajmy instrukcję ``use`` na początku pliku kontrolera, a później zmodyfiku
 W rzeczywistości niczego to nie zmienia w sposobie działania kontrolera.
 W następnym rozdziale dowiesz się o metodach pomocniczych (helperach), które są
 udostępnione przez klasę kontrolera podstawowego. Te metody to po prostu skróty
-do rdzennych funkcji Symfony2, które są dla dostępne niezależnie od tego, czy używa
+do rdzennych funkcji Symfony2, które są dostępne niezależnie od tego, czy używa
 się klasy ``Controller``, czy nie. Dobrym sposobem na zapoznanie się z klasą
 :class:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller` jest zobaczenie
 jak ona działa.
@@ -386,10 +387,15 @@ jak ona działa.
 
 .. tip::
 
-    W Symfonii rozszerzanie klasy podstawowej ``Controler`` jest opcjonalne - zawiera
-    ona pomocne skróty ale nic obowiązkowego. Można również rozszerzyć
-    :class:`Symfony\Component\DependencyInjection\ContainerAware`. Stanie się wówczas
-    dostępny  obiekt *kontenera usługi* poprzez właściwość ``container``.
+    Rozszerzenie klasy bazowej w Symfony jest *opcjonalne* - zawiera ona użyteczne
+    skróty, ale nie są one obowiązkowe. Można również rozszerzyć klasę
+    :class:`Symfony\\Component\\DependencyInjection\\ContainerAware` lub wykorzystać
+    klasę cechę class:`Symfony\\Component\\DependencyInjection\\ContainerAwareTrait`
+    jeśli ma się PHP 5.4). Spowoduje to dostępność obiektu kontenera usług poprzez
+    właściwość ``container``.
+
+.. versionadded:: 2.4
+    ``ContainerAwareTrait`` jest nowością w Symfony 2.4.
 
 .. note::
 
@@ -484,16 +490,24 @@ Symfony2 wciąż będzie w stanie przekazywać właściwą wartości do każdej 
 
 .. tip::
 
-    Podobnie jak inne metody podstawowej klasy ``Controller``, metoda ``forward``
-    jest skrótem do rdzennej funkcjonalności Symfony2. Przekazanie może być też
-    dokonane bezpośrednio przez usługę ``http_kernel`` zawracajac obiekt
-    ``Response``::
-
-        $httpKernel = $this->container->get('http_kernel');
-        $response = $httpKernel->forward('AcmeHelloBundle:Hello:fancy', array(
-            'name'  => $name,
-            'color' => 'green',
-        ));
+   Podobnie do innych metod bazowej klasy ``Controller``, metoda ``forward`` jest
+   skrótem do rdzennej funkcjonalności Symfony2. Przekazanie może zostać zrealizowane
+   bezpośrednio przez powielenie bieżącego żądania. Gdy to :ref:`pod-żądanie
+   <http-kernel-sub-requests>` zostaje wykonane poprzez usługę ``http_kernel``,
+   ``HttpKernel`` zwraca obiekt ``Response``:: 
+      
+      use Symfony\Component\HttpKernel\HttpKernelInterface;
+      
+      $path = array(
+            '_controller' => 'AcmeHelloBundle:Hello:fancy',
+            'name'        => $name,
+            'color'       => 'green',
+      );
+      $request = $this->container->get('request');
+      $subRequest = $request->duplicate(array(), null, $path);
+      
+      $httpKernel = $this->container->get('http_kernel');
+      $response = $httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
 
 .. index::
    single: kontroler; renderowanie szablonów
@@ -572,8 +586,6 @@ Rozszerzając klasę kontrolera podstaowego, można uzyskać dostęp do
 każdej usługi Symfony2 poprzez metodę ``get()``. Poniżej znajduje się kilka
 popularnych usług, jakie mogą być potrzebne::
 
-    $request = $this->getRequest();
-
     $templating = $this->get('templating');
 
     $router = $this->get('router');
@@ -641,16 +653,22 @@ atrybuty w pliku cookie, używając natywnych sesji PHP.
 Przechowywanie i pobieranie informacji z sesji może być łatwo osiągnięte z dowolnego
 kontrolera::
 
-    $session = $this->getRequest()->getSession();
+    use Symfony\Component\HttpFoundation\Request;
 
-    // zapisanie atrybutu do odczytania w kolejnym żądaniu
-    $session->set('foo', 'bar');
+    public function indexAction(Request $request)
+    {
+        $session = $request->getSession();
 
-    // w innym kontrolerze i innym żądaniu
-    $foo = $session->get('foo');
+        // store an attribute for reuse during a later user request
+        $session->set('foo', 'bar');
 
-    // użycie domyślnej wartości, jeśli nie istnieje klucz
-    $filters = $session->get('filters', array());
+        // in another controller for another request
+        $foo = $session->get('foo');
+
+        // use a default value if the key doesn't exist
+        $filters = $session->get('filters', array());
+    }
+    
 
 Atrybuty te pozostają przypisane użytkownikowi przez pozostałą część sesji.
 
@@ -667,16 +685,21 @@ następne żądanie. Tego typu komunikaty nazywane są "fleszowymi".
 
 Na przykład, wyobraźmy sobie, że przetwarzane jest zgłoszenie formularza::
 
-    public function updateAction()
+    use Symfony\Component\HttpFoundation\Request;
+
+    public function updateAction(Request $request)
     {
         $form = $this->createForm(...);
 
-        $form->handleRequest($this->getRequest());
-        
-        if ($form->isValid()) {
-            // obsługa formularza
+        $form->handleRequest($request);
 
-            $this->get('session')->getFlashBag()->add('notice', 'Zmiany zostały zapisane!');
+        if ($form->isValid()) {
+            // do some sort of processing
+
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                'Your changes were saved!'
+            );
 
             return $this->redirect($this->generateUrl(...));
         }
@@ -696,24 +719,20 @@ komunikatu ``notice``:
     .. code-block:: html+jinja
        :linenos:
 
-        {% if app.session.started %}
-            {% for flashMessage in app.session.flashbag.get('notice') %}
-                <div class="flash-notice">
-                    {{ flashMessage }}
-                </div>
-            {% endfor %}
-        {% endif %}
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="flash-notice">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
 
     .. code-block:: html+php
        :linenos:
 
-        <?php if ($view['session']->isStarted()): ?>
-            <?php foreach ($view['session']->getFlashBag()->get('notice') as $message): ?>
-                <div class="flash-notice">
-                    <?php echo "<div class='flash-error'>$message</div>" ?>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
+        <?php foreach ($view['session']->getFlash('notice') as $message): ?>
+            <div class="flash-notice">
+                <?php echo "<div class='flash-error'>$message</div>" ?>
+            </div>
+        <?php endforeach; ?>
 
 Zgodnie z założeniem, komunikaty fleszowe sa przeznaczone do użycia dokładnie
 przy jednym żądaniu (są one wyświetlane natychmiast). Zostały zaprojektowane tak,
@@ -733,11 +752,15 @@ jest zwracana klientowi::
     use Symfony\Component\HttpFoundation\Response;
 
     // utworzenie prostego obiektu Response z kodem statusu 200 (domyślnie)
-    $response = new Response('Hello '.$name, 200);
+     $response = new Response('Hello '.$name, Response::HTTP_OK);
 
     // utworzenie odpowiedzi JSON ze kodem statusu 200
     $response = new Response(json_encode(array('name' => $name)));
     $response->headers->set('Content-Type', 'application/json');
+
+.. versionadded:: 2.4
+    Obsługa stałych kodu statusu HTTP została dodana w Symfony 2.4.
+
 
 .. tip::
 
@@ -762,18 +785,23 @@ jest zwracana klientowi::
 Obiekt Request
 --------------
 
-Rozszerzając podstawową klasę ``Controller``, kontroler uzyskuje również dostęp
-do obiektu``Request``::
+Poza wartościami wieloznaczników trasowania, kontroler również uzyskuje dostęp
+do obiektu ``Request``. Framework wstrzykuje obiekt ``Request`` do kontrolera,
+jeśli zmienna w `Symfony\Component\HttpFoundation\Request` jest typu podpowiedzi
+(type-hinted)::
 
-    $request = $this->getRequest();
+    use Symfony\Component\HttpFoundation\Request;
 
-    $request->isXmlHttpRequest(); // żądanie Ajax?
+    public function indexAction(Request $request)
+    {
+        $request->isXmlHttpRequest(); // is it an Ajax request?
 
-    $request->getPreferredLanguage(array('en', 'fr'));
+        $request->getPreferredLanguage(array('en', 'fr'));
 
-    $request->query->get('page'); // pobieramy parametr $_GET
+        $request->query->get('page'); // get a $_GET parameter
 
-    $request->request->get('page'); // pobieramy parametr $_POST
+        $request->request->get('page'); // get a $_POST parameter
+    }
 
 Podobnie jak w przypadku obiektu ``Response``, nagłówki żądania są przechowywane w
 obiekcie ``HeaderBag`` i są równie łatwo dostępne.

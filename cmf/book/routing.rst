@@ -508,7 +508,7 @@ w każdym projekcie lub innych wspólnych danych. Jeśli nie potrzeba treści, m
 po prostu nie ustawiać tego dokumentu.
 
 Więcej szczgółów mozna znaleźć w 
-:ref:`w dokumentacji RoutingBundle documentation <bundle-routing-document>`.
+:ref:`w dokumentacji RoutingBundle <bundle-routing-document>`.
 
 Uwagi końcowe
 -------------

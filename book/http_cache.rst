@@ -313,9 +313,11 @@ Nagłówek ``Cache-Control`` jest wyjątkowy, ponieważ zawiera nie jedną ale w
 porcji informacji o buforowaniu odpowiedzi. Każda z tych porcji jest oddzielona
 przecinkiem:
 
-     Cache-Control: private, max-age=0, must-revalidate
+.. code-block:: text
 
-     Cache-Control: max-age=3600, must-revalidate
+    Cache-Control: private, max-age=0, must-revalidate
+
+    Cache-Control: max-age=3600, must-revalidate
 
 Symfony dostarcza abstracji nagłówka ``Cache-Control`` w celu ułatwienia jego tworzenia::
 
@@ -476,10 +478,17 @@ odpowiedź jest uważana za przestarzała". Nagłówek ``Expires`` może zostać
 poprzez metodę ``setExpires()`` obiektu ``Response``. Wymaga to jako argumentu
 instancji ``DateTime``::
 
-    $date = new DateTime();
-    $date->modify('+600 seconds');
+    use Symfony\Component\HttpFoundation\Request;
 
-    $response->setExpires($date);
+    public function indexAction(Request $request)
+    {
+        $response = $this->render('MyBundle:Main:index.html.twig');
+        $response->setETag(md5($response->getContent()));
+        $response->setPublic(); // make sure the response is public/cacheable
+        $response->isNotModified($request);
+
+        return $response;
+    }
 
 W rezultacie nagłówek HTTP bedzie wyglądać tak:
 
@@ -623,7 +632,9 @@ Na przykład, można wykorzystać dla wszystkich obiektów datę ostatniej modyf
 niezbędną do obliczenia daty ważności reprezentacji zasobu jako wartość nagłówka
 ``Last-Modified``::
 
-    public function showAction($articleSlug)
+    use Symfony\Component\HttpFoundation\Request;
+
+    public function showAction($articleSlug, Request $request)
     {
         // ...
 
@@ -633,15 +644,14 @@ niezbędną do obliczenia daty ważności reprezentacji zasobu jako wartość na
         $date = $authorDate > $articleDate ? $authorDate : $articleDate;
 
         $response->setLastModified($date);
-        // Ustawienie odpowiedzi jako publicznej.
-        // W przeciwnym razie zostanie ona domyślnie ustawiona jako prywatna
+        // Set response as public. Otherwise it will be private by default.
         $response->setPublic();
 
-        if ($response->isNotModified($this->getRequest())) {
+        if ($response->isNotModified($request)) {
             return $response;
         }
 
-        // ... wykonanie jeszcze czegoś aby wypełnić odpowiedź treścią
+        // ... do more work to populate the response with the full content
 
         return $response;
     }
@@ -672,38 +682,39 @@ Metoda ``Response::isNotModified()`` wykonuje to dokładnie, przez udostępnieni
 prostego i wydajnego wzorca::
 
     use Symfony\Component\HttpFoundation\Response;
+    use Symfony\Component\HttpFoundation\Request;
 
-    public function showAction($articleSlug)
+    public function showAction($articleSlug, Request $request)
     {
-        // Pobranie minimum informacji do obliczenia
-        // ETag lub wartości Last-Modified
-        // (w oparciu o Request, dane są pobierane
-        // z bazy danych lub na przykład z listy par klucz-wartość
+        // Get the minimum information to compute
+        // the ETag or the Last-Modified value
+        // (based on the Request, data is retrieved from
+        // a database or a key-value store for instance)
         $article = ...;
 
-        // utworzenie Response z ETag  i ewentualnie nagłówka Last-Modified
+        // create a Response with an ETag and/or a Last-Modified header
         $response = new Response();
         $response->setETag($article->computeETag());
         $response->setLastModified($article->getPublishedAt());
 
-        // Ustawienie odpowiedzi jako publicznej. W przeciwnym razie będzie ona prywatna
+        // Set response as public. Otherwise it will be private by default.
         $response->setPublic();
 
-        // Sprawdzenie czy Response zostało zmodyfikowane dla danego Request
-        if ($response->isNotModified($this->getRequest())) {
-            // natychmiastowe zwrócenie Response 304
+        // Check that the Response is not modified for the given Request
+        if ($response->isNotModified($request)) {
+            // return the 304 Response immediately
             return $response;
-        } else {
-            // wykonanie tutaj jeszcze czegoś - jak np. pobieranie więcej danych
-            $comments = ...;
-
-            // lub renderowanie szablonu z $response który już się rozpoczął
-            return $this->render(
-                'MyBundle:MyController:article.html.twig',
-                array('article' => $article, 'comments' => $comments),
-                $response
-            );
         }
+
+        // do more work here - like retrieving more data
+        $comments = ...;
+
+        // or render a template with the $response you've already started
+        return $this->render(
+            'MyBundle:MyController:article.html.twig',
+            array('article' => $article, 'comments' => $comments),
+            $response
+        );
     }
 
 Gdy ``Response`` nie jest zmodyfikowane, to metoda ``isNotModified()`` autoamtycznie
@@ -813,12 +824,12 @@ ograniczenie: mogą tylko buforować całe strony. Jeśli ma się bardziej dynam
 strony lub strona ma więcej dynamicznych części, to pech. Na szczęście Symfony2
 oferuje rozwiązanie dla takich przypadków, oparte na technice nazywanej `ESI`_,
 lub Edge Side Includes. Specyfikację tej techniki napisana została prawie 10
-lat temu przez Akamaï. Technika ta umożliwia, aby określone części strony miały
+lat temu przez Akamai. Technika ta umożliwia, aby określone części strony miały
 inną strategię buforowania niż cała strona.
 
 Opisane w specyfikacji ESI znaczniki można umieścić na stronie w celu komunikacji
 z pamięcią podręczną bramy. W Symfony2 wykorzystany jest tylko jeden znacznik,
-``include``, ponieważ jest to jedyny przydatny znacznik poza kontekstem Akamaï:
+``include``, ponieważ jest to jedyny przydatny znacznik poza kontekstem Akamai:
 
 .. code-block:: html
    :linenos:
@@ -926,12 +937,12 @@ stosuje standardowy helper ``render`` do skonfigurowania znaczników ESI:
 
         <?php echo $view['actions']->render(
             new ControllerReference('...:news', array('max' => 5)),
-            array('renderer' => 'esi'))
+            array('strategy' => 'esi'))
         ?>
 
         <?php echo $view['actions']->render(
             $view['router']->generate('latest_news', array('max' => 5), true),
-            array('renderer' => 'esi'),
+            array('strategy' => 'esi'),
         ) ?>
 
 Wykorzystując renderowanie ``esi`` (poprzez funkcję ``render_esi`` Twiga) powiadamia
@@ -951,7 +962,7 @@ fragmenty treści ze stroną tak jak robi to wtedy, gdy używa ``render``.
 .. note::
 
     Symfony2 wykrywa czy pamięć podręczna bramy wykrywa obsługę ESI z inną
-    specyfikacją Akamaï i to jest jest obsługiwana "z pudełka" przez odwrotne proxy
+    specyfikacją Akamai i to jest jest obsługiwana "z pudełka" przez odwrotne proxy
     Symfony2.
 
 Osadzone akcje mogą teraz określać własne zasady buforowania, całkowicie niezależnie
@@ -974,7 +985,9 @@ Podczas stosowania odniesienia do kontrolera znacznik ESI powinien odwoływać s
 osadzonej akcji jak do dostępnego URL, tak więc pamięć podręczna może pobierać
 wskazaną treść niezależnie od reszty strony. Symfony2 dba o wygenerowanie unikatowego
 URL dla każdego odniesienia do kontrolera i jest w stanie wyznaczyć każdy taki
-adres właściwie, dzięki nasłuchowi (*ang. listner*), który musi być włączony w konfiguracji:
+adres właściwie, dzięki komponentowi 
+:class:`Symfony\\Component\\HttpKernel\\EventListener\\FragmentListener`,
+który musi być włączony w konfiguracji:
 
 .. configuration-block::
 
@@ -1076,15 +1089,18 @@ Oto jak można skonfigurować odwrotne proxy Symfony2 aby obsługiwało metodę 
             }
 
             $response = new Response();
-            if (!$this->getStore()->purge($request->getUri())) {
-                $response->setStatusCode(404, 'Not purged');
+            if ($this->getStore()->purge($request->getUri())) {
+                $response->setStatusCode(Response::HTTP_OK, 'Purged');
             } else {
-                $response->setStatusCode(200, 'Purged');
+                $response->setStatusCode(Response::HTTP_NOT_FOUND, 'Not purged');
             }
 
             return $response;
         }
     }
+    
+.. versionadded:: 2.4
+    Obsługa stałych kodu statusu HTTP została dodana w Symfony 2.4.    
 
 .. caution::
 
@@ -1115,6 +1131,6 @@ Dalasza lektura
 .. _`model walidacyjny`: http://tools.ietf.org/html/rfc2616#section-13.3
 .. _`RFC 2616`: http://tools.ietf.org/html/rfc2616
 .. _`HTTP Bis`: http://tools.ietf.org/wg/httpbis/
-.. _`P4 - Conditional Requests`: http://tools.ietf.org/html/draft-ietf-httpbis-p4-conditional-12
-.. _`P6 - Caching: Browser and intermediary caches`: http://tools.ietf.org/html/draft-ietf-httpbis-p6-cache-12
+.. _`P4 - Conditional Requests`: http://tools.ietf.org/html/draft-ietf-httpbis-p4-conditional
+.. _`P6 - Caching: Browser and intermediary caches`: http://tools.ietf.org/html/draft-ietf-httpbis-p6-cache
 .. _`ESI`: http://www.w3.org/TR/esi-lang

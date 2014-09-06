@@ -32,7 +32,7 @@ bardziej dostosowany do wielokrotnego użytku, sprawdzalny i właściwie podzelo
 po prostu dlatego, że kontener usług sprawia pisanie kodu tak łatwym.
 
 .. index::
-   single: kontener usług; Co to jest usługa?
+   single: kontener usług; usługa
 
 Co to jest usługa?
 ------------------
@@ -98,37 +98,7 @@ Lepszym rozwiązaniem jest spowodowanie, aby kontener usług sam utworzył obiek
 ``Mailer``. W tym celu musi się "nauczyć" kontener jak tworzyć usługę ``Mailer``.
 Wykonuje się to w pliku konfiguracyjnym, który może mieć format YAML, XML lub PHP:
 
-.. configuration-block::
-
-    .. code-block:: yaml
-       :linenos:
-
-        # app/config/config.yml
-        services:
-            my_mailer:
-                class:        Acme\HelloBundle\Mailer
-                arguments:    [sendmail]
-
-    .. code-block:: xml
-       :linenos:
-
-        <!-- app/config/config.xml -->
-        <services>
-            <service id="my_mailer" class="Acme\HelloBundle\Mailer">
-                <argument>sendmail</argument>
-            </service>
-        </services>
-
-    .. code-block:: php
-       :linenos:
-
-        // app/config/config.php
-        use Symfony\Component\DependencyInjection\Definition;
-
-        $container->setDefinition('my_mailer', new Definition(
-            'Acme\HelloBundle\Mailer',
-            array('sendmail')
-        ));
+.. include:: includes/_service_container_my_mailer.rst.inc
 
 .. note::
 
@@ -662,6 +632,127 @@ przykładzie usługa ``newsletter_manager`` potrzebuje usługi ``my_mailer`` w c
 funkcjonowania. Po określeniu tej zależności w kontenerze usług, kontener zajmie
 się całym działaniem instancji obiektów.
 
+.. index::
+   single: kontener usług; wyrażenia
+
+.. _book-services-expressions:
+
+Stosowanie języka wyrażeń
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.4
+    Funkcjonalność języka wyrażeń została wprowadzona w Symfony 2.4.
+
+Kontener usług obsługuje również "wyrażenie", które pozwala na wstrzykniecie do
+usługi bardzo specyficznych wartości.
+
+Załóżmy dla przykładu, że mamy trzecią usługę (nie pokazaną tutaj), o nazwie
+``mailer_configuration``, która ma metodę ``getMailerMethod()`` i która zwraca
+ciąg tekstowy taki jak ``sendmail`` w oparciu o tą samą konfigurację. Proszę
+pamiętać, ze pierwszy argument dla usługi ``my_mailer`` jest prostym ciągiem
+tekstowym ``sendmail``:
+
+.. include:: includes/_service_container_my_mailer.rst.inc
+
+Jednak, jak możemy pobrać tą wartość z ``getMailerMethod()`` nowej usługi
+``mailer_configuration`` bez sztywnego kodowania tego? Jednym ze sposobów jest
+wykorzystanie wyrażenia:
+
+.. configuration-block::
+
+    .. code-block:: yaml
+       :linenos:
+
+        # app/config/config.yml
+        services:
+            my_mailer:
+                class:        Acme\HelloBundle\Mailer
+                arguments:    ["@=service('mailer_configuration').getMailerMethod()"]
+
+    .. code-block:: xml
+       :linenos:
+
+        <!-- app/config/config.xml -->
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services
+                http://symfony.com/schema/dic/services/services-1.0.xsd"
+            >
+
+            <services>
+                <service id="my_mailer" class="Acme\HelloBundle\Mailer">
+                    <argument type="expression">service('mailer_configuration').getMailerMethod()</argument>
+                </service>
+            </services>
+        </container>
+
+    .. code-block:: php
+       :linenos:
+
+        // app/config/config.php
+        use Symfony\Component\DependencyInjection\Definition;
+        use Symfony\Component\ExpressionLanguage\Expression;
+
+        $container->setDefinition('my_mailer', new Definition(
+            'Acme\HelloBundle\Mailer',
+            array(new Expression('service("mailer_configuration").getMailerMethod()'))
+        ));
+
+Więcej informacji o składni języka wyrażeń znajduje się w :doc:`/components/expression_language/syntax`.
+
+W tym kontekście mamy dostęp do 2 funkcji:
+
+* ``service`` - zwraca określoną usługę (patrz przykład poniżej);
+* ``parameter`` - zwraca wartość okreśłonego parametru (składnia jest podobna do ``service``)
+
+Można również uzyskać dostęp do :class:`Symfony\\Component\\DependencyInjection\\ContainerBuilder`
+poprzez zmienna ``container``. Oto inny przykład:
+
+.. configuration-block::
+
+    .. code-block:: yaml
+       :linenos:
+
+        services:
+            my_mailer:
+                class:     Acme\HelloBundle\Mailer
+                arguments: ["@=container.hasParameter('some_param') ? parameter('some_param') : 'default_value'"]
+
+    .. code-block:: xml
+       :linenos:
+
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services
+                http://symfony.com/schema/dic/services/services-1.0.xsd"
+            >
+
+            <services>
+                <service id="my_mailer" class="Acme\HelloBundle\Mailer">
+                    <argument type="expression">@=container.hasParameter('some_param') ? parameter('some_param') : 'default_value'</argument>
+                </service>
+            </services>
+        </container>
+
+    .. code-block:: php
+       :linenos:
+
+        use Symfony\Component\DependencyInjection\Definition;
+        use Symfony\Component\ExpressionLanguage\Expression;
+
+        $container->setDefinition('my_mailer', new Definition(
+            'Acme\HelloBundle\Mailer',
+            array(new Expression(
+                "@=container.hasParameter('some_param') ? parameter('some_param') : 'default_value'"
+            ))
+        ));
+
+Wyrażenia mogą być stosowane jako argumenty konfiguratora w ``arguments``,
+``properties``  oraz argumenty dla ``calls`` (metoda ``calls``).
+
+
 Zależności opcjonalne - wstrzykiwanie setera
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -754,8 +845,113 @@ Wstrzykiwanie zależności przez metodę setera wymaga zmiany składni:
     Opisane tutaj podejście nazywane jest "wstrzykiwaniem konstruktora" i "wstrzykiwaniem
     setera". Kontener usług Symfony2 również obsługuje "wstrzykiwanie zależności".
 
-Czynienie referencji opcjonalnymi
----------------------------------
+
+.. index::
+   single: kontener usług; wstrzykiwanie żądań
+
+.. _book-container-request-stack:
+
+Wstrzykiwanie żądań
+~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.4
+    Usługa ``request_stack`` została wprowadzona w Symfony 2.4.
+
+Począwszy od Symfony 2.4, zamiast wstrzykiwania usługi ``request``, należy wstrzykiwać
+usługę ``request_stack`` i uzyskiwać dostęp do obiektu ``Request`` wywołując metodę
+:method:`Symfony\\Component\\HttpFoundation\\RequestStack::getCurrentRequest`::
+
+    namespace Acme\HelloBundle\Newsletter;
+
+    use Symfony\Component\HttpFoundation\RequestStack;
+
+    class NewsletterManager
+    {
+        protected $requestStack;
+
+        public function __construct(RequestStack $requestStack)
+        {
+            $this->requestStack = $requestStack;
+        }
+
+        public function anyMethod()
+        {
+            $request = $this->requestStack->getCurrentRequest();
+            // ... do something with the request
+        }
+
+        // ...
+    }
+
+Teraz, wystarczy wstrzyknąć ``request_stack``, która zachowuje się jak każda
+zwykła usługa:
+
+.. configuration-block::
+
+    .. code-block:: yaml
+       :linenos:
+
+        # src/Acme/HelloBundle/Resources/config/services.yml
+        services:
+            newsletter_manager:
+                class:     Acme\HelloBundle\Newsletter\NewsletterManager
+                arguments: ["@request_stack"]
+
+    .. code-block:: xml
+       :linenos:
+
+        <!-- src/Acme/HelloBundle/Resources/config/services.xml -->
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+            <services>
+                <service
+                    id="newsletter_manager"
+                    class="Acme\HelloBundle\Newsletter\NewsletterManager"
+                >
+                    <argument type="service" id="request_stack"/>
+                </service>
+            </services>
+        </container>
+
+    .. code-block:: php
+       :linenos:
+
+        // src/Acme/HelloBundle/Resources/config/services.php
+        use Symfony\Component\DependencyInjection\Definition;
+        use Symfony\Component\DependencyInjection\Reference;
+
+        // ...
+        $container->setDefinition('newsletter_manager', new Definition(
+            'Acme\HelloBundle\Newsletter\NewsletterManager',
+            array(new Reference('request_stack'))
+        ));
+
+.. sidebar:: Dlaczego nie należy wstrzykiwać usługi ``request``?
+
+    Prawie wszystkie wbudowane usługi Symfony2 zachowują się w ten sam sposób:
+    tworzona jest przez kontener pojedyncza instancja, która jest zwracana przez
+    kontener, ilekroć pobiera się ta usługę lub gdy jest ona wstrzykiwana do innej
+    usługi. Jest jeden wyjątek w standardowej aplikacji Symfony2: usługa ``request``.
+
+    Jeśli spróbuje się wstrzyknąć ``request`` do usługi, prawdopodobnie otrzyma
+    się wyjątek
+    :class:`Symfony\\Component\\DependencyInjection\\Exception\\ScopeWideningInjectionException`.
+    Dzieje się tak dlatego, że usługa ``request`` może się **zmieniać** w trakcie
+    funkcjonowania kontenera (na przykład, gdy tworzona jest usługa podżądania).
+
+
+.. tip::
+
+    Jeśli zdefiniuje się kontroler jako usługę, to można pobrać obiekt ``Request``
+    bez wstrzykiwania kontenera, przez jej przekazanie jako argumentu metody akcji.
+    Szczegóły w :ref:`book-controller-request-argument`.
+
+
+Uczynienie referencji opcjonalnymi
+----------------------------------
 
 Czasami jedna z usług może mieć zależności opcjonalne, co oznacza, że zależność
 nie jest wymagana dla prawidłowego działania usługi. W powyższym przykładzie usługa

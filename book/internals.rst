@@ -412,7 +412,14 @@ i ustawiając nowy obiekt ``Exception`` lub nie robić nic::
     w zależności od wyjątku, to ustawiania statusu na odpowiedzi nie będzie działać. Jeśli chcesz
     zastąpić kod statusu (co jednak musi mieć bardzo ważny powód), ustaw nagłówek ``X-Status-Code``::
 
-        return new Response('Error', 404 /* ignored */, array('X-Status-Code' => 200));
+        return new Response(
+            'Error',
+            Response::HTTP_NOT_FOUND, // ignored
+            array('X-Status-Code' => Response::HTTP_OK)
+        );
+        
+     .. versionadded:: 2.4
+        Obsługę stałych kodu statusu HTTP wprowadzono e Symfony 2.4.
 
 .. index::
    single: dyspozytor zdarzeń

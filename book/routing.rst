@@ -75,12 +75,6 @@ jest prosta:
 
         return $collection;
 
-.. versionadded:: 2.2
-    Opcja ``path`` jest nowością w Symfony2.2 i zastępuje opcję ``pattern``
-    z wersji wcześniejszych.
-
-
-
 Ścieżka zdefiniowana w trasie ``blog_show`` działa jak ``/blog/*``, gdzie
 znak wieloznaczny (``*``) otrzymuje nazwę ``slug``. Dla ścieżki URL ``/blog/moj-post``
 zmienna ``slug`` przybierze wartość ``moj-post``, która jest dostępna z poziomu
@@ -309,7 +303,7 @@ Może być to użyte np. do pobrania wpisu na blogu, którego adres pasuje do te
 ciągu znakowego.
 
 Ten wzorzec jednakże nie będzie pasował do samego ``/blog``. Dzieje się tak,
-ponieważ domyślnie wymagane jest okreśłenie wszystkich wieloznaczników.
+ponieważ domyślnie wymagane jest określenie wszystkich wieloznaczników.
 Może być to zmienione poprzez dodanie do tablicy ``defaults`` następnej wartości
 wieloznacznika.
 
@@ -460,6 +454,20 @@ dając wieloznacznikowi ``page`` wartość ``2``.
 | /blog/2 | {page} = 2 |
 +---------+------------+
 
+.. caution::
+
+    Oczywiście, można mieć więcej niż jeden opcjonalny wieloznacznik (np.
+    ``/blog/{slug}/{page}``), ale wszystko po po opcjonalnym wieloznaczniku musi
+    też być opcjonalne. Na przykład, ``/{page}/blog`` jest prawidłową ścieżką,
+    ale ``page`` będzie zawsze wymagane (czyli proste ``/blog`` nie dopasuje tej
+    trasy ).
+
+.. tip::
+
+    Trasy z opcjonalnymi parametrami na końcu nie będą pasować do żądań/ które
+    mają końcowy ukośnik (np. ``/blog/`` nie będzie pasować, ale ``/blog`` tak).
+
+
 .. index::
    single: trasowanie; wymagania
 
@@ -533,11 +541,11 @@ bezsensowną wartość ``my-blog-post`` dla wieloznacznika ``{page}``.
 | /blog/my-blog-post | blog  | {page} = my-blog-post |
 +--------------------+-------+-----------------------+
 
-Rozwiązaniem tego problemu jest dodanie do trasy **wymagań** (parametru ``requirements``).
-Trasy w tym przypadku będą działały idealnie, jeśli wzorzec ``/blog/{page}`` będzie
-pasował *wyłącznie* do ścieżek URL, w których wieloznacznik ``{page}`` jest typu
-integer. Na szczęście można dodawać wyrażenie regularne do każdego parametru, w tym
-do parametru ``requirements``. Na przykład:
+Rozwiązaniem problemu jest dodanie *wymagań* trasy lub  *warunków* trasy
+(zobacz :ref:`book-routing-conditions`). Trasy w tym przykładzie będą działać
+perfekcyjnie, jeśli ścieżka ``/blog/{page}`` *tylko* będzie dopasowywać ścieżki
+URL, w których  segment ``{page}`` jest liczbą. Na szczęście wyrażenie regularne
+wymagań może łatwo zostać dodane dla każdego parametru. Na przykład:
 
 .. configuration-block::
 
@@ -590,13 +598,15 @@ takiej jak ``/blog/2`` (ponieważ 2 jest liczbą), ale nie będzie już pasować
 W efekcie końcowym scieżka URL ``/blog/my-blog-post`` będzie odpowiednio pasować do
 trasy ``blog_show``.
 
-+--------------------+-----------+-----------------------+
-| URL                | route     | parameters            |
-+====================+===========+=======================+
-| /blog/2            | blog      | {page} = 2            |
-+--------------------+-----------+-----------------------+
-| /blog/my-blog-post | blog_show | {slug} = my-blog-post |
-+--------------------+-----------+-----------------------+
++----------------------+-----------+-------------------------+
+| URL                  | trasa     | parametry               |
++======================+===========+=========================+
+| /blog/2              | blog      | {page} = 2              |
++----------------------+-----------+-------------------------+
+| /blog/my-blog-post   | blog_show | {slug} = my-blog-post   |
++----------------------+-----------+-------------------------+
+| /blog/2-my-blog-post | blog_show | {slug} = 2-my-blog-post |
++----------------------+-----------+-------------------------+
 
 .. sidebar:: Wcześniejsze trasy zawsze wygrywają
 
@@ -728,10 +738,6 @@ Można to osiągnąć poprzez następującą konfigurację trasowania:
 
         return $collection;
 
-.. versionadded:: 2.2
-    W Symfony2.2 została dodana opcja ``methods``. Użycie  ``_method`` wymagane
-    jest tylko w starszych wersjach.
-
 Pomimo faktu, iż te dwie trasy mają identyczne ścieżki (``/contact``), pierwsza
 z nich będzie pasować tylko do żądań GET, a druga tylko do żądań POST. Oznacza to,
 że można wyświetlać i zgłosić formularz poprzez ten sam adres URL, jednocześnie
@@ -747,15 +753,110 @@ wykorzystując do tego oddzielne kontrolery dla tych dwóch różnych akcji.
    
 .. _adding-host:
    
-Dodawanie hosta
-~~~~~~~~~~~~~~~
-
-.. versionadded:: 2.2
-    W Symfony 2.2 dodano obsługę dopasowania hosta
+Dodawanie wymagania dotyczacego hosta
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Można również dopasowywać nagłówek HTTP `Host`_ przychodzącego żądania. Więcej
 informacji można uzyskać a artykule :doc:`/components/routing/hostname_pattern`
 w dokumentacji komponentu Routing.
+
+.. index::
+   single: trasowanie; wyrażenia warunkowe
+
+.. _book-routing-conditions:
+
+Całkowicie przerobiona trasa wykorzystująca warunki trasowania
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.4
+    Warunki tras zostały wprowadzone w Symfony 2.4.
+
+Jak zobaczyliśmy, trasa może być wykonana dla dopasowywania tylko określonych wieloznaczników
+trasowania (poprzez wyrażenie regularne), metod HTTP lub nazw hosta. Jednak system
+trasowania może zostać rozszerzony, uzyskując prawie nieograniczoną elastyczność
+przy zastosowaniu *wyrażeń warunkowych*:
+
+.. configuration-block::
+
+    .. code-block:: yaml
+       :linenos:
+
+        contact:
+            path:     /contact
+            defaults: { _controller: AcmeDemoBundle:Main:contact }
+            condition: "context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'"
+
+    .. code-block:: xml
+       :linenos:
+
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <routes xmlns="http://symfony.com/schema/routing"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
+
+            <route id="contact"
+                path="/contact"
+                condition="context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'"
+            >
+                <default key="_controller">AcmeDemoBundle:Main:contact</default>
+            </route>
+        </routes>
+
+    .. code-block:: php
+       :linenos:
+
+        use Symfony\Component\Routing\RouteCollection;
+        use Symfony\Component\Routing\Route;
+
+        $collection = new RouteCollection();
+        $collection->add('contact', new Route(
+            '/contact', array(
+                '_controller' => 'AcmeDemoBundle:Main:contact',
+            ),
+            array(),
+            array(),
+            '',
+            array(),
+            array(),
+            'context.getMethod() in ["GET", "HEAD"] and request.headers.get("User-Agent") matches "/firefox/i"'
+        ));
+
+        return $collection;
+
+Wartością opcji ``condition`` jest *wyrażeniem warunkowym trasowania*, które w skrócie
+będziemy nazywać *warunkiem trasowania*. Więcej o składni warunków trasowania
+można przeczytać w dokumencie :doc:`/components/expression_language/syntax`.
+W pwyższym przykładzie, trasa nie zostanie dopasowana, chyba że metoda HTTP, to
+GET albo HEAD  i jeśli nagłówek
+``User-Agent`` dopasowuje ``firefox``.
+
+W wyrażeniu można wykonać bardziej złożoną logikę wprowadzając dwie zmienne, które
+są przekazywane do wyrażenia:
+
+* ``context``: instancja :class:`Symfony\\Component\\Routing\\RequestContext`,
+  która przechowuje najbardziej podstawowe informacje o dopasowywanej trasie;
+* ``request``: obiekt Symfony :class:`Symfony\\Component\\HttpFoundation\\Request`
+(zobacz :ref:`component-http-foundation-request`).
+
+.. caution::
+
+    Warunki trasowania *nie są* brane pod uwagę podczas generowania lokalizatora URL.
+
+.. sidebar:: Wyrażenia są kompilowane do PHP
+
+    W tle, wyrażenia są kompilowane do surowego PHP. Nasz przykład będzie generował
+    następujący kod PHP w katalogu cache::
+
+        if (rtrim($pathinfo, '/contact') === '' && (
+            in_array($context->getMethod(), array(0 => "GET", 1 => "HEAD"))
+            && preg_match("/firefox/i", $request->headers->get("User-Agent"))
+        )) {
+            // ...
+        }
+
+    Dlatego używanie klucza ``condition`` nie powoduje żadnego dodatkowego narzutu
+    czasowego.
 
 .. index::
    single: Routing; Advanced example
@@ -826,6 +927,7 @@ ukośnika. Ścieżki URL pasujące do tej trasy mogą wyglądać np. tak:
 
 * ``/articles/en/2010/my-post``
 * ``/articles/fr/2010/my-post.rss``
+* ``/articles/en/2013/my-latest-post.html``
 
 .. _book-routing-format-param:
 
@@ -977,7 +1079,7 @@ Dołączanie zewnętrznych zasobów trasowania
 Wszystkie trasy są ładowane z pojedyńczego pliku konfiguracyjnego - zazwyczaj
 ``app/config/routing.yml`` (czytaj rozdział :ref:`creating-routes`).
 Często jednak zachodzi potrzeba ładowania trasy z innych miejsc, takich jak plik
-trasowania umieszczonego w pakiecie. Można tego dokonać poprzez "importowanie"
+trasowania umieszczonego w pakiecie. Można tego dokonać poprzez "zaimportowanie"
 tego pliku:
 
 .. configuration-block::
@@ -1075,7 +1177,7 @@ prostego ``/hello/{name}``:
 
     .. code-block:: yaml
        :linenos:
-
+       
         # app/config/routing.yml
         acme_hello:
             resource: "@AcmeHelloBundle/Resources/config/routing.yml"
@@ -1083,15 +1185,16 @@ prostego ``/hello/{name}``:
 
     .. code-block:: xml
        :linenos:
-
+       
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
-
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
-            <import resource="@AcmeHelloBundle/Resources/config/routing.xml" prefix="/admin" />
+            <import resource="@AcmeHelloBundle/Resources/config/routing.xml"
+                prefix="/admin" />
         </routes>
 
     .. code-block:: php
@@ -1101,7 +1204,13 @@ prostego ``/hello/{name}``:
         use Symfony\Component\Routing\RouteCollection;
 
         $collection = new RouteCollection();
-        $collection->addCollection($loader->import("@AcmeHelloBundle/Resources/config/routing.php"), '/admin');
+
+        $acmeHello = $loader->import(
+            "@AcmeHelloBundle/Resources/config/routing.php"
+        );
+        $acmeHello->addPrefix('/admin');
+
+        $collection->addCollection($acmeHello);
 
         return $collection;
 
@@ -1110,9 +1219,6 @@ zasobu trasowania.
 
 Dodawanie wyrażeń regularnych hosta do importowanych tras
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. versionadded:: 2.2
-    W Symfony 2.2 dodano obsługę dopasowywania hosta.
 
 Można ustawić wyrażenie regularne hosta na importowanych trasach. Więcej informacji
 można znaleźć w rozdziale :ref:`component-routing-host-imported`.
@@ -1177,27 +1283,41 @@ Ten dwukierunkowy system tworzony jest przez metody
 Przyjrzyjmy się poniższemu przykładowi wykorzystującemu wcześniejszą trasę
 ``blog_show``::
 
-    $params = $router->match('/blog/my-blog-post');
-    // array('slug' => 'my-blog-post', '_controller' => 'AcmeBlogBundle:Blog:show')
+     $params = $this->get('router')->match('/blog/my-blog-post');
+    // array(
+    //     'slug'        => 'my-blog-post',
+    //     '_controller' => 'AcmeBlogBundle:Blog:show',
+    // )
 
-    $uri = $router->generate('blog_show', array('slug' => 'my-blog-post'));
+    $uri = $this->get('router')->generate('blog_show', array('slug' => 'my-blog-post'));
     // /blog/my-blog-post
+    
 
 Aby wygenerować ścieżkę URL, musi się określić nazwę trasy (np. ``blog_show``) oraz
 wszystkie wieloznaczniki (np. ``slug = my-blog-post``) użyte we wzorcu tej trasy.
-Z tej informacji można wygenerować łatwo każdą ścieżkę URL:
+Z tej informacji można wygenerować łatwo każdą ścieżkę URL::
 
-.. code-block:: php
+   class MainController extends Controller
+   {
+      public function showAction($slug)
+      {
+         // ...
+            
+         $url = $this->generateUrl(
+            'blog_show',
+            array('slug' => 'my-blog-post')
+         );
+      }
+   }
 
-    class MainController extends Controller
-    {
-        public function showAction($slug)
-        {
-          // ...
+.. note::
 
-          $url = $this->get('router')->generate('blog_show', array('slug' => 'my-blog-post'));
-        }
-    }
+    W kontrolerach, które rozszerzają bazową klase kontrolera Symfony
+    :class:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller`,
+    można wykorzystać metodę
+    :method:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller::generateUrl`,
+    która wywołuje metodę usługi trasy
+    :method:`Symfony\\Component\\Routing\\Router::generate`.
 
 W kolejnym rozdziale poznasz jak generować ścieżki URL w szablonach.
 

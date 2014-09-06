@@ -299,7 +299,11 @@ ta zawiera jakiś tekst lub czy odpowiedź nie jest dokumentem XML lub HTML::
 .. sidebar:: Użyteczne asercje
 
     Oto lista najczęściej stosowanych i użytecznych metod asercji::
+        
+        use Symfony\Component\HttpFoundation\Response;
 
+        // ...
+        
         // Twierdzenie, że jest co najmniej jeden znacznik h2 z klasą "subtitle"
         // with the class "subtitle"
         $this->assertGreaterThan(
@@ -327,7 +331,7 @@ ta zawiera jakiś tekst lub czy odpowiedź nie jest dokumentem XML lub HTML::
         $this->assertTrue($client->getResponse()->isNotFound());
         // Ustalenie kodu statusu 200
         $this->assertEquals(
-            200,
+            Response::HTTP_OK,
             $client->getResponse()->getStatusCode()
         );
 
@@ -337,6 +341,10 @@ ta zawiera jakiś tekst lub czy odpowiedź nie jest dokumentem XML lub HTML::
         );
         // lub tylko sprawdzenie, czy odpowiedź jest przekierowywana na jakiś adres URL
         $this->assertTrue($client->getResponse()->isRedirect());
+        
+    .. versionadded:: 2.4
+        Obsługę stałych kodu statusu HTTP dodano w Symfony 2.4.
+        
 
 .. index::
    single: testy; klient
@@ -444,7 +452,8 @@ przeglądarkach::
 Dostęp do wewnętrznych obiektów
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-W Symfony 2.3 dodano metody ``getInternalRequest()`` i ``getInternalResponse()``.
+.. versionadded:: 2.3
+    W Symfony 2.3 dodano metody ``getInternalRequest()`` i ``getInternalResponse()``.
 
 Jeśli używa się klienta do testowania aplikacji, to można uzyskać dostęp do obiektów
 wewnętrznych klienta::
@@ -758,6 +767,10 @@ od jego typu::
     // Załadowanie pliku
     $form['photo']->upload('/path/to/lucas.jpg');
 
+.. tip::
+
+    Jeśli świadomie chcesz wybrać "nieprawidłowe" wartości pól select/radio, zobacz
+    :ref:`components-dom-crawler-invalid`.
 
 .. tip::
 

@@ -395,8 +395,8 @@ Można to zrobić szybko i brzydko::
 Rozwiązanie tego problemu może być trudne. Na szczęście jest to dokładnie
 zaprojektowane w Symfony.
 
-Przetwarzanie w aplikacji Symfony
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Proces przetwarzania aplikacji Symfony
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Kiedy zdecydujesz się powierzyć Symfony obsługę każdego żądania, to życie może
 stać się łatwiejsze. Symfony stosuje taki sam prosty wzorzec dla każdego żądanie:

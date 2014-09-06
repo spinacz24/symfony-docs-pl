@@ -42,7 +42,7 @@ w swojej aplikacji:
 Jak dotąd, jest to tylko zwyczajna klasa, która robi coś w aplikacji.
 Celem walidacji jest sprawdzenie, czy zawartość obiektu jest prawidłowa.
 Aby to działało, trzeba skonfigurować listę reguł (zwanych
- :ref:`**ograniczeniami**, *ang. constraints*<validation-constraints>`),
+ :ref:`ograniczeniami (ang. constraints) <validation-constraints>`),
  które obiekt musi spełniać, aby przejść walidację. Reguły te mogą być określone
  w wielu różnych formatach (YAML, XML, adnotacje, czy PHP).
 
@@ -123,14 +123,13 @@ Następnie, aby faktycznie walidować obiekt ``Author`` trzeba użyć metodę ``
 z usługi ``validator`` (klasy :class:`Symfony\\Component\\Validator\\Validator`).
 Zadanie ``validator`` jest proste: odczytać ograniczenia i sprawdzić, czy dane
 znajdujące się w obiekcie spełniają te ograniczenia. Jeśli walidacja się nie powiedzie,
-zwracana jest tablica błędów. Rozpatrzmy poniższy przykład z wnetrza kontrolera:
-
-.. code-block:: php
-   :linenos:
-
+zwracana jest nie pusta lista błedów
+(klasa :class:`Symfony\\Component\\Validator\\ConstraintViolationList`).
+Rozpatrzmy poniższy przykład z wnętrza kontrolera::
+   
+   // ...
     use Symfony\Component\HttpFoundation\Response;
     use Acme\BlogBundle\Entity\Author;
-    // ...
 
     public function indexAction()
     {
@@ -141,10 +140,17 @@ zwracana jest tablica błędów. Rozpatrzmy poniższy przykład z wnetrza kontro
         $errors = $validator->validate($author);
 
         if (count($errors) > 0) {
-            return new Response(print_r($errors, true));
-        } else {
-            return new Response('The author is valid! Yes!');
+            /*
+             * Uses a __toString method on the $errors variable which is a
+             * ConstraintViolationList object. This gives us a nice string
+             * for debugging
+             */
+            $errorsString = (string) $errors;
+
+            return new Response($errorsString);
         }
+
+        return new Response('The author is valid! Yes!');
     }
 
 Jeśli właściwość ``$name`` jest pusta, to można zobaczyć poniższy komunikat błędu:
@@ -173,9 +179,7 @@ Możesz również przekazać kolekcję błędów do szablonu.
         return $this->render('AcmeBlogBundle:Author:validate.html.twig', array(
             'errors' => $errors,
         ));
-    } else {
-        // ...
-    }
+    } 
 
 Jeśli zachodzi taka potrzeba, to można w szablonie wyprowadzić listę błędów:
 
@@ -254,7 +258,7 @@ wysłania formularza z poziomu kontrolera wyglada następująco::
     W tym przykładzie użyto klasę formularza ``AuthorType``, która nie jest
     tutaj pokazana.
 
-W celu uzyskania więcej informacji zobacz do rozdziału :doc:`Formularze</book/forms>`.
+W celu uzyskania więcej informacji zobacz do rozdziału :doc:`Formularze </book/forms>`.
 
 .. index::
    pair: walidacja; konfiguracja
@@ -280,9 +284,17 @@ adnotacji, to należy określić to w ograniczeniach:
        :linenos:
 
         <!-- app/config/config.xml -->
-        <framework:config>
-            <framework:validation enable_annotations="true" />
-        </framework:config>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:framework="http://symfony.com/schema/dic/symfony"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
+                                http://symfony.com/schema/dic/symfony http://symfony.com/schema/dic/symfony/symfony-1.0.xsd">
+
+            <framework:config>
+                <framework:validation enable-annotations="true" />
+            </framework:config>
+        </container>
 
     .. code-block:: php
        :linenos:
@@ -293,6 +305,7 @@ adnotacji, to należy określić to w ograniczeniach:
                 'enable_annotations' => true,
             ),
         ));
+
 
 .. index::
    single: walidacja; ograniczenia
@@ -333,8 +346,8 @@ w artykule ":doc:`/cookbook/validation/custom_constraint`".
 Konfiguracja ograniczeń
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Niektóre ograniczenia, takie jak :doc:`NotBlank</reference/constraints/NotBlank>,
-są proste, podczas gdy inne, jak np. :doc:`Choice</reference/constraints/Choice>
+Niektóre ograniczenia, takie jak :doc:`NotBlank </reference/constraints/NotBlank>,
+są proste, podczas gdy inne, jak np. :doc:`Choice </reference/constraints/Choice>
 mają kilka dostępnych opcji konfiguracji. Załóżmy, że klasa ``Author`` ma właściwość
 ``gender``, które może przyjmować wartość "kobieta" lub "mężczyzna":
 
@@ -347,7 +360,7 @@ mają kilka dostępnych opcji konfiguracji. Załóżmy, że klasa ``Author`` ma 
         Acme\BlogBundle\Entity\Author:
             properties:
                 gender:
-                    - Choice: { choices: [mężczyzna, kobieta], message: Wybierz płeć. }
+                    - Choice: { choices: [male, female], message: Choose a valid gender. }
 
     .. code-block:: php-annotations
        :linenos:
@@ -359,8 +372,8 @@ mają kilka dostępnych opcji konfiguracji. Załóżmy, że klasa ``Author`` ma 
         {
             /**
              * @Assert\Choice(
-             *     choices = { "mężczyzna", "kobieta" },
-             *     message = "Wybierz płeć."
+             *     choices = { "male", "female" },
+             *     message = "Choose a valid gender."
              * )
              */
             public $gender;
@@ -379,18 +392,21 @@ mają kilka dostępnych opcji konfiguracji. Załóżmy, że klasa ``Author`` ma 
                 <property name="gender">
                     <constraint name="Choice">
                         <option name="choices">
-                            <value>mężczyzna</value>
-                            <value>kobieta</value>
+                            <value>male</value>
+                            <value>female</value>
                         </option>
-                        <option name="message">Wybierz płeć.</option>
+                        <option name="message">Choose a valid gender.</option>
                     </constraint>
                 </property>
             </class>
         </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/BlogBundle/Entity/Author.php
+
+        // ...
         use Symfony\Component\Validator\Mapping\ClassMetadata;
         use Symfony\Component\Validator\Constraints\Choice;
 
@@ -401,8 +417,8 @@ mają kilka dostępnych opcji konfiguracji. Załóżmy, że klasa ``Author`` ma 
             public static function loadValidatorMetadata(ClassMetadata $metadata)
             {
                 $metadata->addPropertyConstraint('gender', new Choice(array(
-                    'choices' => array('mężczyzna', 'kobieta'),
-                    'message' => 'Wybierz płeć.',
+                    'choices' => array('male', 'female'),
+                    'message' => 'Choose a valid gender.',
                 )));
             }
         }
@@ -423,18 +439,20 @@ w ten sposób.
         Acme\BlogBundle\Entity\Author:
             properties:
                 gender:
-                    - Choice: [mężczyzna, kobieta]
+                    - Choice: [male, female]
 
     .. code-block:: php-annotations
        :linenos:
 
         // src/Acme/BlogBundle/Entity/Author.php
+
+        // ...
         use Symfony\Component\Validator\Constraints as Assert;
 
-        class Autor
+        class Author
         {
             /**
-             * @Assert\Choice({"mężczyzna", "kobieta"})
+             * @Assert\Choice({"male", "female"})
              */
             protected $gender;
         }
@@ -451,16 +469,19 @@ w ten sposób.
             <class name="Acme\BlogBundle\Entity\Author">
                 <property name="gender">
                     <constraint name="Choice">
-                        <value>mężczyzna</value>
-                        <value>kobieta</value>
+                        <value>male</value>
+                        <value>female</value>
                     </constraint>
                 </property>
             </class>
         </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
-        // src/Acme/BlogBundle/Entity/Autor.php
+        // src/Acme/BlogBundle/Entity/Author.php
+
+        // ...
         use Symfony\Component\Validator\Mapping\ClassMetadata;
         use Symfony\Component\Validator\Constraints\Choice;
 
@@ -470,9 +491,13 @@ w ten sposób.
 
             public static function loadValidatorMetadata(ClassMetadata $metadata)
             {
-                $metadata->addPropertyConstraint('gender', new Choice(array('mężczyzna', 'kobieta')));
+                $metadata->addPropertyConstraint(
+                    'gender',
+                    new Choice(array('male', 'female'))
+                );
             }
         }
+
 
 Ma to jedynie na celu ułatwienie i przyspieszenie konfiguracji najczęściej
 używanych opcji ograniczeń.
@@ -491,7 +516,6 @@ Pełną informację o tłumaczeniu komunikatów ograniczeń znajdziesz w dokumen
 
 .. index::
    single: walidacja; cele ograniczeń
-
 
 .. _validator-constraint-targets:
 
@@ -526,7 +550,8 @@ klasy ``Author``, której wartość powinna mieć co najmniej 3 znaki.
             properties:
                 firstName:
                     - NotBlank: ~
-                    - MinLength: 3
+                    - Length:
+                        min: 3
 
     .. code-block:: php-annotations
        :linenos:
@@ -540,7 +565,7 @@ klasy ``Author``, której wartość powinna mieć co najmniej 3 znaki.
         {
             /**
              * @Assert\NotBlank()
-             * @Assert\MinLength(3)
+             * @Assert\Length(min = "3")
              */
             private $firstName;
         }
@@ -549,12 +574,20 @@ klasy ``Author``, której wartość powinna mieć co najmniej 3 znaki.
        :linenos:
 
         <!-- src/Acme/BlogBundle/Resources/config/validation.xml -->
-        <class name="Acme\BlogBundle\Entity\Author">
-            <property name="firstName">
-                <constraint name="NotBlank" />
-                <constraint name="MinLength">3</constraint>
-            </property>
-        </class>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
+
+            <class name="Acme\BlogBundle\Entity\Author">
+                <property name="firstName">
+                    <constraint name="NotBlank" />
+                    <constraint name="Length">
+                        <option name="min">3</option>
+                    </constraint>
+                </property>
+            </class>
+        </constraint-mapping>
 
     .. code-block:: php
        :linenos:
@@ -564,7 +597,7 @@ klasy ``Author``, której wartość powinna mieć co najmniej 3 znaki.
         // ...
         use Symfony\Component\Validator\Mapping\ClassMetadata;
         use Symfony\Component\Validator\Constraints\NotBlank;
-        use Symfony\Component\Validator\Constraints\MinLength;
+        use Symfony\Component\Validator\Constraints\Length;
 
         class Author
         {
@@ -573,7 +606,9 @@ klasy ``Author``, której wartość powinna mieć co najmniej 3 znaki.
             public static function loadValidatorMetadata(ClassMetadata $metadata)
             {
                 $metadata->addPropertyConstraint('firstName', new NotBlank());
-                $metadata->addPropertyConstraint('firstName', new MinLength(3));
+                $metadata->addPropertyConstraint(
+                    'firstName',
+                    new Length(array("min" => 3)));
             }
         }
 
@@ -581,13 +616,13 @@ klasy ``Author``, której wartość powinna mieć co najmniej 3 znaki.
    single: walidacja; ograniczenia dla akcesorów
    pair: walidacja; akcesory
 
-Metody akcesory
-~~~~~~~~~~~~~~~
+Akcesory getter i isser
+~~~~~~~~~~~~~~~~~~~~~~~
 
 Ograniczenia mogą również być stosowane do zwrócenia wartości metody.
 Symfony2 umożliwia dodanie ograniczenia do jakiejkolwiek publicznej metody,
 której nazwa zaczyna się od "get" lub "is". W typ podręczniku oba takie typy
-metod określane są jako akcesory (getery i isery) (*ang. getters, issers*).
+metod określane są jako akcesory (getter i isser).
 
 Zaletą tej techniki jest to, że pozwala dynamicznie walidować obiekt. Przykładowo
 załóżmy, że chcemy się upewnić, że pole hasła nie zgadza się z imieniem użytkownika
@@ -603,22 +638,24 @@ i następnie zrobić załóżenie, że metoda ta musi zwrócić ``true``:
         Acme\BlogBundle\Entity\Author:
             getters:
                 passwordLegal:
-                    - "True": { message: "Hasło nie może być takie samo jak Twoje imię" }
+                    - "True": { message: "The password cannot match your first name" }
 
     .. code-block:: php-annotations
        :linenos:
 
         // src/Acme/BlogBundle/Entity/Author.php
+
+        // ...
         use Symfony\Component\Validator\Constraints as Assert;
 
-        class Autor
+        class Author
         {
             /**
-             * @Assert\True(message = "Hasło nie może być takie samo jak Twoje imię")
+             * @Assert\True(message = "The password cannot match your first name")
              */
             public function isPasswordLegal()
             {
-                // zwraca true lub false
+                // return true or false
             }
         }
 
@@ -626,17 +663,26 @@ i następnie zrobić załóżenie, że metoda ta musi zwrócić ``true``:
        :linenos:
 
         <!-- src/Acme/BlogBundle/Resources/config/validation.xml -->
-        <class name="Acme\BlogBundle\Entity\Author">
-            <getter property="passwordLegal">
-                <constraint name="True">
-                    <option name="message">Hasło nie może być takie samo jak Twoje imię</option>
-                </constraint>
-            </getter>
-        </class>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
+
+            <class name="Acme\BlogBundle\Entity\Author">
+                <getter property="passwordLegal">
+                    <constraint name="True">
+                        <option name="message">The password cannot match your first name</option>
+                    </constraint>
+                </getter>
+            </class>
+        </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/BlogBundle/Entity/Author.php
+
+        // ...
         use Symfony\Component\Validator\Mapping\ClassMetadata;
         use Symfony\Component\Validator\Constraints\True;
 
@@ -645,7 +691,7 @@ i następnie zrobić załóżenie, że metoda ta musi zwrócić ``true``:
             public static function loadValidatorMetadata(ClassMetadata $metadata)
             {
                 $metadata->addGetterConstraint('passwordLegal', new True(array(
-                    'message' => 'Hasło nie może być takie samo jak Twoje imię',
+                    'message' => 'The password cannot match your first name',
                 )));
             }
         }
@@ -669,7 +715,7 @@ Klasy
 ~~~~~
 
 Niektóre ograniczenia mogą być zastosowanie do walidacji całej klasy. Na przykład,
-ograniczenie :doc:`*Callback*</reference/constraints/Callback>` jest ogólnym
+ograniczenie :doc:`Callback </reference/constraints/Callback>` jest ogólnym
 ograniczeniem stosowanym do całej klasy. Podczas walidacji klasy, wykonywane
 są metody określone przez ograniczenie, więc każda może dostarczyć niestandardowej
 walidacji.
@@ -700,9 +746,10 @@ rejestracji użytkownika jak i podczas aktualizowania jego informacji kontaktowy
                     - Email: { groups: [registration] }
                 password:
                     - NotBlank: { groups: [registration] }
-                    - MinLength: { limit: 7, groups: [registration] }
+                    - Length: { min: 7, groups: [registration] }
                 city:
-                    - MinLength: 2
+                    - Length:
+                        min: 2
 
     .. code-block:: php-annotations
        :linenos:
@@ -722,12 +769,12 @@ rejestracji użytkownika jak i podczas aktualizowania jego informacji kontaktowy
 
             /**
             * @Assert\NotBlank(groups={"registration"})
-            * @Assert\MinLength(limit=7, groups={"registration"})
+            * @Assert\Length(min=7, groups={"registration"})
             */
             private $password;
 
             /**
-            * @Assert\MinLength(2)
+            * @Assert\Length(min = "2")
             */
             private $city;
         }
@@ -736,31 +783,39 @@ rejestracji użytkownika jak i podczas aktualizowania jego informacji kontaktowy
        :linenos:
 
         <!-- src/Acme/BlogBundle/Resources/config/validation.xml -->
-        <class name="Acme\BlogBundle\Entity\User">
-            <property name="email">
-                <constraint name="Email">
-                    <option name="groups">
-                        <value>registration</value>
-                    </option>
-                </constraint>
-            </property>
-            <property name="password">
-                <constraint name="NotBlank">
-                    <option name="groups">
-                        <value>registration</value>
-                    </option>
-                </constraint>
-                <constraint name="MinLength">
-                    <option name="limit">7</option>
-                    <option name="groups">
-                        <value>registration</value>
-                    </option>
-                </constraint>
-            </property>
-            <property name="city">
-                <constraint name="MinLength">7</constraint>
-            </property>
-        </class>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
+
+            <class name="Acme\BlogBundle\Entity\User">
+                <property name="email">
+                    <constraint name="Email">
+                        <option name="groups">
+                            <value>registration</value>
+                        </option>
+                    </constraint>
+                </property>
+                <property name="password">
+                    <constraint name="NotBlank">
+                        <option name="groups">
+                            <value>registration</value>
+                        </option>
+                    </constraint>
+                    <constraint name="Length">
+                        <option name="min">7</option>
+                        <option name="groups">
+                            <value>registration</value>
+                        </option>
+                    </constraint>
+                </property>
+                <property name="city">
+                    <constraint name="Length">
+                        <option name="min">7</option>
+                    </constraint>
+                </property>
+            </class>
+        </constraint-mapping>
 
     .. code-block:: php
        :linenos:
@@ -771,27 +826,30 @@ rejestracji użytkownika jak i podczas aktualizowania jego informacji kontaktowy
         use Symfony\Component\Validator\Mapping\ClassMetadata;
         use Symfony\Component\Validator\Constraints\Email;
         use Symfony\Component\Validator\Constraints\NotBlank;
-        use Symfony\Component\Validator\Constraints\MinLength;
+        use Symfony\Component\Validator\Constraints\Length;
 
         class User
         {
             public static function loadValidatorMetadata(ClassMetadata $metadata)
             {
                 $metadata->addPropertyConstraint('email', new Email(array(
-                    'groups' => array('registration')
+                    'groups' => array('registration'),
                 )));
 
                 $metadata->addPropertyConstraint('password', new NotBlank(array(
-                    'groups' => array('registration')
+                    'groups' => array('registration'),
                 )));
-                $metadata->addPropertyConstraint('password', new MinLength(array(
-                    'limit'  => 7,
+                $metadata->addPropertyConstraint('password', new Length(array(
+                    'min'  => 7,
                     'groups' => array('registration')
                 )));
 
-                $metadata->addPropertyConstraint('city', new MinLength(3));
+                $metadata->addPropertyConstraint(
+                    'city',
+                    Length(array("min" => 3)));
             }
         }
+
 
 W tej konfiguracji są trzy grupy walidacyjne:
 
@@ -835,6 +893,7 @@ uniknięcia wielu komunikatów o błędach).
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/BlogBundle/Resources/config/validation.yml
         Acme\BlogBundle\Entity\User:
@@ -853,6 +912,7 @@ uniknięcia wielu komunikatów o błędach).
                     - NotBlank: ~
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/Acme/BlogBundle/Entity/User.php
         namespace Acme\BlogBundle\Entity;
@@ -861,7 +921,7 @@ uniknięcia wielu komunikatów o błędach).
         use Symfony\Component\Validator\Constraints as Assert;
 
         /**
-         * @Assert\GroupSequence({"Strict", "User"})
+         * @Assert\GroupSequence({"User", "Strict"})
          */
         class User implements UserInterface
         {
@@ -885,30 +945,38 @@ uniknięcia wielu komunikatów o błędach).
         }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/BlogBundle/Resources/config/validation.xml -->
-        <class name="Acme\BlogBundle\Entity\User">
-            <property name="username">
-                <constraint name="NotBlank" />
-            </property>
-            <property name="password">
-                <constraint name="NotBlank" />
-            </property>
-            <getter property="passwordLegal">
-                <constraint name="True">
-                    <option name="message">The password cannot match your username</option>
-                    <option name="groups">
-                        <value>Strict</value>
-                    </option>
-                </constraint>
-            </getter>
-            <group-sequence>
-                <value>User</value>
-                <value>Strict</value>
-            </group-sequence>
-        </class>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
+
+            <class name="Acme\BlogBundle\Entity\User">
+                <property name="username">
+                    <constraint name="NotBlank" />
+                </property>
+                <property name="password">
+                    <constraint name="NotBlank" />
+                </property>
+                <getter property="passwordLegal">
+                    <constraint name="True">
+                        <option name="message">The password cannot match your username</option>
+                        <option name="groups">
+                            <value>Strict</value>
+                        </option>
+                    </constraint>
+                </getter>
+                <group-sequence>
+                    <value>User</value>
+                    <value>Strict</value>
+                </group-sequence>
+            </class>
+        </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/BlogBundle/Entity/User.php
         namespace Acme\BlogBundle\Entity;
@@ -920,13 +988,22 @@ uniknięcia wielu komunikatów o błędach).
         {
             public static function loadValidatorMetadata(ClassMetadata $metadata)
             {
-                $metadata->addPropertyConstraint('username', new Assert\NotBlank());
-                $metadata->addPropertyConstraint('password', new Assert\NotBlank());
+                $metadata->addPropertyConstraint(
+                    'username',
+                    new Assert\NotBlank()
+                );
+                $metadata->addPropertyConstraint(
+                    'password',
+                    new Assert\NotBlank()
+                );
 
-                $metadata->addGetterConstraint('passwordLegal', new Assert\True(array(
-                    'message' => 'The password cannot match your first name',
-                    'groups'  => array('Strict'),
-                )));
+                $metadata->addGetterConstraint(
+                    'passwordLegal',
+                    new Assert\True(array(
+                        'message' => 'The password cannot match your first name',
+                        'groups'  => array('Strict'),
+                    ))
+                );
 
                 $metadata->setGroupSequence(array('User', 'Strict'));
             }
@@ -935,6 +1012,146 @@ uniknięcia wielu komunikatów o błędach).
 W tym przykładzie najpierw sprawdzamy wszystkie ograniczenia w grupie ``User``
 (która jest taka sama jak grupa ``Default``). Gdy wszystkie ograniczenia w tej
 grupie są prawidłowe i tylko wtedy, sprawdzana jest druga grupa ``Strict``.
+
+Dostawcy sekwencji grup
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Przyjmijmy, że mamy encję ``User``, która może być zwykłym użytkownikiem lub
+użytkownikiem premium. Gdy encja jest użytkownikiem premium, to powinno się do
+niej dodać kilka specyficznych ograniczeń (np. szczegóły karty kredytowej).
+Dla dynamicznego określania, które grupy powinny zostać aktywowane, można utworzyć
+dostawcę sekwencji grup (*ang. Group Sequence Provider*). Najpierw utwórzmy encję
+i nowe ograniczenie o nazwie``Premium``:
+
+.. configuration-block::
+
+    .. code-block:: yaml
+       :linenos:
+
+        # src/Acme/DemoBundle/Resources/config/validation.yml
+        Acme\DemoBundle\Entity\User:
+            properties:
+                name:
+                    - NotBlank
+                creditCard:
+                    - CardScheme
+                        schemes: [VISA]
+                        groups: [Premium]
+
+    .. code-block:: php-annotations
+       :linenos:
+
+        // src/Acme/DemoBundle/Entity/User.php
+        namespace Acme\DemoBundle\Entity;
+
+        use Symfony\Component\Validator\Constraints as Assert;
+
+        class User
+        {
+            // ...
+
+            /**
+             * @Assert\NotBlank()
+             */
+            private $name;
+
+            /**
+             * @Assert\CardScheme(
+             *     schemes={"VISA"},
+             *     groups={"Premium"},
+             * )
+             */
+            private $creditCard;
+        }
+
+    .. code-block:: xml
+       :linenos:
+
+        <!-- src/Acme/DemoBundle/Resources/config/validation.xml -->
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
+
+            <class name="Acme\DemoBundle\Entity\User">
+                <property name="name">
+                    <constraint name="NotBlank" />
+                </property>
+
+                <property name="creditCard">
+                    <constraint name="CardScheme">
+                        <option name="schemes">
+                            <value>VISA</value>
+                        </option>
+                        <option name="groups">
+                            <value>Premium</value>
+                        </option>
+                    </constraint>
+                </property>
+            </class>
+        </constraint-mapping>
+
+    .. code-block:: php
+       :linenos:
+
+        // src/Acme/DemoBundle/Entity/User.php
+        namespace Acme\DemoBundle\Entity;
+
+        use Symfony\Component\Validator\Constraints as Assert;
+        use Symfony\Component\Validator\Mapping\ClassMetadata;
+
+        class User
+        {
+            private $name;
+            private $creditCard;
+
+            // ...
+
+            public static function loadValidatorMetadata(ClassMetadata $metadata)
+            {
+                $metadata->addPropertyConstraint('name', new Assert\NotBlank());
+                $metadata->addPropertyConstraint('creditCard', new Assert\CardScheme(
+                    'schemes' => array('VISA'),
+                    'groups'  => array('Premium'),
+                ));
+            }
+        }
+
+Teraz zmieńmy klasę ``User`` na implementację
+:class:`Symfony\\Component\\Validator\\GroupSequenceProviderInterface` i dodajmy
+metodę :method:`Symfony\\Component\\Validator\\GroupSequenceProviderInterface::getGroupSequence`,
+która powinna zwracać tablicę grup do zastosowania. Ponadto dodajmy adnotację
+``@Assert\GroupSequenceProvider`` do klasy (lub  ``group_sequence_provider: true``
+do pliku YAML). Jeśli przyjmiemy, że metoda o nazwie ``isPremium`` zwraca ``true``,
+jeśli użytkownik jest członkiem premium,
+to nasz kod może wyglądać tak::
+
+    // src/Acme/DemoBundle/Entity/User.php
+    namespace Acme\DemoBundle\Entity;
+
+    // ...
+    use Symfony\Component\Validator\GroupSequenceProviderInterface;
+
+    /**
+     * @Assert\GroupSequenceProvider
+     * ...
+     */
+    class User implements GroupSequenceProviderInterface
+    {
+        // ...
+
+        public function getGroupSequence()
+        {
+            $groups = array('User');
+
+            if ($this->isPremium()) {
+                $groups[] = 'Premium';
+            }
+
+            return $groups;
+        }
+    }
+
 
 .. index::
    single: walidacja; walidacja wartości
@@ -980,7 +1197,7 @@ zrobienia. Wewnątrz kontrolera wygląda to podobnie do tego::
 Wywołując w walidatorze metodę ``validateValue`` można przekazać tam surową wartość
 i obiekt ograniczenia, jakie chce się walidować. Pełną listę dostępnych ograniczeń,
 z pełną nazwą klasy dla każdego ograniczenia, znajdziesz w rozdziale
- :doc:`Informacje o ograniczeniach</reference/constraints>`.
+ :doc:`Informacje o ograniczeniach </reference/constraints>`.
 
 Metoda ``validateValue`` zwraca obiekt
 :class:`Symfony\\Component\\Validator\\ConstraintViolationList`,
