@@ -15,7 +15,7 @@ Obsługa wielojęzyczności
     tak samo jak dla treści na przykład w języku niemieckim ``http://foo.com/de/hello-world``.
 
     Jeśli zachodzi potrzeba używania adresów URL specyficznych dla jakiegoś języka,
-    można dodać dokumenty Route dla innych ustawień regionalnych, albo skonfigurować
+    można dodać dokumenty Route dla innych ustawień narodowych, albo skonfigurować
     dynamiczny router do wyszukiwania tras z przedrostkami. Można również skompletować
     oddzielną trasę i treść używając oddzielnych dokumentów z pakietów RoutingBundle
     i ContentBundle.
