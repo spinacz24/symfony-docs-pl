@@ -17,8 +17,7 @@ podejście na rzecz prostoty.
 SimpleCmsBundle zapewnia rozwiązanie dla łatwego mapowania treści, tras i elementów
 menu, w oparciu o prostą strukturę drzewa w repozytorium treści.
 
-Wprowadzenie do tematyki pakietu można znaleźć w rozdziale :doc:`Getting started
-<../../book/simplecms>`.
+Wprowadzenie do tematyki pakietu można znaleźć w rozdziale :doc:`../../book/simplecms`.
 
 `Witryna CMF`_ jest aplikacja wykorzystującą pakiet SimpleCmsBundle.
 

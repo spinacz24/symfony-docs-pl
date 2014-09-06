@@ -4,12 +4,12 @@
 .. index::
     single: rozszerzanie klasy Page; SimpleCmsBundle
 
-Rozszerzani klasy Page
-----------------------
+Rozszerzanie klasy Page
+-----------------------
 
 Domyślny dokument Page (``Symfony\Cmf\Bundle\SimpleCmsBundle\Model\Page``)
 jest stosunkowo prosty, dostarczany wraz z paru najbardziej użytecznymi właściwościami
-dla budowania typowej strony: tytułem, treścią, znacznikami, datą publikacji itd.
+dla budowania typowej strony: tytułem, treścią, etykietami, datą publikacji itd.
 
 Jeśli to nie wystarcza w projekcie, można łatwo dostarczyć własny dokument przez
 rozszerzenie  domyślnego dokumentu ``Page`` i jawne ustawienie parametru konfiguracji
