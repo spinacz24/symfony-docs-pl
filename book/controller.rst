@@ -785,7 +785,7 @@ jest zwracana klientowi::
 Obiekt Request
 --------------
 
-Poza wartościami symboli zastępczych trasowania, kontroler również uzyskuje dostęp
+Poza wartościami wieloznaczników trasowania, kontroler również uzyskuje dostęp
 do obiektu ``Request``. Framework wstrzykuje obiekt ``Request`` do kontrolera,
 jeśli zmienna w `Symfony\Component\HttpFoundation\Request` jest typu podpowiedzi
 (type-hinted)::

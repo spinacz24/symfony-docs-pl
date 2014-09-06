@@ -41,7 +41,7 @@ tego sprawdzania. Oczywiście, gdy wyłączy się taką kontrolę, to do obowią
 administratora systemu będzie należeć czyszczenie pamięci podręcznej, po każdej
 zmianie plików źródłowych. W przeciwnym razie aktualizacja nie będzie widoczna.
 
-Dla przykładu, aby wyłączyć w APC sprawdzanie, trzeba dodać w pliku php.ini 
+Dla przykładu, aby wyłączyć w APC sprawdzanie, trzeba dodać w pliku ``php.ini`` 
 linię ``apc.stat=0`` 
 .
 
@@ -65,7 +65,7 @@ poleceń na etapie procesu wdrożenia:
 
 .. code-block:: bash
 
-    php composer.phar dump-autoload --optimize
+    $ php composer.phar dump-autoload --optimize
 
 Wewnętrznie buduje to wielką tablicę mapy klas w ``vendor/composer/autoload_namespaces.php``.
 
@@ -85,13 +85,16 @@ dystrybucji, kod ten powinien już być dostępny w pliku w postaci komentarza::
     $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 
     // Use APC for autoloading to improve performance
-    // Change 'sf2' by the prefix you want in order to prevent key conflict with another application
+    // Change 'sf2' by the prefix you want in order
+    // to prevent key conflict with another application
     /*
     $loader = new ApcClassLoader('sf2', $loader);
     $loader->register(true);
     */
 
     // ...
+
+Więcej szczegółów w :doc:`/components/class_loader/cache_class_loader`.
 
 .. note::
 

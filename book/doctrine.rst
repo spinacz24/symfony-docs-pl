@@ -686,8 +686,8 @@ czasu wywołania metody ``flush()``.
 
 .. _`book-doctrine-queries`:
 
-Zapytania do obiektów
----------------------
+Odpytywanie obiektów
+--------------------
 
 Pokazywaliśmy już, jak obiekt repozytorium umożliwia uruchomienie podstawowych zapytań
 bez specjalnego wysiłku::
@@ -702,10 +702,10 @@ trzeba sobie wyobrazić, że tu odpytywane są obiekty klasy encji (np. ``Produc
 a nie wiersze tabeli (np. ``product``).
 
 Podczas odpytywania w Doctrine, ma się dwie możliwości: pisanie czystych zapytań
-Doctrine lub stosowanie konstruktora zapytań Doctrine.
+Doctrine lub stosowanie budowniczego zapytań Doctrine.
 
-Zapytania do obiektów z użyciem DQL
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Odpytywanie obiektów z użyciem DQL
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Proszę sobie wyobrazić, że chcemy zapytać o produkty, ale tylko takie, które kosztują więcej
 niż ``19.99`` i są uporządkowane od najtańszych do najdroższych. Wewnątrz kontrolera
@@ -781,7 +781,7 @@ oficjalnej dokumentacji Doctrine.
 .. index::
       single: Doctrine; QueryBuilder 
 
-Stosowanie konstruktora zapytań Doctrine
+Stosowanie budowniczego zapytań Doctrine
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Zamiast pisać bezpośrednio zapytania, można alternatywnie wykorzystać obiekt
@@ -801,7 +801,7 @@ wpisywania nazw metod. Z poziomu kontrolera::
     $products = $query->getResult();
 
 Obiekt ``QueryBuilder`` zawiera wszystkie niezbędne metody do do budowy zapytania.
-Przez wywołanie metody ``thegetQuery()`` konstruktor zapytań zwraca zwykły obiekt
+Przez wywołanie metody ``thegetQuery()`` budowniczy zapytań zwraca zwykły obiekt
 ``Query``, który jest taki sam, jak obiekt zbudowany w poprzednim rozdziale.
 
 Więcej informacji o konstruktorze zapytań Doctrine można znaleźć w dokumentacji
@@ -1453,6 +1453,12 @@ Doctrine obsługuje następujące typy danych:
   * ``boolean``
   * ``object`` (serializowane i przechowywane w polu ``CLOB``)
   * ``array`` (serializowane i przechowywane w polu ``CLOB``)
+  * ``simple_array`` (serializowane przy użyciu :phpfunction:`implode()`
+    i :phpfunction:`explode()`, z przecinkiem jako ogranicznikiem i przechowywane
+    w polu ``CLOB`` field)
+  * ``json_array`` (serializowane przy użyciu :phpfunction:`json_encode()`
+    i :phpfunction:`json_decode()` i przechowywane w polu ``CLOB``)
+  * ``guid``
 
 Aby uzyskać więcej informacji przeczytaj artykuł `Mapping Types`_ w dokumentacji
 Doctrine.
