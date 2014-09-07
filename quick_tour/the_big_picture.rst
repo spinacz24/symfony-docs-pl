@@ -260,7 +260,7 @@ Teraz ponownie zajrzyj do konfiguracji tras i znajdź klucz ``_demo``:
 *Nazwa logiczna* pliku zawierajacego trasę ``_demo``, to
 ``@AcmeDemoBundle/Controller/DemoController.php`` i odnosi się do pliku
 ``src/Acme/DemoBundle/Controller/DemoController.php``.
-W pliku tym trasy są określone jako adnotacje o metodach działania::
+W pliku tym trasy są określone jako adnotacje w metodach akcji::
 
    // src/Acme/DemoBundle/Controller/DemoController.php
    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
