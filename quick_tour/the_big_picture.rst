@@ -173,15 +173,15 @@ W kolejnym rozdziale dowiesz się dokładnie co to oznacza.
 
 .. tip::
 
-    In addition to YAML files, routes can be configured in XML or PHP files
-    and can even be embedded in PHP annotations. This flexibility is one of the
-    main features of Symfony2, a framework that never imposes a particular
-    configuration format on you.
+    Oprócz plików YAML, trasy można skonfigurować w plikach XML lub PHP oraz
+    można je osadzić w postaci adnotacji PHP w kontrolerach. Ta elastyczność
+    jest jedną z głównych zalet Symfony2, frameworka, który nie narzuca
+    programiście formatu konfiguracji.
 
 Kontrolery
 ~~~~~~~~~~
 
-Kontroler jest to jakaś funkcj lub metoda PHP obsługująca przychodzące
+Kontroler jest to jakaś funkcja lub metoda PHP obsługująca przychodzące
 *żądania* i zwracająca *odpowiedzi* (często kod HTML). Zamiast wykorzystywać
 zmienne globalne PHP i funkcje (np. ``$_GET`` lub ``header()``) do zarządzania
 komunikatami HTTP, Symfony używa obiekty :class:`Symfony\\Component\\HttpFoundation\\Request`
