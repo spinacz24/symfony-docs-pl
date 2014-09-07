@@ -32,7 +32,7 @@ Pobieranie Dystrybucji Symfony2
 
 .. tip::
 
-    Po pierwsze, sprawdz czy masz zainstalowany oraz skonfigurowany
+    Po pierwsze, sprawdź czy masz zainstalowany oraz skonfigurowany
     serwer (np. Apache) z najnowszą wersją PHP (zalecane jest PHP 5.3.2 lub wersja
     wyższa). Aby uzyskać więcej informacji o wymaganiach Symfony2, przeczytaj
     :doc:`Wymagania do uruchomienia Symfony2</reference/requirements>`.
@@ -138,6 +138,11 @@ standardowej Symfony:
    
    $ php composer.phar create-project symfony/framework-standard-edition /path/to/webroot/Symfony dev-master
    
+.. note::
+   Wyżej podane polecenie pobierze najnowszą wersję `dev-master`. Jeśli będzie
+   się chciało pobrać konkretna wersję, np. 2.5, to zamiast opcji ``dev-master``
+   należy zastosować opcje ``2.5.x``.
+
 
 .. note::
    
@@ -184,10 +189,10 @@ W systemie uniksowym można użyć w terminalu jedno z poniższych poleceń (zam
 .. code-block:: bash
 
    # dla pliku .tgz
-   $ tar -zxvf Symfony_Standard_Vendors_2.4.###.tgz
+   $ tar -zxvf Symfony_Standard_Vendors_2.5.###.tgz
    
    # dla pliku .zip
-   $ unzip Symfony_Standard_Vendors_2.4.###.zip
+   $ unzip Symfony_Standard_Vendors_2.5.###.zip
 
 Jeśli pobrałeś archiwum *without vendors*, to koniecznie przeczytaj następny rozdział.
 
@@ -264,7 +269,7 @@ aktualizujące:
 Konfiguracja i ustawienia
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-W tym momęcie wszystkie zewnętrzne biblioteki umiejscowione są w katalogu ``vendor/``.
+W tym momencie wszystkie zewnętrzne biblioteki umiejscowione są w katalogu ``vendor/``.
 Masz także wstępnie skonfigurowany projekt w katalogu ``app/`` wg ustawień domyślnych
 oraz przykładowy kod w katalogu ``src/``.
 
@@ -280,18 +285,15 @@ aby sprawdzić swoją konfigurację:
 
 Jeśli są jakieś problemy, rozwiąż je teraz, zanim przejdziesz dalej.
 
-.. sidebar:: Ustawienie Uprawnień
+.. _book-installation-permissions:
+
+.. sidebar:: Ustawienie uprawnień
    
    Jednym z powszechnych problemów jest to, że katalogi *app/cache* i *app/logs*
    muszą być zapisywalne zarówno dla serwera internetowego, jak i dla użytkownika
    linii poleceń. Na systemie uniksowym, jeżeli użytkownik serwera internetowego
    jest inny niż użytkownik linii poleceń, to można uruchomić tylko raz następujące
    polecenia w swoim projekcie, aby spowodować prawidłowość ustawień uprawnień.
-   
-   **Należy mieć na uwadze, że nie wszystkie serwery internetowe uruchamiane są
-   w procesie należącym do użytkownika** ``www-data``, tak jak to przyjęto w poniższych
-   przykładach. Zamiast tego, sprawdź jaki użytkownik jest właścicielem procesów
-   stosowanego serwera internetowego i użyj go w miejsce ``www-data``.
    
    W systemie uniksowym można to zrobić przy pomocy następujących poleceń:
    
@@ -309,15 +311,15 @@ Jeśli są jakieś problemy, rozwiąż je teraz, zanim przejdziesz dalej.
 
    Wiele systemów pozwalają używać polecenia ``chmod +a``. Najpierw spróbuj zastosować
    to polecenie i gdy zwrócony zostanie błąd, spróbuj metody następnej. Tutaj najpierw
-   próbujemy ustalić użytkownika serwera internetowego i ustawić go jako ``APACHEUSER``:
+   próbujemy ustalić użytkownika serwera internetowego i ustawić go jako ``HTTPDUSER``:
    
    .. code-block:: bash
-      
+
       $ rm -rf app/cache/*
       $ rm -rf app/logs/*
       
-      $ APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data' | grep -v root | head -1 | cut -d\  -f1`
-      $ sudo chmod +a "www-data allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+      $ HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+      $ sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
       $ sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
    
    **2. Użycie ACL w systemach nie obsługujących ``chmod +a``**
@@ -326,13 +328,13 @@ Jeśli są jakieś problemy, rozwiąż je teraz, zanim przejdziesz dalej.
    o nazwie ``setfacl``. Możesz spróbować `włączyć obsługę ACL`_ na partycji i
    zainstalować ``setfacl`` (w Ubuntu jest on zainstalowany domyślnie).
    Tutaj najpierw próbujemy ustalić użytkownika serwera internetowego i ustawić
-   go jako ``APACHEUSER``:
+   go jako ``HTTPDUSER``:
    
    .. code-block:: bash
       
-      $ APACHEUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data' | grep -v root | head -1 | cut -d\  -f1`
-      $ sudo setfacl -R -m u:"$APACHEUSER":rwX -m u:`whoami`:rwX app/cache app/logs
-      $ sudo setfacl -dR -m u:"$APACHEUSER":rwX -m u:`whoami`:rwX app/cache app/logs
+      $ HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+      $ sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
+      $ sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
       
    W systemie takim jak Ubuntu, można to zrobić też inaczej:
     
@@ -345,6 +347,8 @@ Jeśli są jakieś problemy, rozwiąż je teraz, zanim przejdziesz dalej.
       # nadanie uprawnień zapisu do app/cache i app/logs
       $ sudo chmod -R 775 app/cache app/logs
      
+   Jeśli to nie zadziała, spróbuj dodać opcję ``-n``.
+   
    **3. Bez użycia ACL**
    
    Jeśli nie ma się dostępu do zmian ACL katalogów, to pozostaje zmiana ``umask``,

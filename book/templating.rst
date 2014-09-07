@@ -81,18 +81,16 @@ które są bardziej przyjazne dla projektantów stron i są bardziej wydajne ni�
         </body>
     </html>
 
-Twig definiuje dwa rodzaje specjalnej składni:
+Twig definiuje trzy rodzaje specjalnej składni:
 
 * ``{{ ... }}``: "Przekaż coś": drukuje wartość zmiennej lub wynik wyrażenia do szablonu;
 
 * ``{% ... %}``: "Zrób coś": znacznik kontrolujący logikę szablonu - jest stosowany
   do wykonywania instrukcji, takich jak na przykład pętla ``for``.
 
-.. note::
-
-   Jest jeszcze trzecia składnia używana do tworzenia komentarzy: ``{# to jest komentarz #}``.
-   Składnia ta może obejmować wiele linii, stanowiąc ekwiwalent komentarza ``/* komentarz */``
-   składni PHP.
+* ``{# ... #}``: "Zakomentuj coś": jest to odpowiednik składni ``/* comment */``
+  w PHP. Jest używany do dodawania jedno- lub wieloliniowych komentarzy. Treść
+  tych komentarzy nie jest brana pod uwagę przy renderowaniu stron. 
 
 Twig zawiera również **filtry**, które modyfikuja zawartość przed rozpoczęciem
 renderowania. Poniższe działanie powoduje zmianę znaków wartości zmiennej ``title``
@@ -411,13 +409,13 @@ lokalizacji:
   szablonu dla określonej strony. Trzy części łańcucha, każdy oddzielony dwukropkiem
   (``:``) ma następujace znaczenie:
 
-    * ``AcmeBlogBundle``: (*pakiet*) szablon znajduje się wewnątrz ``AcmeBlogBundle``
-      (np. ``src/Acme/BlogBundle``);
-
-    * ``Blog``: (*kontroler*) wskazuje, że szablon znajduje się wewnątrz podkatalogu
-      ``Blog`` katalogu ``Resources/views``;
-
-    * ``index.html.twig``: (*szablon*) aktualna nazwa pliku, to ``index.html.twig``.
+  * ``AcmeBlogBundle``: (*pakiet*) szablon znajduje się wewnątrz ``AcmeBlogBundle``
+    (np. ``src/Acme/BlogBundle``);
+   
+  * ``Blog``: (*kontroler*) wskazuje, że szablon znajduje się wewnątrz podkatalogu
+    ``Blog`` katalogu ``Resources/views``;
+  
+  * ``index.html.twig``: (*szablon*) aktualna nazwa pliku, to ``index.html.twig``.
 
   Zakładając, że ``AcmeBlogBundle`` umieszczony jest w ``src/Acme/BlogBundle``,
   to ostateczną ścieżką do układu strony będzie ``src/Acme/BlogBundle/Resources/views/Blog/index.html.twig``.
@@ -659,7 +657,9 @@ Aby dołączyć kontroler, trzeba się do niego odwołać używając standardowe
 
         {# ... #}
         <div id="sidebar">
-            {{ render(controller('AcmeArticleBundle:Article:recentArticles', { 'max': 3 })) }}
+            {{ render(controller('AcmeArticleBundle:Article:recentArticles', {
+                'max': 3
+            })) }}
         </div>
 
     .. code-block:: html+php
@@ -670,7 +670,10 @@ Aby dołączyć kontroler, trzeba się do niego odwołać używając standardowe
         <!-- ... -->
         <div id="sidebar">
             <?php echo $view['actions']->render(
-                new ControllerReference('AcmeArticleBundle:Article:recentArticles', array('max' => 3))
+                new \Symfony\Component\HttpKernel\Controller\ControllerReference(
+                    'AcmeArticleBundle:Article:recentArticles',
+                    array('max' => 3)
+                )
             ) ?>
         </div>
 
@@ -736,9 +739,18 @@ do konfigurowania znaczników ``hinclude.js``:
            :linenos:
 
             <!-- app/config/config.xml -->
-            <framework:config>
-                <framework:fragments path="/_fragment" />
-            </framework:config>
+            <?xml version="1.0" encoding="UTF-8" ?>
+            <container xmlns="http://symfony.com/schema/dic/services"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:framework="http://symfony.com/schema/dic/symfony"
+                xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
+                    http://symfony.com/schema/dic/symfony http://symfony.com/schema/dic/symfony/symfony-1.0.xsd">
+
+                <!-- ... -->
+                <framework:config>
+                    <framework:fragments path="/_fragment" />
+                </framework:config>
+            </container>
 
         .. code-block:: php
            :linenos:
@@ -767,9 +779,18 @@ JavaScript) można ustawić w konfiguracji aplikacji:
        :linenos:
 
         <!-- app/config/config.xml -->
-        <framework:config>
-            <framework:templating hinclude-default-template="AcmeDemoBundle::hinclude.html.twig" />
-        </framework:config>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:framework="http://symfony.com/schema/dic/symfony"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
+                http://symfony.com/schema/dic/symfony http://symfony.com/schema/dic/symfony/symfony-1.0.xsd">
+
+            <!-- ... -->
+            <framework:config>
+                <framework:templating hinclude-default-template="AcmeDemoBundle::hinclude.html.twig" />
+            </framework:config>
+        </container>
 
     .. code-block:: php
        :linenos:
@@ -850,6 +871,7 @@ konfigurację trasowania:
     .. code-block:: yaml
        :linenos:
 
+        # app/config/routing.yml
         _welcome:
             path:     /
             defaults: { _controller: AcmeDemoBundle:Welcome:index }
@@ -857,13 +879,25 @@ konfigurację trasowania:
     .. code-block:: xml
        :linenos:
 
-        <route id="_welcome" path="/">
-            <default key="_controller">AcmeDemoBundle:Welcome:index</default>
-        </route>
+        <!-- app/config/routing.yml -->
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <routes xmlns="http://symfony.com/schema/routing"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
+
+            <route id="_welcome" path="/">
+                <default key="_controller">AcmeDemoBundle:Welcome:index</default>
+            </route>
+        </routes>
 
     .. code-block:: php
        :linenos:
-
+        
+        // app/config/routing.php
+        use Symfony\Component\Routing\Route;
+        use Symfony\Component\Routing\RouteCollection;
+        
         $collection = new RouteCollection();
         $collection->add('_welcome', new Route('/', array(
             '_controller' => 'AcmeDemoBundle:Welcome:index',
@@ -892,6 +926,7 @@ z bardziej skomplikowaną trasą:
     .. code-block:: yaml
        :linenos:
 
+        # app/config/routing.yml
         article_show:
             path:     /article/{slug}
             defaults: { _controller: AcmeArticleBundle:Article:show }
@@ -899,13 +934,25 @@ z bardziej skomplikowaną trasą:
     .. code-block:: xml
        :linenos:
 
-        <route id="article_show" path="/article/{slug}">
-            <default key="_controller">AcmeArticleBundle:Article:show</default>
-        </route>
+        <!-- app/config/routing.xml -->
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <routes xmlns="http://symfony.com/schema/routing"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
+
+            <route id="article_show" path="/article/{slug}">
+                <default key="_controller">AcmeArticleBundle:Article:show</default>
+            </route>
+        </routes>
 
     .. code-block:: php
        :linenos:
 
+        // app/config/routing.php
+        use Symfony\Component\Routing\Route;
+        use Symfony\Component\Routing\RouteCollection;
+        
         $collection = new RouteCollection();
         $collection->add('article_show', new Route('/article/{slug}', array(
             '_controller' => 'AcmeArticleBundle:Article:show',
@@ -1000,8 +1047,48 @@ Funkcja ``asset`` rozwiązuje ten problem i generuje odpowiednie ścieżki.
 Dodatkowo, w przypadku korzystania z funkcji ``asset``, Symfony może automatycznie
 dołączać łańcuch zapytania do :term:`aktywu<aktywa>`, w celu zagwarantowania, że aktualizowane
 statyczne aktywa nie będą buforowane w czasie wykorzystywania.
-Na przykład, ``/images/logo.png`` wyglądać jak ``/images/logo.png?v2``.
-Więcej informacji na tenm temat można znależć w :ref:`ref-framework-assets-version`.
+Na przykład, ``/images/logo.png`` będzie wyglądać jak ``/images/logo.png?v2``.
+Więcej informacji na ten temat można znależć w :ref:`ref-framework-assets-version`.
+
+.. _`book-templating-version-by-asset`:
+
+.. versionadded:: 2.5
+    Ustawienie wersjonowanych adresów URL na bazie aktywów zostało wprowadzone w Symfony 2.5.
+
+Jeśli chce się ustawić wersję dla określonego aktywa, można ustawić czwarty argument
+(lub argument ``version``) dla wybranej wersji:
+
+.. configuration-block::
+
+    .. code-block:: html+jinja
+
+        <img src="{{ asset('images/logo.png', version='3.0') }}" alt="Symfony!" />
+
+    .. code-block:: html+php
+
+        <img src="<?php echo $view['assets']->getUrl('images/logo.png', null, false, '3.0') ?>" alt="Symfony!" />
+
+Jeśli nie dostarczy się wersji lub przekaże ``null``, zostanie użyta domyślna
+wersja pakietu (z :ref:`ref-framework-assets-version`). Po przekazanie ``false``,
+wersjonowanie URL zostanie deaktywowane dla tego aktywa.
+
+.. versionadded:: 2.5
+    Bezwzględne adresy URL dla aktywów zostały wprowadzone w Symfony 2.5.
+
+Jeśli potrzebuje się bezwzględnych adresów URL dla aktywów, można ustawić trzeci
+argument (lub argument ``absolute``) na ``true``:
+
+.. configuration-block::
+
+    .. code-block:: html+jinja
+
+        <img src="{{ asset('images/logo.png', absolute=true) }}" alt="Symfony!" />
+
+    .. code-block:: html+php
+
+        <img src="<?php echo $view['assets']->getUrl('images/logo.png', null, true) ?>" alt="Symfony!" />
+
+
 
 .. index::
    single: szablonowanie; dołączanie arkuszy stylów
@@ -1040,7 +1127,7 @@ potrzebne w całej witrynie:
             {# ... #}
 
             {% block stylesheets %}
-                <link href="{{ asset('/css/main.css') }}" type="text/css" rel="stylesheet" />
+                <link href="{{ asset('css/main.css') }}" type="text/css" rel="stylesheet" />
             {% endblock %}
         </head>
         <body>
@@ -1066,7 +1153,7 @@ Wewnątrz szablonu strony kontaktowej trzeba zrobić co następuje:
     {% block stylesheets %}
         {{ parent() }}
 
-        <link href="{{ asset('/css/contact.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset('css/contact.css') }}" type="text/css" rel="stylesheet" />
     {% endblock %}
 
     {# ... #}
@@ -1186,9 +1273,20 @@ aplikacji:
        :linenos:
 
         <!-- app/config/config.xml -->
-        <framework:templating>
-            <framework:engine id="twig" />
-        </framework:templating>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:framework="http://symfony.com/schema/dic/symfony"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
+                http://symfony.com/schema/dic/symfony http://symfony.com/schema/dic/symfony/symfony-1.0.xsd">
+
+            <!-- ... -->
+            <framework:config>
+                <framework:templating>
+                    <framework:engine>twig</framework:engine>
+                </framework:templating>
+            </framework:config>
+        </container>
 
     .. code-block:: php
        :linenos:
@@ -1340,7 +1438,7 @@ Ta metoda działa doskonale z trzema różnymi typami szablonów, które właśn
           {% endfor %}
       {% endblock %}
 
-Proszę zauważyć, że szablon ten rozszerza szablon sekcji - (``AcmeBlogBundle::layout.html.twig``)
+Proszę zauważyć, że szablon ten rozszerza szablon sekcji (``AcmeBlogBundle::layout.html.twig``)
 który z kolei rozszerza bazowy układ aplikacji (``::base.html.twig``). Jest to typowy
 model dziedziczenia trójpoziomowego.
 
@@ -1515,9 +1613,9 @@ W wielu przypadkach może być wygodne użycie jednego kontrolera do wygenerowan
 wielu różnych formatów w oparciu o "format żądania". Z tego powodu typowy wzorzec
 jest zrobiony następująco::
 
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $format = $this->getRequest()->getRequestFormat();
+        $format = $request->getRequestFormat();
 
         return $this->render('AcmeBlogBundle:Blog:index.'.$format.'.twig');
     }
