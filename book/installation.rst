@@ -7,11 +7,6 @@
 Instalacja oraz konfiguracja Symfony
 ====================================
 
-Jest to dość wierne tłumaczenie anglojęzycznego artykułu `Installing and Configuring
-Symfony`_, ale uzupełnione w trakcie tłumaczenia o informacje, które wydają się
-niezbędne do przekazania w tym temacie. Poprawiono też kilka nieścisłości
-występujących w oryginale.
-
 Co do konwencji. W całym podręczniku stosowane są ścieżki w formacie uniksowym.
 Jeżeli chcesz zainstalować Symfony w środowisku Windows, to musisz sobie je
 odpowiednio przekształcić, co nie jest filozofią.
