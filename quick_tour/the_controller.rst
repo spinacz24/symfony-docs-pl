@@ -31,7 +31,7 @@ Popraw wydajność definicji tras przez dodanie domyślnej wartości xml dla zmi
         return array('name' => $name);
     }
 
-Dzięki użyciu stosowanego formatu żądania (określonego jako wartość ``_format``),
+Dzięki użyciu stosowanego formatu żądania (zdefiniowanego w specjalnej zmiennej ``_format``),
 Symfony2 automatycznie wybiera odpowiedni szablon, w tym przypadku ``hello.xml.twig``:
 
 .. code-block:: xml+php
@@ -53,7 +53,11 @@ użyć w ścieżce trasy wieloznacznika {_format}::
     // ...
 
     /**
-     * @Route("/hello/{name}.{_format}", defaults={"_format"="html"}, requirements={"_format"="html|xml|json"}, name="_demo_hello")
+     * @Route(
+     *     "/hello/{name}.{_format}",
+     *     defaults = { "_format" = "html" },
+     *     requirements = { "_format" = "html|xml|json" },
+     *     name = "_demo_hello"
      * @Template()
      */
     public function helloAction($name)
@@ -61,7 +65,7 @@ użyć w ścieżce trasy wieloznacznika {_format}::
         return array('name' => $name);
     }
 
-Kontroler będzie teraz również wywoływany dla ściezek URL takich jak ``/demo/hello/Fabien.xml``
+Kontroler będzie teraz również dopasowaywał ścieżkę URL taka jak ``/demo/hello/Fabien.xml``
 lub ``/demo/hello/Fabien.json``.
 
 Wpis ``requirements`` określa wyrażenie regularne, jakie wieloznacznik musi dopasować.
@@ -80,31 +84,48 @@ Metoda ``generateUrl()`` jest identyczna z funkcją ``path()`` którą użyliśm
 Jako argumenty, przyjmuje nazwę trasy oraz tablicę parametrów i zwraca związany
 przyjazny adres URL.
 
-Można także w łatwy sposób przekazać akcję do innej akcji używając metodę ``forward()``.
-Wewnętrznie Symfony2 wykonuje "pod-żądanie" oraz zwraca z niego obiekt ``Response``::
+Można także wewnętrznie przekazać akcję do innej akcji używając metodę ``forward()``::
 
-    $response = $this->forward('AcmeDemoBundle:Hello:fancy', array('name' => $name, 'color' => 'green'));
+    * @Route(
+     *     "/hello/{name}.{_format}",
+     *     defaults = { "_format" = "html" },
+     *     requirements = { "_format" = "html|xml|json" },
+     *     name = "_demo_hello"
 
-    // zrób coś z obiektem Response lub też zwróć go bezpośrednio
+Wyświetlanie stron błędów
+-------------------------
 
+Podczas wykonywania każdej aplikacji internetowej nieuchronnie zdarzają się błędy.
+W przypadku błędu ``404``, Symfony zawiera przydatny skrót, który można wykorzystać
+w kontrolerach::
+
+    throw $this->createNotFoundException();
+
+Dla błędów ``500``, wystarczy zrzucić w kontrolerze zwykły wyjątek PHP a Symfony
+przekształci go do odpowiedniej strony błędu ``500``::
+
+    throw new \Exception('Something went wrong!');
 
 Pobieranie informacji z żądania
 -------------------------------
 
-Poza wartościami wieloznaczników tras kontroler ma również dostęp do obiektu
-``Request``::
+Symfony automatycznie wstrzykuje obiekt ``Request`` gdy kontroler ma argument,
+który jest typem odgadywanym w ``Symfony\Component\HttpFoundation\Request``::
 
-    $request = $this->getRequest();
+    use Symfony\Component\HttpFoundation\Request;
 
-    $request->isXmlHttpRequest(); // czy jest to zapytanie Ajax?
+    public function indexAction(Request $request)
+    {
+        $request->isXmlHttpRequest(); // is it an Ajax request?
 
-    $request->getPreferredLanguage(array('en', 'fr'));
+        $request->getPreferredLanguage(array('en', 'fr'));
 
-    $request->query->get('page'); // pobranie parametru $_GET
+        $request->query->get('page');   // get a $_GET parameter
 
-    $request->request->get('page'); // pobranie parametru $_POST
+        $request->request->get('page'); // get a $_POST parameter
+    }
 
-W szablonie, możesz także uzyskać dostęp do biektu ``Request`` poprzez
+W szablonie, możesz także uzyskać dostęp do obiektu ``Request`` poprzez
 zmienną ``app.request``:
 
 .. code-block:: html+jinja
@@ -129,14 +150,16 @@ Przechowywania i pobierania informacji z sesji można łatwo uzyskać w dowolnym
     // przechowanie atrybutu do ponownego użycia w późniejszym żądaniu użytkownika
     $session->set('foo', 'bar');
 
-    // w innym kontrolerze dla innego żądania
+    // pobranie wartości atrybutu session
     $foo = $session->get('foo');
 
-    // użycie domyślnej wartości, jeśli klucz nie istnieje
-    $filters = $session->set('filters', array());
+    // użycie domyślnej wartości, jeśli atrybut nie istnieje
+    $foo = $session->get('foo', 'default_value');
 
-Można także przechowywać małe komunikaty (zwane komunikatami fleszowymi) które będą
-dostępne w kolejnych żądaniach::
+Można również zapisać "wiadomości fleszowe", które będą automatycznie usuwane po
+następnym żądaniu. Są one przydatne, gdy chce się ustawić komunikat o sukcesie,
+przed przekierowaniem użytkownika na inną stronę (która będzie następnie pokazywać
+ten komunikat)::
 
     // przechowanie (w kontrolerze) komunikatu dla następnych żądań
     $session->getFlashBag()->add('notice', 'Congratulations, your action succeeded!');
@@ -148,76 +171,15 @@ dostępne w kolejnych żądaniach::
     {% endfor %}
 
 Jest to przydatne gdy chce się ustawić komunikat o powodzeniu przed przekierowaniem
-użytkownika do innej strony (która wyświetli ten komunikat). Należy pamiętać, że
-przy stosowaniu funkcji has() zamiast get(), komunikat fleszowy nie będzie usunięty
-i pozostanie dostępny dla następnych żądań.
+użytkownika do innej strony (która wyświetli ten komunikat)::
 
-Bezpieczeństwo zasobów
-----------------------
+    // store a message for the very next request (in a controller)
+    $session->getFlashBag()->add('notice', 'Congratulations, your action succeeded!');
 
-Symfony Standard Edition dostarczany jest z prostą konfiguracją bezpieczeństwa,
-która wystarcza dla potrzeb większości powszechnych zastosowań:
+.. code-block:: html+jinja
 
-.. code-block:: yaml
-   :linenos:
-
-    # app/config/security.yml
-    security:
-        encoders:
-            Symfony\Component\Security\Core\User\User: plaintext
-
-        role_hierarchy:
-            ROLE_ADMIN:       ROLE_USER
-            ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
-
-        providers:
-            in_memory:
-                memory:
-                    users:
-                        user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                        admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
-
-        firewalls:
-            dev:
-                pattern:  ^/(_(profiler|wdt)|css|images|js)/
-                security: false
-
-            login:
-                pattern:  ^/demo/secured/login$
-                security: false
-
-            secured_area:
-                pattern:    ^/demo/secured/
-                form_login:
-                    check_path: /demo/secured/login_check
-                    login_path: /demo/secured/login
-                logout:
-                    path:   /demo/secured/logout
-                    target: /demo/
-
-Taka konfiguracja wymaga od użytkowników zalogowania się dla dowolnego URL
-zaczynającego się od ``/demo/secured/`` i określa dwóch właściwych użytkowników:
-``user`` i ``admin``. Ponadto użytkownik ``admin`` ma rolę ``ROLE_ADMIN``, która
-obejmuje też rolę ``ROLE_USER`` (zobacz na ustawienie ``role_hierarchy``).
-
-
-.. tip::
-
-    W tym przykładzie, dla czytelności konfiguracji, hasła są zapisane w zwyłym
-    tekście, ale można użyć dowolnego algorytmu mieszajacego poprzez zmienienie
-    sekcji ``encoders``.
-
-Przechodząc do adresu ``http://localhost/Symfony/web/app_dev.php/demo/secured/hello``,
-użytkownik automatycznie zostanie przekierowany do formularza logowania, gdyż zasób
-jest chroniony przez firewall.
-
-.. note::
-
-    Warstwa bezpieczeństwa Symfony2 jest bardzo użyteczna i dostarczana jest z wieloma
-    "dostawcami" użytkowników (czyli mechanizmami umożliwiającymi dostęp do danych
-    użytkownika z różnych źródeł, takimi jak Doctrine ORM) i "dostawcami" uwierzytelniania
-    (takimi jak HTTP Basic, HTTP Digest  lub certyfikaty X509). Przeczytaj rozdział
-    ":doc:`/book/security`" podręcznika w celu uzyskania więcej informacji.
+    {# wyświetlenie komunikatu fleszowego w szablonie #}
+    <div>{{ app.session.flashbag.get('notice') }}</div>
 
 Buforowanie zasobów
 -------------------
@@ -241,21 +203,10 @@ można użyć wygodnej adnotacji ``@Cache()``::
         return array('name' => $name);
     }
 
-W tym przykładzie, zasób będzie buforowany przez jeden dzień. Można także
-użyć walidacji zamiast wygasania lub kombinacji tych dwóch technik, jeśli to lepsze
-rozwiązanie dla konkretnej sytuacji.
-
-Buforowanie zasobów jest zarządzane przez wbudowane w Symfony2 odwrotny serwer pośredniczący
-(*ang. reverse proxy*). Ponieważ buforowanie jest zarządzane z wykorzystaniem zwykłych
-nagłówków buforowania HTTP, to można zamienić wbudowane odwrotny serwer pośredniczący
-na Varnish lub Squid i łatwo skalować swoją aplikację.
-
-
-.. note::
-
-    Lecz co, jeżeli nie można buforować całej strony? Symfony2 rozwiązuje ten problem
-    przez natywnie wspierane Edge Side Includes (ESI). Zapoznaj się ze szczegółami
-    na stronie ":doc:`/book/http_cache`". 
+W tym przykładzie zasoby będą buforowane przez jeden dzień(``86400`` sekund).
+Buforowanie zasobów jest zarządzane przez rdzeń Symfony2. Ponieważ jednak buforowanie
+jest zarządzane przy wykorzystaniu nagłówków HTTP buforowania, można zastosować
+Varnish lubr Squid bez zmieniania nawet jednej linii kodu swojej aplikacji.
 
 Podsumowanie
 ------------
