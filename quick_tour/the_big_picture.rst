@@ -198,7 +198,7 @@ kontroler można utworzyć ręcznie, na podstawie żądania::
 Symfony2 wybiera kontroler na podstawie wartości ``_controller`` z 
 konfiguracji trasowania: ``AcmeDemoBundle:Welcome:index``. Ten ciąg znaków jest
 *logiczną nazwą* kontrolera i odwołuje się do metody ``indexAction`` z
-:class:`Acme\DemoBundle\Controller\WelcomeController`::
+:class:`Acme\\DemoBundle\\Controller\\WelcomeController`::
 
     // src/Acme/DemoBundle/Controller/WelcomeController.php
     namespace Acme\DemoBundle\Controller;
