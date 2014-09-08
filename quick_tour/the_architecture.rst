@@ -13,9 +13,8 @@ Zanurzmy się więc teraz w architekturę Symfony2.
 Struktura katalogów
 -------------------
 
-Struktura katalogów Symfony2 jest dość elastyczna, ale struktura katalogów
-dystrybucji *Standard Edition* odzwierciedla typową oraz rekomendowaną strukturę
-aplikacji Symfony2:
+Struktura katalogów Symfony2 jest dość elastyczna, ale zalecana struktura katalogów
+jest następująca:
 
 * ``app/``:    konfiguracja aplikacji;
 * ``src/``:    kod PHP projektu;
@@ -39,11 +38,10 @@ umiejscowiony jest :term:`kontroler wejścia <kontroler wejścia>`::
     $kernel->loadClassCache();
     $kernel->handle(Request::createFromGlobals())->send();
 
-W pierwszej kolejności jądro oczekuje istnienie pliku ``bootstrap.php.cache``,
-który inicjuje framework oraz rejestruje ``autoloader`` (zobacz niżej).
-
-Jak każdy kontroler wejścia, ``app.php`` używa klasy jądra ``AppKernel`` do
-rozruchu aplikacji.
+Kontroler ten najpierw ładuje aplikacje wykorzystując klasę kernela (w tym przypadku
+``AppKernel``). Następnie, tworzy obiekt ``Request`` używając globalnych zmiennych
+PHP i przekazuje ten obiekt do kernela. Następnym krokiem jest przesłanie zawartości
+odpowiedzi zwracanej przez kernel z powrotem do użytkownika.
 
 .. _the-app-dir:
 
@@ -61,17 +59,10 @@ Ta klasa musi implementować dwie metody:
 * ``registerContainerConfiguration()`` wczytuje konfigurację aplikacji
   (więcej na ten temat później).
 
-Automatyczne ładowanie jest obsługiwane poprzez `Composer`_, co oznacza, że
-można użyć dowolnych  klas PHP nie robiąc nic. Jeśli potrzeba więcej elastyczności,
-to można rozszerzyć autoloader w pliku ``app/autoload.php``. Wszystkie zależności
-są przechowywane w katalogu ``vendor/``, ale jest to tylko konwencja. Można je
-przechowywać wszędzie tam, gdzie się chce -  globalnie na serwerze lub lokalnie
-w swoich projektach.
-
-.. note::
-
-    Jeżeli chcesz nauczyć się więcej o programie Composer, przeczytaj `Composer-Autoloader`_.
-    Symfony ma również komponent autoładowania - czytaj ":doc:`/components/class_loader`".
+Automatyczne ładowanie jest obsługiwane poprzez `Composer`_, co oznacza, że można
+wykorzystać dowolna klasę PHP, nie robiąc nic w ogóle! Wszystkie zależności są
+przechowywane w katalogu ``vendor/``, ale to jest tylko konwencja.
+Można przechowywać je tam gdzie się chce, globalnie na serwerze lub lokalnie w projektach.
 
 
 Systemu pakietów
@@ -83,6 +74,7 @@ systemu :term:`pakietów <pakiet>`.
 Pakiet jest czymś w rodzaju wtyczki w innych programach. Więc dlaczego został nazwany
 pakietem (*ang. bundle*) a nie wtyczką (*ang. plugin*)? To dlatego, że wszystko w Symfony2
 należy do jakiegoś pakietu, od funkcji rdzenia frameworka po kod napisany dla aplikacji.
+
 Pakiety są obywatelem numer jeden w Symfony2. Zapewnia to elastyczność w używaniu
 wbudowanych pakietów funkcyjnych rozpowszechnianych przez osoby trzecie lub w dystrybucji
 własnych pakietów. Stwarza to możliwość łatwego doboru i wyboru odpowiednich
@@ -137,7 +129,7 @@ Konfiguracja pakietu
 ~~~~~~~~~~~~~~~~~~~~
 
 Każdy pakiet może być dostosowywany poprzez pliki konfiguracyjne w języku YAML,
-XML, czy też PHP. Wystarczy popatrzeć na domyślną konfigurację:
+XML, czy też PHP. Wystarczy popatrzeć na domyślną konfigurację Symfony:
 
 .. code-block:: yaml
    :linenos:
@@ -203,9 +195,9 @@ XML, czy też PHP. Wystarczy popatrzeć na domyślną konfigurację:
         password:  "%mailer_password%"
         spool:     { type: memory }
 
-Każdy wpisów jak np. ``framework`` definiuje konfigurację dla określonego pakietu.
-Dla przykładu, ``framework`` konfiguruje pakiet ``FrameworkBundle`` a ``swiftmailer``
-konfiguruje ``SwiftmailerBundle``.
+Każdy wpis pierwszego poziomu, jak np. ``framework``, ``twig`` lub ``doctrine``,
+ definiuje konfigurację dla określonego pakietu. Dla przykładu, ``framework``
+ konfiguruje pakiet FrameworkBundle a ``swiftmailer`` konfiguruje SwiftmailerBundle.
 
 Każde :term:`środowisko` może nadpisać domyślną konfigurację poprzez dostarczenie
 odpowiedniego pliku konfiguracyjnego. Dla przykładu, środowisko ``dev`` wczytuje plik
@@ -284,10 +276,10 @@ Rozszerzenie pakietów
 Stosując tą konwencję, można następnie wykorzystać
 :doc:`dziedziczenia pakietów </cookbook/bundles/inheritance>` do "napisania" plików,
 kontrolerów lub szablonów. Na przykład, można utworzyć pakiet ``AcmeNewBundle``
-i  określić, że zastępuje on pakiet ``AcmeDemoBundle``. Gdy Symfony ładuje kontroler
+i  określić, że zastępuje on pakiet AcmeDemoBundle. Gdy Symfony ładuje kontroler
 ``AcmeDemoBundle:Welcome:index``, to najpierw będzie wyszukiwał klasy ``WelcomeController``
-w pakiecie ``AcmeNewBundle`` i jeśli jej nie znajdzie, to rozpocznie przeszukiwanie
-pakietu ``AcmeDemoBundle``. Oznacza to, że pakiet może zastąpić prawie każdą część
+w pakiecie AcmeNewBundle i jeśli jej nie znajdzie, to rozpocznie przeszukiwanie
+pakietu AcmeDemoBundle. Oznacza to, że pakiet może zastąpić prawie każdą część
 innego pakietu.
 
 Rozumiesz teraz dlaczego Symfony2 jest tak elastyczny? Współdziel swoje pakiety
@@ -314,8 +306,8 @@ plików YAML oraz XML dla każdego zapytania. Prędkość jest po części zwią
 z systemem buforowania. Konfiguracja aplikacji jest parsowana tylko dla pierwszego
 żądania i przetwarzana do kodu PHP przechowywanego w katalogu ``app/cache/``.
 W środowisku programistycznym, Symfony2 jest wystarczająco inteligentny aby czyścić
-pamięć podręczną po zmianie pliku. Ale w środowisku produkcyjnym, to do 
-do zadań programisty należy czyszczenie pamięci podręcznej zmianie kodu lub
+pamięć podręczną po zmianie pliku. Natomiast w środowisku produkcyjnym, to do 
+do zadań programisty należy czyszczenie pamięci podręcznej po zmianie kodu lub
 konfiguracji.
 
 Podczas tworzenia aplikacji, dużo rzeczy może pójść źle. Pliki dzienników zdarzeń,
@@ -355,8 +347,4 @@ jeszcze dużo nauczyć o Symfony2 by stać się mistrzem, od testowania do wysy�
 poczty e-mail. Chcesz zapoznać sie z tymi tematami? Nie musisz specjalnie
 szukać - przejdź do oficjalnej książki i wybierz tam dowolny temat.
 
-
-.. _`standardy`:               http://groups.google.com/group/php-standards/web/psr-0-final-proposal
-.. _`konwencji`:               http://pear.php.net/
 .. _`Composer`:                http://getcomposer.org
-.. _`Composer-Autoloader`:     http://getcomposer.org/doc/01-basic-usage.md#autoloading

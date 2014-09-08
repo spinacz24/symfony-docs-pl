@@ -6,34 +6,24 @@ Widok (View)
 
 Po przeczytaniu pierwszej części tego poradnika, dobrze jest poświęcić
 kolejne 10 minut dla Symfony2. W drugiej części, nauczysz się
-więcej na temat silnika szablonów Symfony2, `Twig`_. Twig jest elastycznym,
-szybkim oraz bezpiecznym systemem szablonów PHP. Sprawia że szablony
+więcej na temat silnika szablonów Symfony2, `Twig`_ - elastycznego,
+szybkiego oraz bezpiecznnego systemem szablonów PHP. Sprawia że szablony
 są bardo czytelne oraz zwięzłe. Czyni je także bardziej przyjaznymi dla
 projektantów stron internetowych.
-
-.. note::
-
-    Zamiast używać systemu Twig, można również w swojej aplikacji użyć zwykłych
-    :doc:`skryptów PHP </cookbook/templating/PHP>`.
-    Obydwa silniki są wspierane przez Symfony2.
 
 Zapoznanie się z Twig
 ---------------------
 
-.. tip::
-
-    Jeśli chcesz się nauczyć systemu Twig, to zalecamy przeczytanie oficjalnej
-    `dokumentacji`_. Niniejszy rozdział jest tylko przeglądem głównych
-    pojęć tego systemu.
-
 Szablon Twig jest tekstowym plikiem który może generować każdy rodzaj
-treści (HTML, XML, CSV, LaTeX, ...). Twig definiuje dwa rodzaje
-ograniczników:
+treści (HTML, XML, CSV, LaTeX, ...). Elementy szablonu Twig są oddzielana od reszt
+zawartości przy użyciu tych ograniczników:
 
 * ``{{ ... }}``: wypisuje zmienną lub też wynik wyrażenia;
 
 * ``{% ... %}``: kontroluje logikę szablonu. Jest na przykład używany do pętli
   ``for`` lub  wyrażeń ``if``.
+
+* ``{# ... #}``: Umożliwia dołączanie wewnątrz szablonu komentarzy.
 
 Poniżej znajduje się kod minimalnego szablonu, ilustrujący kilka podstawowych rzeczy:
 użyte zostały dwie zmienne ``page_title`` oraz ``navigation``, które będą
@@ -45,14 +35,14 @@ przekazane do szablonu:
     <!DOCTYPE html>
     <html>
         <head>
-            <title>My Webpage</title>
+            <title>{{ page_title }}</title>
         </head>
         <body>
             <h1>{{ page_title }}</h1>
 
             <ul id="navigation">
                 {% for item in navigation %}
-                    <li><a href="{{ item.href }}">{{ item.caption }}</a></li>
+                    <li><a href="{{ item.url }}">{{ item.label }}</a></li>
                 {% endfor %}
             </ul>
         </body>
@@ -62,8 +52,8 @@ przekazane do szablonu:
 
     Komentarze mogą być dołączone do szablonu poprzez użycie ogranicznika ``{# ... #}``.
 
-Aby w Symfony wyrenderować szablon, trzeba z poziomu kontrolera użyć metodę ``render`` 
-i przekazać do szablonu wszystkie potrzebne zmienne::
+Do renderowania szablonu w Symfony używa się metody ``render`` w kontrolerze
+i przekazuje potrzebne zmienne jako tablicę, wykorzystując opcjonalny drugi argument::
 
     $this->render('AcmeDemoBundle:Demo:hello.html.twig', array(
         'name' => $name,
@@ -71,49 +61,44 @@ i przekazać do szablonu wszystkie potrzebne zmienne::
 
 Zmienne przekazane do szablonu mogą być ciągami znaków, tablicami lub nawet obiektami.
 Twig rozpoznaje różnice między nimi i umożliwia łatwy dostęp do "atrybutów" zmiennej
-poprzez notację kropkową (``.``):
+poprzez notację kropkową (``.``).
+Poniższy kod pokazuje jak wyświetlana jest treść zmiennych w zależności od zmiennej
+przekazanej przez kontroler:
 
 .. code-block:: jinja
    :linenos:
 
+    {# 1. Simple variables #}
     {# array('name' => 'Fabien') #}
     {{ name }}
 
+    {# 2. Arrays #}
     {# array('user' => array('name' => 'Fabien')) #}
     {{ user.name }}
 
-    {# force array lookup #}
+    {# alternative syntax for arrays #}
     {{ user['name'] }}
 
+    {# 3. Objects #}
     {# array('user' => new User('Fabien')) #}
     {{ user.name }}
     {{ user.getName }}
 
-    {# force method name lookup #}
+    {# alternative syntax for objects #}
     {{ user.name() }}
     {{ user.getName() }}
-
-    {# pass arguments to a method #}
-    {{ user.date('Y-m-d') }}
-
-.. note::
-
-    Należy pamiętać że nawiasy klamrowe nie są częścią zmiennej ale
-    instrukcją drukarską. Jeśli umieszczasz zmienne wewnątrz znaczników,
-    nie umieszczaj wokół nich nawiasów klamrowych.
 
 Dekorowanie szablonów
 ---------------------
 
-Przeważnie w projektach szablony posiadają elementy, takie jak powszechnie używany
-nagłówek czy stopka. W Symfony2, patrzymy na ten problem inaczej - szablon może
-być dekorowany przez inny szablon. Działa to tak samo jak klasy PHP. Dziedziczenie
-szablonów umożliwia zbudowanie podstawowego szablonu "układu strony" (*ang. layout*),
-który zawiera wszystkie typowe elementy strony oraz określa "bloki", które szablony
-potomne mogą zamieniać.
+Przeważnie szablony w projekcie posiadają współdzielone elementy takie jak dobrze
+znany nagłówek czy stopka. Twig rozwiązuje ten problem elegancko wykorzystując
+tzw. "dziedziczenie szablonów". Ta funkcjonalność umożliwia zbudowanie bazowego
+szablonu "layout", który zawiera wszystkie elementy strony i definiuje "bloki",
+które szablony potomne mogą przesłaniać.
 
-Szablon ``hello.html.twig`` dziedziczy po szablonie ``layout.html.twig``,
-dzięki znacznikowi ``extends``:
+Szablon ``hello.html.twig`` uzywa znacznika ``extends`` do wskazania, że dziedziczy
+ze wspólnego szblonu ``layout.html.twig``:
 
 .. code-block:: html+jinja
    :linenos:
@@ -130,22 +115,23 @@ dzięki znacznikowi ``extends``:
 Zapis ``AcmeDemoBundle::layout.html.twig`` wygląda znajomo, prawda? Jest to ta sama
 notacja, jaka była zastosowana do regularnego szablonu. Część ``::`` oznacza, że
 element kontrolera jest pusty, tak więc odpowiedni plik znajduje się w katalogu
-``Resources/views/``.
+pakietu ``Resources/views/``.
 
 Przyjrzyjmy sie uproszczonej wersji ``layout.html.twig``:
 
-.. code-block:: html+jinja
+.. code-block:: jinja
    :linenos:
-
+   
     {# src/Acme/DemoBundle/Resources/views/layout.html.twig #}
-    <div class="symfony-content">
+    <div>
         {% block content %}
         {% endblock %}
     </div>
 
-Znaczniki ``{% block %}`` określają bloki, które może wypełniać szablon potomny.
-Znacznik ten informuje szablon potomny, że może zastąpić ten znacznik
-własnym kodem.
+Znaczniki ``{% block %}`` powiadamiają silnik szablonowania, że szablon potomny
+może przesłaniać tą porcje szablonu. W naszym przykładzie, szablon ``hello.html.twig``
+przesłania blok ``content``, co oznacza, że tekst "Hello Fabien" jest renderowany
+wewnątrz elementu ``<div>``.
 
 W tym przykładzie, szablon ``hello.html.twig`` zastępuje blok ``content``,
 co oznacza że tekst "Hello Fabien" jest renderowany w środku elementu
@@ -154,9 +140,23 @@ co oznacza że tekst "Hello Fabien" jest renderowany w środku elementu
 Używanie znaczników, filtrów i funkcji
 --------------------------------------
 
-Jedną z najlepszych cech systemu Twig jest jego rozszerzalność poprzez zanaczniki,
-filtry i funkcje. Symfony2 posiada wiele wbudowanych elementów ułatwiających pracę
-nad projektowaniem szablonów.
+Jedną z najlepszych cech systemu Twig jest jego rozszerzalność poprzez znaczniki,
+filtry i funkcje. Proszę spojrzeć na poniższy przykładowy szablon, w którym stosuje
+się filtry znacznie modyfikujące informacje przed ich wyświetleniem:
+
+.. code-block:: jinja
+   :linenos:
+   
+   <h1>{{ article.title|trim|capitalize }}</h1>
+   
+   <p>{{ article.content|striptags|slice(0, 1024) }}</p>
+   
+   <p>Tags: {{ article.tags|sort|join(", ") }}</p>
+   
+   <p>Następny artykuł zostanie opublikowany w {{ 'następny poniedziałek'|date('d-m-Y')}}</p>
+
+Zapoznaj się z oficjalną `dokumentacją Twig`_, aby nauczyć się wszystkiego o filtrach,
+funkcjach i znacznikach.
 
 Dołączenie innych szablonów
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -165,14 +165,15 @@ Najlepszym sposobem, aby podzielić się fragmentem kodu pomiędzy różnymi
 szablonami jest stworzenie nowego szablonu który może zostać dołączony
 przez inne szablony.
 
-Utwórzmy szablon ``embedded.html.twig``:
+Najpierw, utworzymy szablon ``embedded.html.twig``:
 
 .. code-block:: jinja
-
+    :linenos:
+    
     {# src/Acme/DemoBundle/Resources/views/Demo/embedded.html.twig #}
     Hello {{ name }}
 
-i zmieńmy szablon ``index.html.twig``, tak aby dołączał nasz nowo utworzony szablon:
+i zmienimy szablon ``index.html.twig``, tak aby dołączał nasz nowo utworzony szablon:
 
 .. code-block:: jinja
    :linenos:
@@ -192,8 +193,10 @@ A co, jeśli chcesz osadzić wynik innego kontrolera w szablonie? To bardzo przy
 podczas pracy z Ajax, lub gdy osadzony szablon potrzebuje niektórych zmiennych
 niedostępnych w głównym szablonie.
 
-Załóżmy, że chcemy utworzyć akcję ``fancy`` i chcemy dołączyć ją do szablonu ``index``.
-Aby to zrobić, trzeba użyć znacznik ``render``:
+Załóżmy, że utworzyliśmy metodę kontrolera ``topArticlesAction`` dla wyświetlania
+najbardziej popularnych artykułów na swojej witrynie. Jeśli chce się "renderować"
+wynik tej metody (np. ``HTML``) wewnątrz szablonu ``index``, trzeba zastosować
+funkcję``render``:
 
 .. code-block:: jinja
 
@@ -221,12 +224,32 @@ w renderowanej z szablonu stronie. Aby to zrobić, użyjemy funkcji``render``::
 
         // ...
     }
+    
+Tutaj ciąg ``AcmeDemoBundle:Demo:topArticles`` odnosi się do akcji ``topArticlesAction``
+kontrolera ``Demo`` a argument ``num`` jest dostępny dla kontrolera::
+
+   // src/Acme/DemoBundle/Controller/DemoController.php
+
+    class DemoController extends Controller
+    {
+        public function topArticlesAction($num)
+        {
+            // look for the $num most popular articles in the database
+            $articles = ...;
+
+            return $this->render('AcmeDemoBundle:Demo:topArticles.html.twig', array(
+                'articles' => $articles,
+            ));
+        }
+
+        // ...
+    }    
 
 Tworzenie odnośników pomiędzy stronami
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Skoro mowa o aplikacjach internetowych, to tworzenie odnośników pomiędzy stronami
-jest koniecznością. Zamiast umieszczania w szablonach sztywnych lokalizatorów URL,
+Tworzenie odnośników pomiędzy stronami jest koniecznością w aplikacjach internetowych.
+Zamiast umieszczania w szablonach sztywnych lokalizatorów URL,
 można zastosować funkcję ``path``, która wie jak wygenerować URL na podstawie
 konfiguracji trasowania. W ten sposób wszystkie lokalizatory URL mogą być łatwo
 aktualizowane tylko przez zmianę konfiguracji:
@@ -235,9 +258,9 @@ aktualizowane tylko przez zmianę konfiguracji:
 
     <a href="{{ path('_demo_hello', { 'name': 'Thomas' }) }}">Greet Thomas!</a>
 
-Funkcja ``path`` pobiera jako argumenty nazwę trasy i tablicę parametrów. Nazwa
-trasy jest głównym kluczem do którego odnoszone są trasy, a parametry są wartościami
-wieloznaczników określonymi w ścieżce trasy::
+Funkcja ``path`` pobiera jako argumenty nazwę trasy i tablicę parametrów.
+Nazwa trasy jest kluczem w którym zdefiniowane są trasy a parametry są wartościami
+zmiennych zdefiniowanych we wzorcu trasy::
 
     // src/Acme/DemoBundle/Controller/DemoController.php
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -254,8 +277,9 @@ wieloznaczników określonymi w ścieżce trasy::
 
 .. tip::
 
-    Funkcja ``url`` generuje bezwzględny lokalizator URL: ``{{ url('_demo_hello', {
-    'name': 'Thomas' }) }}``.
+    Funkcja ``url`` jest bardzo podobna do funkcji ``path``, ale generuje *bezwzgledne*
+    adresy URL, które są bardzo pomocne przy renderowaniu adresów email i plików RSS:
+    ``{{ url('_demo_hello', {'name': 'Thomas'}) }}``.
 
 Dołączanie zasobów: obrazów, skryptów JavaScript i arkuszy stylów
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -272,13 +296,6 @@ oferuje funkcję ``asset`` radzącą sobie łatwo z tym zagadnieniem:
 Głównym zadaniem funkcji ``asset`` jest umożliwienie lepszej przenośności aplikacji.
 Dzięki tej funkcji, możesz przenieść główny katalog aplikacji w dowolne miejsce bez
 konieczności dokonywania zmian w kodzie szablonu.
-
-Zabezpieczenie zmiennych
-------------------------
-
-Twig jest skonfigurowany tak aby zabezpieczać wszystkie dane wyjściowe.
-Przeczytaj `dokumentację`_ systemu Twig aby dowiedzieć się więcej na temat
-zabezpieczenia danych wyjściowych oraz rozszerzenia *Escaper*.
 
 Podsumowanie
 ------------
@@ -297,6 +314,5 @@ Ale coraz bardziej odbiegam od tematu. Po pierwsze, musisz dowiedzieć się wię
 o kontrolerach i to jest tematem :doc:`kolejnej części przewodnika <the_controller>`.
 Gotowy na kolejne 10 minut z Symfony2?
 
-.. _Twig:          http://twig.sensiolabs.org/
-.. _dokumentacji: http://twig.sensiolabs.org/documentation
-.. _dokumentację: http://twig.sensiolabs.org/documentation
+.. _`Twig`:               http://twig.sensiolabs.org/
+.. _`dokumentacją Twig`: http://twig.sensiolabs.org/documentation

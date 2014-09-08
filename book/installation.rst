@@ -7,11 +7,6 @@
 Instalacja oraz konfiguracja Symfony
 ====================================
 
-Jest to dość wierne tłumaczenie anglojęzycznego artykułu `Installing and Configuring
-Symfony`_, ale uzupełnione w trakcie tłumaczenia o informacje, które wydają się
-niezbędne do przekazania w tym temacie. Poprawiono też kilka nieścisłości
-występujących w oryginale.
-
 Co do konwencji. W całym podręczniku stosowane są ścieżki w formacie uniksowym.
 Jeżeli chcesz zainstalować Symfony w środowisku Windows, to musisz sobie je
 odpowiednio przekształcić, co nie jest filozofią.
@@ -136,14 +131,8 @@ standardowej Symfony:
 
 .. code-block:: bash
    
-   $ php composer.phar create-project symfony/framework-standard-edition /path/to/webroot/Symfony dev-master
+   $ php composer.phar create-project symfony/framework-standard-edition /path/to/webroot/Symfony '~2.5'
    
-.. note::
-   Wyżej podane polecenie pobierze najnowszą wersję `dev-master`. Jeśli będzie
-   się chciało pobrać konkretna wersję, np. 2.5, to zamiast opcji ``dev-master``
-   należy zastosować opcje ``2.5.x``.
-
-
 .. note::
    
    Aby szybciej załadować pliki dostawców i bez dodatkowych katalogów (np. "Tests"),
@@ -178,9 +167,10 @@ trzeba pobrać archiwum .tgz albo .zip. Oba są równoważne, więc decyzja zale
 od Twoich preferencj
 
 Trzeba zdecydować się na pobranie archiwum z lub bez dostawców (*ang. vendors*).
-Jeżeli planujesz używanie bibliotek lub pakietów (*ang. bundles*) niezależnych
-dostawców i zarządzać nimi za pośrednictwem Composera, to przypuszczalnie lepszym
-wyborem będzie pobranie dystrybucji *without vendors*.
+Jeżeli planuje sie używanie bibliotek lub pakietów (*ang. bundles*) niezależnych
+dostawców i zarządzanie nimi za pośrednictwem Composera, to przypuszczalnie lepszym
+wyborem będzie pobranie dystrybucji *without vendors*, co omówione jest w następnym
+rozdziale.
 
 Pobierz jedno z archiwów i rozpakuj go gdzieś w katalogu głównym serwera internetowego.
 W systemie uniksowym można użyć w terminalu jedno z poniższych poleceń (zamieniając
@@ -194,8 +184,6 @@ W systemie uniksowym można użyć w terminalu jedno z poniższych poleceń (zam
    # dla pliku .zip
    $ unzip Symfony_Standard_Vendors_2.5.###.zip
 
-Jeśli pobrałeś archiwum *without vendors*, to koniecznie przeczytaj następny rozdział.
-
 .. note::
    
    Można łatwo zastąpić domyślną strukturę katalogów. Przeczytaj artykuł
@@ -205,13 +193,13 @@ Jeśli pobrałeś archiwum *without vendors*, to koniecznie przeczytaj następny
 Aktualizacja bibliotek dostawców
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-W tym momencie powinieneś mieć pobrany i zainstalowany w pełni funkcjonalny projekt
-Symfony, z którym możesz rozpocząć tworzenie własnej aplikacji. Projekt Symfony
+W tym momencie powinino się mieć pobrany i zainstalowany w pełni funkcjonalny projekt
+Symfony, z którym można rozpocząć tworzenie własnej aplikacji. Projekt Symfony
 zależy od wielu zewnętrznych bibliotek. Są one pobierane do katalogu *vendor/*
 projektu. poprzez bibliotekę `Composer`_, o której była mowa w poprzednim rozdziale.
 
 W zależności o sposobu pobrania Symfony, może być konieczne pobranie bibliotek
-dostawców lub nie (bo znajdowały się w pliku archiwum instalacyjnego). Aktualizacja
+dostawców lub nie (by znajdowały się w pliku archiwum instalacyjnego). Aktualizacja
 bibliotek dostawców jest zawsze bezpieczna i gwarantuje, że ma się wszystkie potrzebne
 biblioteki.
 
@@ -270,7 +258,7 @@ Konfiguracja i ustawienia
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 W tym momencie wszystkie zewnętrzne biblioteki umiejscowione są w katalogu ``vendor/``.
-Masz także wstępnie skonfigurowany projekt w katalogu ``app/`` wg ustawień domyślnych
+Ma się także wstępnie skonfigurowany projekt w katalogu ``app/`` wg ustawień domyślnych
 oraz przykładowy kod w katalogu ``src/``.
 
 Symfony2 dostarczane jest z wizualnym testerem konfiguracji serwera, aby pomóc w
@@ -394,7 +382,7 @@ Symfony2 przywita nas ekranem, takim jak ten:
 Rozpoczęcie programowania
 -------------------------
 
-Teraz, gdy już masz w pełni funkcjonalną aplikację Symfony2, możesz rozpocząć jej
+Teraz, gdy już mamy w pełni funkcjonalną aplikację Symfony2, możemy rozpocząć jej
 dalsze tworzenie. Twoja dystrybucja może zwierać trochę przykładowego kodu – sprawdź
 plik README.md zawarty w katalogu głównym aplikacji (otwórz go jak zwykły plik tekstowy)
 aby poznać informacje o zawartym w dystrybucji przykładowym kodzie i jak można go usunąć.
@@ -412,8 +400,8 @@ w Symfony.
 Używanie systemu kontroli wersji
 --------------------------------
 
-Jeśli używasz systemu kontroli wersji, takiego jak *Git* lub *Subversion*,
-możesz skonfigurować swój system kontroli wersji oraz rozpocząć wysyłanie
+Jeśli używa się systemu kontroli wersji, takiego jak *Git* lub *Subversion*,
+można skonfigurować swój system kontroli wersji oraz rozpocząć wysyłanie
 tam swojego projektu. Symfony Standard edition jest startowym punktem
 dla nowego projektu.
 
@@ -423,7 +411,7 @@ w git, przeczytaj :doc:`/cookbook/workflow/new_project_git`.
 Ignorowanie katalogu ``vendor/``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Jeśli pobrałeś archiwum *without vendors*, możesz zignorować całą
+Jeśli pobrało się archiwum *without vendors*, można zignorować całą
 zawartość katalogu ``vendor/`` i nie zgłaszać go do systemu kontroli wersji.
 W *Git* robi się to przez utworzenie pliku *.gitignore* i dodanie do niego
 nastęþującej linii:
