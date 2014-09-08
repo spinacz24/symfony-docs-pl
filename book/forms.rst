@@ -44,6 +44,7 @@ i przechowywać dane dla pojedynczego zadania::
         {
             return $this->task;
         }
+        
         public function setTask($task)
         {
             $this->task = $task;
@@ -174,12 +175,12 @@ formularza:
    Przykład ten zakłada, że stworzyliśmy trasę o nazwie ``task_new``, która wskazuje
    utworzony wcześniej kontroler ``AcmeTaskBundle:Default:new``.
 
-
-To jest to! Przez wydrukowanie ``form_widget(form)``, zostanie w formularzu
-zrenderowane każde pole, wraz z etykietą i komunikatem błędu (jeśli wystąpi).
-Jest to proste lecz nie elastyczne (na razie). Zazwyczaj chce się zrenderować
-każde pole formularza indywidualnie, dzięki czemu można kontrolować wygląd formularza.
-Dowiesz się jak to zrobić w rozdziale ":ref:`form-rendering-template`".
+To jest to! Przy drukowaniu ``form(form)`` renderowane jest każde pole w formularzu,
+wraz z etykietą  i komunikatem błędu (jeśli wystąpi błąd). Funkcja ``form`` również
+obejmuje wszystko co jest potrzebne dla znacznika ``form`` HTML. Jest to proste,
+ale mało elastyczne (na razie). Zazwyczaj chce się indywidualnie renderować każde
+pole formularza, tak więc można kontrolować wygląd formularza. Więcej na ten temat
+w rozdziale ":ref:`form-rendering-template`".
 
 Zanim przejdziemy dalej, zwróć uwagę na to, jak zostało zrenderowane pole wejściowe
 ``task``, mające wartość właściwości ``task`` obiektu ``$task`` (czyli "Write a blog
