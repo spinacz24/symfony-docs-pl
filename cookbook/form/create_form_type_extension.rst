@@ -1,5 +1,5 @@
 .. index::
-   single: Form; Rozszerzanie typów pól
+   single: Form; Rozszerzanie typów formularza
 
 Jak rozszerzać typy formularza
 ===================================
