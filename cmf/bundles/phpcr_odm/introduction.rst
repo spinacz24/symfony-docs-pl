@@ -30,7 +30,7 @@ Wymagania
 
 * przy wykorzystaniu **jackalope-jackrabbit**: Java, Apache Jackalope i libxml
   wersja >= 2.7.0 (z powodu `błędu w libxml`_)
-* przy wwykorzystaniu **jackalope-doctrine-dbal z MySQL**: MySQL >= 5.1.5
+* przy wykorzystaniu **jackalope-doctrine-dbal z MySQL**: MySQL >= 5.1.5
   (jeśli potrzeba funkcji xml, to ``ExtractValue``)
 
 Instalacja
@@ -56,7 +56,7 @@ Jeśli chce się używać PHPCR-ODM, dodatkowo trzeba zażądać
     }
 
 Oprócz ``Doctrine\Bundle\PHPCRBundle\DoctrinePHPCRBundle`` trzeba również utworzyć
-w jądrze aplikacji instancję ``Doctrine\Bundle\DoctrineBundle\DoctrineBundle``.
+w kernelu instancję ``Doctrine\Bundle\DoctrineBundle\DoctrineBundle``.
 
 Konfiguracja
 ------------
@@ -139,7 +139,7 @@ poznania szczegółów. Prosty przykład:
         ));
 
 Jackalope Doctrine DBAL zapewnia implementację PHPCR bez jakichkolwiek wymagań
-instalacyjnych, poza jakimkolwiek systemem RDBMS obsługiwanym przez Doctrine.
+instalacyjnych dla systemów RDBMS obsługiwanych przez Doctrine.
 Po skonfigurowaniu Doctrine DBAL, można skonfigurować Jackalope:
 
 .. configuration-block::
@@ -503,12 +503,12 @@ Przeczytaj też
 * :doc:`multiple_sessions`
 
 .. _`DoctrinePHPCRBundle`: https://github.com/doctrine/DoctrinePHPCRBundle
-.. _`Symfony2 Doctrine documentation`: http://symfony.com/doc/current/book/doctrine.html
+.. _`dokumentację Symfony2 Doctrine`: http://symfony.com/doc/current/book/doctrine.html
 .. _`Jackalope`: http://jackalope.github.io/
 .. _`stroną internetową PHPCR`: http://phpcr.github.io/
 .. _`dokumentacja PHPCR-ODM`: http://docs.doctrine-project.org/projects/doctrine-phpcr-odm/en/latest/
 .. _`błędu w libxml`: http://bugs.php.net/bug.php?id=36501)
-.. _`z Composer`: http://getcomposer.org
+.. _`poprzez Composer`: http://getcomposer.org
 .. _`doctrine/phpcr-bundle`: https://packagist.org/packages/doctrine/phpcr-bundle
 .. _`metadata caching`: http://symfony.com/doc/master/reference/configuration/doctrine.html
 .. _`PHPCR-ODM documentation on Multilanguage`: http://docs.doctrine-project.org/projects/doctrine-phpcr-odm/en/latest/reference/multilang.html
@@ -517,7 +517,7 @@ Przeczytaj też
 .. _`Symfony event subscriber`: http://symfony.com/doc/master/components/event_dispatcher/introduction.html#using-event-subscribers
 .. _`Symfony cookbook entry`: http://symfony.com/doc/current/cookbook/doctrine/event_listeners_subscribers.html
 .. _`Symfony documentation on the entity form type`: http://symfony.com/doc/current/reference/forms/types/entity.html
-.. _SonataDoctrinePHPCRAdminBundle: http://sonata-project.org/bundles/doctrine-phpcr-admin/master/doc/index.html
+.. _`SonataDoctrinePHPCRAdminBundle`: http://sonata-project.org/bundles/doctrine-phpcr-admin/master/doc/index.html
 .. _`currently broken`: https://github.com/sonata-project/SonataDoctrineORMAdminBundle/issues/145
 .. _`DoctrineMigrationsBundle`: http://symfony.com/doc/current/bundles/DoctrineMigrationsBundle/index.html
 .. _`DoctrineFixturesBundle`: http://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html

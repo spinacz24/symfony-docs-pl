@@ -9,34 +9,34 @@ jak zobaczysz tutaj, do plików, które mają określone rozszerzenie. Aby pokaz
 jak radzić sobie z każdą opcją, załóżmy, że chcemy używać filtra CoffeeScript,
 który kompiluje pliki CoffeeScript do JavaScript.
 
-Główna konfiguracja polega na ustanowieniu ścieżek do coffee i node. Domyślnie są
-one ustawione odpowiednio na ``/usr/bin/coffee`` i ``/usr/bin/node``:
+Główna konfiguracja polega na ustanowieniu ścieżek do ``coffee``, ``node``
+oraz ``node_modules``. Na przykład, konfiguracja może wyglądać tak:
 
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         # app/config/config.yml
         assetic:
             filters:
                 coffee:
-                    bin: /usr/bin/coffee
-                    node: /usr/bin/node
+                    bin:        /usr/bin/coffee
+                    node:       /usr/bin/node
+                    node_paths: [/usr/lib/node_modules/]
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/config.xml -->
         <assetic:config>
             <assetic:filter
                 name="coffee"
-                bin="/usr/bin/coffee"
-                node="/usr/bin/node" />
+                bin="/usr/bin/coffee/"
+                node="/usr/bin/node/">
+                <assetic:node-path>/usr/lib/node_modules/</assetic:node-path>
+            </assetic:filter>
         </assetic:config>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('assetic', array(
@@ -44,6 +44,7 @@ one ustawione odpowiednio na ``/usr/bin/coffee`` i ``/usr/bin/node``:
                 'coffee' => array(
                     'bin'  => '/usr/bin/coffee',
                     'node' => '/usr/bin/node',
+                    'node_paths' => array('/usr/lib/node_modules/'),
                 ),
             ),
         ));
@@ -56,23 +57,22 @@ Można teraz serwować pojedynczy plik CoffeeScript jako JavaScript prosto z sza
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
-        {% javascripts '@AcmeFooBundle/Resources/public/js/example.coffee' filter='coffee' %}
-            <script src="{{ asset_url }}" type="text/javascript"></script>
+        {% javascripts '@AppBundle/Resources/public/js/example.coffee' filter='coffee' %}
+            <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
 
     .. code-block:: html+php
-       :linenos:
 
         <?php foreach ($view['assetic']->javascripts(
-            array('@AcmeFooBundle/Resources/public/js/example.coffee'),
+            array('@AppBundle/Resources/public/js/example.coffee'),
             array('coffee')
         ) as $url): ?>
-            <script src="<?php echo $view->escape($url) ?>" type="text/javascript"></script>
-        <?php endforeach; ?>
+            <script src="<?php echo $view->escape($url) ?>"></script>
+        <?php endforeach ?>
 
-To wszystko co jest potrzebne by skompilować ten plik CoffeeScript i zaserwować go jako skompilowany skrypt JavaScript.        
+To wszystko co jest potrzebne by skompilować ten plik CoffeeScript i zaserwować
+go jako skompilowany skrypt JavaScript.        
 
 Filtrowanie wielu plików
 ------------------------
@@ -82,26 +82,25 @@ Można także połączyć wiele plików CoffeeScript w jeden plik wynikowy:
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
-        {% javascripts '@AcmeFooBundle/Resources/public/js/example.coffee'
-                       '@AcmeFooBundle/Resources/public/js/another.coffee'
+        {% javascripts '@AppBundle/Resources/public/js/example.coffee'
+                       '@AppBundle/Resources/public/js/another.coffee'
             filter='coffee' %}
-            <script src="{{ asset_url }}" type="text/javascript"></script>
+            <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
 
     .. code-block:: html+php
-       :linenos:
 
         <?php foreach ($view['assetic']->javascripts(
             array(
-                '@AcmeFooBundle/Resources/public/js/example.coffee',
-                '@AcmeFooBundle/Resources/public/js/another.coffee',
+                '@AppBundle/Resources/public/js/example.coffee',
+                '@AppBundle/Resources/public/js/another.coffee',
             ),
             array('coffee')
         ) as $url): ?>
-            <script src="<?php echo $view->escape($url) ?>" type="text/javascript"></script>
-        <?php endforeach; ?>
+            <script src="<?php echo $view->escape($url) ?>"></script>
+        <?php endforeach ?>
+
 
 Oba pliki będą teraz serwowane jako jeden plik, skompilowany do zwykłego JavaScript.
 
@@ -125,18 +124,17 @@ wszystkich plików ``.coffee``:
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         # app/config/config.yml
         assetic:
             filters:
                 coffee:
-                    bin: /usr/bin/coffee
-                    node: /usr/bin/node
-                    apply_to: "\.coffee$"
+                    bin:        /usr/bin/coffee
+                    node:       /usr/bin/node
+                    node_paths: [/usr/lib/node_modules/]
+                    apply_to:   "\.coffee$"
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/config.xml -->
         <assetic:config>
@@ -145,10 +143,10 @@ wszystkich plików ``.coffee``:
                 bin="/usr/bin/coffee"
                 node="/usr/bin/node"
                 apply_to="\.coffee$" />
+                <assetic:node-paths>/usr/lib/node_modules/</assetic:node-path>
         </assetic:config>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('assetic', array(
@@ -156,10 +154,12 @@ wszystkich plików ``.coffee``:
                 'coffee' => array(
                     'bin'      => '/usr/bin/coffee',
                     'node'     => '/usr/bin/node',
+                    'node_paths' => array('/usr/lib/node_modules/'),
                     'apply_to' => '\.coffee$',
                 ),
             ),
         ));
+
 
 Dzięki temu nie ma już potrzeby, aby określać filtr ``coffee`` w szablonie.
 Można również stosować zwykłe pliki JavaScript, które zostaną połączone i wyrenderowane
@@ -168,23 +168,21 @@ jako pojedynczy plik JavaScript (tylko pliki ``.coffee`` zostaną poddane filtro
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos;
 
-        {% javascripts '@AcmeFooBundle/Resources/public/js/example.coffee'
-                       '@AcmeFooBundle/Resources/public/js/another.coffee'
-                       '@AcmeFooBundle/Resources/public/js/regular.js' %}
-            <script src="{{ asset_url }}" type="text/javascript"></script>
+        {% javascripts '@AppBundle/Resources/public/js/example.coffee'
+                       '@AppBundle/Resources/public/js/another.coffee'
+                       '@AppBundle/Resources/public/js/regular.js' %}
+            <script src="{{ asset_url }}"></script>
         {% endjavascripts %}
 
     .. code-block:: html+php
-       :linenos:
 
         <?php foreach ($view['assetic']->javascripts(
             array(
-                '@AcmeFooBundle/Resources/public/js/example.coffee',
-                '@AcmeFooBundle/Resources/public/js/another.coffee',
-                '@AcmeFooBundle/Resources/public/js/regular.js',
+                '@AppBundle/Resources/public/js/example.coffee',
+                '@AppBundle/Resources/public/js/another.coffee',
+                '@AppBundle/Resources/public/js/regular.js',
             )
         ) as $url): ?>
-            <script src="<?php echo $view->escape($url) ?>" type="text/javascript"></script>
-        <?php endforeach; ?>
+            <script src="<?php echo $view->escape($url) ?>"></script>
+        <?php endforeach ?>

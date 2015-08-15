@@ -16,6 +16,7 @@ Instalacja dodatkowych pakietów
 Przykład omówiony w tym poradniku wymaga następujących pakietów:
 
 * `symfony-cmf/routing-auto-bundle`_;
+* `symfony-cmf/tree-browser-bundle`_;
 * `sonata-project/doctrine-phpcr-admin-bundle`_;
 * `doctrine/data-fixtures`_;
 * `symfony-cmf/menu-bundle`_.
@@ -32,8 +33,8 @@ czasu dodając teraz wszystkie wymagane pakiety.
         ...
         require: {
             ...
-            "symfony-cmf/routing-auto-bundle": "1.0.*@alpha",
-            "symfony-cmf/menu-bundle": "1.1.*",
+            "symfony-cmf/routing-auto-bundle": "1.0.*@dev",
+            "symfony-cmf/menu-bundle": "1.1.*", 
             "sonata-project/doctrine-phpcr-admin-bundle": "1.1.*",
             "symfony-cmf/tree-browser-bundle": "1.1.*",
             "doctrine/data-fixtures": "1.0.*",
@@ -88,8 +89,8 @@ Teraz można wygenerować pakiet, w którym będziemy pisać większość kodu:
 Dokumenty
 .........
 
-Utworzy to dwie klasy dokumentów, jedna dla stron a drugą dla wpisów.
-Te dwa dokumenty udostępniają w dużym stopniu tą samą logikę, więc utworzymy
+Utwórzmy dwie klasy dokumentów, jedną dla stron a drugą dla wpisów.
+Te dwa dokumenty bedą udostępniać w dużym stopniu tą samą logikę, więc utworzymy
 cechę (``trait``) aby zmniejszyć powielanie kodu::
 
     // src/Acme/BasicCmsBundle/Document/ContentTrait.php
@@ -172,7 +173,7 @@ cechę (``trait``) aby zmniejszyć powielanie kodu::
 
     Cechy (*ang. traits*) są dostępne dopiero od wersji PHP 5.4. Jeśli używa się
     mniejszą wersję PHP, można skopiować powyższy kod do każdej klasy, aby uzyskać
-    ten efekt. Nie można jednak rozszerzyć jednej klasy przez druga, gdyż spowoduje
+    ten sam efekt. Nie można jednak rozszerzyć jednej klasy przez drugą, gdyż spowoduje
     to później niezamierzone zachowanie przy integracji z interfejsem administracyjnym.
 
 Klasa ``Page`` jest teraz przejrzysta i prosta::
@@ -192,7 +193,7 @@ Klasa ``Page`` jest teraz przejrzysta i prosta::
         use ContentTrait;
     }
 
-Należy mieć na uwadze, że dokument strony powinien być referencyjny (zdolnym do
+Należy mieć na uwadze, że dokument strony powinien być referencyjny (zdolny do
 bycia celem odniesień w innych dokumentach). Umożliwia to innym dokumentom posiadanie
 odniesień do tej strony. Klasa ``Post`` będzie również referencyjna i dodatkowo
 będzie automatycznie ustawiać datę wykorzystując `zdarzenie cyklu życia przed utrwaleniem`_,
@@ -238,7 +239,7 @@ jeśli nie zostało to wcześniej ustawione w sposób jawny::
     }
 
 Zarówno klasa ``Post`` jaki ``Page`` implementują interfejs ``RouteReferrersReadInterface``.
-Umożliwia on `generowanie adresów URL przez DynamicRouter`_ w instancji tych klas
+Umożliwia on `generowanie adresów URL przez DynamicRouter`_ w *instancji tych klas*
 (na przykład przy użyciu znacznika ``{{ path(content) }}`` w Twig).
 
 Inicjator repozytorium
@@ -246,9 +247,9 @@ Inicjator repozytorium
 
 :ref:`Inicjatory repozytoriów <phpcr-odm-repository-initializers>` umożliwiają
 ustanowienie i utrzymanie węzłów PHPCR wymaganych przez aplikację, na przykład
-będzie się potrzebowało ścieżki ``/cms/pages``, ``/cms/posts`` i ``/cms/routes``.
+gdy będzie się potrzebowało ścieżki ``/cms/pages``, ``/cms/posts`` i ``/cms/routes``.
 Klasa ``GenericInitializer`` może łatwo wykorzystywać inicjowanie listy ścieżek.
-Dodajmy konfiguracji kontenera usługi następujący kod:
+Dodajmy w konfiguracji kontenera usługi następujący kod:
 
 .. configuration-block::
 
@@ -435,3 +436,4 @@ Teraz w repozytorium treści powinno być kilka danych.
 .. _`doctrine dbal jackalope`: https://github.com/jackalope/jackalope-doctrine-dbal
 .. _`Apache Jackrabbit`: https://jackrabbit.apache.org
 .. _`zdarzenie cyklu życia przed utrwaleniem`: http://docs.doctrine-project.org/projects/doctrine-phpcr-odm/en/latest/reference/events.html#lifecycle-callbacks
+.. _`symfony-cmf/tree-browser-bundle`: http://symfony.com/doc/current/cmf/bundles/tree-browser.html

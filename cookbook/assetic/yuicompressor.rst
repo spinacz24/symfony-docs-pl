@@ -4,6 +4,16 @@
 Jak kompresować skrypty i style z użyciem YUI Compressor
 ========================================================
 
+.. caution::
+
+    YUI Compressor `nie jest już utrzymywany przez Yahoo`_. Dlatego **zdecydowanie
+    zaleca się unikanie stosowania narzędzi YUI**, chyba że jest to bezwzglednie
+    konieczne.
+    Proszę zapoznać się z artykułem :doc:`/cookbook/assetic/uglifyjs` w celu uzyskania
+    informacji o alternatywnym i nowocześniejszym rozwiązaniu.
+
+
+
 Yahoo! dostarcza doskonałe narzędzie do minimalizacji plików JavaScript i arkuszy stylów,
 dzięki czemu podróżują one przez sieć o wiele szybciej, `YUI Compressor`_.
 Dzięki Assetic, można skorzystać z tego narzędzia bardzo łatwo. 
@@ -167,3 +177,4 @@ ten filtr w momencie, gdy tryb debugowania jest wyłączony.
 
 .. _`YUI Compressor`: http://developer.yahoo.com/yui/compressor/
 .. _`Pobierz JAR`: http://yuilibrary.com/projects/yuicompressor/
+.. _`nie jest już utrzymywany przez Yahoo`: http://www.yuiblog.com/blog/2013/01/24/yui-compressor-has-a-new-owner/

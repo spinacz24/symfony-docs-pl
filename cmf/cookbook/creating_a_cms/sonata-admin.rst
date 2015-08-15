@@ -44,8 +44,8 @@ Włącz w kernelu związane pakiety Sonata::
         }
     }
 
-Sonata wymaga pakietu ``sonata_block`` w celu umożliwienia konfigurowania jej
-w konfiguracji głównej:
+Sonata wymaga ustawienia bloku ``sonata_block`` w celu umożliwienia konfigurowania
+tego pakietu w konfiguracji głównej:
 
 .. configuration-block::
 
