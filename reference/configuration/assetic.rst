@@ -1,5 +1,5 @@
 .. index::
-   pair: Asscetic; konfiguracja
+   pair: Assetic; konfiguracja
 
 AsseticBundle - Konfiguracja
 ============================

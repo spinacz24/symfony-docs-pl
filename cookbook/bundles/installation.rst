@@ -1,82 +1,53 @@
 .. index::
    single: pakiet; instalacja
 
-Jak zainstalować pakiety firm trzecich ?
-========================================
+Jak zainstalować pakiety zewnetrzne ?
+=====================================
 
 Większość pakietów zapewnia swoje instrukcje obsługi. Jednakże, podstawowe
-etapy instalacji pakietów są niemalże identyczne.
+etapy instalacji pakietów są niemalże identyczne:
 
-Dodawanie zależności w Composer
--------------------------------
+* `A) Dodanie zależności dla Composer`_
+* `B) Aktywowanie pakietu`_
+* `C) Skonfigurowanie pakietu`_
 
-Począwszy od Symfony 2.1, zależności są zarządzane przez Composer. To dobry
-pomysł, aby nauczyć się podstaw Composera studiując `jego dokumentację`_.
+A) Dodanie zależności dla Composer
+----------------------------------
 
-Przed użyciem Composera do instalacji pakietu, należy sprawdzić czy dany
-pakiet istnieje w archiwum `Packagist`_. Na przykład, jeśli wyszukiwano
-popularnego `FOSUserBundle`_, archiwum powinno odnaleźć `friendsofsymfony/user-bundle`_.
+Zależności są zarządzane przez Composer, tak więc jeśli Composer jest dla Ciebie
+nowością zapoznaj sie z `jego dokumentacją`_. Procedura ta obejmuje dwa kroki:
 
-.. note::
+1) Znajdź nazwę pakietu na Packagist
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    Packagist jest głównym archiwum dla Composera. Jeśli szukasz pakietu,
-    najlepsze co możesz zrobić, to sprawdzić serwis `KnpBundles`_, gdyż
-    jest to nieoficjalne archiwum pakietów Symfony. Jeśli pakiet zawiera
-    plik ``README``, zostanie wyświetlony, a jeśli posiada wpis w Packagist,
-    zostanie dodatkowo ukazany odnośnik do owej paczki. To naprawdę przydatna
-    witryna, od której warto rozpocząć poszukiwania konkretnych pakietów.
+Plik README pakietu (np. `FOSUserBundle`_) zazwyczaj informuje o nazwie pakietu
+(np. ``friendsofsymfony/user-bundle``). Jeśli nie, można odszukać pakiet na stronie
+`Packagist.org`_.
 
-Teraz, gdy ma się już nazwę pakietu, należy określić, którą wersję użyć.
-Zazwyczaj różne wersje pakietu odpowiadają konkretnej wersji Symfony. Informacje
-te powinny być zawarte w pliku ``README``. Jeśli tak nie jest, można użyć
-dowolnej wersji. Jeśli przez przypadek wybrano niezgodną, Composer poinformuje
-o błędnych zależnościach, które planowano zainstalować. Jeśli to się wydarzy,
-można spróbować innej wersji.
+.. tip::
 
-W przypadku FOSUserBundle, plik ``README`` zawiera przestrogę, że wersja
-1.2.0 musi być używana z Symfony 2.0, a 1.3+ z Symfony 2.1+. Packagist wyświetla
-przykładowe wymagania ``require`` dla wszystkich wersji pakietu. Aktualna
-wersja rozwojowa FOSUserBundle to ``"friendsofsymfony/user-bundle": "2.0.*@dev"``.
+    Szukasz pakietów? Spróbuj przeszukać `KnpBundles.com`_: nieoficjalne
+    archiwum pakietów Symfony.
 
-Teraz można dodać pakiet do pliku ``composer.json`` i zaktualizować zależności.
-Można zrobić to ręcznie:
+2) Zainstaluj pakiet poprzez Composer
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. **Dodaj poniższe linie do pliku composer.json:**
-
-   .. code-block:: json
-      :linenos:
-
-       {
-           ...,
-           "require": {
-               ...,
-               "friendsofsymfony/user-bundle": "2.0.*@dev"
-           }
-       }
-
-2. **Zaktualizuj zależności**
-
-   .. code-block:: bash
-      :linenos:
-
-       $ php composer.phar update friendsofsymfony/user-bundle
-
-   albo zaktualizuj wszystkie zależności naraz
-
-   .. code-block:: bash
-      :linenos:
-
-       $ php composer.phar update
-
-Można to również zrobić jednym poleceniem:
+Teraz, gdy już znana jest nazwa pakietu, można zainstalować go stosując Composer:
 
 .. code-block:: bash
-   :linenos:
 
-    $ php composer.phar require friendsofsymfony/user-bundle:2.0.*@dev
+    $ composer require friendsofsymfony/user-bundle
 
-Aktywowanie pakietu
--------------------
+Pozwoli to na wybranie najlepszej wersji dla swojego projektu, dodanie jej do
+pliku ``composer.json`` i pobranie kodu do katalogu ``vendor/``. Jeśli potrzeba
+specyficznej wersji, należy dołączyć ją jako drugi argument polecenia `composer require`_:
+
+.. code-block:: bash
+
+    $ composer require friendsofsymfony/user-bundle "~2.0"
+
+B) Aktywowanie pakietu
+----------------------
 
 W tym momencie pakiet jest zainstalowany w projekcie Symfony (w ``vendor/friendsofsymfony/``),
 a autoloader rozpoznaje jego klasy. Jedyne co trzeba zrobić, to zarejestrować
@@ -100,8 +71,36 @@ pakiet w ``AppKernel``::
         }
     }
 
-Konfigurowanie pakietu
-----------------------
+W nielicznych przypadkach, mozna potrzebować, aby pakiet był tylko włączony w 
+:doc:`środowisku </cookbook/configuration/environments>` programistycznym.
+Na przykład, DoctrineFixturesBundle pomaga załadować dane testowe - coś, co
+przypuszczalnie potrzebuje sie tylko w środowisku programistycznym.
+W celu załadowania takiego pakietu tylko w srodowisku ``dev`` i ``test``,
+zarejestruj pakiet w ten sposób::
+
+    // app/AppKernel.php
+
+    // ...
+    class AppKernel extends Kernel
+    {
+        // ...
+
+        public function registerBundles()
+        {
+            $bundles = array(
+                // ...
+            );
+
+            if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+                $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
+            }
+
+            // ...
+        }
+    }
+
+C) Skonfigurowanie pakietu
+--------------------------
 
 Pakiet zazwyczaj wymaga dodania specjalnej konfiguracji do pliku ``app/config/config.yml``.
 Dokumentacja pakietu najprawdopodobniej opisze wszelkie szczegóły, niemniej
@@ -144,8 +143,8 @@ Inne ustawienia
 W tym momencie powinno się przestudiować plik ``README`` używanego pakietu i
 zobaczyć co zrobić dalej.
 
-.. _jego dokumentację: http://getcomposer.org/doc/00-intro.md
-.. _Packagist:           https://packagist.org
-.. _FOSUserBundle:       https://github.com/FriendsOfSymfony/FOSUserBundle
+.. _`jego dokumentacją`: https://getcomposer.org/doc/00-intro.md
+.. _`Packagist`:           https://packagist.org
+.. _`FOSUserBundle`:       https://github.com/FriendsOfSymfony/FOSUserBundle
 .. _`friendsofsymfony/user-bundle`: https://packagist.org/packages/friendsofsymfony/user-bundle
-.. _KnpBundles:          http://knpbundles.com/
+.. _`KnpBundles`:          http://knpbundles.com/

@@ -7,7 +7,7 @@
 Trasowanie
 ==========
 
-Piękne (przyjazne) adresy URL to absolutna konieczność dla każdej poważnej aplikacji
+Przyjazne adresy URL to absolutna konieczność dla każdej poważnej aplikacji
 internetowej. Oznacza to porzucenie "brzydkich" (nieprzyjaznych) ścieżek, takich
 jak ``index.php?article_id=57`` na rzecz czegoś takiego jak ``/read/intro-to-symfony``.
 
@@ -39,30 +39,47 @@ jest prosta:
 
 .. configuration-block::
 
+    .. code-block:: php-annotations
+
+        // src/AppBundle/Controller/BlogController.php
+        namespace AppBundle\Controller;
+
+        use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+        class BlogController extends Controller
+        {
+            /**
+             * @Route("/blog/{slug}", name="blog_show")
+             */
+            public function showAction($slug)
+            {
+                // ...
+            }
+        }
+
     .. code-block:: yaml
-       :linenos:
 
         # app/config/routing.yml
         blog_show:
-            path:   /blog/{slug}
-            defaults:  { _controller: AcmeBlogBundle:Blog:show }
+            path:      /blog/{slug}
+            defaults:  { _controller: AppBundle:Blog:show }
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
             <route id="blog_show" path="/blog/{slug}">
-                <default key="_controller">AcmeBlogBundle:Blog:show</default>
+                <default key="_controller">AppBundle:Blog:show</default>
             </route>
         </routes>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -70,7 +87,7 @@ jest prosta:
 
         $collection = new RouteCollection();
         $collection->add('blog_show', new Route('/blog/{slug}', array(
-            '_controller' => 'AcmeBlogBundle:Blog:show',
+            '_controller' => 'AppBundle:Blog:show',
         )));
 
         return $collection;
@@ -80,39 +97,21 @@ znak wieloznaczny (``*``) otrzymuje nazwę ``slug``. Dla ścieżki URL ``/blog/m
 zmienna ``slug`` przybierze wartość ``moj-post``, która jest dostępna z poziomu
 kontrolera (czytaj dalej).
 
-Parametr ``_controller`` jest specjalnym kluczem, który informuje Symfony jaki kontroler
-powinien być uruchomiony, kiedy ścieżka URL zostanie dopasowana do wzorca trasy.
-Wartością ``_controller`` jest ciąg znakowy określający
-:ref:`nazwę logiczną<controller-string-syntax>`. Ma to zastosowanie do wzorców,
-które wskazują określa klasę i metodę PHP:
+Jeśli nie chce sie stosować adnotacji, bo nie podoba się ten sposób lub ponieważ
+nie chce się polegać na SensioFrameworkExtraBundle, można stosować trasowanie
+w formacie Yaml, XML lub PHP. W formatach tych parametr ``_controller`` jest
+specjalnym kluczem, który powiadamia Symfony o tym, który kontroler powinien być
+wykonany, gdy scieżka URL zostanie dopasowana do wzorca trasy. Wartością
+``_controller`` jest ciąg znakowy określający :ref:`nazwę logiczną<controller-string-syntax>`.
+Ma to zastosowanie do wzorców, które wskazują określoną klasę i metodę PHP.
 
-.. code-block:: php
-   :linenos:
-
-    // src/Acme/BlogBundle/Controller/BlogController.php
-
-    namespace Acme\BlogBundle\Controller;
-    use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-    class BlogController extends Controller
-    {
-        public function showAction($slug)
-        {
-            $blog = // use the $slug variable to query the database
-
-            return $this->render('AcmeBlogBundle:Blog:show.html.twig', array(
-                'blog' => $blog,
-            ));
-        }
-    }
-
-W tym kodzie właśnie utworzyliśmy naszą pierwszą trasę i połączyliśmy ją z kontrolerem.
-Teraz, kiedy odwiedzi się ``/blog/moj-post``, zostanie uruchomiony kontroler
-``showAction``, a zmienna ``$slug`` przyjmie wartość ``moj-post``.
+Tak więc, utworzylismy trasę i połączyliśmy ja do kontrolera. Teraz, gdy odwiedzi
+się ``/blog/my-post``, wykonana zostanie akcja (kontroler) ``showAction`` a zmienna
+``$slug`` stanie się równoważnikiem ``my-post``.
 
 To jest właśnie zadanie mechanizmu trasowania Symfony2: odwzorować ścieżkę URL żądania
-na kontroler. W dalszej części artykułu podanych jest  wiele sztuczek, które sprawiają,
-że odwzorowanie nawet najbardziej skomplikowanych adresów URL staje się łatwe.
+na kontroler (akcję). W dalszej części artykułu podanych jest  wiele sztuczek,
+które sprawiają, że odwzorowanie nawet najbardziej skomplikowanych adresów URL staje się łatwe.
 
 
 .. index::
@@ -122,7 +121,7 @@ Trasowanie - pod maską
 ----------------------
 
 Kiedy do aplikacji wysłane jest żądanie, zawiera ono dokładny adres do
-"zasobu", który klient żąda. Ten adres nazywany jest lokalizatorem URL
+"zasobu", który żąda klient. Ten adres nazywany jest lokalizatorem URL
 (lub identyfikatorem URI) i zawiera ścieżkę do zasobu, taką jak ``/kontakt``,
 ``/blog/informacje`` lub cokolwiek innego. Weźmy za
 przykład poniższe żądanie HTTP:
@@ -143,14 +142,15 @@ mniej więcej tak:
    konkretnej trasy i zwraca informacje o trasie, łącznie z nazwą kontrolera, który
    powinien zostać uruchomiony;
 
-#. Rdzeń Symfony2 wykonuje kontroler, który ostatecznie zwraca obiekt ``Response``.
+#. Rdzeń Symfony2 wykonuje kod kontrolera (akcji), który ostatecznie zwraca obiekt
+   ``Response``.
 
 .. figure:: /images/request-flow.png
    :align: center
    :alt: Przepływ żądania w Symfony2
 
-Warstwa trasowania jest narzędziem, które tłumaczy przychodzący adres URL na określony
-kontroler jaki ma być wykonany.
+   Warstwa trasowania jest narzędziem, które tłumaczy przychodzący adres URL na określony
+   kontroler jaki ma być wykonany.
 
 .. index::
    single: trasowanie; tworzenie tras
@@ -209,37 +209,53 @@ oraz z tablicy ``defaults`` przechowującej wartości domyślne:
 
 .. configuration-block::
 
-    .. code-block:: yaml
-       :linenos:
+    .. code-block:: php-annotations
 
+        // src/AppBundle/Controller/MainController.php
+
+        // ...
+        class MainController extends Controller
+        {
+            /**
+             * @Route("/")
+             */
+            public function homepageAction()
+            {
+                // ...
+            }
+        }
+
+    .. code-block:: yaml
+
+        # app/config/routing.yml
         _welcome:
-            path:   /
-            defaults:  { _controller: AcmeDemoBundle:Main:homepage }
+            path:      /
+            defaults:  { _controller: AppBundle:Main:homepage }
 
     .. code-block:: xml
-       :linenos:
 
+        <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
-
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
             <route id="_welcome" path="/">
-                <default key="_controller">AcmeDemoBundle:Main:homepage</default>
+                <default key="_controller">AppBundle:Main:homepage</default>
             </route>
 
         </routes>
 
-    .. code-block:: php
-       :linenos:
+    ..  code-block:: php
 
+        // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
 
         $collection = new RouteCollection();
         $collection->add('_welcome', new Route('/', array(
-            '_controller' => 'AcmeDemoBundle:Main:homepage',
+            '_controller' => 'AppBundle:Main:homepage',
         )));
 
         return $collection;
@@ -261,41 +277,57 @@ Do określenia wielu tras można wykorzystać jedno lub więcej
 
 .. configuration-block::
 
-    .. code-block:: yaml
-       :linenos:
+    .. code-block:: php-annotations
 
+        // src/AppBundle/Controller/BlogController.php
+
+        // ...
+        class BlogController extends Controller
+        {
+            /**
+             * @Route("/blog/{slug}")
+             */
+            public function showAction($slug)
+            {
+                // ...
+            }
+        }
+
+    .. code-block:: yaml
+
+        # app/config/routing.yml
         blog_show:
-            path:   /blog/{slug}
-            defaults:  { _controller: AcmeBlogBundle:Blog:show }
+            path:      /blog/{slug}
+            defaults:  { _controller: AppBundle:Blog:show }
 
     .. code-block:: xml
-       :linenos:
 
+        <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
-
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
             <route id="blog_show" path="/blog/{slug}">
-                <default key="_controller">AcmeBlogBundle:Blog:show</default>
+                <default key="_controller">AppBundle:Blog:show</default>
             </route>
         </routes>
 
     .. code-block:: php
-       :linenos:
-       
+
+        // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
 
         $collection = new RouteCollection();
         $collection->add('blog_show', new Route('/blog/{slug}', array(
-            '_controller' => 'AcmeBlogBundle:Blog:show',
+            '_controller' => 'AppBundle:Blog:show',
         )));
 
         return $collection;
 
-Wzorzec będzie pasował do wszystkiego, co wygląda jak ``/blog/*``. Co więcej,
+Wzorzec taki będzie pasował do wszystkiego, co wygląda jak ``/blog/*``. Co więcej,
 wartość przypisana do parametru ``{slug}`` będzie dostępna wewnątrz kontrolera.
 Innymi słowy, jeśli ścieżka URL wygląda tak: ``/blog/hello-world``,
 to zmienna ``$slug`` z wartością ``hello-world`` będzie dostępna w kontrolerze.
@@ -316,36 +348,54 @@ wpisów na blogu wymyślonej aplikacji blogowej:
 
 .. configuration-block::
 
-    .. code-block:: yaml
-       :linenos:
+    .. code-block:: php-annotations
 
+        // src/AppBundle/Controller/BlogController.php
+
+        // ...
+        class BlogController extends Controller
+        {
+            // ...
+
+            /**
+             * @Route("/blog")
+             */
+            public function indexAction()
+            {
+                // ...
+            }
+        }
+
+    .. code-block:: yaml
+
+        # app/config/routing.yml
         blog:
-            path:   /blog
-            defaults:  { _controller: AcmeBlogBundle:Blog:index }
+            path:      /blog
+            defaults:  { _controller: AppBundle:Blog:index }
 
     .. code-block:: xml
-       :linenos:
 
+        <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
-
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
             <route id="blog" path="/blog">
-                <default key="_controller">AcmeBlogBundle:Blog:index</default>
+                <default key="_controller">AppBundle:Blog:index</default>
             </route>
         </routes>
 
     .. code-block:: php
-       :linenos:
 
+        // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
 
         $collection = new RouteCollection();
         $collection->add('blog', new Route('/blog', array(
-            '_controller' => 'AcmeBlogBundle:Blog:index',
+            '_controller' => 'AppBundle:Blog:index',
         )));
 
         return $collection;
@@ -358,36 +408,50 @@ parameter ``{page}``:
 
 .. configuration-block::
 
-    .. code-block:: yaml
-       :linenos:
+    .. code-block:: php-annotations
 
+        // src/AppBundle/Controller/BlogController.php
+
+        // ...
+
+        /**
+         * @Route("/blog/{page}")
+         */
+        public function indexAction($page)
+        {
+            // ...
+        }
+
+    .. code-block:: yaml
+
+        # app/config/routing.yml
         blog:
-            path:   /blog/{page}
-            defaults:  { _controller: AcmeBlogBundle:Blog:index }
+            path:      /blog/{page}
+            defaults:  { _controller: AppBundle:Blog:index }
 
     .. code-block:: xml
-       :linenos:
 
+        <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
-
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
             <route id="blog" path="/blog/{page}">
-                <default key="_controller">AcmeBlogBundle:Blog:index</default>
+                <default key="_controller">AppBundle:Blog:index</default>
             </route>
         </routes>
 
     .. code-block:: php
-       :linenos:
 
+        // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
 
         $collection = new RouteCollection();
         $collection->add('blog', new Route('/blog/{page}', array(
-            '_controller' => 'AcmeBlogBundle:Blog:index',
+            '_controller' => 'AppBundle:Blog:index',
         )));
 
         return $collection;
@@ -396,7 +460,7 @@ Podobnie jak poprzedni wieloznacznik ``{slug}``, wartość pasująca do ``{page}
 będzie też dostępna dla kontrolera. Ta wartość może być użyta do określenia,
 którą część wpisu na blogu wyświetlić dla danej strony.
 
-Ale chwileczkę! Ponieważ wieloznaczniki są domyślnie wymagane, ta trasa już nie będzie
+Chwileczkę! Ponieważ wieloznaczniki są domyślnie wymagane, ta trasa już nie będzie
 pasować do adresu ``/blog``. Ponadto, aby zobaczyć stronę 1 blogu, trzeba użyć
 ścieżki URL ``/blog/1``. Ponieważ nie jest to dobry sposób dla bardziej złożonej
 aplikacji internetowej, to zmodyfikujemy trasę tak aby wileoznacznik ``{page}``
@@ -405,38 +469,52 @@ zapis:
 
 .. configuration-block::
 
-    .. code-block:: yaml
-       :linenos:
+    .. code-block:: php-annotations
 
+        // src/AppBundle/Controller/BlogController.php
+
+        // ...
+
+        /**
+         * @Route("/blog/{page}", defaults={"page" = 1})
+         */
+        public function indexAction($page)
+        {
+            // ...
+        }
+
+    .. code-block:: yaml
+
+        # app/config/routing.yml
         blog:
-            path:   /blog/{page}
-            defaults:  { _controller: AcmeBlogBundle:Blog:index, page: 1 }
+            path:      /blog/{page}
+            defaults:  { _controller: AppBundle:Blog:index, page: 1 }
 
     .. code-block:: xml
-       :linenos:
 
+        <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
-
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
             <route id="blog" path="/blog/{page}">
-                <default key="_controller">AcmeBlogBundle:Blog:index</default>
+                <default key="_controller">AppBundle:Blog:index</default>
                 <default key="page">1</default>
             </route>
         </routes>
 
     .. code-block:: php
-       :linenos:
 
+        // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
 
         $collection = new RouteCollection();
         $collection->add('blog', new Route('/blog/{page}', array(
-            '_controller' => 'AcmeBlogBundle:Blog:index',
-            'page' => 1,
+            '_controller' => 'AppBundle:Blog:index',
+            'page'        => 1,
         )));
 
         return $collection;
@@ -446,13 +524,13 @@ wymagany. Ścieżka URL ``/blog`` będzie teraz pasowała do tej trasy, a warto�
 ``page`` zostanie ustawiona na ``1``. Ścieżka URL ``/blog/2`` również będzie pasować,
 dając wieloznacznikowi ``page`` wartość ``2``.
 
-+---------+------------+
-| /blog   | {page} = 1 |
-+---------+------------+
-| /blog/1 | {page} = 1 |
-+---------+------------+
-| /blog/2 | {page} = 2 |
-+---------+------------+
+===========  ========  ==================
+URL          Trasa     Parametry
+===========  ========  ==================
+``/blog``    ``blog``  ``{page}`` = ``1``
+``/blog/1``  ``blog``  ``{page}`` = ``1``
+``/blog/2``  ``blog``  ``{page}`` = ``2``
+===========  ========  ==================
 
 .. caution::
 
@@ -478,50 +556,74 @@ Spójrzmy na utworzone przez nas wcześniej trasy:
 
 .. configuration-block::
 
-    .. code-block:: yaml
-       :linenos:
+    .. code-block:: php-annotations
 
+        // src/AppBundle/Controller/BlogController.php
+
+        // ...
+        class BlogController extends Controller
+        {
+            /**
+             * @Route("/blog/{page}", defaults={"page" = 1})
+             */
+            public function indexAction($page)
+            {
+                // ...
+            }
+
+            /**
+             * @Route("/blog/{slug}")
+             */
+            public function showAction($slug)
+            {
+                // ...
+            }
+        }
+
+    .. code-block:: yaml
+
+        # app/config/routing.yml
         blog:
-            path:   /blog/{page}
-            defaults:  { _controller: AcmeBlogBundle:Blog:index, page: 1 }
+            path:      /blog/{page}
+            defaults:  { _controller: AppBundle:Blog:index, page: 1 }
 
         blog_show:
-            path:   /blog/{slug}
-            defaults:  { _controller: AcmeBlogBundle:Blog:show }
+            path:      /blog/{slug}
+            defaults:  { _controller: AppBundle:Blog:show }
 
     .. code-block:: xml
-       :linenos:
 
+        <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
-
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
             <route id="blog" path="/blog/{page}">
-                <default key="_controller">AcmeBlogBundle:Blog:index</default>
+                <default key="_controller">AppBundle:Blog:index</default>
                 <default key="page">1</default>
             </route>
 
             <route id="blog_show" path="/blog/{slug}">
-                <default key="_controller">AcmeBlogBundle:Blog:show</default>
+                <default key="_controller">AppBundle:Blog:show</default>
             </route>
         </routes>
 
     .. code-block:: php
-       :linenos:
 
+        // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
 
         $collection = new RouteCollection();
         $collection->add('blog', new Route('/blog/{page}', array(
-            '_controller' => 'AcmeBlogBundle:Blog:index',
-            'page' => 1,
+            '_controller' => 'AppBundle:Blog:index',
+            'page'        => 1,
         )));
 
         $collection->add('blog_show', new Route('/blog/{show}', array(
-            '_controller' => 'AcmeBlogBundle:Blog:show',
+            '_controller' => 'AppBundle:Blog:show',
         )));
 
         return $collection;
@@ -533,13 +635,12 @@ zawsze będzie wybierał **pierwszą** trasę, którą znajdzie. Innymi słowy, 
 ``/blog/my-blog-post`` będzie pasowała do pierwszej trasy (``blog``) i zwracała
 bezsensowną wartość ``my-blog-post`` dla wieloznacznika ``{page}``.
 
-+--------------------+-------+-----------------------+
-| URL                | route | parameters            |
-+====================+=======+=======================+
-| /blog/2            | blog  | {page} = 2            |
-+--------------------+-------+-----------------------+
-| /blog/my-blog-post | blog  | {page} = my-blog-post |
-+--------------------+-------+-----------------------+
+======================  ========  ===============================
+URL                     Trasa     Parametry
+======================  ========  ===============================
+``/blog/2``             ``blog``  ``{page}`` = ``2``
+``/blog/my-blog-post``  ``blog``  ``{page}`` = ``"my-blog-post"``
+======================  ========  ===============================
 
 Rozwiązaniem problemu jest dodanie *wymagań* trasy lub  *warunków* trasy
 (zobacz :ref:`book-routing-conditions`). Trasy w tym przykładzie będą działać
@@ -549,41 +650,57 @@ wymagań może łatwo zostać dodane dla każdego parametru. Na przykład:
 
 .. configuration-block::
 
-    .. code-block:: yaml
-       :linenos:
+    .. code-block:: php-annotations
 
+        // src/AppBundle/Controller/BlogController.php
+
+        // ...
+
+        /**
+         * @Route("/blog/{page}", defaults={"page": 1}, requirements={
+         *     "page": "\d+"
+         * })
+         */
+        public function indexAction($page)
+        {
+            // ...
+        }
+
+    .. code-block:: yaml
+
+        # app/config/routing.yml
         blog:
-            path:   /blog/{page}
-            defaults:  { _controller: AcmeBlogBundle:Blog:index, page: 1 }
+            path:      /blog/{page}
+            defaults:  { _controller: AppBundle:Blog:index, page: 1 }
             requirements:
                 page:  \d+
 
     .. code-block:: xml
-       :linenos:
 
+        <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
-
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
             <route id="blog" path="/blog/{page}">
-                <default key="_controller">AcmeBlogBundle:Blog:index</default>
+                <default key="_controller">AppBundle:Blog:index</default>
                 <default key="page">1</default>
                 <requirement key="page">\d+</requirement>
             </route>
         </routes>
 
     .. code-block:: php
-       :linenos:
 
+        // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
 
         $collection = new RouteCollection();
         $collection->add('blog', new Route('/blog/{page}', array(
-            '_controller' => 'AcmeBlogBundle:Blog:index',
-            'page' => 1,
+            '_controller' => 'AppBundle:Blog:index',
+            'page'        => 1,
         ), array(
             'page' => '\d+',
         )));
@@ -598,15 +715,13 @@ takiej jak ``/blog/2`` (ponieważ 2 jest liczbą), ale nie będzie już pasować
 W efekcie końcowym scieżka URL ``/blog/my-blog-post`` będzie odpowiednio pasować do
 trasy ``blog_show``.
 
-+----------------------+-----------+-------------------------+
-| URL                  | trasa     | parametry               |
-+======================+===========+=========================+
-| /blog/2              | blog      | {page} = 2              |
-+----------------------+-----------+-------------------------+
-| /blog/my-blog-post   | blog_show | {slug} = my-blog-post   |
-+----------------------+-----------+-------------------------+
-| /blog/2-my-blog-post | blog_show | {slug} = 2-my-blog-post |
-+----------------------+-----------+-------------------------+
+========================  =============  ===============================
+URL                       Trasa          Parametry
+========================  =============  ===============================
+``/blog/2``               ``blog``       ``{page}`` = ``2``
+``/blog/my-blog-post``    ``blog_show``  ``{slug}`` = ``my-blog-post``
+``/blog/2-my-blog-post``  ``blog_show``  ``{slug}`` = ``2-my-blog-post``
+========================  =============  ===============================
 
 .. sidebar:: Wcześniejsze trasy zawsze wygrywają
 
@@ -622,43 +737,60 @@ strona główna aplikacji jest dostępna w dwóch różnych językach, zależnie
 
 .. configuration-block::
 
-    .. code-block:: yaml
-       :linenos:
+    .. code-block:: php-annotations
 
+        // src/AppBundle/Controller/MainController.php
+
+        // ...
+        class MainController extends Controller
+        {
+            /**
+             * @Route("/{_locale}", defaults={"_locale": "en"}, requirements={
+             *     "_locale": "en|fr"
+             * })
+             */
+            public function homepageAction($_locale)
+            {
+            }
+        }
+
+    .. code-block:: yaml
+
+        # app/config/routing.yml
         homepage:
-            path:   /{culture}
-            defaults:  { _controller: AcmeDemoBundle:Main:homepage, culture: en }
+            path:      /{_locale}
+            defaults:  { _controller: AppBundle:Main:homepage, _locale: en }
             requirements:
-                culture:  en|fr
+                _locale:  en|fr
 
     .. code-block:: xml
-       :linenos:
 
+        <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
-
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
-            <route id="homepage" path="/{culture}">
-                <default key="_controller">AcmeDemoBundle:Main:homepage</default>
-                <default key="culture">en</default>
-                <requirement key="culture">en|fr</requirement>
+            <route id="homepage" path="/{_locale}">
+                <default key="_controller">AppBundle:Main:homepage</default>
+                <default key="_locale">en</default>
+                <requirement key="_locale">en|fr</requirement>
             </route>
         </routes>
 
     .. code-block:: php
-       :linenos:
 
+        // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
 
         $collection = new RouteCollection();
-        $collection->add('homepage', new Route('/{culture}', array(
-            '_controller' => 'AcmeDemoBundle:Main:homepage',
-            'culture' => 'en',
+        $collection->add('homepage', new Route('/{_locale}', array(
+            '_controller' => 'AppBundle:Main:homepage',
+            '_locale'     => 'en',
         ), array(
-            'culture' => 'en|fr',
+            '_locale' => 'en|fr',
         )));
 
         return $collection;
@@ -666,15 +798,14 @@ strona główna aplikacji jest dostępna w dwóch różnych językach, zależnie
 Część ścieżki URL ``{culture}`` w przychodzącym żądaniu jest dopasowywana do wyrażenia
 regularnego ``(en|fr)``.
 
-+-----+---------------------------+
-| /   | {culture} = en            |
-+-----+---------------------------+
-| /en | {culture} = en            |
-+-----+---------------------------+
-| /fr | {culture} = fr            |
-+-----+---------------------------+
-| /es | *nie pasuje do tej trasy* |
-+-----+---------------------------+
+=======  ========================
+Ścieżka  Parametry
+=======  ========================
+``/``    ``{_locale}`` = ``"en"``
+``/en``  ``{_locale}`` = ``"en"``
+``/fr``  ``{_locale}`` = ``"fr"``
+``/es``  *won't match this route*
+=======  ========================
 
 .. index::
    single: trasowanie; wymagania metody HTTP
@@ -690,51 +821,80 @@ Można to osiągnąć poprzez następującą konfigurację trasowania:
 
 .. configuration-block::
 
+    .. code-block:: php-annotations
+
+        // src/AppBundle/Controller/MainController.php
+        namespace AppBundle\Controller;
+
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+        // ...
+
+        class MainController extends Controller
+        {
+            /**
+             * @Route("/news")
+             * @Method("GET")
+             */
+            public function newsAction()
+            {
+                // ... display your news
+            }
+
+            /**
+             * @Route("/contact")
+             * @Method({"GET", "POST"})
+             */
+            public function contactFormAction()
+            {
+                // ... display and process a contact form
+            }
+        }
+
     .. code-block:: yaml
-       :linenos:
 
-        contact:
-            path:  /contact
-            defaults: { _controller: AcmeDemoBundle:Main:contact }
-            methods:  GET
+        # app/config/routing.yml
+        news:
+            path:     /news
+            defaults: { _controller: AppBundle:Main:news }
+            methods:  [GET]
 
-        contact_process:
-            path:  /contact
-            defaults: { _controller: AcmeDemoBundle:Main:contactProcess }
-            methods:  POST
+        contact_form:
+            path:     /contact
+            defaults: { _controller: AppBundle:Main:contactForm }
+            methods:  [GET, POST]
 
     .. code-block:: xml
-       :linenos:
 
+        <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
-
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
-            <route id="contact" path="/contact" methods="GET">
-                <default key="_controller">AcmeDemoBundle:Main:contact</default>
+            <route id="news" path="/news" methods="GET">
+                <default key="_controller">AppBundle:Main:news</default>
             </route>
 
-            <route id="contact_process" path="/contact" methods="POST">
-                <default key="_controller">AcmeDemoBundle:Main:contactProcess</default>
+            <route id="contact_form" path="/contact" methods="GET|POST">
+                <default key="_controller">AppBundle:Main:contactForm</default>
             </route>
         </routes>
 
     .. code-block:: php
-       :linenos:
 
+        // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
 
         $collection = new RouteCollection();
-        $collection->add('contact', new Route('/contact', array(
-            '_controller' => 'AcmeDemoBundle:Main:contact',
+        $collection->add('news', new Route('/news', array(
+            '_controller' => 'AppBundle:Main:contact',
         ), array(), array(), '', array(), array('GET')));
 
-        $collection->add('contact_process', new Route('/contact', array(
-            '_controller' => 'AcmeDemoBundle:Main:contactProcess',
-        ), array(), array(), '', array(), array('POST')));
+        $collection->add('contact_form', new Route('/contact', array(
+            '_controller' => 'AppBundle:Main:contactForm',
+        ), array(), array(), '', array(), array('GET', 'POST')));
 
         return $collection;
 
@@ -768,9 +928,6 @@ w dokumentacji komponentu Routing.
 Całkowicie przerobiona trasa wykorzystująca warunki trasowania
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. versionadded:: 2.4
-    Warunki tras zostały wprowadzone w Symfony 2.4.
-
 Jak zobaczyliśmy, trasa może być wykonana dla dopasowywania tylko określonych wieloznaczników
 trasowania (poprzez wyrażenie regularne), metod HTTP lub nazw hosta. Jednak system
 trasowania może zostać rozszerzony, uzyskując prawie nieograniczoną elastyczność
@@ -779,7 +936,6 @@ przy zastosowaniu *wyrażeń warunkowych*:
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         contact:
             path:     /contact
@@ -787,7 +943,6 @@ przy zastosowaniu *wyrażeń warunkowych*:
             condition: "context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'"
 
     .. code-block:: xml
-       :linenos:
 
         <?xml version="1.0" encoding="UTF-8" ?>
         <routes xmlns="http://symfony.com/schema/routing"
@@ -795,16 +950,13 @@ przy zastosowaniu *wyrażeń warunkowych*:
             xsi:schemaLocation="http://symfony.com/schema/routing
                 http://symfony.com/schema/routing/routing-1.0.xsd">
 
-            <route id="contact"
-                path="/contact"
-                condition="context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'"
-            >
+            <route id="contact" path="/contact">
                 <default key="_controller">AcmeDemoBundle:Main:contact</default>
+                <condition>context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'</condition>
             </route>
         </routes>
 
     .. code-block:: php
-       :linenos:
 
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
@@ -824,7 +976,7 @@ przy zastosowaniu *wyrażeń warunkowych*:
 
         return $collection;
 
-Wartością opcji ``condition`` jest *wyrażeniem warunkowym trasowania*, które w skrócie
+Wartość opcji ``condition`` jest *wyrażeniem warunkowym trasowania*, które w skrócie
 będziemy nazywać *warunkiem trasowania*. Więcej o składni warunków trasowania
 można przeczytać w dokumencie :doc:`/components/expression_language/syntax`.
 W pwyższym przykładzie, trasa nie zostanie dopasowana, chyba że metoda HTTP, to
@@ -859,8 +1011,8 @@ są przekazywane do wyrażenia:
     czasowego.
 
 .. index::
-   single: Routing; Advanced example
-   single: Routing; _format parameter
+   single: Routing; zaawansowany przykład
+   single: Routing; parametr _format
 
 .. _advanced-routing-example:
 
@@ -873,50 +1025,79 @@ trasowania:
 
 .. configuration-block::
 
-    .. code-block:: yaml
-       :linenos:
+    .. code-block:: php-annotations
 
+        // src/AppBundle/Controller/ArticleController.php
+
+        // ...
+        class ArticleController extends Controller
+        {
+            /**
+             * @Route(
+             *     "/articles/{_locale}/{year}/{title}.{_format}",
+             *     defaults={"_format": "html"},
+             *     requirements={
+             *         "_locale": "en|fr",
+             *         "_format": "html|rss",
+             *         "year": "\d+"
+             *     }
+             * )
+             */
+            public function showAction($_locale, $year, $title)
+            {
+            }
+        }
+
+    .. code-block:: yaml
+
+        # app/config/routing.yml
         article_show:
-          path:  /articles/{culture}/{year}/{title}.{_format}
-          defaults: { _controller: AcmeDemoBundle:Article:show, _format: html }
+          path:     /articles/{_locale}/{year}/{title}.{_format}
+          defaults: { _controller: AppBundle:Article:show, _format: html }
           requirements:
-              culture:  en|fr
+              _locale:  en|fr
               _format:  html|rss
               year:     \d+
 
     .. code-block:: xml
-       :linenos:
 
+        <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
-
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
-            <route id="article_show" path="/articles/{culture}/{year}/{title}.{_format}">
-                <default key="_controller">AcmeDemoBundle:Article:show</default>
+            <route id="article_show"
+                path="/articles/{_locale}/{year}/{title}.{_format}">
+
+                <default key="_controller">AppBundle:Article:show</default>
                 <default key="_format">html</default>
-                <requirement key="culture">en|fr</requirement>
+                <requirement key="_locale">en|fr</requirement>
                 <requirement key="_format">html|rss</requirement>
                 <requirement key="year">\d+</requirement>
+
             </route>
         </routes>
 
     .. code-block:: php
-       :linenos:
 
+        // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
 
         $collection = new RouteCollection();
-        $collection->add('homepage', new Route('/articles/{culture}/{year}/{title}.{_format}', array(
-            '_controller' => 'AcmeDemoBundle:Article:show',
-            '_format' => 'html',
-        ), array(
-            'culture' => 'en|fr',
-            '_format' => 'html|rss',
-            'year' => '\d+',
-        )));
+        $collection->add(
+            'article_show',
+            new Route('/articles/{_locale}/{year}/{title}.{_format}', array(
+                '_controller' => 'AppBundle:Article:show',
+                '_format'     => 'html',
+            ), array(
+                '_locale' => 'en|fr',
+                '_format' => 'html|rss',
+                'year'    => '\d+',
+            ))
+        );
 
         return $collection;
 
@@ -989,20 +1170,17 @@ Wzorzec ten składa się z trzech części, każda z nich oddzielona jest dwukro
 
 Na przykład, wartość ``AcmeBlogBundle:Blog:show`` parametru ``_controller_`` oznacza:
 
-+----------------+------------------+--------------+
-| Pakiet         | Klasa kontrolera | Nazwa metody |
-+================+==================+==============+
-| AcmeBlogBundle | BlogController   | showAction   |
-+----------------+------------------+--------------+
+=========  ==================  ==============
+Pakiet     Klasa kontrolera    Nazwa metody
+=========  ==================  ==============
+AppBundle  ``BlogController``  ``showAction``
+=========  ==================  ==============
 
-Kontroler może wyglądać np. tak:
+Kontroler może wyglądać np. tak::
+   
+   // src/AppBundle/Controller/BlogController.php
+    namespace AppBundle\Controller;
 
-.. code-block:: php
-   :linenos:
-
-    // src/Acme/BlogBundle/Controller/BlogController.php
-
-    namespace Acme\BlogBundle\Controller;
     use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
     class BlogController extends Controller
@@ -1013,7 +1191,7 @@ Kontroler może wyglądać np. tak:
         }
     }
 
-Prowszę zauważyć, że Symfony dodaje ciąg ``Controller`` do nazwy klasy (``Blog``
+Proszę zauważyć, że Symfony dodaje ciąg ``Controller`` do nazwy klasy (``Blog``
 => ``BlogController``) oraz ciąg ``Action`` do nazwy metody (``show`` => ``showAction``).
 
 Można również odnieść się do kontrolera używając w pełni kwalifikowanej nazwy klasy
@@ -1033,12 +1211,9 @@ Parametry trasy a argumenty kontrolera
 --------------------------------------
 
 Parametry trasy (np. ``{slug}``) są szczególnie ważne, ponieważ każdy z nich
-jest dostępny jako argument metody kontrolera:
-
-.. code-block:: php
-   :linenos:
-
-    public function showAction($slug)
+jest dostępny jako argument metody kontrolera::
+   
+   public function showAction($slug)
     {
       // ...
     }
@@ -1058,6 +1233,7 @@ kolejności) nastęþujacych zmiennych może być użyta jako argumenty metody
 * ``$title``
 * ``$_format``
 * ``$_controller``
+* ``$_route``
 
 Ponieważ wieloznaczniki i kolekcja ``defaults`` są łączone razem, nawet zmienna
 ``$_controller`` jest dostępna. Więcej szczegółów jest omówionych w rozdziale
@@ -1085,33 +1261,36 @@ tego pliku:
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         # app/config/routing.yml
-        acme_hello:
-            resource: "@AcmeHelloBundle/Resources/config/routing.yml"
+        app:
+            resource: "@AppBundle/Controller/"
+            type:     annotation # required to enable the Annotation reader for this resource
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
-
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
-            <import resource="@AcmeHelloBundle/Resources/config/routing.xml" />
+            <!-- the type is required to enable the annotation reader for this resource -->
+            <import resource="@AppBundle/Controller/" type="annotation"/>
         </routes>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
 
         $collection = new RouteCollection();
-        $collection->addCollection($loader->import("@AcmeHelloBundle/Resources/config/routing.php"));
+        $collection->addCollection(
+            // second argument is the type, which is required to enable
+            // the annotation reader for this resource
+            $loader->import("@AppBundle/Controller/", "annotation")
+        );
 
         return $collection;
 
@@ -1122,70 +1301,65 @@ tego pliku:
 
 Klucz ``resource`` wczytuje podany zasób trasowania. W tym przypadku zasobem jest
 pełna ścieżka do pliku, gdzie skrót ``@AcmeHelloBundle`` przekształacany jest 
-ścieżke do pakietu. Importowany plik może wyglądać na przykład tak:
+ścieżkę do pakietu. Gdy wskazuje na katalog, to sparsowane zostaną wszystkie pliki
+w tym katalogu i wstawione do trasowania.
 
-.. configuration-block::
+.. note::
 
-    .. code-block:: yaml
-       :linenos:
+    Mozna również dołaczyć inne plikikonfigurujace trasowanie, co jest często
+    stosowane w pakietach zewnętrznych:
 
-        # src/Acme/HelloBundle/Resources/config/routing.yml
-       acme_hello:
-            path:  /hello/{name}
-            defaults: { _controller: AcmeHelloBundle:Hello:index }
+    .. configuration-block::
 
-    .. code-block:: xml
-       :linenos:
+        .. code-block:: yaml
 
-        <!-- src/Acme/HelloBundle/Resources/config/routing.xml -->
-        <?xml version="1.0" encoding="UTF-8" ?>
+            # app/config/routing.yml
+            app:
+                resource: "@AcmeOtherBundle/Resources/config/routing.yml"
 
-        <routes xmlns="http://symfony.com/schema/routing"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+        .. code-block:: xml
 
-            <route id="acme_hello" path="/hello/{name}">
-                <default key="_controller">AcmeHelloBundle:Hello:index</default>
-            </route>
-        </routes>
+            <!-- app/config/routing.xml -->
+            <?xml version="1.0" encoding="UTF-8" ?>
+            <routes xmlns="http://symfony.com/schema/routing"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://symfony.com/schema/routing
+                    http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    .. code-block:: php
-       :linenos:
+                <import resource="@AcmeOtherBundle/Resources/config/routing.xml" />
+            </routes>
 
-        // src/Acme/HelloBundle/Resources/config/routing.php
-        use Symfony\Component\Routing\RouteCollection;
-        use Symfony\Component\Routing\Route;
+        .. code-block:: php
 
-        $collection = new RouteCollection();
-        $collection->add('acme_hello', new Route('/hello/{name}', array(
-            '_controller' => 'AcmeHelloBundle:Hello:index',
-        )));
+            // app/config/routing.php
+            use Symfony\Component\Routing\RouteCollection;
 
-        return $collection;
+            $collection = new RouteCollection();
+            $collection->addCollection(
+                $loader->import("@AcmeOtherBundle/Resources/config/routing.php")
+            );
 
-Trasy z tego pliku są przetwarzane i ładowane w ten sam sposób, jak główny plik
-trasowania.
+            return $collection;
 
 Przedrostki dla importowanych tras
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Można również zapewnić "przedrostek" dla importowanych tras. Na przykład załóżmy,
-że trasa ``acme_hello`` ma ostateczną ścieżkę ``/admin/hello/{name}``, zamiast
-prostego ``/hello/{name}``:
+Można również zapewnić "przedrostek" dla importowanych tras.
+Na przykład załóżmy, że chcemy popzedzić wszystkie trasy w AppBundle z ``/site``
+(np. ``/site/blog/{slug}`` zamiast ``/blog/{slug}``):
 
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
-       
+
         # app/config/routing.yml
-        acme_hello:
-            resource: "@AcmeHelloBundle/Resources/config/routing.yml"
-            prefix:   /admin
+        app:
+            resource: "@AppBundle/Controller/"
+            type:     annotation
+            prefix:   /site
 
     .. code-block:: xml
-       :linenos:
-       
+
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
         <routes xmlns="http://symfony.com/schema/routing"
@@ -1193,29 +1367,27 @@ prostego ``/hello/{name}``:
             xsi:schemaLocation="http://symfony.com/schema/routing
                 http://symfony.com/schema/routing/routing-1.0.xsd">
 
-            <import resource="@AcmeHelloBundle/Resources/config/routing.xml"
-                prefix="/admin" />
+            <import
+                resource="@AppBundle/Controller/"
+                type="annotation"
+                prefix="/site" />
         </routes>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
 
+        $app = $loader->import('@AppBundle/Controller/', 'annotation');
+        $app->addPrefix('/site');
+
         $collection = new RouteCollection();
-
-        $acmeHello = $loader->import(
-            "@AcmeHelloBundle/Resources/config/routing.php"
-        );
-        $acmeHello->addPrefix('/admin');
-
-        $collection->addCollection($acmeHello);
+        $collection->addCollection($app);
 
         return $collection;
 
-Ciąg ``/admin`` będzie teraz poprzedzał ścieżkę każdej trasy ładowanej z nowego
-zasobu trasowania.
+Ścieżka każdej ładowanej trasy z nowego trasowania będzie poprzedzona teraz
+łańcuchem ``/site``.
 
 Dodawanie wyrażeń regularnych hosta do importowanych tras
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1237,7 +1409,11 @@ Polecenie należy wykonać głównym katalogu projektu, tak jak poniżej:
 
 .. code-block:: bash
 
-    $ php app/console router:debug
+    $ php app/console debug:router
+
+.. versionadded:: 2.6
+    W wersjach wcześniejszych od Symfony 2.6 polecenie to było wywoływane
+    wyrażeniem ``router:debug``.
 
 Polecenie to wyświetli na ekranie listę wszystkich skonfigurowanych
 tras aplikacji:
@@ -1256,18 +1432,22 @@ jej nazwę do powyższego polecenia:
 
 .. code-block:: bash
 
-    $ php app/console router:debug article_show
+    $ php app/console debug:router article_show
     
-.. versionadded:: 2.1
-    W Symfony 2.1 dodano obsługe polecenia ``router:match``.
-
 Można sprawdzić czy trasa pasuje do ścieżki posługując się poleceniem konsoli ``router:match``:
 
 .. code-block:: bash
+      
+   $ php app/console router:match /blog/my-latest-post
 
-    $ php app/console router:match /articles/en/2012/article.rss
-    Route "article_show" matches
 
+Polecenie to wydrukuje dopasowana do ścieżki URL trasę.
+
+.. code-block:: text
+
+    Route "blog_show" matches
+
+    
 .. index::
    single: trasowanie; generowanie ścieżek URL
 
@@ -1283,13 +1463,15 @@ Ten dwukierunkowy system tworzony jest przez metody
 Przyjrzyjmy się poniższemu przykładowi wykorzystującemu wcześniejszą trasę
 ``blog_show``::
 
-     $params = $this->get('router')->match('/blog/my-blog-post');
+    $params = $this->get('router')->match('/blog/my-blog-post');
     // array(
     //     'slug'        => 'my-blog-post',
-    //     '_controller' => 'AcmeBlogBundle:Blog:show',
+    //     '_controller' => 'AppBundle:Blog:show',
     // )
 
-    $uri = $this->get('router')->generate('blog_show', array('slug' => 'my-blog-post'));
+    $uri = $this->get('router')->generate('blog_show', array(
+        'slug' => 'my-blog-post'
+    ));
     // /blog/my-blog-post
     
 
@@ -1298,17 +1480,17 @@ wszystkie wieloznaczniki (np. ``slug = my-blog-post``) użyte we wzorcu tej tras
 Z tej informacji można wygenerować łatwo każdą ścieżkę URL::
 
    class MainController extends Controller
-   {
-      public function showAction($slug)
-      {
-         // ...
-            
-         $url = $this->generateUrl(
-            'blog_show',
-            array('slug' => 'my-blog-post')
-         );
-      }
-   }
+    {
+        public function showAction($slug)
+        {
+            // ...
+
+            $url = $this->generateUrl(
+                'blog_show',
+                array('slug' => 'my-blog-post')
+            );
+        }
+    }
 
 .. note::
 
@@ -1317,7 +1499,22 @@ Z tej informacji można wygenerować łatwo każdą ścieżkę URL::
     można wykorzystać metodę
     :method:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller::generateUrl`,
     która wywołuje metodę usługi trasy
-    :method:`Symfony\\Component\\Routing\\Router::generate`.
+    :method:`Symfony\\Component\\Routing\\Router::generate`::
+      
+      use Symfony\Component\DependencyInjection\ContainerAware;
+
+        class MainController extends ContainerAware
+        {
+            public function showAction($slug)
+            {
+                // ...
+
+                $url = $this->container->get('router')->generate(
+                    'blog_show',
+                    array('slug' => 'my-blog-post')
+                );
+            }
+        }
 
 W kolejnym rozdziale poznasz jak generować ścieżki URL w szablonach.
 
@@ -1329,9 +1526,55 @@ W kolejnym rozdziale poznasz jak generować ścieżki URL w szablonach.
 
     .. code-block:: javascript
 
-        var url = Routing.generate('blog_show', { "slug": 'my-blog-post'});
+       var url = Routing.generate(
+            'blog_show',
+            {"slug": 'my-blog-post'}
+        );
+      
+    Więcej informacji można znaleźć w dokumentacji tego pakietu.
 
-    Więcej informacji mozna znaleźć w dokumentacji tego pakietu.
+.. index::
+   single: trasowanie; generowanie ścieżek URL w łańcuchach zapytań
+
+Generowanie scieżek URL w łańcuchach zapytań
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Metoda ``generate`` pobiera tablicę wartości wieloznacznych do generowania
+identyfikatorów URI. Jeśli przekaże się dodatkowe wieloznacznki, to zostaną one
+dodane do URI jako łańcuch zapytania::
+
+    $this->get('router')->generate('blog', array(
+        'page' => 2,
+        'category' => 'Symfony'
+    ));
+    // /blog/2?category=Symfony
+
+.. index::
+   single: trasowanie; generowanie ścieżek URL w szablonach
+   
+Generowanie ścieżek URL w szablonach
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Najczęściej generowanię ścieżek URL ma miejsce wewnętrz szablonów
+podczas łączenia stron w aplikacji. Dokonuje sie tego jak poprzednio, ale
+stosując pomocnicze funkcje szablonów:
+
+.. configuration-block::
+
+    .. code-block:: html+jinja
+
+        <a href="{{ path('blog_show', {'slug': 'my-blog-post'}) }}">
+          Read this blog post.
+        </a>
+
+    .. code-block:: html+php
+
+        <a href="<?php echo $view['router']->generate('blog_show', array(
+            'slug' => 'my-blog-post',
+        )) ?>">
+            Read this blog post.
+        </a>
+
 
 .. index::
    single: trasowanie; bezwględne ścieżki URL
@@ -1340,81 +1583,40 @@ Generowanie bezwzględnych ścieżek URL
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Domyślnie mechanizm trasowania generuje względne ścieżki URL (np. ``/blog``).
-Aby wygenerować bezwzględną ścieżkę URL, trzeba przekazać ``true`` jako trzeci
-argument metody ``generate()``:
-
-.. code-block:: php
-
-    $router->generate('blog_show', array('slug' => 'my-blog-post'), true);
+Dla wygenerowania bezwzględnych ścieżek URL, trzeba przekazać ``true`` jako trzeci
+argument metody ``generate()``::
+   
+   $this->generateUrl('blog_show', array('slug' => 'my-blog-post'), true);
     // http://www.example.com/blog/my-blog-post
+
+Wewnątrz szablonu, w Twig, zamiast funkcji ``path()`` (generujacej wzgledną
+ścieżkę URL) wystarczy uzyć funkcję ``url()`` (generujaca bezwgledny adres URL).
+W PHP trzeba przekazać ``true`` do  ``generate()``:
+
+.. configuration-block::
+
+    .. code-block:: html+jinja
+
+        <a href="{{ url('blog_show', {'slug': 'my-blog-post'}) }}">
+          Read this blog post.
+        </a>
+
+    .. code-block:: html+php
+
+        <a href="<?php echo $view['router']->generate('blog_show', array(
+            'slug' => 'my-blog-post',
+        ), true) ?>">
+            Read this blog post.
+        </a>
+
 
 .. note::
 
-    Host używany podczas generowania bezwzględnego adresu URL jest hostem dla aktualnego
-    obiektu ``Request``. Jest to wykrywane automatycznie na podstawie informacji
-    o serwerze dostarczanych przez PHP. Podczas generowania bezwzglednych adresów
-    URL dla skryptów uruchamianych z linii poleceń trzeba ręcznie podawać właściwy
-    host dla obiektu ``Request``:
-
-    .. code-block:: php
-
-        $request->headers->set('HOST', 'www.example.com');
-
-Generowanie ścieżek URL z łańcuchem zapytania
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Metoda ``generate`` pobiera tablicę wartości wieloznacznych dla generowania adresu
-URI. Lecz jeśli przekaże się dodatkowe elementy tej tablicy, to zostaną one dodane
-do adresu URI jako `łańcuch zapytania`_::
-
-    $router->generate('blog', array('page' => 2, 'category' => 'Symfony'));
-    // /blog/2?category=Symfony
-
-
-.. index::
-   single: trasowanie; generowanie adresów URL wewnątrz szablonów
-
-
-Generowanie adresów URL wewnątrz szablonów
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Najczęściej wykorzystywanym miejscem do generowania adresów URL wewnątrz szablonów
-są odnośniki pomiędzy stronami aplikacji. Odbywa sie to tak samo jak opisano wcześniej,
-lecz za pomocą funkcji pomocniczej szablonu:
-
-.. configuration-block::
-
-    .. code-block:: html+jinja
-       :linenos:
-
-        <a href="{{ path('blog_show', { 'slug': 'my-blog-post' }) }}">
-          Przeczytaj ten post bloga.
-        </a>
-
-    .. code-block:: php
-       :linenos:
-
-        <a href="<?php echo $view['router']->generate('blog_show', array('slug' => 'my-blog-post')) ?>">
-            Przeczytaj ten post bloga.
-        </a>
-
-Można generować również bezwzględne ścieżki URL.
-
-.. configuration-block::
-
-    .. code-block:: html+jinja
-       :linenos:
-
-        <a href="{{ url('blog_show', { 'slug': 'my-blog-post' }) }}">
-          Przeczytaj ten post bloga.
-        </a>
-
-    .. code-block:: php
-       :linenos:
-
-        <a href="<?php echo $view['router']->generate('blog_show', array('slug' => 'my-blog-post'), true) ?>">
-            Przeczytaj ten post bloga.
-        </a>
+    Host używany podczas generowania bezwzględnego adresu URL jest automatycznie
+    wykrywany przy uzyciu boeżacego obiektu ``Request``. Podczas generowania
+    bezwzglednych adresów URL poza kontekstem web (na przykład w poleceniu kontekstowym)
+    to nie bedzie działać. Zobacz :doc:`/cookbook/console/sending_emails` w celu
+    zapoznania sie z rozwiązaniem tego problemu.
 
 Podsumowanie
 ------------

@@ -24,7 +24,7 @@ wykorzystywać kod szablonu.
 
 
 .. index::
-   single: szablonowanie; Co to jest szablon?
+   single: szablonowanie; szablony
 
 Szablony
 --------
@@ -34,7 +34,6 @@ Szablon jest plikiem tekstowym mogącym wygenerować dowolny format tekstowy
 PHP* - plik tekstowy parsowany przez PHP, który zawiera mieszankę tekstu i kodu PHP:
 
 .. code-block:: html+php
-   :linenos:
 
     <!DOCTYPE html>
     <html>
@@ -51,19 +50,18 @@ PHP* - plik tekstowy parsowany przez PHP, który zawiera mieszankę tekstu i kod
                             <?php echo $item->getCaption() ?>
                         </a>
                     </li>
-                <?php endforeach; ?>
+                <?php endforeach ?>
             </ul>
         </body>
     </html>
 
 .. index:: single: Twig; wprowadzenie
 
-Lecz pakiety Symfony2 są wyposażone w jeszcze bardziej silniejszy język szablonowania
-o nazwie `Twig`_. Twig pozwala pisać zwięzłe, czytelne szablony na kilka sposbów,
+Pakiety Symfony2 są wyposażone w jeszcze bardziej silniejszy język szablonowania
+o nazwie `Twig`_. Twig pozwala pisać zwięzłe, czytelne szablony na kilka sposobów,
 które są bardziej przyjazne dla projektantów stron i są bardziej wydajne niż szablony PHP:
 
 .. code-block:: html+jinja
-   :linenos:
 
     <!DOCTYPE html>
     <html>
@@ -88,7 +86,7 @@ Twig definiuje trzy rodzaje specjalnej składni:
 * ``{% ... %}``: "Zrób coś": znacznik kontrolujący logikę szablonu - jest stosowany
   do wykonywania instrukcji, takich jak na przykład pętla ``for``.
 
-* ``{# ... #}``: "Zakomentuj coś": jest to odpowiednik składni ``/* comment */``
+* ``{# ... #}``: "Skomentuj coś": jest to odpowiednik składni ``/* comment */``
   w PHP. Jest używany do dodawania jedno- lub wieloliniowych komentarzy. Treść
   tych komentarzy nie jest brana pod uwagę przy renderowaniu stron. 
 
@@ -106,12 +104,12 @@ które są dostępne domyślnie. Do Twig można nawet `dodać własne rozszerzen
 
 .. tip::
 
-    Rejestrowanie rozszerzenia Twiga jest tak proste jak tworzenie nowej usługi
-    i jej zakodowanie poprzez :ref:`znacznik<reference-dic-tags-twig-extension>`
+    Rejestrowanie rozszerzenia Twiga sprowadza się do utworzenie nowej usługi
+    i jej zakodowania poprzez :ref:`znacznik<reference-dic-tags-twig-extension>`
     ``twig.extension``.
 
-Jak zobaczymy dalszej części dokumentacji, Twig również obsługuje funkcje, które
-również mogą być łatwo dodawane przez użytkownika. Na przyjkład, w poniższym kodzie
+Jak zobaczymy w dalszej części dokumentacji, Twig również obsługuje funkcje, które
+mogą być łatwo dodawane przez użytkownika. Na przyjkład, w poniższym kodzie
 użyto standardowy znacznik ``for`` i funkcję ``cycle`` do wydrukowania dziesięciu
 znaczników div, na przemian z klasami ``odd``, ``even``:
 
@@ -128,7 +126,7 @@ W tym rozdziale przykłady szablonów będą pokazywane zarówno jako szablony T
 
 .. tip::
 
-    Jeśli zdecydujesz się nie używać Twiga i wyłączy go, to musisz zaimplementować
+    Jeśli zdecydujesz się nie używać Twiga i wyłączysz go, to musisz zaimplementować
     własną obsługę wyjątków poprzez zdarzenie ``kernel.exception``.
 
 .. sidebar:: Dlaczego Twig?
@@ -202,7 +200,6 @@ Po pierwsze, zbuduj podstawowy plik układu strony:
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
         {# app/Resources/views/base.html.twig #}
         <!DOCTYPE html>
@@ -214,10 +211,10 @@ Po pierwsze, zbuduj podstawowy plik układu strony:
             <body>
                 <div id="sidebar">
                     {% block sidebar %}
-                    <ul>
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/blog">Blog</a></li>
-                    </ul>
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/blog">Blog</a></li>
+                        </ul>
                     {% endblock %}
                 </div>
 
@@ -228,7 +225,6 @@ Po pierwsze, zbuduj podstawowy plik układu strony:
         </html>
 
     .. code-block:: html+php
-       :linenos:
 
         <!-- app/Resources/views/base.html.php -->
         <!DOCTYPE html>
@@ -246,7 +242,7 @@ Po pierwsze, zbuduj podstawowy plik układu strony:
                             <li><a href="/">Home</a></li>
                             <li><a href="/blog">Blog</a></li>
                         </ul>
-                    <?php endif; ?>
+                    <?php endif ?>
                 </div>
 
                 <div id="content">
@@ -273,10 +269,9 @@ Szablon potomny może wyglądać tak:
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
-        {# src/Acme/BlogBundle/Resources/views/Blog/index.html.twig #}
-        {% extends '::base.html.twig' %}
+        {# app/Resources/views/blog/index.html.twig #}
+        {% extends 'base.html.twig' %}
 
         {% block title %}My cool blog posts{% endblock %}
 
@@ -288,10 +283,9 @@ Szablon potomny może wyglądać tak:
         {% endblock %}
 
     .. code-block:: html+php
-       :linenos:
 
-        <!-- src/Acme/BlogBundle/Resources/views/Blog/index.html.php -->
-        <?php $view->extend('::base.html.php') ?>
+        <!-- app/Resources/views/blog/index.html.php -->
+        <?php $view->extend('base.html.php') ?>
 
         <?php $view['slots']->set('title', 'My cool blog posts') ?>
 
@@ -299,7 +293,7 @@ Szablon potomny może wyglądać tak:
             <?php foreach ($blog_entries as $entry): ?>
                 <h2><?php echo $entry->getTitle() ?></h2>
                 <p><?php echo $entry->getBody() ?></p>
-            <?php endforeach; ?>
+            <?php endforeach ?>
         <?php $view['slots']->stop() ?>
 
 .. note::
@@ -317,7 +311,6 @@ przez bloki z szablonu potomnego. W zależności od wartości ``blog_entries`` w
 może wyglądać następująco:
 
 .. code-block:: html
-   :linenos:
 
     <!DOCTYPE html>
     <html>
@@ -401,9 +394,21 @@ Domyślnie szablony mogą zostać umieszczone w dwu różnych lokalizacjach:
   w swoim katalogu ``Resources/views`` (i podkatalogach). Większość szablonów
   funkcjonuje wewnątrz pakietu.
 
-Symfony2 używa dla odwoływania się do szablonów składni **pakiet**:**kontroler**:**szablon**.
-Umożliwia to na wiele różnych typów szablonów, z których każdy znajduje się w określonej
-lokalizacji:
+Większość z używanych szablonów umieszczonych jest w katalogu ``app/Resources/views/``.
+Wówczas wykorzystuje się ścieżkę względną do tego katalogu. Na przykład,
+aby zrenderować lub rozszerzyć ``app/Resources/views/base.html.twig`` trzeba będzie
+użyć ścieżkę ``base.html.twig`` a do zrenderowania lub rozszerzenia 
+``app/Resources/views/blog/index.html.twig`` ścieżkę ``blog/index.html.twig``.
+
+.. _template-referencing-in-bundle:
+
+Odwoływanie się do szablonów w pakietach
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Symfony2 używa dla odwoływania się do szablonów składni
+**pakiet**:**kontroler**:**szablon**.
+Umożliwia to na stosowanie wielu różnych typów szablonów, z których każdy znajduje
+się w określonej lokalizacji:
 
 * ``AcmeBlogBundle:Blog:index.html.twig``: Ta składnia jest używana do określenia
   szablonu dla określonej strony. Trzy części łańcucha, każdy oddzielony dwukropkiem
@@ -428,7 +433,7 @@ lokalizacji:
 * ``::base.html.twig``: Składnia ta odwołuje się do szablonu lub ogólnego układu
   strony. Proszę zauważyć, że łańcuch rozpoczyna się od dwóch dwukropków
   (``::``), co oznacza, że zarówno część "pakiet" jak część "kontroler" nie występują.
-  Oznacza to, że szablon nie jest zlokalizowany w jakimkolwiek pakiecie, ale w głównej
+  Oznacza to, że szablon nie jest zlokalizowany w jakimś pakiecie, ale w głównej
   gałęzi w katalogu ``app/Resources/views/``.
 
 W rozdziale :ref:`overriding-bundle-templates` dowiemy się, jak każdy szablon
@@ -448,11 +453,13 @@ Format **pakiet**:**kontroler**:**szablon** każdego szablonu określa gdzie zna
 się plik szablonu. Każda nazwa szablonu ma też dwa rozszerzenia, które określają
 *format* i *silnik* dla tego szablonu.
 
-* **AcmeBlogBundle:Blog:index.html.twig** - format HTML, silnik Twig
-
-* **AcmeBlogBundle:Blog:index.html.php** - format HTML, silnik PHP
-
-* **AcmeBlogBundle:Blog:index.css.twig** - dormat CSS, silnik Twig
+========================  ======  ======
+Nazwa pliku               Format  silnik
+========================  ======  ======
+``blog/index.html.twig``  HTML    Twig
+``blog/index.html.php``   HTML    PHP
+``blog/index.css.twig``   CSS     Twig
+========================  ======  ======
 
 Domyślnie każdy szablon Symfony2 może być napisany dla silnika Twig albo PHP
 i mieć ostatnie rozszerzenie (np. ``.twig`` albo ``.php``).
@@ -471,7 +478,7 @@ proszę przeczytać rozdział :ref:`template-formats`.
    :ref:`Konfiguracja szablonowania<template-configuration>`.
 
 .. index::
-   single: szablonowanie; znaczniki i helpery
+   single: szablonowanie; znaczniki
    single: szablonowanie; helpery PHP
 
 Znaczniki i helpery
@@ -492,7 +499,7 @@ Już widzieliśmy kilka wbudowanych znaczników Twiga (``{% block %}`` i ``{% ex
 jak też przykład helpera PHP (``$view['slots']``). Nauczmy sie więcej.
 
 .. index::
-   single: szablonowanie; dołączanie innych szablonów
+   single: szablonowanie; dołączanie szablonów
 
 .. _including-templates:
 
@@ -580,6 +587,10 @@ Ta jest przekazywana przez szablon ``list.html.twig`` przy użyciu polecenia ``w
     Składnia ``{'article': article}`` jest standardową składnią Twiga dla map asocjacyjnych
     (czyli tablic z nazwanymi kluczami). Jeśli trzeba przekazać wiele elementów,
     będzie to wygladać tak: ``{'foo': foo, 'bar': bar}``.
+    
+.. versionadded:: 2.3
+    The `funkcja include()`_ jest nową funkcja Twig dostęþną w Symfony 2.3.
+    Wcześniej stosowany był `znacznik `{% include %}`_.    
 
 .. index::
    single: szablonowanie; osadzanie kontrolerów 
@@ -645,7 +656,7 @@ Szablon ``recentList`` jest bardzo prosty:
     (tj. ``/article/*slug*``). Jest to zła praktyka. W następnym rozdziale poznamy
     jak to wykonać prawidłowo.
 
-Aby dołączyć kontroler, trzeba się do niego odwołać używając standardowej składni
+Dla dołączenia kontrolera, trzeba się do niego odwołać używając standardowej składni
 (tj. **pakiet**:**kontroler**:**akcja**):
 
 .. configuration-block::
@@ -679,7 +690,7 @@ Aby dołączyć kontroler, trzeba się do niego odwołać używając standardowe
 
 Ilekroć zajdzie potrzeba użycia zmiennej lub porcji informacji do których nie ma
 się dostępu w szablonie, to warto rozważyć przetwarzanie kontrolerem. Kontrolery
-są szybkie w wykonaniu i promują dobrą organizacje kodu i możliwość jego wielokrotnego
+są szybkie w wykonaniu i promują dobrą organizacje kodu oraz możliwość jego wielokrotnego
 wykorzystania.
 
 .. index:: hinclude.js
@@ -691,9 +702,9 @@ wykorzystania.
 Asynchroniczna zawartość z hinclude.js
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Kontrolery mogą być osadzana asynchronicznie przy wykorzystaniu biblioteki
+Kontrolery mogą być osadzane asynchronicznie przy wykorzystaniu biblioteki
 JavaScript `hinclude.js`_. Jako że osadzana treść pochodzi z innej strony (lub
-kontrolera w tym przypadku), to Symfony2 używa standardowego helpera ``render``
+w tym przypadku z kontrolera), to Symfony2 używa standardowego helpera ``render``
 do konfigurowania znaczników ``hinclude.js``:
 
 .. configuration-block::
@@ -718,7 +729,7 @@ do konfigurowania znaczników ``hinclude.js``:
 
 .. note::
 
-   Aby działać, hinclude.js musi zosytać dołączona do strony.
+   Biblioteka hinclude.js musi zostać dołączona do strony, inaczej nie będzie działać.
 
 .. note::
 
@@ -826,7 +837,7 @@ wszystkie zdefiniowane globalne szablony):
             )
         ) ?>
 
-Albo można również określić łańcuch tekstowy do wyświetlenia jako domyślną zawartość:
+albo można również określić łańcuch tekstowy do wyświetlenia jako domyślną zawartość:
 
 .. configuration-block::
 
@@ -856,9 +867,9 @@ Albo można również określić łańcuch tekstowy do wyświetlenia jako domyś
 Odnośniki do stron
 ~~~~~~~~~~~~~~~~~~
 
-Tworzenie łączy do innych stron aplikacji jest jedną z najczęstrzych czynności
-przy wykonywaniu szablonu. Aby wygenerować adresy URL oparte o konfigurację trasowania,
-to zamiast umieszczać w szablonie sztywne adresy URL, należy wykorzystywać funkcję
+Tworzenie łączy do innych stron aplikacji jest jedną z najczęstszych czynności
+przy wykonywaniu szablonu. Dla wygenerowania adresów URL oparte o konfigurację trasowania,
+zamiast umieszczać w szablonie sztywne adresy URL, należy wykorzystywać funkcję
 ``path`` Twiga (lub helper ``router`` w szablonie PHP). Później, jeśli chce się
 zmodyfikować adres URL danej strony, to wystarczy zmienić konfigurację trasowania.
 Szablony wygenerują wówczas automatycznie nowy adres URL.
@@ -905,7 +916,7 @@ konfigurację trasowania:
 
         return $collection;
 
-Aby utworzyć łącze do strony, wystarczy użyć funkcji ``path`` Twiga i odnieść się
+Dla utworzenia łącze do strony, wystarczy użyć funkcji ``path`` Twiga i odnieść się
 do odpowiedniej trasy:
 
 .. configuration-block::
@@ -1024,18 +1035,17 @@ poprzez funkcję ``assets``:
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
         <img src="{{ asset('images/logo.png') }}" alt="Symfony!" />
 
-        <link href="{{ asset('css/blog.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('css/blog.css') }}" rel="stylesheet" />
 
     .. code-block:: html+php
-       :linenos:
 
         <img src="<?php echo $view['assets']->getUrl('images/logo.png') ?>" alt="Symfony!" />
 
-        <link href="<?php echo $view['assets']->getUrl('css/blog.css') ?>" rel="stylesheet" type="text/css" />
+        <link href="<?php echo $view['assets']->getUrl('css/blog.css') ?>" rel="stylesheet" />
+
 
 Głównym celem funkcji ``asset`` jest uczynienie aplikacji bardziej przenośną.
 Jeżeli aplikacja zlokalizowana jest w głównym katalogu hosta (np. ``http://example.com``),
@@ -1052,9 +1062,6 @@ Więcej informacji na ten temat można znależć w :ref:`ref-framework-assets-ve
 
 .. _`book-templating-version-by-asset`:
 
-.. versionadded:: 2.5
-    Ustawienie wersjonowanych adresów URL na bazie aktywów zostało wprowadzone w Symfony 2.5.
-
 Jeśli chce się ustawić wersję dla określonego aktywa, można ustawić czwarty argument
 (lub argument ``version``) dla wybranej wersji:
 
@@ -1066,14 +1073,16 @@ Jeśli chce się ustawić wersję dla określonego aktywa, można ustawić czwar
 
     .. code-block:: html+php
 
-        <img src="<?php echo $view['assets']->getUrl('images/logo.png', null, false, '3.0') ?>" alt="Symfony!" />
+        <img src="<?php echo $view['assets']->getUrl(
+            'images/logo.png',
+            null,
+            false,
+            '3.0'
+        ) ?>" alt="Symfony!" />
 
 Jeśli nie dostarczy się wersji lub przekaże ``null``, zostanie użyta domyślna
 wersja pakietu (z :ref:`ref-framework-assets-version`). Po przekazanie ``false``,
 wersjonowanie URL zostanie deaktywowane dla tego aktywa.
-
-.. versionadded:: 2.5
-    Bezwzględne adresy URL dla aktywów zostały wprowadzone w Symfony 2.5.
 
 Jeśli potrzebuje się bezwzględnych adresów URL dla aktywów, można ustawić trzeci
 argument (lub argument ``absolute``) na ``true``:
@@ -1086,7 +1095,11 @@ argument (lub argument ``absolute``) na ``true``:
 
     .. code-block:: html+php
 
-        <img src="<?php echo $view['assets']->getUrl('images/logo.png', null, true) ?>" alt="Symfony!" />
+        <img src="<?php echo $view['assets']->getUrl(
+            'images/logo.png',
+            null,
+            true
+        ) ?>" alt="Symfony!" />
 
 
 
@@ -1118,45 +1131,75 @@ o nazwie ``javascripts`` zaraz powyżej znacznika zamykającego ``body``.
 Bloki te będę zawierać wszystkie arkusze stylów i skrypty Javascripts jakie są
 potrzebne w całej witrynie:
 
-.. code-block:: html+jinja
-   :linenos:
+.. configuration-block::
 
-    {# app/Resources/views/base.html.twig #}
-    <html>
-        <head>
-            {# ... #}
+    .. code-block:: html+jinja
 
-            {% block stylesheets %}
-                <link href="{{ asset('css/main.css') }}" type="text/css" rel="stylesheet" />
-            {% endblock %}
-        </head>
-        <body>
-            {# ... #}
+        {# app/Resources/views/base.html.twig #}
+        <html>
+            <head>
+                {# ... #}
 
-            {% block javascripts %}
-                <script src="{{ asset('/js/main.js') }}" type="text/javascript"></script>
-            {% endblock %}
-        </body>
-    </html>
+                {% block stylesheets %}
+                    <link href="{{ asset('css/main.css') }}" rel="stylesheet" />
+                {% endblock %}
+            </head>
+            <body>
+                {# ... #}
+
+                {% block javascripts %}
+                    <script src="{{ asset('js/main.js') }}"></script>
+                {% endblock %}
+            </body>
+        </html>
+
+    .. code-block:: php
+
+        // app/Resources/views/base.html.php
+        <html>
+            <head>
+                <?php ... ?>
+
+                <?php $view['slots']->start('stylesheets') ?>
+                    <link href="<?php echo $view['assets']->getUrl('css/main.css') ?>" rel="stylesheet" />
+                <?php $view['slots']->stop() ?>
+            </head>
+            <body>
+                <?php ... ?>
+
+                <?php $view['slots']->start('javascripts') ?>
+                    <script src="<?php echo $view['assets']->getUrl('js/main.js') ?>"></script>
+                <?php $view['slots']->stop() ?>
+            </body>
+        </html>
 
 To proste! Ale co, gdy zajdzie potrzeba dołączenia w szablonie potomnym dodatkowego
 arkusza stylów lub pliku Javascript? Na przykład załóżmy, że mamy stronę kontaktową
 i potrzebujemy dołączyć arkusz stylów ``contact.css`` tylko na tej stronie.
 Wewnątrz szablonu strony kontaktowej trzeba zrobić co następuje:
 
-.. code-block:: html+jinja
-   :linenos:
+.. configuration-block::
 
-    {# src/Acme/DemoBundle/Resources/views/Contact/contact.html.twig #}
-    {% extends '::base.html.twig' %}
+    .. code-block:: html+jinja
 
-    {% block stylesheets %}
-        {{ parent() }}
+        {# app/Resources/views/contact/contact.html.twig #}
+        {% extends 'base.html.twig' %}
 
-        <link href="{{ asset('css/contact.css') }}" type="text/css" rel="stylesheet" />
-    {% endblock %}
+        {% block stylesheets %}
+            {{ parent() }}
 
-    {# ... #}
+            <link href="{{ asset('css/contact.css') }}" rel="stylesheet" />
+        {% endblock %}
+
+        {# ... #}
+
+    .. code-block:: php
+
+        // app/Resources/views/contact/contact.html.twig
+        <?php $view->extend('base.html.php') ?>
+
+        <?php $view['slots']->start('stylesheets') ?>
+            <link href="<?php echo $view['as
 
 .. index::
       single: szablonowanie; funkcja parent()
@@ -1208,7 +1251,6 @@ dającej automatyczny dostęp do określonych zmiennych:
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
         <p>Username: {{ app.user.username }}</p>
         {% if app.debug %}
@@ -1217,13 +1259,17 @@ dającej automatyczny dostęp do określonych zmiennych:
         {% endif %}
 
     .. code-block:: html+php
-       :linenos:
 
         <p>Username: <?php echo $app->getUser()->getUsername() ?></p>
         <?php if ($app->getDebug()): ?>
             <p>Request method: <?php echo $app->getRequest()->getMethod() ?></p>
             <p>Application Environment: <?php echo $app->getEnvironment() ?></p>
-        <?php endif; ?>
+        <?php endif ?>
+
+.. versionadded:: 2.6
+    Zmienna globalna ``app.security`` (lub  metoda ``$app->getSecurity()``
+    w szablonie PHP) jest przestarzała od wersji Symfony 2.6. Uzyj zamiast tego
+    ``app.user`` (``$app->getUser()``) oraz ``is_granted()`` (``$view['security']->isGranted()``).
 
 .. tip::
 
@@ -1262,7 +1308,6 @@ aplikacji:
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         # app/config/config.yml
         framework:
@@ -1270,7 +1315,6 @@ aplikacji:
             templating: { engines: ['twig'] }
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1289,7 +1333,6 @@ aplikacji:
         </container>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -1340,15 +1383,15 @@ znaleźliśmy to::
 
 
 Kiedy przetwarzany jest szablon ``AcmeBlogBundle:Blog:index.html.twig,``
-to Symfony2 wyszukuje szablony w dwóch różnych lokalizacjach:
+Symfony2 wyszukuje szablony kolejno w dwóch różnych lokalizacjach:
 
 #. ``app/Resources/AcmeBlogBundle/views/Blog/index.html.twig``
 #. ``src/Acme/BlogBundle/Resources/views/Blog/index.html.twig``
 
 Aby przesłonić szablon pakietu wystarczy skopiować szablon ``index.html.twig``
 z pakietu do ``app/Resources/AcmeBlogBundle/views/Blog/index.html.twig``
-(katalog ``app/Resources/AcmeBlogBundle`` nie będzie istniał, więc trzeba go utworzyć).
-Można teraz dowolnie dostosować ten szablon do swoich wymagań.
+i dostosować go do swoich potrzeb. Katalog ``app/Resources/AcmeBlogBundle`` nie
+będzie istniał, więc trzeba go utworzyć.
 
 .. caution::
 
@@ -1359,7 +1402,7 @@ Można teraz dowolnie dostosować ten szablon do swoich wymagań.
 Logika ta ma również zastosowanie do podstawowych szablonów pakietów. Załóżmy, że
 każdy szablon w ``AcmeBlogBundle`` dziedziczy z szablonu podstawowego o nazwie
 ``AcmeBlogBundle::layout.html.twig``. Podobnie jak wcześniej, Symfony2 będzie
-wyszukiwało szablony w dwóch miejscach:
+wyszukiwało szablony kolejno w dwóch miejscach:
 
 #. ``app/Resources/AcmeBlogBundle/views/layout.html.twig``
 #. ``src/Acme/BlogBundle/Resources/views/layout.html.twig``
@@ -1410,26 +1453,24 @@ Ta metoda działa doskonale z trzema różnymi typami szablonów, które właśn
   elementy specyficzne dla blogu:
 
   .. code-block:: html+jinja
-     :linenos:
 
-      {# src/Acme/BlogBundle/Resources/views/layout.html.twig #}
-      {% extends '::base.html.twig' %}
+      {# app/Resources/views/blog/layout.html.twig #}
+      {% extends 'base.html.twig' %}
 
       {% block body %}
           <h1>Blog Application</h1>
 
           {% block content %}{% endblock %}
       {% endblock %}
-
+  
 * Utwórzmy indywidualny szablon dla każdej strony i rozrzerzmy szablon każdej sekcji.
   Na przykład, strona "index" będzie wywoływana przez coś takiego, jak
   ``AcmeBlogBundle:Blog:index.html.twig`` i zawierać będzie wykaz aktualnych wpisów blogu:
 
   .. code-block:: html+jinja
-     :linenos:
 
-      {# src/Acme/BlogBundle/Resources/views/Blog/index.html.twig #}
-      {% extends 'AcmeBlogBundle::layout.html.twig' %}
+      {# app/Resources/views/blog/index.html.twig #}
+      {% extends 'blog/layout.html.twig' %}
 
       {% block content %}
           {% for entry in blog_entries %}
@@ -1462,7 +1503,7 @@ przykład:
 
 .. configuration-block::
 
-    .. code-block:: jinja
+    .. code-block:: html+jinja
 
         Hello {{ name }}
 
@@ -1492,7 +1533,7 @@ bezpiecznie, drukując na ekranie literalnie znacznik script:
 
 .. code-block:: html
 
-    Hello &lt;script&gt;alert(&#39;helloe&#39;)&lt;/script&gt;
+    Hello &lt;script&gt;alert(&#39;hello!&#39;)&lt;/script&gt;
 
 Systemy szablonowania Twig i PHP podchodzą do tego problemu w odmienny sposób.
 Jeżeli używa się Twig, zabezpieczenie zmiennych jest domyślnie włączone i jest
@@ -1539,7 +1580,7 @@ HTML (a więc zmienna jest zabezpieczana pod kątem bezpieczeństwa kodu HTML). 
 argument pozwala zmienić kontekst. Na przykład, aby wyprowadzić zabezpieczenie przed
 kodem JavaScript, należy użyć kontekst ``js``:
 
-.. code-block:: js
+.. code-block:: html+php
 
     var myMsg = 'Hello <?php echo $view->escape($name, 'js') ?>';
 
@@ -1555,11 +1596,34 @@ Gdy stosuje się PHP, można użyć ``var_dump()`` do szybkiego znalezienia wart
 jakiejś przekazanej zmiennej. Jest tu użyteczne, na przykład wewnątrz kontrolera.
 To samo można uzyskać przy stosowaniu Twig poprzez wykorzystanie rozszerzenia Debug.
 
-Parametry szablonu mogą być zrzucane przy użyciu funkcji ``dump``:
+Gdy stosuje się PHP, mozna użyć :ref:`funkcje dump() z komponentu VarDumper <components-var-dumper-dump>`,
+jeśli chce się szybko odnaleźć wartość przekazanej zmiennej. Jest to przydatne,
+na przykład wewnątrz kontrolera::
+   
+   // src/AppBundle/Controller/ArticleController.php
+    namespace AppBundle\Controller;
+
+    // ...
+
+    class ArticleController extends Controller
+    {
+        public function recentListAction()
+        {
+            $articles = ...;
+            dump($articles);
+
+            // ...
+        }
+    }
+.. note::
+
+    Wyjście funkcji ``dump()`` jest renderowane na programistycznym pasku narzędziowym.
+
+Ten sam mechanizm moze zostać uzyty w szablonach Twig dzięki funkcji ``dump``:
 
 .. code-block:: html+jinja
 
-    {# src/Acme/ArticleBundle/Resources/views/Article/recentList.html.twig #}
+    {# app/Resources/views/article/recent_list.html.twig #}
     {{ dump(articles) }}
 
     {% for article in articles %}
@@ -1567,8 +1631,6 @@ Parametry szablonu mogą być zrzucane przy użyciu funkcji ``dump``:
             {{ article.title }}
         </a>
     {% endfor %}
-
-
 
 
 Zmienne będę zrzucane tylko gdy ustawienie ``debug`` Twiga (w ``config.yml``)
@@ -1583,14 +1645,11 @@ Można sprawdzić poprawność składni w szablonie Twig stosując polecenie kon
 
 .. code-block:: bash
 
-    # Można sprawdzić przez nazwę pliku:
-    $ php app/console twig:lint src/Acme/ArticleBundle/Resources/views/Article/recentList.html.twig
+    # You can check by filename:
+    $ php app/console lint:twig app/Resources/views/article/recent_list.html.twig
 
-    # lub przez katalog:
-    $ php app/console twig:lint src/Acme/ArticleBundle/Resources/views
-
-    # lib używając nazwy pakietu:
-    $ php app/console twig:lint @AcmeArticleBundle
+    # or by directory:
+    $ php app/console lint:twig app/Resources/views
 
 Formaty szablonów
 -----------------
@@ -1603,7 +1662,7 @@ być potrzebny.
 Na przykład, sam "zasób" jest często generowany w różnych formatach. Aby wygenerować
 stronę indeksową artykułu w XML, należy zawrzeć ten format w nazwie szablonu:
 
-* *Nazwa szablonu XML*: ``AcmeArticleBundle:Article:index.xml.twig``
+* *Nazwa szablonu XML*: ``article/index.xml.twig``
 * *Nazwa pliku XML*: ``index.xml.twig``
 
 W rzeczywistości jest to nic innego jak konwencja nazewnicza i szablon nie jest
@@ -1617,7 +1676,7 @@ jest zrobiony następująco::
     {
         $format = $request->getRequestFormat();
 
-        return $this->render('AcmeBlogBundle:Blog:index.'.$format.'.twig');
+        return $this->render('article/index.'.$format.'.twig');
     }
 
 Metoda ``getRequestFormat`` w obiekcie ``Request`` domyślnie zwraca format ``html``,
@@ -1633,14 +1692,12 @@ z parametrem asocjacyjnym:
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
         <a href="{{ path('article_show', {'id': 123, '_format': 'pdf'}) }}">
             PDF Version
         </a>
 
     .. code-block:: html+php
-       :linenos:
 
         <a href="<?php echo $view['router']->generate('article_show', array(
             'id' => 123,
@@ -1688,3 +1745,5 @@ Dalsza lektura
 .. _`filters`: http://twig.sensiolabs.org/doc/filters/index.html
 .. _`dodać własne rozszerzenia`: http://twig.sensiolabs.org/doc/advanced.html#creating-an-extension
 .. _`hinclude.js`: http://mnot.github.com/hinclude/
+.. _`funkcja include()`: http://twig.sensiolabs.org/doc/functions/include.html
+.. _`znacznik `{% include %}`: http://twig.sensiolabs.org/doc/tags/include.html

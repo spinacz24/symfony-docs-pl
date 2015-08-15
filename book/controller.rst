@@ -7,12 +7,12 @@
 Kontroler
 =========
 
-Kontroler to funkcja PHP, którą tworzy się, aby pobierała informacje z żądania
-HTTP, a następnie konstruowała i zwracała odpowiedź HTTP (jako obiekt
-``Response`` Symfony2). Odpowiedź może być stroną HTML, dokumentem XML,
+Kontroler to wywoływalny kod PHP (głównie metoda), którą tworzy się, aby pobierała
+informacje z żądania HTTP, a następnie konstruowała i zwracała odpowiedź HTTP (jako
+obiekt ``Response`` Symfony2). Odpowiedź może być stroną HTML, dokumentem XML,
 serializowaną tablicą JSON, obrazem, przekierowaniem, stroną błędu 404
-lub czymkolwiek innym. Kontroler może zawierać dowolną logikę wymagana do
-wyrenderować zawartości strony.
+lub czymkolwiek innym. Kontroler może zawierać dowolną logikę potrzebną do
+wyrenderowania zawartości strony.
 
 Aby zobaczyć, jakie to proste, spójrzmy jak działa kontroler Symfony2.
 Poniższy kontroler wygeneruje stronę, która wyświetlającą ``Hello world!``::
@@ -33,15 +33,15 @@ do użytkownika.
 Nie ma tutaj żadnej magii czy innych wymagań, o które trzeba się martwić. Oto kilka
 najczęstszych przypadków:
 
-* *Kontroler A* przygotowuje obiekt ``Response`` reprezentujący zawartość strony głównej
+- *Kontroler A* przygotowuje obiekt ``Response`` reprezentujący zawartość strony głównej
   witryny.
 
-* *Kontroler B* odczytuje parametr ``slug`` z żądania, aby pobrać wpis blogu
+- *Kontroler B* odczytuje parametr ``slug`` z żądania, aby pobrać wpis blogu
   z bazy danych i utworzyć obiekt ``Response``, który wyświetli tego blogu. Jeśli
   ``slug`` nie zostanie znaleziony w bazie danych, kontroler utworzy obiekt ``Response``
   zawierający kod błędu 404.
 
-* *Kontroler C* obsługuje formularz kontaktowy. Odczytuje dane formularza z żądania HTTP,
+- *Kontroler C* obsługuje formularz kontaktowy. Odczytuje dane formularza z żądania HTTP,
   zapisuje dane kontaktowe do bazy danych i wysyła email do administratora. W końcu tworzy
   obiekt ``Response``, który przekieruje przeglądarkę klienta do strony z podziękowaniami.
 
@@ -74,8 +74,8 @@ która odwzorowuje ścieżkę URL do tego kontrolera (#2).
 
     Pomimo podobnej nazwy, "kontroler wejścia" zupełnie różni się od "kontrolerów",
     o których mówimy w tym rozdziale. :term:`Kontroler wejścia<kontroler wejscia>`
-    to krótki plik PHP, który znajduje się w katalogu `web` aplikacji i kierowane
-    są doniego wszystkie przechodzące żądania. Typowa aplikacja posiada
+    to krótki plik PHP, który znajduje się w katalogu `web` aplikacji i do którego
+    kierowane są wszystkie przechodzące żądania. Typowa aplikacja posiada
     kontroler wejścia dla środowiska produkcyjnego (np. ``app.php``) i kontroler
     wejścia dla środowiska programistycznego (np. ``app_dev.php``).
     Prawdopodobnie nigdy nie będziesz musiał edytować, przeglądać czy martwić się
@@ -147,54 +147,81 @@ trzeba utworzyć trasę (*ang. route*) odwzorowującą wzorzec ścieżki URL do 
 
 .. configuration-block::
 
-    .. code-block:: yaml
-       :linenos:
+   .. code-block:: php-annotations
+
+        // src/AppBundle/Controller/HelloController.php
+        namespace AppBundle\Controller;
+
+        use Symfony\Component\HttpFoundation\Response;
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+        class HelloController
+        {
+            /**
+             * @Route("/hello/{name}", name="hello")
+             */
+            public function indexAction($name)
+            {
+                return new Response('<html><body>Hello '.$name.'!</body></html>');
+            }
+        }
+
+   .. code-block:: yaml
 
         # app/config/routing.yml
         hello:
             path:      /hello/{name}
-            defaults:     { _controller: AcmeHelloBundle:Hello:index }
+            # uses a special syntax to point to the controller - see note below
+            defaults:  { _controller: AppBundle:Hello:index }
 
-    .. code-block:: xml
-       :linenos:
+   .. code-block:: xml
 
         <!-- app/config/routing.xml -->
-        <route id="hello" path="/hello/{name}">
-            <default key="_controller">AcmeHelloBundle:Hello:index</default>
-        </route>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <routes xmlns="http://symfony.com/schema/routing"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    .. code-block:: php
-       :linenos:
+            <route id="hello" path="/hello/{name}">
+                <!-- uses a special syntax to point to the controller - see note below -->
+                <default key="_controller">AppBundle:Hello:index</default>
+            </route>
+        </routes>
+
+   .. code-block:: php
 
         // app/config/routing.php
+        use Symfony\Component\Routing\Route;
+        use Symfony\Component\Routing\RouteCollection;
+
+        $collection = new RouteCollection();
         $collection->add('hello', new Route('/hello/{name}', array(
-            '_controller' => 'AcmeHelloBundle:Hello:index',
+            // uses a special syntax to point to the controller - see note below
+            '_controller' => 'AppBundle:Hello:index',
         )));
 
-Teraz , po wprowdzeniu ścieżki ``/hello/ryan`` wykonany zostanie kontroler
-``HelloController::indexAction()`` i zostanie przekazana wartość ``ryan`` do zmiennej
-``$name``. Tworzenie "strony" to tworzenie metody kontrolera i powiązanie jej z trasą.
+        return $collection;
 
-Proszę zwrócić uwagę na składnię użytą w odwołaniu się do kontrolera ``AcmeHelloBundle:Hello:index``.
-W celu odwoływania się do różnych kontrolerów Symfony2 uzywa ciągów znakowych o
-elastycznej notacji. Jest to najczęściej używana składnia, która wskazuje Symfony2,
-aby szukał klasy kontrolera o nazwie ``HelloController`` wewnątrz pakietu ``AcmeHelloBundle``.
-Następnie wykonywana jest metoda ``indexAction()``.
+Teraz, po wprowdzeniu ścieżki ``/hello/ryan`` (tj. ``http://localhost:8000/hello/ryan``
+gdy stosuje się :doc:`wbudowanego serwera internetowego </cookbook/web_server/built_in>`)
+wykonany zostanie kontroler ``HelloController::indexAction()`` i do zmiennej
+``$name`` zostanie przekazana wartość ``ryan``. Tworzenie "strony" sprowadza się
+do utworzenie metody kontrolera i powiązania jej z trasą.
 
-Więcej informacji o formacie łańcucha odwoływania się do różnych kontrolerów można
-znaleźć w rozdziale :ref:`Wzorzec nazewniczy kontrolera<controller-string-syntax>`.
+Proste, prawda?
 
-.. note::
+.. sidebar:: Składnia kontrolera AppBundle:Hello:index
 
-    W tym przykładzie konfiguracja trasowania znajduje się bezpośrednio w katalogu
-    ``app/config/``. Lepszym rozwiazaniem  organizacji trasowania jest umieszczenie
-    każdej trasy w pakiecie, do którego ona należy. Więcej informacji na ten temat
-    można znaleźć w rozdziale :ref:`routing-include-external-resources`.
+    Jeśli przy trasowaniu stosuje sie formaty YML lub XML, trzeba odnieść się do
+    kontrolera używając spesjalną składnię skrótu: ``AppBundle:Hello:index``.
+    Wiecej szczegółów o formacie kontrolera mozna znaleźć w :ref:`controller-string-syntax`.
 
-.. tip::
+.. seealso::
 
     Możesz dowiedzieć się więcej o systemie trasowania w rozdziale
     :doc:`routing`.
+
 
 .. index::
    single: kontroler; argumenty kontrolera
@@ -204,9 +231,9 @@ znaleźć w rozdziale :ref:`Wzorzec nazewniczy kontrolera<controller-string-synt
 Parametry trasy jako argumenty kontrolera
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Już wiemy, że parametr ``_controller`` w kontrolerze ``AcmeHelloBundle:Hello:index``
-odnosi się do metody ``HelloController::indexAction()`` znajdujacej się w pakiecie
-``AcmeHelloBundle``. Co ciekwsze, jest to też argument przekazywany do tej metody::
+Już wiemy, że trasa wskazuje na metodę ``HelloController::indexAction()``
+znajdującą się wewnatrz ``AcmeHelloBundle``. Co ciekwsze, jest też argument
+przekazywany do tej metody::
 
     // src/Acme/HelloBundle/Controller/HelloController.php
 
@@ -228,43 +255,64 @@ do parametru trasy. Rozważmy następujący przykład:
 
 .. configuration-block::
 
+    .. code-block:: php-annotations
+
+        // src/AppBundle/Controller/HelloController.php
+        // ...
+
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+        class HelloController
+        {
+            /**
+             * @Route("/hello/{firstName}/{lastName}", name="hello")
+             */
+            public function indexAction($firstName, $lastName)
+            {
+                // ...
+            }
+        }
+
     .. code-block:: yaml
-       :linenos:
 
         # app/config/routing.yml
         hello:
-            path:      /hello/{first_name}/{last_name}
-            defaults:  { _controller: AcmeHelloBundle:Hello:index, color: green }
+            path:      /hello/{firstName}/{lastName}
+            defaults:  { _controller: AppBundle:Hello:index }
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/routing.xml -->
-        <route id="hello" path="/hello/{first_name}/{last_name}">
-            <default key="_controller">AcmeHelloBundle:Hello:index</default>
-            <default key="color">green</default>
-        </route>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <routes xmlns="http://symfony.com/schema/routing"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
+
+            <route id="hello" path="/hello/{firstName}/{lastName}">
+                <default key="_controller">AppBundle:Hello:index</default>
+            </route>
+        </routes>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/routing.php
-        $collection->add('hello', new Route('/hello/{first_name}/{last_name}', array(
-            '_controller' => 'AcmeHelloBundle:Hello:index',
-            'color'       => 'green',
+        use Symfony\Component\Routing\Route;
+        use Symfony\Component\Routing\RouteCollection;
+
+        $collection = new RouteCollection();
+        $collection->add('hello', new Route('/hello/{firstName}/{lastName}', array(
+            '_controller' => 'AppBundle:Hello:index',
         )));
 
-W tym przykładzie kontroler może przyjąć kilka argumentów::
+        return $collection;
 
-    public function indexAction($first_name, $last_name, $color)
+Teraz kontroler może mieć dwa argumenty::
+
+    public function indexAction($firstName, $lastName)
     {
         // ...
     }
-
-Prosze zwrócić uwagę, że obie zmienne (``{first_name}`` i ``{last_name}``)
-oraz domyślny parametr ``color`` są dostępne w kontrolerze jako jego argumenty.
-Kiedy trasa jest dopasowywana, parametry trasy oraz ``wartości domyślne`` są łączone
-w jedną tablicę, która jest dostępna dla kontrolera.
 
 Odwzorowanie parametrów trasy na argumenty kontrolera jest łatwe i elastyczne.
 Należy pamiętać o następujących wskazówkach:
@@ -290,7 +338,7 @@ Należy pamiętać o następujących wskazówkach:
         {
             // ..
         }
-
+    
     Rozwiązaniem problemu może być przypisanie wartości domyślnej do argumentu.
     Poniższy przykład nie zgłosi wyjątku::
 
@@ -314,36 +362,32 @@ Należy pamiętać o następujących wskazówkach:
     Każda trasa posiada również specjalny parametr ``_route``, który przyjmuje
     wartość nazwy dopasowanej trasy (np. ``hello``). Parametr ten dostępny jest
     jako argument kontrolera, ale jest mało przydatny.
+    Można również przekazywać inne zmienne z trasy do argumentów kontrolera.
+    Proszę zapoznać się z :doc:`/cookbook/routing/extra_information`.
 
 .. _book-controller-request-argument:
 
 Obiekt Request jako argument kontrolera
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Można również przekazać do Symfony obiekt ``Request`` jako argument kontrolera.
-Jest to sczególnie wygodne podczas pracy z formularzem, na przykład::
+Co jeśli trzeba odczytać parametry zapytania, przejąc nagłówek lub uzyskać dostęp
+do przesłanego pliku? Wszystkie te informacje są przechowywane w obiekcie ``Request``
+Symfony. W celu pobrania tych informacji z kontrolera wystarczy wykorzystać argumenty
+i **podpowiedzieć je w klasie Request**::
 
     use Symfony\Component\HttpFoundation\Request;
 
-    public function updateAction(Request $request)
+    public function indexAction($firstName, $lastName, Request $request)
     {
-        $form = $this->createForm(...);
+        $page = $request->query->get('page', 1);
 
-        $form->handleRequest($request);
         // ...
     }
+    
+.. seealso::
 
-.. index::
-   single: kontroler; strony statyczne
-
-Tworzenie stron statycznych
----------------------------
-
-Można tworzyć strony statyczne nawet bez użycia kontrolera (potrzebna jest tylko
-trasa i szablon).
-
-Używaj tego! Zobacz :doc:`/cookbook/templating/render_without_controller`.
-
+    Chcesz wiedzieć więcej o uzyskiwaniu informacji z żądania? Zapoznaj się z
+    :ref:`"Dostęp do informacji z żądania" <component-http-foundation-request>`.
 
 .. index::
    single: kontroler; podstawowa klasa kontrolera
@@ -354,64 +398,35 @@ Bazowa klasa kontrolera
 Symfony2 udostępnia klasę ``Controller`` będącą klasą bazową dla kontrolerów
 aplikacji. Pomaga ona w najbardziej typowych zadaniach kontrolera i daje klasie
 kontrolera dostęp do każdego potrzebnego zasobu. Rozszerzając klasę ``Controller``
-można skorzystać z kilku metod pomocniczych (helperów).
+można skorzystać z kilku metod pomocniczych a za pośrednictwem kontenera ze wszystkich
+obiektów usługowych.
 
 Dodajmy instrukcję ``use`` na początku pliku kontrolera, a później zmodyfikujmy
-``HelloController`` tak, aby dziedziczył z klasy ``Controller``:
+klasę ``HelloController`` tak, aby była rozszerzeniem klasy ``Controller``::
+   
+   // src/AppBundle/Controller/HelloController.php
+    namespace AppBundle\Controller;
 
-.. code-block:: php
-   :linenos:
-
-    // src/Acme/HelloBundle/Controller/HelloController.php
-
-    namespace Acme\HelloBundle\Controller;
     use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-    use Symfony\Component\HttpFoundation\Response;
 
     class HelloController extends Controller
     {
-        public function indexAction($name)
-        {
-          return new Response('<html><body>Hello '.$name.'!</body></html>');
-        }
+        // ...
     }
-
+    
 W rzeczywistości niczego to nie zmienia w sposobie działania kontrolera.
 W następnym rozdziale dowiesz się o metodach pomocniczych (helperach), które są
 udostępnione przez klasę kontrolera podstawowego. Te metody to po prostu skróty
 do rdzennych funkcji Symfony2, które są dostępne niezależnie od tego, czy używa
-się klasy ``Controller``, czy nie. Dobrym sposobem na zapoznanie się z klasą
-:class:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller` jest zobaczenie
-jak ona działa.
-.
+się klasy ``Controller``, czy nie. Dobrym sposobem na zobaczenie rdzennej funkcjonalności
+w działaniu jest zapoznanie sie z `Controller class`_.
 
-.. tip::
+.. seealso::
 
-    Rozszerzenie klasy bazowej w Symfony jest *opcjonalne* - zawiera ona użyteczne
-    skróty, ale nie są one obowiązkowe. Można również rozszerzyć klasę
-    :class:`Symfony\\Component\\DependencyInjection\\ContainerAware` lub wykorzystać
-    klasę cechę class:`Symfony\\Component\\DependencyInjection\\ContainerAwareTrait`
-    jeśli ma się PHP 5.4). Spowoduje to dostępność obiektu kontenera usług poprzez
-    właściwość ``container``.
-
-.. versionadded:: 2.4
-    ``ContainerAwareTrait`` jest nowością w Symfony 2.4.
-
-.. note::
-
-    Można również zdefiniować własne
-    :doc:`kontrolery jako usługi</cookbook/controller/service>`.
-
-.. index::
-   single: kontroler; typowe zadania
-
-Typowe zadania kontrolera
--------------------------
-
-Choć kontroler może praktycznie wykonywać prawie wszystko, większość kontrolerów
-będzie wykonywać te same podstawowe zadania w kółko. Zadania takie jak jak przekierowania, forwardowanie,
-przetwrzanie szablonów i udostępnianie rdzennych usług są w Symfony2 bardzo
-łatwe w użyciu.
+    Informacje o tym jak działać będzie kontroler, który nie rozszerza klasy bazowej,
+    można znaleźć w artykule :doc:`Kontrolery jako usługi </cookbook/controller/service>`.
+    Można ewentualnie uzyskać więcej kontroli nad jawnymi objects i zależnościami,
+    które sa wstrzykiwane do kontrolera.
 
 .. index::
    single: kontroler; przekierowania
@@ -423,18 +438,32 @@ Jeśli chce się przekierować użytkownika do innej strony, należy użyć meto
 
     public function indexAction()
     {
-        return $this->redirect($this->generateUrl('homepage'));
+        return $this->redirectToRoute('homepage');
+
+        // redirectToRoute is equivalent to using redirect() and generateUrl() together:
+        // return $this->redirect($this->generateUrl('homepage'), 301);
     }
 
-Metoda ``generateUrl`` jest helperem generującym ścieżkę URL dla danej trasy.
-Więcej informacji można znaleźć w rozdziale :doc:`routing`.
+.. versionadded:: 2.6
+    Metod ``redirectToRoute()`` została dodana w Symfony 2.6. Poprzednio w tym celu
+    używało się razem ``redirect()`` i ``generateUrl()``, co jest jeszcze obsługiwane 
+    (zobacz powyższy przykład).
 
-Domyślnie metoda ``redirect()`` realizuje przekierowanie 302 (tymczasowe, *ang. temporary*).
-Aby wykonać przekierowanie 301 (trwałe, *ang. permanent*), należy podać drugi argument::
+Jeśli chce się wykonać przekierowanie zewnętrzne, wystarczy uzyć ``redirect()``
+i przekazać to w adresie URL::
+   
+   public function indexAction()
+    {
+        return $this->redirect('http://symfony.com/doc');
+    }
+
+Domyślnie metoda ``redirectToRoute()`` realizuje przekierowanie 302 (tymczasowe,
+*ang. temporary*). W celu wykonania przekierowania 301 (trwałe, *ang. permanent*),
+należy zmodyfikować trzeci argument::
 
     public function indexAction()
     {
-        return $this->redirect($this->generateUrl('homepage'), 301);
+        return $this->redirectToRoute('homepage', array(), 301);
     }
 
 .. tip::
@@ -443,71 +472,11 @@ Aby wykonać przekierowanie 301 (trwałe, *ang. permanent*), należy podać drug
     którego zadaniem jest przekierowanie użytkownika. Jest to równoznaczne z::
 
       use Symfony\Component\HttpFoundation\RedirectResponse;
-      
-      return new RedirectResponse($this->generateUrl('homepage'));
 
-
-.. index::
-   single: kontroler; przekazywania
-
-Przekazywanie (forwarding)
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Można również łatwo dokonać przekazania do innego wewnętrznego kontrolera przy
-użyciu metody ``forward()``. Metoda ta sprawia, że zamiast przekierowywać przegladarkę
-użytkownika wykonywane jest wewnętrzne podżądanie i wywoływany jest określony kontroler.
-Metoda ``forward()`` zwraca obiekt ``Response``, który jest zwracany przez ten kontroler::
-
-    public function indexAction($name)
-    {
-        $response = $this->forward('AcmeHelloBundle:Hello:fancy', array(
-            'name'  => $name,
-            'color' => 'green'
-        ));
-
-        // ... zmodyfikowanie odpowiedzi lub zwrócenie jej bezpośrednio
-
-        return $response;
-    }
-
-Należy zwrócić uwagę, że metoda ``forward()`` wykorzystuje tą samą reprezentację
-znakową kontrolera jaka jest używana w konfiguracji trasowania. W powyższym przykładzie
-klasa docelowego kontrolera ``HelloController`` będzie się znajdować wewnątrz pakietu
-``AcmeHelloBundle``. Tablica przekazana do metody staje sie argumentami wynikowego
-kontrolera. Taki sam interfejs jest stosowany podczas osadzania kontrolerów w szablonach
-(zobacz do rozdziału :ref:`templating-embedding-controller`). Metoda docelowego
-kontrolera musi wyglądać następująco::
-
-    public function fancyAction($name, $color)
-    {
-        // ... utworzenie i zwrócenie obiektu Response
-    }
-
-Kolejność argumentów ``fancyAction`` nie ma znaczenia, podobnie jak w przypadku
-tworzenia kontrolera dla trasy. Symfony2 dopasowuje nazwy indeksów (np. ``name``)
-do nazw argumentów metody (np. ``$name``). Jeśli zmieni się kolejność argumentów,
-Symfony2 wciąż będzie w stanie przekazywać właściwą wartości do każdej zmiennej.
-
-.. tip::
-
-   Podobnie do innych metod bazowej klasy ``Controller``, metoda ``forward`` jest
-   skrótem do rdzennej funkcjonalności Symfony2. Przekazanie może zostać zrealizowane
-   bezpośrednio przez powielenie bieżącego żądania. Gdy to :ref:`pod-żądanie
-   <http-kernel-sub-requests>` zostaje wykonane poprzez usługę ``http_kernel``,
-   ``HttpKernel`` zwraca obiekt ``Response``:: 
-      
-      use Symfony\Component\HttpKernel\HttpKernelInterface;
-      
-      $path = array(
-            '_controller' => 'AcmeHelloBundle:Hello:fancy',
-            'name'        => $name,
-            'color'       => 'green',
-      );
-      $request = $this->container->get('request');
-      $subRequest = $request->duplicate(array(), null, $path);
-      
-      $httpKernel = $this->container->get('http_kernel');
-      $response = $httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+        public function indexAction()
+        {
+            return new RedirectResponse($this->generateUrl('homepage'));
+        }
 
 .. index::
    single: kontroler; renderowanie szablonów
@@ -517,64 +486,30 @@ Symfony2 wciąż będzie w stanie przekazywać właściwą wartości do każdej 
 Renderowanie szablonów
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Chociaż nie jest to wymagane, większość kontrolerów ostatecznie renderuje szablon,
-który jest odpowiedzialny za generowanie kodu HTML (lub w innym formacie).
-Metoda ``renderView()`` renderuje szablon i zwraca jego zawartość. Zawartość
-szablonu może być użyta do utworzenia obiektu ``Response``::
+Jeśli wyprowadza się HTML można wykorzystać renderowanie szablonu. Metoda ``render()``
+renderuje szablon i wstawia zawartość do obiektu ``Response``::
+   
+   // renders app/Resources/views/hello/index.html.twig
+    return $this->render('hello/index.html.twig', array('name' => $name));
 
-    use Symfony\Component\HttpFoundation\Response;
-
-    $content = $this->renderView(
-        'AcmeHelloBundle:Hello:index.html.twig',
-        array('name' => $name)
-    );
-
-    return new Response($content);
-
-Może to być nawet wykonane w jednym kroku przy użyciu metody ``render``, która
-zwraca obiekt ``Response`` zawierający zawartość szablonu::
-
-    return $this->render(
-        'AcmeHelloBundle:Hello:index.html.twig',
-        array('name' => $name)
-    );
-
-W obu przypadkach, wyrenderowany zostanie szablon ``Resources/views/Hello/index.html.twig``
-z pakietu ``AcmeHelloBundle``.
-
-Silnik szablonów Symfony jest szczegółowo wyjaśniony w rozdziale
+Można również wstawić szablony w bardziej zagłębionych podkatalogach. Wystarczy
+wypróbować, a by uniknąć tworzenia niepotrzebnie zagłebionej struktur::
+   
+   // renders app/Resources/views/hello/greetings/index.html.twig
+    return $this->render('hello/greetings/index.html.twig', array(
+        'name' => $name
+    ));      
+   
+Silnik szablonowania Symfony jest szczegółowo wyjaśniony w rozdziale
 :doc:`templating`.
 
-.. tip::
+.. sidebar:: Odwoływanie się do szablonów umieszczonych w pakietach
 
-    Można nawet uniknąć wywoływania metody ``render`` stosujac adnotację ``@Template``.
-    Zobacz do dokumentacji :doc:`FrameworkExtraBundle</bundles/SensioFrameworkExtraBundle/annotations/view>`
-    w celu poznania szczegółów.
-    
-
-.. tip::
-
-    Metoda ``renderView`` jest skrótem usługi ``templating``.
-    Usługa ``templating`` może być również użyta bezpośrednio::
-
-        $templating = $this->get('templating');
-        $content = $templating->render(
-            'AcmeHelloBundle:Hello:index.html.twig',
-            array('name' => $name)
-        );
-
-.. note::
-
-    Możliwe jest także renderowanie szablonów znajdujących się w głębszych podkatalogach,
-    jednak należy uważać, aby nie wpaść w pułapkę nadmiernie rozbudowanej struktury
-    katalogów:::
-
-        $templating->render(
-            'AcmeHelloBundle:Hello/Greetings:index.html.twig',
-            array('name' => $name)
-        );
-        // renderowany jest index.html.twig znajdujacy się w Resources/views/Hello/Greetings.
-
+    Można również umieszczać szablony w katalogu ``Resources/views`` pakietu
+    i odwoływać się do nich stosując składnię ``BundleName:DirectoryName:FileName``.
+    Na przykład, ``AppBundle:Hello:index.html.twig`` będzie odwoływał się do szablonu
+    umieszczonego w  ``src/AppBundle/Resources/views/Hello/index.html.twig``.
+    Zobacz :ref:`template-referencing-in-bundle`.
 
 .. index::
    single: kontroler; dostęp do usług
@@ -582,9 +517,13 @@ Silnik szablonów Symfony jest szczegółowo wyjaśniony w rozdziale
 Dostęp do innych usług
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Rozszerzając klasę kontrolera podstaowego, można uzyskać dostęp do
+Symfony jest spakowany w wiele przydatnych obiektów nazywanych usługami. Są one
+używane do renderowania szablonów, wysyłania wiadomości email, zapytań do bazy
+danych i innych wymyśłonych "działań".
+
+Rozszerzając klasę kontrolera podstawowego, można uzyskać dostęp do
 każdej usługi Symfony2 poprzez metodę ``get()``. Poniżej znajduje się kilka
-popularnych usług, jakie mogą być potrzebne::
+popularnych usług, jakie można wykorzystać::
 
     $templating = $this->get('templating');
 
@@ -593,13 +532,19 @@ popularnych usług, jakie mogą być potrzebne::
     $mailer = $this->get('mailer');
 
 Istnieje wiele dostępnych usług i zachęca się do tworzenia własnych.
-Aby wyświetlić listę wszstkich dostępnych usług, nalezy użyć polecenia konsoli ``container:debug``:
+Aby wyświetlić listę wszstkich dostępnych usług, nalezy użyć polecenia konsoli
+``container:debug``:
 
 .. code-block:: bash
 
     $ php app/console container:debug
 
-Aby dowiedzieć się więcej, zobacz rozdział :doc:`service_container`.
+.. versionadded:: 2.6
+    W wersjach wcześniejszych niż Symfony 2.6 polecenie to wywoływane było
+    wyrazeniem ``container:debug``.
+    
+
+Więcej informacji można znaleźć w rozdziale :doc:`service_container`.
 
 .. index::
    single: kontroler; zarządzanie stronami błędów
@@ -622,7 +567,8 @@ podstawiwego, można postąpić następująco::
         return $this->render(...);
     }
 
-Metoda ``createNotFoundException()`` tworzy specjalny obiet ``NotFoundHttpException``,
+Metoda ``createNotFoundException()`` tworzy specjalny obiekt
+:class:`Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException`,
 który w efekcie końcowym wyzwala odpowiedź HTTP z kodem statusu 404.
 
 Oczywiście w kontrolerze można zrzucić dowolną klasę ``Exception`` - Symfony2 będzie
@@ -662,10 +608,10 @@ kontrolera::
         // store an attribute for reuse during a later user request
         $session->set('foo', 'bar');
 
-        // in another controller for another request
-        $foo = $session->get('foo');
+        // get the attribute set by another controller in another request
+        $foobar = $session->get('foobar');
 
-        // use a default value if the key doesn't exist
+        // use a default value if the attribute doesn't exist
         $filters = $session->get('filters', array());
     }
     
@@ -696,12 +642,14 @@ Na przykład, wyobraźmy sobie, że przetwarzane jest zgłoszenie formularza::
         if ($form->isValid()) {
             // do some sort of processing
 
-            $this->get('session')->getFlashBag()->add(
+            $this->addFlash(
                 'notice',
                 'Your changes were saved!'
             );
 
-            return $this->redirect($this->generateUrl(...));
+            // $this->addFlash is equivalent to $this->get('session')->getFlashBag()->add
+
+            return $this->redirectToRoute(...);
         }
 
         return $this->render(...);
@@ -717,7 +665,6 @@ komunikatu ``notice``:
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
         {% for flashMessage in app.session.flashbag.get('notice') %}
             <div class="flash-notice">
@@ -726,15 +673,14 @@ komunikatu ``notice``:
         {% endfor %}
 
     .. code-block:: html+php
-       :linenos:
 
         <?php foreach ($view['session']->getFlash('notice') as $message): ?>
             <div class="flash-notice">
                 <?php echo "<div class='flash-error'>$message</div>" ?>
             </div>
-        <?php endforeach; ?>
+        <?php endforeach ?>
 
-Zgodnie z założeniem, komunikaty fleszowe sa przeznaczone do użycia dokładnie
+Zgodnie z założeniem, komunikaty fleszowe są przeznaczone do użycia dokładnie
 przy jednym żądaniu (są one wyświetlane natychmiast). Zostały zaprojektowane tak,
 aby stosować przekierowania tak, jak zrobiliśmy to w tym przykładzie.
 
@@ -751,33 +697,35 @@ jest zwracana klientowi::
 
     use Symfony\Component\HttpFoundation\Response;
 
-    // utworzenie prostego obiektu Response z kodem statusu 200 (domyślnie)
-     $response = new Response('Hello '.$name, Response::HTTP_OK);
+    // create a simple Response with a 200 status code (the default)
+    $response = new Response('Hello '.$name, Response::HTTP_OK);
 
-    // utworzenie odpowiedzi JSON ze kodem statusu 200
+    // create a JSON-response with a 200 status code
     $response = new Response(json_encode(array('name' => $name)));
     $response->headers->set('Content-Type', 'application/json');
 
-.. versionadded:: 2.4
-    Obsługa stałych kodu statusu HTTP została dodana w Symfony 2.4.
+Właściwość ``headers`` jest obiektem :class:`Symfony\\Component\\HttpFoundation\\HeaderBag`
+i ma kilka ciekawych metod do pobierania i ustawiania nagłówków. Nazwy nagłówków
+są normalizowane, tak więc używanie ``Content-Type`` jest równoważne z ``content-type``
+lub nawet ``content_type``.
 
+Istnieja również specjalne klasy do łatwiejszego wykonywania pewnego rodzaju
+odpowiedzi:
 
-.. tip::
+* dla JSON istnieje :class:`Symfony\\Component\\HttpFoundation\\JsonResponse`.
+  Patrz :ref:`component-http-foundation-json-response`.
 
-    Właściwość ``headers`` to obiekt :class:`Symfony\\Component\\HttpFoundation\\HeaderBag`
-    zawierający kilka użytecznych metod służących do odczytywania i modyfikowania
-    nagłówków ``Response``. Nazwy nagłówków są znormalizowane, dzięki czemu
-    ``Content-Type`` jest tym samym, co ``content-type``, czy nawet ``content_type``.
+* dla plików istnieje :class:`Symfony\\Component\\HttpFoundation\\BinaryFileResponse`.
+  Patrz :ref:`component-http-foundation-serving-files`.
 
-.. tip::
+* dla odpowiedzi strumieniowanych istnieje :class:`Symfony\\Component\\HttpFoundation\\StreamedResponse`.
+  Patrz :ref:`streaming-response`.
 
-    Istnieją również specjalne klasy ułatwiające wykonanie kodu dla niektórych rodzajów odpowiedzi:
-    
-    
-    - dla JSON jest to klasa :class:`Symfony\\Component\\HttpFoundation\\JsonResponse`.
-      Zobacz :ref:`component-http-foundation-json-response`.
-    - dla plików jest to klasa :class:`Symfony\\Component\\HttpFoundation\\BinaryFileResponse`.
-      Zobacz :ref:`component-http-foundation-serving-files`.
+.. seealso::
+
+    Nie martw się! Istnieje o wiele więcej informacji o obiekcie Response
+    w dokumentacji komponentu. Patrz :ref:`component-http-foundation-response`.
+
 
 .. index::
    single: kontroler; obiekt Request
@@ -787,8 +735,8 @@ Obiekt Request
 
 Poza wartościami wieloznaczników trasowania, kontroler również uzyskuje dostęp
 do obiektu ``Request``. Framework wstrzykuje obiekt ``Request`` do kontrolera,
-jeśli zmienna w `Symfony\Component\HttpFoundation\Request` jest typu podpowiedzi
-(type-hinted)::
+jeśli zmienna w :class:`Symfony\\Component\\HttpFoundation\\Request` jest typu
+podpowiedzi (type-hinted)::
 
     use Symfony\Component\HttpFoundation\Request;
 
@@ -806,10 +754,62 @@ jeśli zmienna w `Symfony\Component\HttpFoundation\Request` jest typu podpowiedz
 Podobnie jak w przypadku obiektu ``Response``, nagłówki żądania są przechowywane w
 obiekcie ``HeaderBag`` i są równie łatwo dostępne.
 
+Tworzenie stron statycznych
+---------------------------
+
+Można utworzyć stronę statyczną bez tworzenia kontrolera (potrzebne są tylko
+trasa i szablon).
+
+Patrz :doc:`/cookbook/templating/render_without_controller`.
+
+.. index::
+   single: kontroler; przekazywanie
+
+Przekazywanie do innych kontrolerów
+-----------------------------------
+
+Choć nie często, można również dokonać przekazania do innego wewnetrznego kontrolera
+w metodzie :method:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller::forward`.
+Sprawia to, że zamiast przekierowywać przegladarkę użytkownika, wykonywany jest
+wewnętrzne pod-żądanie i wywoływany jest kontroler. Metoda ``forward()`` zwraca
+obiekt ``Response``, który jest zwracany z kontrolera *that*::
+
+    public function indexAction($name)
+    {
+        $response = $this->forward('AppBundle:Something:fancy', array(
+            'name'  => $name,
+            'color' => 'green',
+        ));
+
+        // ... further modify the response or return it directly
+
+        return $response;
+    }
+
+Proszę zwrócić uwagę, że metoda ``forward()`` używa specjalnego łańcucha reprezentującego
+kontroler (zobacz :ref:`controller-string-syntax`). W tym przypadku, docelową
+funkcją kontrolera będzie ``SomethingController::fancyAction()`` wewnatrz AppBundle.
+Tablica przekazywana do metody staje się argumentami wynikowego kontrolera.
+Jest to ten sam pomysł jak przy osadzaniu kontrolerów w szablonach (patrz
+:ref:`templating-embedding-controller`). Ta docelowa metoda kontrolera będzie
+wygladać mniej więcej tak::
+
+    public function fancyAction($name, $color)
+    {
+        // ... create and return a Response object
+    }
+
+Podobnie jak w przypadku tworzenia kontrolera dla trasy, kolejność argumentów
+``fancyAction`` nie ma znaczenia. Symfony dopasowuje nazwy kluczy indeksu
+(np. ``name``) do nazw argumentów metody (np. ``$name``). Jeśli zmieni się kolejność
+argumentów, Symfony2 wciąż będzie w stanie przekazywać właściwą wartości do każdej
+zmiennej.
+
+
 Wnioski końcowe
 ---------------
 
-Za każdym razem, kiedy tworzy sie stronę, musi się napisać kod, który zaiwera logikę
+Za każdym razem, kiedy tworzy sie stronę, musi się napisać kod, który zawiera logikę
 tej strony. W Symfony nazywa się ten kod kontrolerem i jest to funkcja PHP, która
 może robić wszystko co jest potrzebne, aby w efekcie końcowym został zwrócony
 obiekt ``Response``, który zostaje wysłany do użytkownika.
@@ -828,3 +828,6 @@ Dalsza lektura
 
 * :doc:`/cookbook/controller/error_pages`
 * :doc:`/cookbook/controller/service`
+
+
+.. _`Controller class`: https://github.com/symfony/symfony/blob/master/src/Symfony/Bundle/FrameworkBundle/Controller/Controller.php
