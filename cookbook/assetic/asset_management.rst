@@ -31,7 +31,7 @@ je z dowolnego miejsca) zanim te zostaną wyświetlone użytkownikowi. Oznacza t
 * Przepuścić wszystkie, albo tylko część plików CSS i JS przez jakiś kompilator,
   taki jak LESS, SASS albo CoffeeScript
 
-* Zastosować optymalizacje obrazu na zdjęciach
+* Zoptymalizować obraz na zdjęciach
 
 .. _cookbook-assetic-assets:
 
@@ -50,9 +50,9 @@ Assetic wykorzystuje własne znaczniki aktywów systemu Twig, takie jak:
 
 * {% javascripts .... %}
 * {% stylesheets ... %}
-* {% images .. %}
+* {% image .. %}
 
-oraz helpery helpery PHP: ``javascripts``, ``stylesheets`` i ``images``. 
+oraz helpery PHP: ``javascripts``, ``stylesheets`` i ``images``. 
 
 .. _cookbook-assetic-including-javascript:
 
