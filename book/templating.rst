@@ -1055,8 +1055,8 @@ każdego aktywu powinna zostać wygenerowana z podkatalogiem (np. ``/my_app/imag
 Funkcja ``asset`` rozwiązuje ten problem i generuje odpowiednie ścieżki.
 
 Dodatkowo, w przypadku korzystania z funkcji ``asset``, Symfony może automatycznie
-dołączać łańcuch zapytania do :term:`aktywu<aktywa>`, w celu zagwarantowania, że aktualizowane
-statyczne aktywa nie będą buforowane w czasie wykorzystywania.
+dołączać łańcuch zapytania do :term:`aktywu<aktywa>`, w celu zagwarantowania, że
+statyczne aktywa zostaną wymienione w pamięci podręcznej po zaktualizowaniu.
 Na przykład, ``/images/logo.png`` będzie wyglądać jak ``/images/logo.png?v2``.
 Więcej informacji na ten temat można znależć w :ref:`ref-framework-assets-version`.
 
@@ -1081,8 +1081,8 @@ Jeśli chce się ustawić wersję dla określonego aktywa, można ustawić czwar
         ) ?>" alt="Symfony!" />
 
 Jeśli nie dostarczy się wersji lub przekaże ``null``, zostanie użyta domyślna
-wersja pakietu (z :ref:`ref-framework-assets-version`). Po przekazanie ``false``,
-wersjonowanie URL zostanie deaktywowane dla tego aktywa.
+wersja zestawu aktywów (z :ref:`ref-framework-assets-version`). Po przekazaniu
+``false``, wersjonowanie URL zostanie deaktywowane dla tego aktywa.
 
 Jeśli potrzebuje się bezwzględnych adresów URL dla aktywów, można ustawić trzeci
 argument (lub argument ``absolute``) na ``true``:
