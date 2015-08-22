@@ -61,7 +61,7 @@ je użyć w projekcie natychmiast::
 Użycie wszystkich komponentów
 -----------------------------
 
-Jeśłi chcesz używać wszystkie komponenty Symfony, to zamiast pobierać każdy
+Jeśli chcesz używać wszystkie komponenty Symfony, to zamiast pobierać każdy
 komponent z osobna, pobierz cały pakiet instalacyjny ``symfony/symfony``:
 
 .. code-block:: bash
