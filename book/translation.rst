@@ -18,16 +18,18 @@ oznacza to opakowanie tekstu w funkcję zdolną do translacji tekstu (lub "komun
 na język użytkownika::
 
     // ten tekst zawsze będzie drukowany w języku angielskim
-    echo 'Hello World';
+    dump('Hello World');
+    die();
 
     // ten tekst może zostać przetłumaczony na język użytkownika końcowego lub
     // domyślnie na język angielski
-    echo $translator->trans('Hello World');
+    dump($translator->trans('Hello World'));
+    die();
 
 .. note::
 
-    Pojęcie **ustawienia narodowego** (*ang. locale*), czesto też nazywanego ustawieniem
-    regionalnym, dotyczy mniej więcej języka i kraju użytkownika. Oznaczane jest
+    Pojęcie **ustawienie narodowe** (*ang. locale*), czesto też nazywane *ustawieniem
+    regionalnym*, dotyczy mniej więcej języka i kraju użytkownika. Oznaczane jest
     przez jakiś łańcuch tekstowy, który aplikacja
     używa do zarządzania tłumaczeniami i innymi różnicami formatów (np. formatem walutowym).
     Zalecanym oznaczeniem ustawień narodowych jest format złożony z kodu językowego
@@ -36,9 +38,9 @@ na język użytkownika::
     Oznaczenie ustawienia narodowego w aplikacji będziemy w tym podręczniku nazywać
     **identyfikatorem narodowym**.
     
-W tym rozdziale dowiesz się jak wykorzystywać w Symfony2  komponent Translation.
+W tym rozdziale dowiesz się jak wykorzystywać w Symfony  komponent Translation.
 Przeczytaj :doc:`dokumentację komponentu Translation </components/translation/usage>`
-dla dowiedzenia się więcej na ten temat. Ogólnie rzecz biorąc, proces implementacji
+aby dowiedzieć się więcej na ten temat. Ogólnie rzecz biorąc, proces implementacji
 funkcjonalności tłumaczeń składa się z kilku kroków:
 
 #. :ref:`Włączenie i skonfigurowanie <book-translation-configuration>` usługi
@@ -101,11 +103,11 @@ w konfiguracji:
             'translator' => array('fallback' => 'en'),
         ));
 
-W rozdziale :ref:`book-translation-fallback` omówiono szczegóły dotyczace klucza
+W rozdziale :ref:`book-translation-fallback` omówiono szczegóły dotyczące klucza
 ``fallback`` i to, co się dzieje, gdy Symfony nie może znaleźć tłumaczenia.
 
-Identyfikator narodowy wykorzystywany w tłumaczeniach jest przechowywane w żądaniu.
-Zazwyczaj jest ustawiane w trasie przez atrybut ``_locale``
+Identyfikator narodowy wykorzystywany w tłumaczeniach jest przechowywany w żądaniu.
+Zazwyczaj jest ustawiany w trasie przez atrybut ``_locale``
 (zobacz :ref:`book-translation-locale-url`).
 
 .. _book-translation-basic:
@@ -114,26 +116,26 @@ Podstawowe tłumaczenie
 ----------------------
 
 Tłumaczenie tekstu jest realizowane przez usługę ``translator``
-(:class:`Symfony\\Component\\Translation\\Translator`). Aby przetłumaczyć blok
-tekstu (nazywany tu *komunikatem*), trzeba użyć metody
+(:class:`Symfony\\Component\\Translation\\Translator`). W celu przetłumaczenia
+bloku tekstu (nazywanego tu *komunikatem*), trzeba użyć metody
 :method:`Symfony\\Component\\Translation\\Translator::trans`.
 Załóżmy na przykład, że tłumaczymy prosty komunikat wewnątrz kontrolera::
 
-    // ...
-    use Symfony\Component\HttpFoundation\Response;
+    // tekst będzie *zawsze* drukowany po angielsku
+    dump('Hello World');
+    die();
 
-    public function indexAction()
-    {
-        $translated = $this->get('translator')->trans('Symfony2 is great');
-
-        return new Response($translated);
-    }
+    // tekst może zostać przetłumaczony na język końcowego użytkownika, lub
+    // albo będzie wydrukowany po angielsku, jeśli tłumaczenie nie zostanie
+    // znalezione  
+    dump($translator->trans('Hello World'));
+    die();
 
 .. _book-translation-resources:
 
-Podczas wykonywani tego kodu, Symfony2 będzie próbował przetłumaczyć komunikat
-"Symfony2 is great" w oparciu o ustawienie narodowe użytkownika. Będzie to działało,
-jeśli powiadomi się Symfony2 jak ma przetłumaczyć komunikat udostępniając "zasób
+Podczas wykonywania tego kodu, Symfony będzie próbował przetłumaczyć komunikat
+"Hello World" w oparciu o ustawienie narodowe użytkownika. Będzie to działało,
+jeśli powiadomi się Symfony jak ma przetłumaczyć komunikat udostępniając "zasób
 translacyjny", którym zwykle jest plik zawierający kolekcje tłumaczeń dla określonego
 ustawienia narodowego. Ten "słownik" tłumaczeń może zostać stworzony w różnych
 formatach. Zalecanym formatem jest XLIFF:
@@ -149,8 +151,8 @@ formatach. Zalecanym formatem jest XLIFF:
             <file source-language="en" datatype="plaintext" original="file.ext">
                 <body>
                     <trans-unit id="1">
-                        <source>Symfony2 is great</source>
-                        <target>Symfony2 jest wielkie</target>
+                        <source>Hello World</source>
+                        <target>Witaj Świecie</target>
                     </trans-unit>
                 </body>
             </file>
@@ -161,20 +163,20 @@ formatach. Zalecanym formatem jest XLIFF:
 
         // messages.pl.php
         return array(
-            'Symfony2 is great' => 'Symfony2 jest wielkie',
+            'Hello World' => 'Witaj Świecie',
         );
 
     .. code-block:: yaml
        :linenos:
 
         # messages.pl.yml
-        Symfony2 is great: Symfony2 jest wielkie
+        Hello World: Witaj Świecie
 
 Informacja o tym, gdzie powinny być umieszczone te pliki translacyjne, znajduje
 się w rozdziale :ref:`book-translation-resource-locations`.
 
 Teraz, gdy językiem ustawienia narodowego użytkownika jest język polski, to komunikat
-zostanie przetłumaczony jako ``Symfony2 jest wielkie``.
+zostanie przetłumaczony jako ``Witaj Świecie``.
 Można również przetłumaczyć komunikat wewnątrz :ref:`szablonów <book-translation-tags>`.
 
 .. index::
@@ -183,12 +185,12 @@ Można również przetłumaczyć komunikat wewnątrz :ref:`szablonów <book-tran
 Proces tłumaczenia
 ~~~~~~~~~~~~~~~~~~
 
-W celu właściwego przetłumaczenia komunikatu, Symfony2 wykonuje następujące czynności:
+W celu właściwego przetłumaczenia komunikatu, Symfony wykonuje następujące czynności:
 
 * Zostaje określony identyfikator narodowy bieżącego użytkownika, który
   jest zawarty w żądaniu (lub przechowywany jako wartość ``_locale`` w sesji);
 
-* Ze zasobów translacyjnych dla określonej wartości identyfikatora narodowego
+* Z zasobów translacyjnych dla określonej wartości identyfikatora narodowego
   (np. ``pl_PL``) ładowany jest katalog przetłumaczonych komunikatów. Ładowane
   są również komunikaty dla :ref:`podstawowego identyfikatora narodowego
   <book-translation-fallback>` i dodawane są one do katalogu jeśli jeszcze w nim nie
@@ -199,7 +201,7 @@ W celu właściwego przetłumaczenia komunikatu, Symfony2 wykonuje następujące
 * Jeśli komunikat znajduje się w katalogu, to zwracane jest tłumaczenie. Jeśli nie,
   to zwracany jest oryginalny komunikat.
 
-Gdy używa się metody ``trans()``, Symfony2 wyszukuje dokładny łańcuch tekstowy w
+Gdy używa się metody ``trans()``, Symfony wyszukuje dokładny łańcuch tekstowy w
 odpowiednim katalogu komunikatów i go zwraca (jeśli istnieje).
 
 .. index::
@@ -261,7 +263,7 @@ Więcej informacji znajduje się w
 Tłumaczenia w szablonach
 ------------------------
 
-W większości przypadków, tłumaczenia dokonywane są w szablonach. Symfony2 dostarcza
+W większości przypadków, tłumaczenia dokonywane są w szablonach. Symfony dostarcza
 natywną obsługę tłumaczeń zarówno w szablonach Twig jak i PHP.
 
 .. index::
@@ -272,8 +274,8 @@ natywną obsługę tłumaczeń zarówno w szablonach Twig jak i PHP.
 Szablony Twig
 ~~~~~~~~~~~~~
 
-Symfony2 zapewnia wyspecjalizowane znaczniki Twig (``trans`` i ``transchoice``)
-w celu pomocy z tłumaczeniem komunikatów *statycznych bloków tekstu*:
+Symfony zapewnia wyspecjalizowane znaczniki Twig (``trans`` i ``transchoice``)
+w celu pomocy z tłumaczeniem komunikatów w postaci *statycznych bloków tekstu*:
 
 .. code-block:: jinja
    :linenos:
@@ -291,12 +293,12 @@ użycia symbolu zastępczego zgodnego ze wzorcem ``%var%``.
 .. caution::
 
     Podczas tłumaczeń w szablonach Twig przy użyciu znaczników wymagana jest
-    notacja symboli zamiennych ``%var%``.
+    notacja symboli zastępczych ``%var%``.
 
 .. tip::
 
     Jeśli w ciągu musi się użyć znak procenta  (``%``), to trzeba go zabezpieczyć
-    stosując podwójne znaki procent: ``{% trans %}Procent: %percent%%%{% endtrans %}``
+    stosując dodatkowo dwa znaki procent: ``{% trans %}Procent: %percent%%%{% endtrans %}``
 
 Można również określić domenę komunikatu i przekazać kilka dodatkowych zmiennych:
 
@@ -313,8 +315,8 @@ Można również określić domenę komunikatu i przekazać kilka dodatkowych zm
 
 .. _book-translation-filters:
 
-Filtru ``trans`` i ``transchoice`` mogą zostać użyte do przetłumaczenia *tekstów
-zmiennych* i złożonych wyrażeń:
+Filtry ``trans`` i ``transchoice`` mogą zostać użyte do przetłumaczenia *zmiennych*
+i złożonych wyrażeń:
 
 .. code-block:: jinja
    :linenos:
@@ -330,7 +332,7 @@ zmiennych* i złożonych wyrażeń:
 .. tip::
 
     Stosowanie znaczników translacyjnych i filtrów daje ten sam efekt, ale z jedną
-    subtelna różnicą: automatyczne zabezpieczenie danych wyjściowych jest stosowane
+    subtelną różnicą: automatyczne zabezpieczenie danych wyjściowych jest stosowane
     tylko w tłumaczeniach wykorzystujących filtry. Innymi słowami, jeśli chce się mieć
     pewność, że przetłumaczony komunikat nie został zabezpieczony na wyjściu znakami
     ucieczki, trzeba zastosować filtr `raw`` po filtrze translacyjnym:
@@ -372,7 +374,7 @@ Usługa translacyjna jest dostępna w szablonie PHP przy zastosowaniu helpera
 .. code-block:: html+php
    :linenos:
 
-    <?php echo $view['translator']->trans('Symfony2 is great') ?>
+    <?php echo $view['translator']->trans('Symfony is great') ?>
 
     <?php echo $view['translator']->transChoice(
         '{0} There is no apples|{1} There is one apple|]1,Inf[ There are %count% apples',
@@ -385,7 +387,7 @@ Usługa translacyjna jest dostępna w szablonie PHP przy zastosowaniu helpera
 Nazwy zasobów (plików) translacyjnych i ich lokalizacja
 -------------------------------------------------------
 
-Symfony2 wyszukuje pliki komunikatów (czyli tłumaczenia) w następujących katalogach:
+Symfony wyszukuje pliki komunikatów (czyli tłumaczenia) w następujących katalogach:
 
 * ``app/Resources/translations``;
 
@@ -397,7 +399,7 @@ Miejsca te są wymienione tutaj w kolejności najwyższego priorytetu. Oznacza t
 że można przesłonić komunikaty translacyjne pakietu, umieszczając przesłaniający
 plik tłumaczeń w dowolnym z dwu poprzednich katalogów.
 
-Mechanizm przesłaniania działaj na poziomie kluczy. Oznacza to, że w pliku tłumaczeń
+Mechanizm przesłaniania działa na poziomie kluczy. Oznacza to, że w pliku tłumaczeń
 o najwyższym priorytecie musi się wymienić tylko przesłaniane klucze. Gdy klucz
 nie zostaje znaleziony w podstawowym pliku tłumaczeń, translator automatycznie
 przechodzi do plików tłumaczeń niższego poziomu.
@@ -405,7 +407,7 @@ przechodzi do plików tłumaczeń niższego poziomu.
 Ważna jest też nazwa plików tłumaczeń – każdy plik tłumaczeń musi nosić nazwę zgodną
 ze wzorcem: ``domena.identyfikator.typ``:
 
-* **domena**: opcjonalny spsób organizowania komunikatów w grupy (np. ``admin``,
+* **domena**: opcjonalny sposób organizowania komunikatów w grupy (np. ``admin``,
   ``navigation`` lub domyślnie ``messages``) - zobacz :ref:`using-message-domains`;
 
 * **identyfikator**: oznaczenie językowe (narodowe) dla tłumaczenia
@@ -446,18 +448,28 @@ Awaryjny identyfikator narodowy
 -------------------------------
 
 Proszę sobie wyobrazić, że ustawienie narodowe użytkownika, to ``pl_PL`` oraz że
-mamy klucz translacyjny ``Symfony2 is great``. W celu znalezienia polskiego tłumaczenia,
+mamy klucz translacyjny ``Hello World``. W celu znalezienia polskiego tłumaczenia,
 Symfony w rzeczywistości sprawdza zasoby dla kilku różnych identyfikatorów narodowych:
 
 1. Najpierw, Symfony przeszukuje polskie zasoby translacyjnego ``pl_PL``
    (np. ``messages.pl_PL.xliff``), kolejno w trzech katalogach translacyjnych;
 
-2. Jeśli nie znaleziono tego tłumaczenia, Symfony przeszukije zasoby ``pl``
+2. Jeśli nie znaleziono tego tłumaczenia, Symfony przeszukuje zasoby ``pl``
    (np. ``messages.pl.xliff``);
 
 3. Jeśli tłumaczenie dalej nie zostało znalezione, Symfony używa parametru
-   konfiguracyjnego ``fallback``, którego domyśłna wartość , to ``en``.
+   konfiguracyjnego ``fallback``, którego domyślna wartość , to ``en``.
    
+.. versionadded:: 2.6
+    W Symmy 2.6. wprowadzono możliwość rejestrowania brakujących tłumaczeń w dzienniku
+    zdarzeń. 
+
+.. note::
+
+    Kiedy Symfony nie znajdzie tłumaczenia dla określonego ustawienia narodowego,
+    doda brakujące tłumaczenie do pliku dziennika zdarzeń. Więcej informacji można 
+    znaleźć w :ref:`reference-framework-translator-logging`.
+
 
 .. _book-translation-user-locale:
 
@@ -549,7 +561,7 @@ Jest to w pełni obsługiwane przez specjalny parametr ``_locale``:
 
         return $collection;
 
-Podczas stosowania specjalnegp parametru ``_locale`` w trasie, dopasowanie
+Podczas stosowania specjalnego parametru ``_locale`` w trasie, dopasowanie
 identyfikatora narodowego będzie *automatycznie ustawiane w żądaniu* i może zostać
 pobrane poprzez metodę :method:`Symfony\\Component\\HttpFoundation\\Request::getLocale`.
 Innymi słowami, jeśli użytkownik odwiedzi URI ``/pl/contact``, to symbol ``pl``
@@ -599,7 +611,7 @@ Jeśli używa się ograniczeń walidacyjnych we frameworku formularzy, można w 
 łatwy tłumaczyć komunikaty błędów. Wystarczy utworzyć zasób dla :ref:`domeny
 <using-message-domains>` ``validators``.
 
-W celu rozpoczęcia załóżmy, że tworzymy zwykły stary obiekt PHP, który trzeba
+Załóżmy, że tworzymy zwykły stary obiekt PHP, który trzeba
 używać gdzieś w aplikacji::
 
     // src/Acme/BlogBundle/Entity/Author.php
@@ -714,27 +726,201 @@ pakietu.
         # validators.en.yml
         author.name.not_blank: Please enter an author name.
 
-Tłumaczenie zawartości bazydanych
----------------------------------
+Tłumaczenie zawartości bazy danych
+----------------------------------
 
 Tłumaczenie treści z bazy danych powinno być obsługiwane przez rozszrzenie
 `Translatable Extension`_ Doctrine. Więcej informacji znajdziesz w dokumentacji
 tej biblioteki.
 
+Debugowanie tłumaczeń
+---------------------
+
+.. versionadded:: 2.6
+    Przed Symfony 2.6, polecenie tu opisywane miało nazwę ``translation:debug``.
+
+Podczas utrzymywania pakietu, mozna użyć lub usunąć komunikat translacyjny bez
+aktualizowania wszystkich katalogów komunikatów. Polecenie ``debug:translation``
+pomaga znaleźć te brakujące i niewykorzystywane komunikaty translacyjne dla
+określonego ustawienia narodowego. Pokaże ono tabelę z wynikiem wykorzystanych
+tłumaczeń z danego ustawienia narodowego oraz wynik wykorzystanych awaryjnych
+tłumaczeń. Na samej górze pokazuje jakie tłumaczenia są takie same jak tłumaczenia
+awaryjne (może to wskazywać na komunikaty nieprawidłowo przetłumaczone).
+
+Polecenie to wykrywa znaczniki translacyjne lub filtry w szablonie Twig:
+
+.. code-block:: jinja
+
+    {% trans %}Symfony is great{% endtrans %}
+
+    {{ 'Symfony is great'|trans }}
+
+    {{ 'Symfony is great'|transchoice(1) }}
+
+    {% transchoice 1 %}Symfony is great{% endtranschoice %}
+
+Wykrywa ono również następujące translatory użyte w szablonach PHP:
+
+.. code-block:: php
+
+    $view['translator']->trans("Symfony is great");
+
+    $view['translator']->transChoice('Symfony is great', 1);
+
+.. caution::
+
+    Ekstraktory nie są zdolne do badania komunikatów tłumaczonych poza szablonami,
+    co oznacza że nie zostanie wykryty translator zastosowany w etykietach formularzy
+    lub wewnątrz kontrolerów.
+    Dynamiczne tłumaczenia obejmujące zmienne lub wyrażenia nie są wykrywane w
+    szablonach, co oznacza że, poniższy przykład nie zostanie przeanalizowany:
+
+    .. code-block:: jinja
+
+        {% set message = 'Symfony is great' %}
+        {{ message|trans }}
+
+Załóżmy, że opcja default_locale ma wartość ``fr`` i że awaryjne ustawienie narodowe,
+to ``en`` (zobacz :ref:`book-translation-configuration` i :ref:`book-translation-fallback`
+dla poznania szczegółów o tej konfiguracji).
+Załóżmy też, że mamy już ustawienie regionalne ``fr`` dla niektórych tłumaczeń
+w AcmeDemoBundle:
+
+.. configuration-block::
+
+    .. code-block:: xml
+
+        <!-- src/Acme/AcmeDemoBundle/Resources/translations/messages.fr.xliff -->
+        <?xml version="1.0"?>
+        <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+            <file source-language="en" datatype="plaintext" original="file.ext">
+                <body>
+                    <trans-unit id="1">
+                        <source>Symfony2 is great</source>
+                        <target>J'aime Symfony2</target>
+                    </trans-unit>
+                </body>
+            </file>
+        </xliff>
+
+
+    .. code-block:: yaml
+
+        # src/Acme/AcmeDemoBundle/Resources/translations/messages.fr.yml
+        Symfony2 is great: J'aime Symfony2
+
+    .. code-block:: php
+
+        // src/Acme/AcmeDemoBundle/Resources/translations/messages.fr.php
+        return array(
+            'Symfony2 is great' => 'J\'aime Symfony2',
+        );
+
+a dla ustawienia ``en``:
+
+.. configuration-block::
+
+    .. code-block:: xml
+
+        <!-- src/Acme/AcmeDemoBundle/Resources/translations/messages.en.xliff -->
+        <?xml version="1.0"?>
+        <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+            <file source-language="en" datatype="plaintext" original="file.ext">
+                <body>
+                    <trans-unit id="1">
+                        <source>Symfony is great</source>
+                        <target>Symfony is great</target>
+                    </trans-unit>
+                </body>
+            </file>
+        </xliff>
+
+    .. code-block:: yaml
+
+        # src/Acme/AcmeDemoBundle/Resources/translations/messages.en.yml
+        Symfony is great: Symfony is great
+
+    .. code-block:: php
+
+        // src/Acme/AcmeDemoBundle/Resources/translations/messages.en.php
+        return array(
+            'Symfony is great' => 'Symfony is great',
+        );
+
+W celu sprawdzenia wszystkich komunikatów w ustawieniu ``fr`` dla AcmeDemoBundle,
+trzeba urychomić:
+
+.. code-block:: bash
+
+    $ php app/console debug:translation fr AcmeDemoBundle
+
+Wynikiem będzie:
+
+.. image:: /images/book/translation/debug_1.png
+    :align: center
+
+Wskazuje to, że komunikat ``Symfony is great`` jest nieużywany, ponieważ wprawdzie
+został przetłumaczony, ale tłumaczenie jeszcze nigdzie nie zostało użyte.
+
+Teraz, jeśli przetłumaczy się komunikat w jednym z szablonów, otrzyma się taki wynik:
+
+.. image:: /images/book/translation/debug_2.png
+    :align: center
+
+Stan jest pusty, co oznacza że, komunikat jest tłumaczony w ustawieniu ``fr``
+i został użyty w jednym lub więcej szablonów.
+
+Jeśli z pliku tłumaczeń usunie się komunikat ``Symfony is great`` dla ustawienia
+narodowego ``fr`` i uruchomi się to polecenie, uzyska się:
+
+.. image:: /images/book/translation/debug_3.png
+    :align: center
+
+Stan ten wskazuje na brak komunikatu, ponieważ nie został on przetłumaczony
+w ustawieniu narodowym ``fr``, ale nadal jest używany w szablonie.
+Ponadto, komunikat w ustawieniu ``fr`` jest taki sam jak w ustawieniu ``en``.
+Jest to szczególny przypadek, ponieważ identyfikator nieprzetłumaczonego komunikatu
+jest taki sam jak jego tłumaczenia w ustawieniu ``en``.
+
+Jeśli teraz skopiuje się zawartość pliku translacyjnego w ustawieniu ``en`` do pliku
+translacyjnego w ustawieniu ``fr`` i uruchomi się polecenie debugujące, otrzyma się:
+
+.. image:: /images/book/translation/debug_4.png
+    :align: center
+
+Mozna teraz zobaczyć, że tłumaczenia komunikatów z ustawień ``fr`` i ``en`` są
+takie same, co może oznaczać że, przypuszczalnie skopiowało się komunikaty francuskie
+na komunikaty angielskie i może zapomniało sie je przetłumaczyć.
+
+Domyślnie sprawdzane sa wszystkie domeny, ale jest możliwe określenie pojedynczej
+domeny:
+
+.. code-block:: bash
+
+    $ php app/console debug:translation en AcmeDemoBundle --domain=messages
+
+Gdy pakiety mają duzo komunikatów, przydatne jest wyswietlenie tylko nieużywanych
+lub brakujących komunikatów, używając przełącznika ``--only-unused`` lub ``--only-missing``:
+
+.. code-block:: bash
+
+    $ php app/console debug:translation en AcmeDemoBundle --only-unused
+    $ php app/console debug:translation en AcmeDemoBundle --only-missing
+
 
 Podsumowanie
 ------------
 
-Z komponentem Symfony2 Translation, tworzenie umiędzynarodowionych aplikacji nie
+Z komponentem Symfony Translation, tworzenie wielojęzycznych aplikacji nie
 musi być bolesnym procesem i sprowadza się do kilku prostych kroków:
 
 * Uabstrakcyjnienie komunikatów w aplikacji przez owinięcie każdego z nich metodą 
   :method:`Symfony\\Component\\Translation\\Translator::trans` lub
-  :method:`Symfony\\Component\\Translation\\Translator::transChoice` methods
-  (learn about this in :doc:`/components/translation/usage`);
+  :method:`Symfony\\Component\\Translation\\Translator::transChoice`
+  (przeczytaj o tym w :doc:`/components/translation/usage`);
   
 * Przetłumaczenie każdego komunikatu dla wielu ustawień narodowych przez utworzenie
-  plików tłumaczeń komunikatów. Symfony2 odnajduje i przetwarza każdy plik ponieważ
+  plików komunikatów translacyjnych. Symfony odnajduje i przetwarza każdy plik ponieważ
   jego nazwa zgodna jest z określoną konwencją;
 
 * Zarządzanie ustawieniami narodowymi, których oznaczenia (identyfikatory) są
