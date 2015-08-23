@@ -4,337 +4,289 @@
 Przegląd
 ========
 
-Zacznij korzystać z Symfony2 w 10 minut! Ten rozdział wyjaśni Ci kilka
-najważniejszych pojęć Symfony2 i to, jak można rozpocząć
-szybko pracę, pokazując w działaniu prosty przykład aplikacji.
+Zacznij korzystać z Symfony w 10 minut! Ten rozdział wyjaśni Ci kilka
+najważniejszych pojęć Symfony i to, jak można rozpocząć
+szybko pracę, demonstrując prosty przykład aplikacji.
 
-Jeśli czytelnik kiedykolwiek używał frameworka aplikacji internetowej, to z Symfony2
+Jeśli Czytelnik kiedykolwiek używał frameworka aplikacji internetowej, to z Symfony
 powinien czuć się jak w domu.
 Jeśli nie, to zapraszamy do poznania zupełnie nowego sposobu tworzenia aplikacji
 internetowych.
 
-    
-Instalowanie Symfony2
----------------------
-
-Najpierw, sprawdź zainstalowaną na swoim komputerze wersję wersję PHP, gdyż Symfony2
-wymaga wersji 5.3.3 lub wyższej. Otwórz konsolę i wykonaj następujące polecenie
-instalujące najnowszą wersję Symfony2 w katalogu ``myproject/``:
+Jedynym wymaganiem do śledzenia wykonywanego tu przykładu jest posiadanie **na swoim
+komputerze instalacji PHP 5.4 lub wersji wyżej**. Jeśli uzywasz rozwiązanie
+pakietowe PHP, takie jak WAMP, XAMP lub MAMP, sprawdź, czy używa taka instalacja
+PHP 5.4 lub wersji wyższej. Możesz również wykonać następujace polecenie w swoim
+terminalu lub konsoli poleceń, aby wyświetlić informację o zaistalowanej wersji
+PHP:
 
 .. code-block:: bash
 
-    $ composer create-project symfony/framework-standard-edition myproject/ '~2.5'
+    $ php --version
 
-.. note::
+.. _installing-symfony2:
+    
+Instalowanie Symfony
+--------------------
 
-    `Composer`_, to menadżer pakietów wykorzystywany w nowoczesnych aplikacjach
-    PHP i jedyny zalecany sposób instalacji Symfony2. W celu zainstalowania
-    programu Composer w systemie Linux lub Mac, wykonaj następujące polecenia:
+W przeszłości musieliśmy instalować Symfony ręcznie, dla każdego nowego projektu.
+Teraz mozemy wykorzystać **Symfony Installer**, który musi być najpierw zainstalowany
+na komputerze przed pierwszym użyciem Symfony.
 
-    .. code-block:: bash
+Na systemach **Linux** i **Mac OS X**, trzeba wykonać następujace polecenia konsolowe:
 
-        $ curl -sS https://getcomposer.org/installer | php
-        $ sudo mv composer.phar /usr/local/bin/composer
+.. code-block:: bash
 
-    Dla zainstalowania programu Composer w systemie Windows, trzeba
-    pobrac `executable installer`_.
+    $ curl -LsS http://symfony.com/installer > symfony.phar
+    $ sudo mv symfony.phar /usr/local/bin/symfony
+    $ chmod a+x /usr/local/bin/symfony
 
-Pamiętaj, że w czasie pierwszej instalacji Symfony2 może minąć kilka minut zanim
-zostaną pobrane wszystkie komponenty. Pod koniec procesu instalacji instalator
-poprosi o odpowiedź na kilka pytań:
+Po zainstalowaniu instalatora Symfony, trzeba otworzyć nowe okno konsoli, aby
+wykonać nowe polecenie ``symfony``:
 
-1. **Would you like to use Symfony 3 directory structure? [y/N]**
-   (*Czy chcesz zastosować strukturę katalogową Symfony 3? [y/N]*) Nadchodząca
-   wersja Symfony 3 zmieni domyślną strukturę katalogową aplikacji Symfony.
-   Jeśli chcesz przetestować tą nową strukturę, wprowadź ``y``. Na użytek niniejszego
-   poradnika, wciśnij klawisz ``<Enter>``, aby zaakceptować domyślną wartość ``N``
-   i utrzymać domyślna strukturę Symfony2.
-2. **Would you like to install Acme demo bundle? [y/N]**
-   (*Czy chcesz zainstalować demonstracyjny pakiet Acme? [y/N]*)
-   Wcześniejsze wersje Symfony niż 2.5 zawierały demonstracyjną aplikację do testowania
-   niektórych możliwości frameworka. Ponieważ ta aplikacja jest przydatna tylko dla
-   początkujących, jej instalacja jest teraz opcjonalna. W celu wykonywania ćwiczeń
-   zawartych w tym poradniku, zainstaluj aplikację demonstracyjną wprowadzając
-   odpowiedź ``y``.
-3. **Some parameters are missing. Please provide them.**
-   (*Niektóre parametry są puste. Proszę wprowadzić je.*)
-   Symfony2 poprosi o podanie wartości wszystkich parametrów konfiguracyjnych.
-   W naszym pierwszym projekcie można je bezpiecznie zignorować wciskając wielokrotnie
-   klawisz ``<Enter>``.
-4. **Do you want to remove the existing VCS (.git, .svn..) history? [Y,n]?**
-   (*Czy chcesz usunąć istniejąca historię VCS (.git, .svn..)? [Y,n]?*)
-   Historia tworzenia dużych projektów, takich jak Symfony, może zajmować sporą
-   przestrzeń dyskową. Wciśnij klawisz ``<Enter>``, aby bezpiecznie usunąć wszystkie
-   dane historii.
+.. code-block:: bash
 
-Uruchomienie Symfony2
----------------------
+    $ symfony
 
-Przed pierwszym uruchomieniem Symfony2, należy wykonać następujące polecenie,
-aby upewnić się, że system spełnia wszystkie techniczne wymagania:
+Na systemach **Windows**, trzeba wykonać następujące polecenie konsolowe:
+
+.. code-block:: bash
+
+    c:\> php -r "readfile('http://symfony.com/installer');" > symfony.phar
+
+Polecenie to pobierze plik o nazwie ``symfony.phar``, który zawiera instalatora
+Symfony. Zapisz lub przenieś ten plik do katalogu, w którym mają być tworzone
+projekty Symfony i następnie uruchom niezwłocznie instalator Symfony, takim
+poleceniem:
+
+.. code-block:: bash
+
+    c:\> php symfony.phar
+
+Utworzenie pierwszego projektu Symfony
+--------------------------------------
+
+Gdy już Symfony Installer jest ustawiony, mozna utworzyć nowy projekt Symfony,
+stosujac polecenie ``new``. Utwórzmy nowy projekt o nazwie ``myproject``:
+
+.. code-block:: bash
+
+    # Linux and Mac OS X
+    $ symfony new myproject
+
+    # Windows
+    c:\> php symfony.phar new myproject
+
+Polecenie to pobierze najnowszą stabilną wersję Symfony i utworzy pusty projekt
+w katalogu ``myproject/``, dzięki czemu od razu można rozpocząć tworzenie swojej
+aplikacji.
+
+.. _running-symfony2:
+
+Uruchomienie Symfony
+--------------------
+
+W tym poradniku wykorzytujemy do uruchamiania aplikacji Symfony wewnetrzny serwer
+internetowy dostarczany przez PHP. Dlatego, uruchamianie aplikacji serwera sprowadza
+się do skonfigurowanie się w katalogu projektu w wykonania polecenia:
 
 .. code-block:: bash
 
     $ cd myproject/
-    $ php app/check.php
-
-Napraw błędy zgłoszone przez polecenie i następnie wykorzystaj wbudowany w PHP
-serwer internetowy do uruchomienia aplikacji Symfony:
-
-.. code-block:: bash
-
     $ php app/console server:run
 
-.. seealso::
-
-   Więcej informacji o wbudowanycm serwerze znajduje się w
-   :doc:`in the cookbook </cookbook/web_server/built_in>`.
-
-Jeśli pojawi się błąd `There are no commands defined in the "server" namespace.`,
-to prawdopodobnie używasz PHP 5.3. Nie jest to nic strasznego, ale wbudowany serwer
-jest tylko dostępny w PHP 5.4.0 lub wersji wyższej. Jeśli masz starszą wersję PHP
-lub jeśli preferujesz tradycyjny serwer, taki jak Apache lub Nginx, przeczytaj
-artykuł :doc:`/cookbook/configuration/web_server_configuration`.
-
-Otwórz przeglądarkę i odwiedź adres URL ``http://localhost:8000``, aby zobaczyć
-stronę powitalną Symfony2:
+Otwórz przegladarke i przejdź do adresu URL ``http://localhost:8000/app/example``,
+co powinno wyświetlic stronę powitalną :
 
 .. image:: /images/quick_tour/welcome.png
    :align: center
-   :alt:   Symfony2 Welcome Page
+   :alt: Symfony Welcome Page
+
+Gratulujemy! Twój pierwszy projekt Symfony jest gotowy do pracy.
+
+.. note::
+
+    Zamiast strony powitalnej można zobaczyć pustą stronę lub strone błędu.
+    Jest to spowodowane błędem uprawnień dostęþu do katalogu. Jest kilka
+    możliwych rozwiązań, w zależnosci od systemu operacyjnego. Sposoby te są
+    omówione w rozdziale :ref:`Ustawianie uprawnień <book-installation-permissions>`
+    podręcznika.
+
+    Jeśli strona powitalna wydaje się nie być zrenderowana z aktywaniu CSS lub obrazów,
+    zainstaluj je:
+
+    .. code-block:: bash
+
+        $ php app/console assets:install
+
+Serwer internetowy można zatrzymać, po zakończeniu pracy z aplikacją Symfony,
+wciskając klucz Ctrl+C.
+
+.. tip::
+
+    Jeśli wolisz pracować z tradycyjnym serwerem internetowym, takim jak Apache
+    lub Nginx, przeczytaj artykuł
+    :doc:`/cookbook/configuration/web_server_configuration`.
+
 
 Podstawy
 --------
 
 Jednym z głównych celów frameworka (platformy aplikacyjnej) jest dobre zorganizowanie
 kodu i umożliwienie łatwego rozwoju aplikacji, z uniknięciem mieszania w jednym
-skrypcie wywołań bazy danych, znaczników HTML i biznesowej logiki. Dla osiągnięcia
-tego celu z Symfony, najpierw musisz poznać kilka podstawowych pojęć i terminów.
+skrypcie wywołań bazy danych, znaczników HTML i logiki biznesowej. W celu zrozumienia,
+jak to działa w Symfony, najpierw musisz poznać kilka podstawowych pojęć i terminów.
 
-Symfony dostarczane jest z przykładowym kodem, który można wykorzystać do nauczenia
-się więcej o podstawowych pojęciach. Przejdź do następującego adresu URL, aby zobaczyć
-stronę powitalną Symfony2 (zamień *Fabien* na swoje imię):
+Podczas tworzenia aplikacji Symfony, rola programisty polaga na napisaniu kodu,
+który odwzorowuje *żądanie* użytkownika (np.  ``http://localhost:8000/app/example``)
+na *zasób* związany z tym żądaniem (stron HTML ``Homepage``).
 
-.. code-block:: text
+Kod, który ma być wykonany, jest zdefiniowany w **akcjach** i **kontrolerach**.
+Odzwzorowanie pomiędzy żądaniem użytkownika a tym kodem jest zdefiniowane w
+konfiguracji **trasowania** .
+Treści wyświetlane w przeglądarce są zazwyczaj renderowane przy uzyciu **szablonów**.
 
-    http://localhost:8000/app_dev.php/demo/hello/Fabien
+Kiedy przeglądało sie ``http://localhost:8000/app/example``, Symfony wykonał kod
+kontrolera, zdefiniowany w pliku ``src/AppBundle/Controller/DefaultController.php``
+i zrenderował szablon ``app/Resources/views/default/index.html.twig``.
+W nastęþnym rozdziale dowiesz sie o szczegółach wewnętrznego funkcjonowania kontrolerów
+Symfony, trasach i szablonach.
 
-.. image:: /images/quick_tour/hello_fabien.png
-   :align: center
+Akcje i kontrolery
+~~~~~~~~~~~~~~~~~~
+
+Otwórz plik ``src/AppBundle/Controller/DefaultController.php`` i obejrzyj zawarty
+tam kod (na razie nie będziemy zajmować sie konfiguracją ``@Route``, ponieważ
+zostanie to wyjaśnione w następnym rozdziale)::
+
+    namespace AppBundle\Controller;
+
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+    use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+    class DefaultController extends Controller
+    {
+        /**
+         * @Route("/app/example", name="homepage")
+         */
+        public function indexAction()
+        {
+            return $this->render('default/index.html.twig');
+        }
+    }
+
+W aplikacji Symfony, **kontrolery**, to zazwyczaj klasy PHP, których nazwy są
+zakończone słowem ``Controller``. W tym przykładzie kontroler nosi nazwę
+``Default`` a klasa PHP ma nazwę ``DefaultController``.
+
+Metody zdefioniowane w kontrolerze sa nazywane **akcjami** - są zwykle związane
+z jakimś jedym adresem URL aplikacji i ich nazwy konczą sie słowem ``Action``.
+W naszym przykładzie kontroler ``Default`` ma tylko jedną akcję o nazwie ``index``
+i definiuje metodę ``indexAction``.
 
 .. note::
+   W niniejszym podręczniku, można się spotkać (jeszcze) ze stosowaniem słowa
+   *kontroler* w znaczeniu *akcja*, co zostało przeniesione z dokumentacji
+   anglojezycznej. Np. mówiąc, że "trasa odwzorowuje żądanie użytkownika na kontroler",
+   trzeba to rozumieć, że "trasa odwzorowuje żądanie użytkownika na odpowiednią
+   metodę kontrolera, czyli na akcję. Tak więc, czytajac o "kontrolerze" proszę
+   zwracać uwagę na kontekst.    
 
-    Może się zdarzyć, że zamiast strony powitalnej, zobaczy się pustą stronę lub
-    stronę błędu. Jest to spowodowane błędem uprawnień do katalogu aplikacji.
-    Jest kilka możliwych rozwiązań tego problemu. Wszystkie z nich omówione są
-    w rozdziale :ref:`Ustawienie uprawnień <book-installation-permissions>`
-    oficjalnego podręcznika Symfony 2.
+Kod akcji jest zazwyczaj bardzo krótki - około 10-15 linii kodu - ponieważ
+odwołuja sie one do innych części aplikacji, w celu pobrania lub wygenerowania
+potrzebnych informacji i renderuje szablonu, w celu pokazania wyników użytkownikowi.
 
-
-Co się tutaj dzieje? Spróbujmy przeanalizować adres URL:
-
-* ``app_dev.php``: Jest to :term:`kontroler wejścia` - unikalny punkt wejścia
-  aplikacji, który odpowiedzialny za wszystkie żądania użytkownika;
-
-* ``/demo/hello/Fabien``: Jest to *wirtualna ścieżka* do zasobu jaki chce uzyskać
-  użytkownik.
-
-Twoim zadaniem, jako programisty jest napisanie takiego kodu, który odwzorowuje
-*żądanie* (``/demo/hello/Fabien``) użytkownika na *zasób* z nim związany (``Hello Fabien!``).
+W tym przykładzie akcja ``index`` jest praktycznie pusta, ponieważ nie ma potrzeby
+wywoływania innych metod. Akcja ta tylko renderuje szablon z treścią *Homepage*.
 
 Trasowanie
 ~~~~~~~~~~
 
 System trasowania (*ang. routing*), nazywany też w polskiej literaturze "systemem przekierowań",
-w Symfony2 obsługuje żądania klienta, dopasowując ścieżkę dostępu (zawartą w adresie URL)
-do skonfigurowanych wzorców tras i przekazaniu sterowania właściwemu kontrolerowi.
-Domyślnie wzorce te są zdefiniowane w pliku ``app/config/routing.yml``:
+w Symfony obsługuje żądania klienta, dopasowując ścieżkę dostępu (zawartą w adresie URL)
+do skonfigurowanych wzorców tras i przekazaniu sterowania właściwej akcji.
+Otwórzmy ponownie plik ``src/AppBundle/Controller/DefaultController.php`` i skupmy
+się na trzech pierwszych liniach metody ``indexAction``::
+   
+   // src/AppBundle/Controller/DefaultController.php
+    namespace AppBundle\Controller;
 
-
-.. code-block:: yaml
-   :linenos:
-
-    # app/config/routing_dev.yml
-    _welcome:
-        pattern:  /
-        defaults: { _controller: AcmeDemoBundle:Welcome:index }
-
-    _demo:
-        resource: "@AcmeDemoBundle/Controller/DemoController.php"
-        type:     annotation
-        prefix:   /demo
-
-    # ...
-
-Pierwsze trzy linie (po komentarzu) określają kod, który jest wykonywany
-gdy użytkownik zażąda zasobu "``/``" (tj. strony powitalnej, którą widziałeś
-wcześniej). Żądanie wywoła kontroler ``AcmeDemoBundle:Welcome:index``. 
-W kolejnym rozdziale dowiesz się dokładnie co to oznacza.
-
-.. tip::
-
-    Oprócz plików YAML, trasy można skonfigurować w plikach XML lub PHP oraz
-    można je osadzić w postaci adnotacji PHP w kontrolerach. Ta elastyczność
-    jest jedną z głównych zalet Symfony2, frameworka, który nie narzuca
-    programiście formatu konfiguracji.
-
-Kontrolery
-~~~~~~~~~~
-
-Kontroler jest to jakaś funkcja lub metoda PHP obsługująca przychodzące
-*żądania* i zwracająca *odpowiedzi* (często kod HTML). Zamiast wykorzystywać
-zmienne globalne PHP i funkcje (np. ``$_GET`` lub ``header()``) do zarządzania
-komunikatami HTTP, Symfony używa obiekty :class:`Symfony\\Component\\HttpFoundation\\Request`
-i :class:`Symfony\\Component\\HttpFoundation\\Response`. Możliwie najprostszy 
-kontroler można utworzyć ręcznie, na podstawie żądania::
-
-    use Symfony\Component\HttpFoundation\Response;
-
-    $name = $request->get('name');
-
-    return new Response('Hello '.$name);
-    
-    
-Symfony2 wybiera kontroler na podstawie wartości ``_controller`` z 
-konfiguracji trasowania: ``AcmeDemoBundle:Welcome:index``. Ten ciąg znaków jest
-*logiczną nazwą* kontrolera i odwołuje się do metody ``indexAction`` z
-:class:`Acme\\DemoBundle\\Controller\\WelcomeController`::
-
-    // src/Acme/DemoBundle/Controller/WelcomeController.php
-    namespace Acme\DemoBundle\Controller;
-
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
     use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-    class WelcomeController extends Controller
+    class DefaultController extends Controller
     {
+        /**
+         * @Route("/app/example", name="homepage")
+         */
         public function indexAction()
         {
-            return $this->render('AcmeDemoBundle:Welcome:index.html.twig');
+            return $this->render('default/index.html.twig');
         }
     }
 
+Te trzy pierwsze linie definiują konfigurację trasowania przy użyciu adnotacji
+``@Route()``. **Adnotacja PHP** jest wygodnym sposobem konfigurowania metody bez
+konieczności pisania zwykłego kodu PHP. Trzeba pamiętać, że bloki adnotacji
+rozpoczynają się od ``/**``, natomiast zwykłe komentarze od ``/*``.
+
+Pierwsza wartość adnoacji ``@Route()`` określa adres URL, która spowoduje wykonanie
+określonej akcji. ponieważ nie trzeba dodawać schematu i hosta z adresu URL
+(np. ``http://example.com``), te adresy URL są zawsze wzgledne i nazywamy je
+*ściezkami*. W naszym przypadku, ścieżka ``/app/example`` odnosi się do aplikacji
+homepage. Druga wartość adnotacji ``@Route()`` (tj. ``name="homepage"``) jest
+opcjonalna i ustawia nazwę tej trasy. Na razie ta nazwa jest nieprzydatna, ale
+później stanie się potrzebna do linkowania stron.
+
+Uwzgledniajac to wszystko, adnotacja ``@Route("/app/example", name="homepage")``
+tworzy nową trasę o nazwie ``homepage``, co powoduje, że Symfony wykonuje akcję
+``index`` kontrolera ``Default``, gdy użytkownik odwiedzi adres URL aplikacji ze
+ścieżką ``/app/example``.
+
 .. tip::
 
-    Można używać pełnej nazwy klasy i metody - 
-    ``Acme\DemoBundle\Controller\WelcomeController::indexAction`` dla wartości
-    ``_controller``. Jeśli jendnak chcesz wykorzystywać proste konwencje, używaj
-    nazwy logicznej, która jest krótsza i pozwala na większą elastyczność.
-
-Klasa ``WelcomeController`` rozszerza wbudowaną klasę :class:`Controller`,
-która dostarcza użytecznych skrótowych metod, takich jak metoda
-`render() <http://api.symfony.com/2.0/Symfony/Bundle/FrameworkBundle/Controller/Controller.html#render()>`_
-ładującą i renderującą szablon (``AcmeDemoBundle:Welcome:index.html.twig``).
-Zwracaną wartością jest obiekt ``Response`` wypełniony zrenderowaną zawartością strony.
-Jeżeli wystąpi taka potrzeba, to obiekt ``Response`` może zostać zmodyfikowany przed
-przesłaniem go do przeglądarki::
-
-   public function indexAction()
-   {
-      $response = $this->render('AcmeDemoBundle:Welcome:index.txt.twig');
-      $response->headers->set('Content-Type', 'text/plain');
-      
-      return $response;
-   }
-
-Nie ważne jak to jest robione, ostatecznym celem kontrolera jest zawsze zwrócenie
-obiektu ``Response``, który następnie powinien być dostarczony do użytkownika.
-Ten obiekt może być wypełniony kodem HTML, reprezentować przekierowanie klienta
-lub nawet zwracać zawartość obrazu JPG nagłówka z ``Content-Type image/jpg``.
-
-Nazwa szablonu ``AcmeDemoBundle:Welcome:index.html.twig``, to logiczna nazwa
-odwołująca się do pliku ``Resources/views/Welcome/index.html.twig`` wewnątrz
-``AcmeDemoBundle` (umieszczonego w ``src/Acme/DemoBundle``). Dalszy rozdział
-o pakietach wyjaśnia, dlaczego jest to takie użyteczne.
-
-Teraz ponownie zajrzyj do konfiguracji tras i znajdź klucz ``_demo``:
-
-.. code-block:: yaml
-   :linenos:
-   
-   # app/config/routing_dev.yml
-   _demo:
-      resource: "@AcmeDemoBundle/Controller/DemoController.php"
-      type:     annotatio
-      prefix:   /demo
-   
-*Nazwa logiczna* pliku zawierajacego trasę ``_demo``, to
-``@AcmeDemoBundle/Controller/DemoController.php`` i odnosi się do pliku
-``src/Acme/DemoBundle/Controller/DemoController.php``.
-W pliku tym trasy są określone jako adnotacje w metodach akcji::
-
-   // src/Acme/DemoBundle/Controller/DemoController.php
-   use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-   use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-   
-   class DemoController extends Controller
-   {
-      /**
-      * @Route("/hello/{name}", name="_demo_hello")
-      * @Template()
-      */
-      public function helloAction($name)
-      {
-         return array('name' => $name);
-      }
-      
-      // ...
-   }
-
-Adnotacja ``@Route()`` tworzy nową trasę dopasowująca ścieżkę ``/hello/{name}``
-w metodzie ``helloAction()``. Dowolny ciąg znakowy w nawiasach klamrowych, taki
-jak ``{name}``, jest traktowany jako zmienna, która może być pobrana bezpośrednio
-z argumentu metody i o tej samej nazwie.
-
-Jeżeli przyjrzeć się dokładniej kodowi kontrolera, to można zauważyć, ze zamiast
-renderowania szablonu i zwrócenia obiektu ``Response``, jak poprzednio, zwracana
-teraz jest tablica parametrów. Adnotacja ``@Template()`` powiadamia Symfony aby
-renderował szablon, przechodząc w każdej z tych zmiennych z tablicy do szablonu.
-Nazwa renderowanego szablonu występuje po nazwie kontrolera. Tak więc w tym przykładzie,
-renderowany jest szablon ``AcmeDemoBundle:Demo:hello.html.twig`` (znajduje się w
-``src/Acme/DemoBundle/Resources/views/Demo/hello.html.twig``).
+    Oprócz adnotacji PHP, trasy można konfigurować w plikach YAML, XML lub
+    PHP, tak jak wyjaśniono to w rozdziale :doc:`Trasowanie </book/routing>`
+    podręcznika Symfony. ta elastyczność jest jedną z głównych cech Symfony -
+    frameworka, który nigdy nie narzuca konkrenego formatu konfiguracji.
 
 Szablony
 ~~~~~~~~
 
-Kontroler renderuje szablon ``src/Acme/DemoBundle/Resources/views/Demo/hello.html.twig``
-(lub ``AcmeDemoBundle:Demo:hello.html.twig`` jeśli używa się logicznej nazwy):
+Jedyną zawartością akcji ``index`` jest instrukcja PHP::
+
+    return $this->render('default/index.html.twig');
+
+Metoda ``$this->render()`` jest wygodnym skrótem renderującym szablon.
+Symfony dostarcza kilka przydatnych skrótów do każdego kontrolera rozszerzającego
+klasę ``Controller``.
+
+Domyślnie, szablony aplikacji sa przechowywane w katalogu ``app/Resources/views/``.
+Dlatego szablon ``default/index.html.twig``, to to samo co
+``app/Resources/views/default/index.html.twig``. Otwórz ten plik i przyjrzyj się
+temu kodowi:
 
 .. code-block:: html+jinja
-   :linenos:
-      
-   {# src/Acme/DemoBundle/Resources/views/Demo/hello.html.twig #}
-   {% extends "AcmeDemoBundle::layout.html.twig" %}
-   
-   {% block title "Hello " ~ name %}
-   
-   {% block content %}
-      <h1>Hello {{ name }}!</h1>
-   {% endblock %}
 
-Symfony2 stosuje domyślnie silnik szablonów `Twig`_,
-ale można również korzystać z tradycyjnych szablonów PHP.
-:doc:`Natępny rozdział opisuje </quick_tour/the_view>`
-jak działają szablony w Symfony2.
+    {# app/Resources/views/default/index.html.twig #}
+    {% extends 'base.html.twig' %}
 
-Pakiety
-~~~~~~~
+    {% block body %}
+        Homepage.
+    {% endblock %}
 
-Może zastanawiałeś się, do czego odnosi się słowo :term:`pakiet` (*ang. bundle*),
-które już kilkakrotnie zostało użyte wcześniej? Cały kod tworzony dla jakiejś aplikacji
-jest zorganizowany w pakiety. W Symfony2 mówi się, że pakiet, to uporządkowany zestaw plików
-(plików PHP, arkuszy stylów, skryptów JavaScript, obrazów, ...), które implementują
-pojedyńczą funkcjonalność (blog, forum, ...) i które mogą być łatwo udostępniane
-innym programistom. Dotąd manipulowaliśmy jednym pakietem - ``AcmeDemoBundle``.
-Dowiesz się więcej na temat pakietów w :doc:`ostatniej części tego przewodnika
-</quick_tour/the_architecture>`.
+Szablon ten jest utworzony w `Twig`_, nowym silniku szablonowania, przeznaczonym
+dla nowoczesnych aplikacji PHP.
+:doc:`Druga część tego poradnika </quick_tour/the_view>` wyjaśni Ci, jak działają
+szablony w Symfony.
 
 .. _quick-tour-big-picture-environments:
 
 Praca ze środowiskami
 ---------------------
 
-Teraz, gdy już lepiej rozumiemy działanie Symfony2, przyjrzymy sie bliżej stopce
-renderowanej na każdej stronie Symfony2. Możesz tam zauważyć mały pasek z logo Symfony2.
+Teraz, gdy już lepiej rozumiemy działanie Symfony, przyjrzymy sie bliżej stopce
+renderowanej na każdej stronie Symfony. Możesz tam zauważyć mały pasek z logo Symfony.
 Jest on nazywany "paskiem debugowania" (*ang. "Web Debug Toolbar"*) i jest to najlepszy
 przyjaciel programisty.
 
@@ -349,9 +301,16 @@ i kwerendach bazy danych:
 .. image:: /images/quick_tour/profiler.png
    :align: center
 
-Oczywiście nie będziesz chciał pokazywać tych narzędzi w środowisku produkcyjnym witryny.
+[Oczywiście nie będziesz chciał pokazywać tych narzędzi w środowisku produkcyjnym witryny.
 Dlatego znajdziesz w katalogu ``web/`` inny kontroler wejścia (``app.php``), który
-jest zoptymalizowany dla środowiska produkcyjnego.
+jest zoptymalizowany dla środowiska produkcyjnego.]
+Narzedzie to dostrcza bardzo dużo wewnetrznej informacji o aplikacji, dlatego z
+pewnością nie można jej pokazywać publicznie. Symfony nie pokazuje tego paska
+narzędziowego, gdy aplikacja jest uruchamiana na serwerze produkcyjnym w "trybie
+publicznym".
+
+Skąd Symfony wie, czy aplikacja ma być uruchomiona w "trybie publicznym"? Dowiesz
+sie tego czytając o pojeciu **środowisk wykonawczych**.
 
 .. _quick-tour-big-picture-environments-intro:
 
@@ -359,9 +318,26 @@ Co to jest środowisko?
 ~~~~~~~~~~~~~~~~~~~~~~
 
 :term:`Środowisko <środowisko>` reprezentuje grupę konfiguracji wykorzystywanych
-podczas uruchamiania aplikacji. Symfony2 definiuje domyślnie dwa środowiska:
+podczas uruchamiania aplikacji. Symfony definiuje domyślnie dwa środowiska:
 ``dev`` (wykorzystywane lokalnie przy pracach programistycznych nad aplikacją)
 i ``prod`` (zoptymalizowane dla wykonywania aplikacji na serwerze produkcyjnym).
+
+Gdy odwiedza się w przeglądarce adres ``http://localhost:8000``, wykonuje się
+aplikację Symfony w środowisku ``dev``. W celu odwiedzenia tej aplikacji w środowisku
+``prod``, trzeba zamiast tego odwiedzić adres ``http://localhost:8000/app.php``.
+Jeśli chce się, aby zawsze środowisko ``dev`` było pokazywane w adresie URL,
+trzeba odwiedzić adres ``http://localhost:8000/app_dev.php``.
+
+Zasadniczą różnicą pomiedzy tymi środowiskami jest to, że środowisko ``dev`` jest
+zoptymalizowane pod wzgledem dostarczania dużej ilości informacji dla programisty,
+co oznacza gorszą wydajność. Natomiast środowisko ``prod`` jest zoptymalizowane
+pod kątem jak najwiekszej wydajności, co oznacza, że debugowanie nie jest realizowane
+i niedostępna jest tego typu informacja, jak też cały pasek debugowania.
+
+Druga różnica między środowskami polega na używaniu przez aplikację innych opcji
+konfiguracyjnych w poszczególnych środowiskach. Gdy ma się dostęp do środowiska
+``dev``, Symfony ładuje plik konfiguracyjny ``app/config/config_dev.yml``,
+a w środowisku ``prod``, plik ``app/config/config_prod.yml``.
 
 Zazwyczaj, środowiska udostępniają dużą ilość opcji konfiguracyjnych. Z tego powodu,
 wspólne opcje konfiguracyjne wstawiane są do wspólnego pliku ``config.yml``
@@ -388,32 +364,16 @@ Po odwiedzeniu w przegladarce pliku``app_dev.php``, wykonuje się aplikację Sym
 w środowisku ``dev``. W celu uruchomienia aplikacji w środowisku ``prod``, trzeba
 odwiedzić zamiast plik ``app.php``. 
 
-Trasy demo są dostęþne w naszej aplikacji tylko w śodowisku ``dev``.
-Dlatego, jeśli spróbuje się uzyskać dostęp z adresu
-``http://localhost/app.php/demo/hello/Fabien``, otrzyma się błąd 404.
-
-.. tip::
-   
-   Jeśli zamiast wbudowanego serwera internetowego PHP użyje się Apache z włączonym
-   modułem ``mod_rewrite`` i wykorzysta się plik ``.htaccess``, zapewni to dostęp
-   do aplikacji Symfony2 w katalogu ``web/``, nawet z możliwością pominięcia w adresie
-   URL nazwy pliku``app.php``. Domyślnie ``.htaccess`` wskazuje wszystkie żądania
-   kontrolerowi wejścia ``app.php``:
-
-   .. code-block:: text
-      
-      http://localhost/demo/hello/Fabien   
-
-Więcej szczegółów o środowiskach można znaleźć w rozdziale
+Więcej szczegółów o środowiskach można znaleźć w artykule
 ":ref:`Środowidka i kontroler wejścia <page-creation-environments>`".
 
 Podsumowanie
 ------------
 
-Gratulacje! Miałeś Czytelniku przedsmak kodowania Symfony2. To nie było tak trudne, prawda?
-Jest dużo więcej do odkrycia, ale teraz trzeba zobaczyć, jak Symfony2 sprawia,
+Gratulacje! Miałeś Czytelniku przedsmak kodowania Symfony. To nie było tak trudne, prawda?
+Jest dużo więcej do odkrycia, ale teraz trzeba zobaczyć, jak Symfony sprawia,
 że ​​naprawdę łatwo jest wdrożyć strony internetowe. Jeśli chcesz się dowiedzieć
-więcej o Symfony2, zacznij lekturę następnej część przewodnika: ":doc:`the_view`.
+więcej o Symfony, zacznij lekturę następnej część przewodnika: ":doc:`the_view`.
 
 .. _Composer:             https://getcomposer.org/
 .. _executable installer: http://getcomposer.org/download

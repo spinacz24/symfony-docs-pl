@@ -6,27 +6,35 @@ Architektura
 
 Jestem pełen uznania dla Ciebie! Miałem obawy, że nie znajdziesz sie tutaj po
 lekturze trzech pierwszych części przewodnika. Twoje starania zostaną niedługo
-nagrodzone. Pierwsze trzy części nie zagłębiały się za głęboko w architekturę frameworka.
-Bo to ona sprawia, że ​​Symfony2 wyróżnia się z tłumu innych frameworków.
-Zanurzmy się więc teraz w architekturę Symfony2.
+nagrodzone. Pierwsze trzy części nie zagłebiały się w architekturę frameworka.
+Ona to sprawia, że Symfony wyróżnia się z tłumu innych frameworków.
+Zajmijmy się więc teraz architekturą Symfony.
 
 Struktura katalogów
 -------------------
 
-Struktura katalogów Symfony2 jest dość elastyczna, ale zalecana struktura katalogów
+Struktura katalogów Symfony jest dość elastyczna, ale zalecana struktura katalogów
 jest następująca:
 
-* ``app/``:    konfiguracja aplikacji;
-* ``src/``:    kod PHP projektu;
-* ``vendor/``: biblioteki zewnętrzne;
-* ``web/``:    katalog główny serwera.
+``app/``
+   Konfiguracja aplikacji, szablony i tłumaczenia.
+
+``src/``
+   Kod PHP projektu
+
+``vendor/``B
+   iblioteki zewnętrzne;
+
+``web/``
+   Katalog główny serwera.
 
 Katalog ``web/``
 ~~~~~~~~~~~~~~~~
 
 Katalog ``web`` jest miejscem wszystkich publicznych oraz statycznych
 plików takich jak obrazy, arkusze stylów oraz pliki JavaScript. Tam także
-umiejscowiony jest :term:`kontroler wejścia <kontroler wejścia>`::
+umiejscowiony jest :term:`kontroler wejścia <kontroler wejścia>`, taki jak
+kontroler wejścia środowiska produkcyjnego, z takim kodem::
 
     // web/app.php
     require_once __DIR__.'/../app/bootstrap.php.cache';
@@ -36,10 +44,12 @@ umiejscowiony jest :term:`kontroler wejścia <kontroler wejścia>`::
 
     $kernel = new AppKernel('prod', false);
     $kernel->loadClassCache();
-    $kernel->handle(Request::createFromGlobals())->send();
+    $request = Request::createFromGlobals();
+    $response = $kernel->handle($request);
+    $response->send();
 
-Kontroler ten najpierw ładuje aplikacje wykorzystując klasę kernela (w tym przypadku
-``AppKernel``). Następnie, tworzy obiekt ``Request`` używając globalnych zmiennych
+Kontroler ten najpierw ładuje aplikacje wykorzystując klasę kernela (``AppKernel``).
+Następnie, tworzy obiekt ``Request`` używając globalnych zmiennych
 PHP i przekazuje ten obiekt do kernela. Następnym krokiem jest przesłanie zawartości
 odpowiedzi zwracanej przez kernel z powrotem do użytkownika.
 
@@ -49,46 +59,52 @@ Katalog ``app/``
 ~~~~~~~~~~~~~~~~
 
 Klasa ``AppKernel`` jest głównym punktem wejścia do konfiguracji aplikacji
-i jako takie, jest przechowywany w folderze ``app/``.
+i jako taka, jest przechowywana w folderze ``app/``.
 
 Ta klasa musi implementować dwie metody:
 
-* ``registerBundles()`` zwraca tablicę wszystkich pakietów potrzebnych do uruchomienia
-  aplikacji;
+``registerBundles()``
+   Zwraca tablicę wszystkich pakietów potrzebnych do uruchomienia aplikacji, tak
+   jak wyjaśniono to w następnym rozdziale;
 
-* ``registerContainerConfiguration()`` wczytuje konfigurację aplikacji
-  (więcej na ten temat później).
+``registerContainerConfiguration()``
+    Wczytuje konfigurację aplikacji (więcej na ten temat później).
 
 Automatyczne ładowanie jest obsługiwane poprzez `Composer`_, co oznacza, że można
-wykorzystać dowolna klasę PHP, nie robiąc nic w ogóle! Wszystkie zależności są
+wykorzystać dowolną klasę PHP, nie robiąc nic w ogóle! Wszystkie zależności są
 przechowywane w katalogu ``vendor/``, ale to jest tylko konwencja.
 Można przechowywać je tam gdzie się chce, globalnie na serwerze lub lokalnie w projektach.
 
 
-Systemu pakietów
-----------------
+Wyjaśnienie systemu pakietów
+----------------------------
 
-Rozdział ten wprowadza do jedenej z największych i najpotężniejszych cech Symfony2 -
+Rozdział ten jest wprowadzeniem do jedenej z największych i najpotężniejszych cech Symfony -
 systemu :term:`pakietów <pakiet>`.
 
 Pakiet jest czymś w rodzaju wtyczki w innych programach. Więc dlaczego został nazwany
-pakietem (*ang. bundle*) a nie wtyczką (*ang. plugin*)? To dlatego, że wszystko w Symfony2
+pakietem (*ang. bundle*) a nie wtyczką (*ang. plugin*)? To dlatego, że wszystko w Symfony
 należy do jakiegoś pakietu, od funkcji rdzenia frameworka po kod napisany dla aplikacji.
 
-Pakiety są obywatelem numer jeden w Symfony2. Zapewnia to elastyczność w używaniu
+Cały kod, jaki sie pisze dla aplikacji jest zorganizowany w pakiety. W Symfony
+mówi się, że pakiet jest ustrukturyzowanym zestawem plików (pliki PHP, arkusze stylów,
+pliki JavaScripts, obrazy itd.), które implementuja pojedyncze funkcjonalności
+(blog, forum  itd.) i które mogą być łatwo współdzielone przez innych programistów.
+
+Pakiety są obywatelem numer jeden w Symfony. Zapewnia to elastyczność w używaniu
 wbudowanych pakietów funkcyjnych rozpowszechnianych przez osoby trzecie lub w dystrybucji
 własnych pakietów. Stwarza to możliwość łatwego doboru i wyboru odpowiednich
 dla swojej aplikacji funkcjonalności i umożliwia łatwą optymalizację całości.
-Tak na koniec - w Symfony2 Twój kod jest tak samo ważny jak kod frameworka.
+Tak na koniec - w Symfony Twój kod jest tak samo ważny jak kod frameworka.
 
 .. note::
 
    W rzeczywistości pojęcie pakietu (*ang. bundle*), nie jest pojęciem wyłącznym
-   dla Symfony2. Pakiety są ściśle związane z przestrzenią nazw i w niektórych
+   dla Symfony. Pakiety są ściśle związane z przestrzenią nazw i w niektórych
    językach (jak np. w Java) są sformalizowane od początku. W PHP pojęcia te nie
    istniały, co było powodem wielu problemów. Zmuszało to programistów do stosowania
    własnych konwencji nazewniczych. Pakiety i przestrzenie nazw zostały formalnie
-   wprowadzone w PHP 5.3 i tym samym pojawiły się w Symfony2.
+   wprowadzone w PHP 5.3 i tym samym pojawiły się w Symfony.
 
 Rejestrowanie pakietów
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -109,10 +125,10 @@ klasy ``AppKernel``. Każdy pakiet jest katalogiem zawierającym pojedyńczą kl
             new Symfony\Bundle\DoctrineBundle\DoctrineBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new AppBundle\AppBundle();
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
-            $bundles[] = new Acme\DemoBundle\AcmeDemoBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
@@ -120,10 +136,10 @@ klasy ``AppKernel``. Każdy pakiet jest katalogiem zawierającym pojedyńczą kl
 
         return $bundles;
     }
-
-Proszę zauważyć, że oprócz pakietu ``AcmeDemoBundle``, który już był omawiany, jądro
+    
+Proszę zauważyć, że oprócz pakietu ``AppBundle``, który już był omawiany, kernel
 udostępnia również inne pakiety, takie jak ``FrameworkBundle``, ``DoctrineBundle``,
-``SwiftmailerBundle`` czy ``AsseticBundle``. Są one częścią rdzenia szkieletu.
+``SwiftmailerBundle`` czy ``AsseticBundle``.
 
 Konfiguracja pakietu
 ~~~~~~~~~~~~~~~~~~~~
@@ -132,16 +148,16 @@ Każdy pakiet może być dostosowywany poprzez pliki konfiguracyjne w języku YA
 XML, czy też PHP. Wystarczy popatrzeć na domyślną konfigurację Symfony:
 
 .. code-block:: yaml
-   :linenos:
 
     # app/config/config.yml
     imports:
         - { resource: parameters.yml }
         - { resource: security.yml }
+        - { resource: services.yml }
 
     framework:
         #esi:             ~
-        #translator:      { fallback: "%locale%" }
+        #translator:      { fallbacks: ["%locale%"] }
         secret:          "%secret%"
         router:
             resource: "%kernel.root_dir%/config/routing.yml"
@@ -149,7 +165,7 @@ XML, czy też PHP. Wystarczy popatrzeć na domyślną konfigurację Symfony:
         form:            true
         csrf_protection: true
         validation:      { enable_annotations: true }
-        templating:      { engines: ['twig'] } #assets_version: SomeVersionScheme
+        templating:      { engines: ['twig'] }
         default_locale:  "%locale%"
         trusted_proxies: ~
         session:         ~
@@ -159,41 +175,15 @@ XML, czy też PHP. Wystarczy popatrzeć na domyślną konfigurację Symfony:
         debug:            "%kernel.debug%"
         strict_variables: "%kernel.debug%"
 
-    # Assetic Configuration
-    assetic:
-        debug:          "%kernel.debug%"
-        use_controller: false
-        bundles:        [ ]
-        #java: /usr/bin/java
-        filters:
-            cssrewrite: ~
-            #closure:
-            #    jar: "%kernel.root_dir%/Resources/java/compiler.jar"
-            #yui_css:
-            #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
-
-    # Doctrine Configuration
-    doctrine:
-        dbal:
-            driver:   "%database_driver%"
-            host:     "%database_host%"
-            port:     "%database_port%"
-            dbname:   "%database_name%"
-            user:     "%database_user%"
-            password: "%database_password%"
-            charset:  UTF8
-
-        orm:
-            auto_generate_proxy_classes: "%kernel.debug%"
-            auto_mapping: true
-
-    # Swiftmailer Configuration
+    # Swift Mailer Configuration
     swiftmailer:
         transport: "%mailer_transport%"
         host:      "%mailer_host%"
         username:  "%mailer_user%"
         password:  "%mailer_password%"
         spool:     { type: memory }
+
+    # ...
 
 Każdy wpis pierwszego poziomu, jak np. ``framework``, ``twig`` lub ``doctrine``,
  definiuje konfigurację dla określonego pakietu. Dla przykładu, ``framework``
@@ -205,7 +195,6 @@ odpowiedniego pliku konfiguracyjnego. Dla przykładu, środowisko ``dev`` wczytu
 modyfikuje go w celu dodania narzędzi do debugowania:
 
 .. code-block:: yaml
-   :linenos:
 
     # app/config/config_dev.yml
     imports:
@@ -219,19 +208,7 @@ modyfikuje go w celu dodania narzędzi do debugowania:
         toolbar: true
         intercept_redirects: false
 
-    monolog:
-        handlers:
-            main:
-                type:  stream
-                path:  %kernel.logs_dir%/%kernel.environment%.log
-                level: debug
-            firephp:
-                type:  firephp
-                level: info
-
-    assetic:
-        use_controller: true
-
+    # ...
 
 Rozszerzanie pakietu
 ~~~~~~~~~~~~~~~~~~~~
@@ -247,42 +224,34 @@ Logiczne nazwy plików
 .....................
 
 Kiedy chce się odwołać do pliku pakietu, trzeba użyj notacji:
-``@BUNDLE_NAME/path/to/file``. Symfony2 zamieni ``@BUNDLE_NAME`` na
+``@BUNDLE_NAME/path/to/file``. Symfony zamieni ``@BUNDLE_NAME`` na
 realną ścieżkę do pakietu. Na przykład, logiczna ścieżka
-``@AcmeDemoBundle/Controller/DemoController.php`` zostanie przekształcona
-do ``src/Acme/DemoBundle/Controller/DemoController.php`` ponieważ Symfony
+``@AppBundle/Controller/DemoController.php`` zostanie przekształcona
+do ``src/AppBundle/Controller/DemoController.php`` ponieważ Symfony
 zna lokalizację ``AcmeDemoBundle``.
 
 Logiczne nazwy kontrolerów
 ..........................
 
-W przypadku kontrolerów trzeba odwołać się do metod stosując notację
+W przypadku kontrolerów trzeba odwołać się do akcji stosując notację
 ``BUNDLE_NAME:CONTROLLER_NAME:ACTION_NAME``. Dla przykładu,
-``AcmeDemoBundle:Welcome:index`` wskazuje na metodę ``indexAction``
-z klasy ``Acme\DemoBundle\Controller\WelcomeController``.
+``AppBundle:Default:index`` wskazuje na metodę ``indexAction``
+z klasy ``AppBundle\Controller\DefaultController``.
 
-Logiczne nazwy szablonów
-........................
-
-Dla szablonów, logiczna nazwa ``AcmeDemoBundle:Welcome:index.html.twig`` zostanie
-przekształcona na ścieżkę do pliku ``src/Acme/DemoBundle/Resources/views/Welcome/index.html.twig``.
-Szablony staną się jeszcze bardziej interesujące kiedy zdasz sobie sprawę że nie
-musisz je przechowywać w systemie plików. Dla przykładu, możesz w prosty sposób
-przechowywać je w bazie danych.
 
 Rozszerzenie pakietów
 .....................
 
 Stosując tą konwencję, można następnie wykorzystać
 :doc:`dziedziczenia pakietów </cookbook/bundles/inheritance>` do "napisania" plików,
-kontrolerów lub szablonów. Na przykład, można utworzyć pakiet ``AcmeNewBundle``
-i  określić, że zastępuje on pakiet AcmeDemoBundle. Gdy Symfony ładuje kontroler
-``AcmeDemoBundle:Welcome:index``, to najpierw będzie wyszukiwał klasy ``WelcomeController``
-w pakiecie AcmeNewBundle i jeśli jej nie znajdzie, to rozpocznie przeszukiwanie
-pakietu AcmeDemoBundle. Oznacza to, że pakiet może zastąpić prawie każdą część
+kontrolerów lub szablonów. Na przykład, można utworzyć pakiet ``NewBundle``
+i  określić, że zastępuje on pakiet AppBundle. Gdy Symfony ładuje kontroler
+``AppBundle:Default:index``, to najpierw będzie wyszukiwał klasy ``DefaultController``
+w pakiecie NewBundle i jeśli jej nie znajdzie, to rozpocznie przeszukiwanie
+pakietu AppBundle. Oznacza to, że pakiet może zastąpić prawie każdą część
 innego pakietu.
 
-Rozumiesz teraz dlaczego Symfony2 jest tak elastyczny? Współdziel swoje pakiety
+Rozumiesz teraz dlaczego Symfony jest tak elastyczny? Współdziel swoje pakiety
 pomiędzy aplikacjami, przechowuj je lokalnie lub globalnie, to zależy od tylko
 Ciebie.
 
@@ -292,23 +261,31 @@ Korzystanie ze żródeł dostawców
 -------------------------------
 
 Jest bardzo prawdopodobne, że Twoja aplikacja będzie zależeć od bibliotek i pakietów
-osób trzecich. Powinny być one przechowywane w katalogu ``vendor/``. Katalog ten już
-zawiera biblioteki Symfony2, biblioteki ``SwiftMailer``, ``Doctrine ORM``,
-system szablonów Twig i trochę innych bibliotek i pakietów osób trzecich
-(zwanych też dostawcami).
+osób trzecich. Powinny być one przechowywane w katalogu ``vendor/``.
+Nie powinno się niczego dotykać w tym katalogu, ponieważ jest on wyłacznie zarządzany
+przez Composer.
+Katalog ten już zawiera biblioteki Symfony, biblioteki ``SwiftMailer``, ``Doctrine ORM``,
+system szablonów Twig i trochę innych bibliotek i pakietów osób trzecich, zwanych
+też **dostawcami**.
 
-Zrozumienie buforowania i dzienników zdarzeń
---------------------------------------------
+Wyjaśnienie pamięci podręcznej i dzienników zdarzeń
+---------------------------------------------------
 
-Symfony2 jest prawdopodobnie jednym z najszybszych pełnych frameworków PHP.
+Symfony jest prawdopodobnie jednym z najszybszych pełnych frameworków PHP.
 Ale jak może tak szybko działać, skoro parsuje oraz interpretuje kilkadziesiąt
 plików YAML oraz XML dla każdego zapytania. Prędkość jest po części związana
 z systemem buforowania. Konfiguracja aplikacji jest parsowana tylko dla pierwszego
 żądania i przetwarzana do kodu PHP przechowywanego w katalogu ``app/cache/``.
-W środowisku programistycznym, Symfony2 jest wystarczająco inteligentny aby czyścić
+
+W środowisku programistycznym, Symfony jest wystarczająco inteligentny aby czyścić
 pamięć podręczną po zmianie pliku. Natomiast w środowisku produkcyjnym, to do 
 do zadań programisty należy czyszczenie pamięci podręcznej po zmianie kodu lub
-konfiguracji.
+konfiguracji. W celu wyczyszczenia pamięci podręcznej w srodowisku ``prod`` można
+użyć tego poleenia:
+
+.. code-block:: bash
+
+    $ php app/console cache:clear --env=prod
 
 Podczas tworzenia aplikacji, dużo rzeczy może pójść źle. Pliki dzienników zdarzeń,
 znajdujące się w katalogu ``app/logs/``, informują o wszystkich żądaniach
@@ -318,7 +295,7 @@ Stosowanie interfejsu linii poleceń
 -----------------------------------
 
 Każda aplikacja posiada narzędzie interfejsu linii poleceń (``app/console``)
-który pomaga w utrzymywaniu aplikacji. Udostęþnia on polecenia które zwiększają
+który pomaga w utrzymywaniu aplikacji. Udostępnia on polecenia które zwiększają
 wydajność prac programistycznych i administracyjnych poprzez automatyzację żmudnych
 i powtarzających się zadań.
 
@@ -332,19 +309,19 @@ Opcja ``--help`` pomaga w poznaniu dostępnych poleceń:
 
 .. code-block:: bash
 
-    php app/console router:debug --help
+    php app/console debug:router --help
 
 Podsumowanie
 ------------
 
 Sądzę, że po przeczytaniu tego przewodnika uważny czytelnik powinieneś czuć
-się komfortowo w pracy z Symfony2. Wszystko w Symfony2 jest zaprojektowane tak by
+się komfortowo w pracy z Symfony. Wszystko w Symfony jest zaprojektowane tak by
 sprostać oczekiwaniom programisty. Zatem, zmieniaj nazwy, przenoś katalogi zgodnie
 z swoimi potrzebami.
 
-To wszystko jeśli chodzi o szybkie wprowadzenie w tematyke Symfony 2. Musisz się
-jeszcze dużo nauczyć o Symfony2 by stać się mistrzem, od testowania do wysyłania
+To wszystko jeśli chodzi o szybkie wprowadzenie w tematyke Symfony. Musisz się
+jeszcze dużo nauczyć o Symfony by stać się mistrzem, od testowania do wysyłania
 poczty e-mail. Chcesz zapoznać sie z tymi tematami? Nie musisz specjalnie
-szukać - przejdź do oficjalnej książki i wybierz tam dowolny temat.
+szukać - przejdź do lektury podręcznika i wybierz tam dowolny temat.
 
 .. _`Composer`:                http://getcomposer.org

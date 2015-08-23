@@ -5,14 +5,18 @@ Widok (View)
 ============
 
 Po przeczytaniu pierwszej części tego poradnika, dobrze jest poświęcić
-kolejne 10 minut dla Symfony2. W drugiej części, nauczysz się
-więcej na temat silnika szablonów Symfony2, `Twig`_ - elastycznego,
+kolejne 10 minut dla Symfony. W drugiej części, nauczysz się
+więcej na temat silnika szablonów Symfony, `Twig`_ - elastycznego,
 szybkiego oraz bezpiecznnego systemem szablonów PHP. Sprawia że szablony
 są bardo czytelne oraz zwięzłe. Czyni je także bardziej przyjaznymi dla
 projektantów stron internetowych.
 
 Zapoznanie się z Twig
 ---------------------
+
+Najlepszym źródłem informacji o tym silniku szablonowania jest oficjalna
+`dokumentacja Twig`_. Niniejszy rozdział daje tylko krótki przegląd najważniejszych
+pojęć.
 
 Szablon Twig jest tekstowym plikiem który może generować każdy rodzaj
 treści (HTML, XML, CSV, LaTeX, ...). Elementy szablonu Twig są oddzielana od reszt
@@ -47,10 +51,6 @@ przekazane do szablonu:
             </ul>
         </body>
     </html>
-
-.. tip::
-
-    Komentarze mogą być dołączone do szablonu poprzez użycie ogranicznika ``{# ... #}``.
 
 Do renderowania szablonu w Symfony używa się metody ``render`` w kontrolerze
 i przekazuje potrzebne zmienne jako tablicę, wykorzystując opcjonalny drugi argument::
@@ -97,45 +97,42 @@ tzw. "dziedziczenie szablonów". Ta funkcjonalność umożliwia zbudowanie bazow
 szablonu "layout", który zawiera wszystkie elementy strony i definiuje "bloki",
 które szablony potomne mogą przesłaniać.
 
-Szablon ``hello.html.twig`` uzywa znacznika ``extends`` do wskazania, że dziedziczy
-ze wspólnego szblonu ``layout.html.twig``:
+Szablon ``index.html.twig`` używa znacznika ``extends`` do wskazania, że dziedziczy
+ze wspólnego szblonu ``base.html.twig``:
 
 .. code-block:: html+jinja
-   :linenos:
 
-    {# src/Acme/DemoBundle/Resources/views/Demo/hello.html.twig #}
-    {% extends "AcmeDemoBundle::layout.html.twig" %}
+    {# app/Resources/views/default/index.html.twig #}
+    {% extends 'base.html.twig' %}
 
-    {% block title "Hello " ~ name %}
-
-    {% block content %}
-        <h1>Hello {{ name }}!</h1>
+    {% block body %}
+        <h1>Welcome to Symfony!</h1>
     {% endblock %}
 
-Zapis ``AcmeDemoBundle::layout.html.twig`` wygląda znajomo, prawda? Jest to ta sama
-notacja, jaka była zastosowana do regularnego szablonu. Część ``::`` oznacza, że
-element kontrolera jest pusty, tak więc odpowiedni plik znajduje się w katalogu
-pakietu ``Resources/views/``.
+Otwórz plik ``app/Resources/views/base.html.twig``, który odpowiada szablonowi
+``base.html.twig`` i znajdź następujący kod Twig code:
 
-Przyjrzyjmy sie uproszczonej wersji ``layout.html.twig``:
+.. code-block:: html+jinja
 
-.. code-block:: jinja
-   :linenos:
-   
-    {# src/Acme/DemoBundle/Resources/views/layout.html.twig #}
-    <div>
-        {% block content %}
-        {% endblock %}
-    </div>
+    {# app/Resources/views/base.html.twig #}
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <meta charset="UTF-8" />
+            <title>{% block title %}Welcome!{% endblock %}</title>
+            {% block stylesheets %}{% endblock %}
+            <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        </head>
+        <body>
+            {% block body %}{% endblock %}
+            {% block javascripts %}{% endblock %}
+        </body>
+    </html>
 
 Znaczniki ``{% block %}`` powiadamiają silnik szablonowania, że szablon potomny
-może przesłaniać tą porcje szablonu. W naszym przykładzie, szablon ``hello.html.twig``
-przesłania blok ``content``, co oznacza, że tekst "Hello Fabien" jest renderowany
-wewnątrz elementu ``<div>``.
-
-W tym przykładzie, szablon ``hello.html.twig`` zastępuje blok ``content``,
-co oznacza że tekst "Hello Fabien" jest renderowany w środku elementu
-``div.symfony-content``.
+może przesłaniać ten fragment szablonu. W naszym przykładzie, szablon ``index.html.twig``
+przesłania blok ``body``, alenie blok ``title``, który będzie wyswietlał domyślną
+treść zdefiniowana w szablonie ``base.html.twig``.
 
 Używanie znaczników, filtrów i funkcji
 --------------------------------------
@@ -165,33 +162,37 @@ Najlepszym sposobem, aby podzielić się fragmentem kodu pomiędzy różnymi
 szablonami jest stworzenie nowego szablonu który może zostać dołączony
 przez inne szablony.
 
-Najpierw, utworzymy szablon ``embedded.html.twig``:
+Proszę sobie wyobrazić, że chcemy wyświetlić reklamy na niektórych stronach
+naszej aplikacji. Najpierw utwórzmy szablon ``banner.html.twig``:
 
 .. code-block:: jinja
-    :linenos:
-    
-    {# src/Acme/DemoBundle/Resources/views/Demo/embedded.html.twig #}
-    Hello {{ name }}
 
-i zmienimy szablon ``index.html.twig``, tak aby dołączał nasz nowo utworzony szablon:
+    {# app/Resources/views/ads/banner.html.twig #}
+    <div id="ad-banner">
+        ...
+    </div>
 
-.. code-block:: jinja
-   :linenos:
+Dla wyświetleniatej reklamy na stronie, dołączymy szablon ``banner.html.twig``
+używając funkcję ``include()``:
 
-    {# src/Acme/DemoBundle/Resources/views/Demo/hello.html.twig #}
-    {% extends "AcmeDemoBundle::layout.html.twig" %}
+.. code-block:: html+jinja
 
-    {# override the body block from embedded.html.twig #}
-    {% block content %}
-        {% include "AcmeDemoBundle:Demo:embedded.html.twig" %}
+    {# app/Resources/views/default/index.html.twig #}
+    {% extends 'base.html.twig' %}
+
+    {% block body %}
+        <h1>Welcome to Symfony!</h1>
+
+        {{ include('ads/banner.html.twig') }}
     {% endblock %}
+
 
 Osadzanie innych kontrolerów
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-A co, jeśli chcesz osadzić wynik innego kontrolera w szablonie? To bardzo przydatne
-podczas pracy z Ajax, lub gdy osadzony szablon potrzebuje niektórych zmiennych
-niedostępnych w głównym szablonie.
+Co, jeśli chce się osadzić wynik innego kontrolera w szablonie? To jest bardzo
+przydatne podczas pracy z Ajax, lub gdy osadzony szablon potrzebuje niektórych
+zmiennych niedostępnych w głównym szablonie.
 
 Załóżmy, że utworzyliśmy metodę kontrolera ``topArticlesAction`` dla wyświetlania
 najbardziej popularnych artykułów na swojej witrynie. Jeśli chce się "renderować"
@@ -200,91 +201,56 @@ funkcję``render``:
 
 .. code-block:: jinja
 
-    {# src/Acme/DemoBundle/Resources/views/Demo/index.html.twig #}
-    {{ render(controller("AcmeDemoBundle:Demo:fancy", {'name': name, 'color': 'green'})) }}
+    {# app/Resources/views/index.html.twig #}
+    {{ render(controller('AppBundle:Default:topArticles')) }}
 
-Załóżmy, że utworzyliśmy metodę kontrolera ``fancyAction`` i chcemy "renderować"
-ją w szablonie ``index``, co oznacza osadzenie wyniku kontrolera (np. ``HTML``)
-w renderowanej z szablonu stronie. Aby to zrobić, użyjemy funkcji``render``::
+tutaj, funkcje ``render()`` i ``controller()`` używają specjalnej składni
+``AppBundle:Default:topArticles`` do odwoływania sie do akcji ``topArticlesAction``
+kontrolera ``Default`` (część ``AppBundle`` zostanie wyświetlona dalej)::
 
-    // src/Acme/DemoBundle/Controller/DemoController.php
+    // src/AppBundle/Controller/DefaultController.php
 
-    class DemoController extends Controller
+    class DefaultController extends Controller
     {
-        public function fancyAction($name, $color)
+        public function topArticlesAction()
         {
-            // utworzenie jakiegoś obiektu, na podstawie zmiennej $color
-            $object = ...;
-
-            return $this->render('AcmeDemoBundle:Demo:fancy.html.twig', array(
-                'name' => $name,
-                'object' => $object,
-            ));
-        }
-
-        // ...
-    }
-    
-Tutaj ciąg ``AcmeDemoBundle:Demo:topArticles`` odnosi się do akcji ``topArticlesAction``
-kontrolera ``Demo`` a argument ``num`` jest dostępny dla kontrolera::
-
-   // src/Acme/DemoBundle/Controller/DemoController.php
-
-    class DemoController extends Controller
-    {
-        public function topArticlesAction($num)
-        {
-            // look for the $num most popular articles in the database
+            // wyszukanie najbardziej popularnych artykułów w bazie danych
             $articles = ...;
 
-            return $this->render('AcmeDemoBundle:Demo:topArticles.html.twig', array(
+            return $this->render('default/top_articles.html.twig', array(
                 'articles' => $articles,
             ));
         }
 
         // ...
-    }    
+    }
 
 Tworzenie odnośników pomiędzy stronami
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Tworzenie odnośników pomiędzy stronami jest koniecznością w aplikacjach internetowych.
-Zamiast umieszczania w szablonach sztywnych lokalizatorów URL,
-można zastosować funkcję ``path``, która wie jak wygenerować URL na podstawie
-konfiguracji trasowania. W ten sposób wszystkie lokalizatory URL mogą być łatwo
-aktualizowane tylko przez zmianę konfiguracji:
+Zamiast umieszczania w szablonach sztywnych lokalizatorów URL, można zastosować funkcję
+``path``, która wie jak wygenerować adres URL na podstawie konfiguracji trasowania.
+W ten sposób wszystkie lokalizatory URL mogą być łatwo aktualizowane tylko przez
+zmianę konfiguracji:
 
 .. code-block:: html+jinja
 
-    <a href="{{ path('_demo_hello', { 'name': 'Thomas' }) }}">Greet Thomas!</a>
+    <a href="{{ path('homepage') }}">Return to homepage</a>
 
-Funkcja ``path`` pobiera jako argumenty nazwę trasy i tablicę parametrów.
-Nazwa trasy jest kluczem w którym zdefiniowane są trasy a parametry są wartościami
-zmiennych zdefiniowanych we wzorcu trasy::
-
-    // src/Acme/DemoBundle/Controller/DemoController.php
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
-    /**
-     * @Route("/hello/{name}", name="_demo_hello")
-     * @Template()
-     */
-    public function helloAction($name)
-    {
-        return array('name' => $name);
-    }
+Funkcja ``path`` pobiera jako pierwszy argument nazwę trasy i może opcjonalnie
+przekazywać jako drugi argument tablicę parametrów.
 
 .. tip::
 
     Funkcja ``url`` jest bardzo podobna do funkcji ``path``, ale generuje *bezwzgledne*
     adresy URL, które są bardzo pomocne przy renderowaniu adresów email i plików RSS:
-    ``{{ url('_demo_hello', {'name': 'Thomas'}) }}``.
+    ``<a href="{{ url('homepage') }}">Visit our website</a>``.
 
 Dołączanie zasobów: obrazów, skryptów JavaScript i arkuszy stylów
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Co to byłby za Internet bez zdjęć, skryptów JavaScript i arkuszy stylów? Symfony2
+Co to byłby za Internet bez zdjęć, skryptów JavaScript i arkuszy stylów? Symfony
 oferuje funkcję ``asset`` radzącą sobie łatwo z tym zagadnieniem:
 
 .. code-block:: html+jinja
@@ -297,6 +263,11 @@ Głównym zadaniem funkcji ``asset`` jest umożliwienie lepszej przenośności a
 Dzięki tej funkcji, możesz przenieść główny katalog aplikacji w dowolne miejsce bez
 konieczności dokonywania zmian w kodzie szablonu.
 
+Korzystanie z funkcji ``asset`` sprawia, że aplikacja staje się bardziej przenośna.
+Powodem jest to, że można przenieść katalog główny aplikacji gdziekolwiek w ramach
+głównego katalogu serwera internetowego, bez konieczności zmieniania czegokolwiek
+w kodzie szablonów.
+
 Podsumowanie
 ------------
 
@@ -305,14 +276,15 @@ bloków, dziedziczenia szablonów i akcjom, bardzo łatwo można zorganizować s
 szablon, w sposób logiczny i rozszerzalny. Jeśli jednak nie odpowiada Ci Twig,
 to zawsze, bez żadnych problemów, możesz użyć w Symfony zwykłych szablonów PHP.
 
-Pracujesz z Symfony2 od około 20 minut, ale już teraz możesz zrobić z nim
-sporo niesamowitych rzeczy. To jest siła Symfony2. Nauka podstaw jest bardzo
+Pracujesz z Symfony od około 20 minut, ale już teraz możesz zrobić z nim
+sporo niesamowitych rzeczy. To jest siła Symfony. Nauka podstaw jest bardzo
 prosta. Już niedługo odkryjesz, że prostota jest ukryta pod bardzo elastyczną
 architekturą.
 
 Ale coraz bardziej odbiegam od tematu. Po pierwsze, musisz dowiedzieć się więcej
 o kontrolerach i to jest tematem :doc:`kolejnej części przewodnika <the_controller>`.
-Gotowy na kolejne 10 minut z Symfony2?
+Gotowy na kolejne 10 minut z Symfony?
 
 .. _`Twig`:               http://twig.sensiolabs.org/
 .. _`dokumentacją Twig`: http://twig.sensiolabs.org/documentation
+.. _`dokumentacja Twig`: http://twig.sensiolabs.org/documentation
