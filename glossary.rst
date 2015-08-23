@@ -5,17 +5,23 @@ Słownik
 
 .. glossary::
    :sorted:
-
+   
+   akcja
+      (*ang. action*)
+      Metoda kontrolera odpowiedzialna za zwrócenie obiektu ``Response``
+      reprezentującego konkretną stronę aplikacji. W Symfony akcje posiadają
+      nazwy kończące się słowem ``Action``.
+   
    aktywa
       (*ang. assets*)
       Aktywa w Symfony, to załadowane zasoby (pliki CSS, JavaScript, obrazy itd.),
-      skrypty generowane na podstawie zasobów i skrypty tworzone "w locie".
+      skrypty generowane z treści plików i skrypty tworzone "w locie".
       Zasób po załadowaniu jest aktywem - przetwarzane są aktywa, a nie zasoby.
       Podobnie jest w ekonomii - aktywa, to aktywowane (aktywne) zasoby.
       
    dystrybucja
       (*ang. distribution*)
-      *Dystrybucja* jest zestawem instalacyjnych komponentów Symfony2,
+      *Dystrybucja* jest zestawem instalacyjnych komponentów Symfony,
       zawierajacym wybrane pakiett (*ang. bundles*), rozsądną strukturę katalogów,
       domyślną konfigurację i opcjonalny systemem konfiguracyjny.
 
@@ -35,7 +41,7 @@ Słownik
       (*ang. bundle*)
       *Pakiet* jest katalogiem zawierającym zestaw plików (plików PHP,
       arkuszy atylów, plików JavaScript, obrazów ...) które *implementują*
-      pojedyńczą funkcjonalność (blog, forum itp.). W Symfony2, (*prawie*)
+      pojedyńczą funkcjonalność (blog, forum itp.). W Symfony, (*prawie*)
       wszystko jest umieszczone w pakietach. (zobacz :ref:`page-creation-bundles`).
       W PHP koncepcja *pakietu*, od wersji PHP 5.3, odnosi się do *przestrzeni
       nazw* - każdy pakiet Symfony dwa tworzy własna *przestrzeń nazw*.  
@@ -53,23 +59,17 @@ Słownik
 
    kontroler
       (*ang. controller*)
-      *Kontroler* to funkcja PHP zawierająca całą logikę niezbędną do zwrócenia 
-      obiektu ``Response``, który reprezentuje daną stronę.
-      Zazwyczaj trasa jest odwzorowywana na kontroler, który następnie używa
-      informacji z żądania HTTP do przetworzenia danych, przetwarza akcje
-      i ostatecznie konstruuje i zwraca obiekt ``Response``. Należy zaznaczyć,
-      że w polskiej literaturze poświęconej Symfony [1]_ termin *kontroler*
-      odnoszony jest czasem do obiektu zawierającego metody, które tu określone
-      zostały jako *kontroler* (np. ``DefaultController) a nie do tych metod.
-      Tutaj *kontrolerem* będziemy nazywać, zgodnie z naszą defnicją, metodę
-      (funkcję) wykonującą opisane tu działanie.    
+      *Kontroler* to obiekt zawierający metody, zwane akcjami, które zawierają
+      całą logikę niezbędną do zwrócenia obiektu ``Response`` reprezentujacego
+      konkretną stronę. W Symfony kontrolery maja nazwy zakończone słowem ``Controler``.
+         
 
    usługa
       (*ang. service*)
       *Usługa* to ogólny termin dla każdego obiektu PHP który wykonuje określone
       zadanie. Usługa zazwyczaj stosowana jest "globalnie", jako obiekt
       nawiązujący połączenie z bazą danych lub obiekt wysyłający wiadomości
-      email. W Symfony2 usługi są często konfigurowane i pobierane z kontenera
+      email. W Symfony usługi są często konfigurowane i pobierane z kontenera
       usług. Aplikacja posiadająca wiele oddzielnych usług nazywana jest
       aplikacją o `architekturze zorientowanej na usługi`_.
 
@@ -104,11 +104,11 @@ Słownik
         
    dostawca
       (*ang. vendor*)
-      *Dostawca* to ktoś dostarczający biblioteki PHP i pakiety dołączne do Symfony2.
+      *Dostawca* to ktoś dostarczający biblioteki PHP i pakiety dołączne do Symfony.
       Pomimo skojarzenia tego słowa z kwestiami handlowymi (vendor w jezyku angielskim
       oznacza dosłownie "sprzedawcę"), dostawca w Symfony bardzo często (nawet
       zazwyczaj) dołącza bezpłatne oprogramowanie. Każda biblioteka którą chcesz
-      dodać do projektu Symfony2 powinna znaleźć się w katalogu``vendor``.
+      dodać do projektu Symfony powinna znaleźć się w katalogu``vendor``.
       Zobacz :ref:`Architektura: Stosowanie "dostawców" <using-vendors>`
 
    Acme
@@ -133,13 +133,13 @@ Słownik
 
    kernel
       (*ang. kernel*)
-      W Symfony2 *kernel*, to centralna klasa obsługująca zapytania HTTP, używająca
+      W Symfony *kernel*, to centralna klasa obsługująca zapytania HTTP, używająca
       wszystkich pakietów oraz bibliotek w niej zarejestrowanych.
       Zobacz: :ref:`the-app-dir` oraz :ref:`book-internals-kernel`.
 
    zapora
       (*ang. firewall*)
-      W Symfony2 *zapora* to nie to samo, co *zapora sieciowa*. Jest to mechanizm
+      W Symfony *zapora* to nie to samo, co *zapora sieciowa*. Jest to mechanizm
       uwierzytelniania użytkowników (tzn. obsługuje proces identyfikacji użytkowników),
       albo dla całej aplikacji albo tylko jej części. Zobacz rozdział
       :doc:`/book/security`.
@@ -148,7 +148,7 @@ Słownik
       (*nazwa własna*)
       *YAML* jest to uniwersalny język ustrukturyzowanego reprezentowania danych
       (tej samej klasy co XML), lekki i przejrzysty, szeroko stosowany w plikach
-      konfiguracyjnych Symfony 2. Zobacz rozdział :doc:`/components/yaml/introduction` 
+      konfiguracyjnych Symfony. Zobacz rozdział :doc:`/components/yaml/introduction` 
       oraz artykuł Wikipedii `YAML`_.
 
 
