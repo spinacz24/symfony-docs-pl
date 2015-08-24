@@ -4,23 +4,24 @@
 .. index::
    single: strony
 
-Utworzenie swojej pierwszej strony w Symfony2
-=============================================
+Utworzenie swojej pierwszej strony w Symfony
+============================================
 
-Tworzenia nowej strony w Symfony2, niezależnie od tego, czy jest to strona HTML,
+Tworzenia nowej strony w Symfony, niezależnie od tego, czy jest to strona HTML,
 czy punkt końcowy JSON, jest prostą dwuetapową procedurą:
 
   * *Utworzenie trasy*: Trasa (*ang. route*) odpowiada części lokalizatora URL określającej
-    ścieżkę dostępu do zasobu (np. ``/about``) i wyznacza też kontroler, który Symfony2
+    ścieżkę dostępu do zasobu (np. ``/about``) i wyznacza też akcję, którą Symfony
     ma wykonać, gdy ścieżka dostępu przychodzącego żądania HTTP zostanie dopasowany do
     wzorca trasy;
 
-  * *Utworzenie kontrolera*: Kontroler jest funkcją PHP, która pobiera przychodzące
-    żądanie HTTP i przekształca je w obiekt Symfony2 o nazwie *Response*, który jest
-    zwracany klientowi.
+  * *Utworzenie kontrolera i akcji*: Kontroler jest klasą, zawierającą metody,
+    zwane akcjami, które są odpowiedzialne
+    za wygenerowanie obiektu Symfony o nazwie *Response* i zwrócenie go klientowi
+    w postaci odpowiedzi HTTP.
 
 Tak jak w internecie każda interakcja jest inicjowana przez żądanie HTTP. Zadanie
-programisty jest jasne i proste: przeanalizować to żądania i zwrócić odpowiedzi HTTP.
+programisty jest jasne i proste: przeanalizować to żądania i zwrócić odpowiedź HTTP.
 
 .. index::
    single: tworzenie strony; przykład
@@ -69,27 +70,27 @@ Zanim do tego przejdziemy, wykonajmy test!
 
     Jeśli skonfigurowało sie właściwie wirtualny host w 
     :doc:`Apache lub Nginx </cookbook/configuration/web_server_configuration>`,
-    trzeba zamieńić ``http://localhost:8000`` na nazwę swojego hosta, taką jak
+    trzeba zamienić ``http://localhost:8000`` na nazwę swojego hosta, taką jak
     na przykład ``http://symfony.dev/app_dev.php/lucky/number``.
 
 Jeśli widzisz na ekranie szczęśliwą liczbę, która została wydrukowana w odpowiedzi,
- to gratulacje! Jednak zanim skończysz grać na tej swojej loterii, sprawdzimy jak
+ to gratulacje! Jednak zanim skończysz grać na tej naszej loterii, sprawdzimy jak
  to działa.
 
 ``@Route`` powyżej ``numberAction()`` nazywa się *adnotacją* i definiuje wzorzec
-ścieżki URL. Można również napisać trasy w in YAML (lub innych formatach):
+ścieżki URL. Można również napisać trasy w YAML (lub innych formatach):
 przeczytaj o tym w rozdziale :doc:`Trasowanie </book/routing>`. W tym podręczniku,
 wiekszość przykładowego kodu dla trasowania jest podawana w kilku formatach.
 
-Metoda poniżej adnotacji, ``numberAction``, jest nazywana *kontrolerem*
-i jest miejscem, w którym buduje się stronę. Jedyną zasadą jest to, że kontroler
-*musi* zwrócić obiekt :ref:`Response <component-http-foundation-response>` Symfony
+Metoda poniżej adnotacji, ``numberAction``, jest nazywana *akcją*
+i jest miejscem, w którym buduje się stronę. Jedyną zasadą jest to, że akcja
+*musi* zwrócić obiekt :ref:`Response <component-http-foundation-response>`
 (a Ty nauczysz się przypuszczalnie naginać tą zasadę).
 
 .. sidebar:: Co to jest ``app_dev.php`` w adresie URL?
 
     Dobre pytanie! Dołaczając ``app_dev.php`` w adresie URL wykonuje sie kod
-    Symfony poprzez plik ``web/app_dev.php``, który dokonuje rozuchu w środowisku
+    Symfony poprzez plik ``web/app_dev.php``, który dokonuje rozuchu w :term:`środowisku <środowisko>`
     ``dev``. Środowisko to udostępnia doskonałe narzedzia debugowania i automatycznej
     przebudowy plików pamięci podręcznej. W środowisku produkcyjnym trzeba używać
     czystych adresów URL, takich jak ``http://localhost:8000/lucky/number``, co
@@ -134,7 +135,7 @@ Spróbuj wyprowadzic to w przegladarce:
 
     http://localhost:8000/app_dev.php/api/lucky/number
 
-Można to nawet skrócić przy użyciu porećznej klasy :class:`Symfony\\Component\\HttpFoundation\\JsonResponse`::
+Można to nawet skrócić przy użyciu poręcznej klasy :class:`Symfony\\Component\\HttpFoundation\\JsonResponse`::
 
     // src/AppBundle/Controller/LuckyController.php
     // ...
@@ -258,13 +259,13 @@ na *dowolną* liczbę:
     http://localhost:8000/app_dev.php/lucky/number/7
 
 Na nowej stronie powinno pojawić się *7* szczęśliwych liczb. Można uzyskać wartość
-z dowolnie podawanego elementu ``{placeholder}`` dodając argument ``$placeholder`
-do kontrolera. Wystarczy upewnić się, że element wieloznaczny w trasie adnotacji
-i zmienna w kontrolerze są takie same.
+z dowolnie podawanego elementu ``{placeholder}`` dodając do akcji argument
+``$placeholder`. Wystarczy upewnić się, że element wieloznaczny w trasie adnotacji
+i zmienna w akcji są takie same.
 
 System trasowania może dużo więcej, jak obsługa wielu wieloznaczników
 (np. ``/blog/{category}/{page})``), czynienie wieloznaczników opcjonalnymi
-i wymuszanie, aby wieloznacznik dopasowaywał wyrażenie regularne (np. aby ``{count}``
+i wymuszanie, aby wieloznacznik dopasowywał wyrażenie regularne (np. aby ``{count}``
  *musiało być* liczbą).
 
 Wszystkie informacje o tym można znaleźć w rozdziale :doc:`Trasowanie </book/routing>`.
@@ -272,7 +273,7 @@ Wszystkie informacje o tym można znaleźć w rozdziale :doc:`Trasowanie </book/
 Renderowanie szablonu (w kontenerze usług)
 ------------------------------------------
 
-Jeśli kontroler zwraca kod HTML, to najlepiej jest zrenderować go w szablonie.
+Jeśli akcja zwraca kod HTML, to najlepiej jest zrenderować go w szablonie.
 Symfony dostarczane jest z Twig: językiem szablonowania, który jest łatwy, wydajny
 i nawet zabany.
 
@@ -404,7 +405,7 @@ tam plik ``number.html.twig`` z zawartością:
 "Welcome to Twig!". Ten prosty plik pokazuje podstawowe rzeczy, takie jak to, że
 składnia zmiennej ``{{ nazwaZmiennej }}`` jest używana do wydrukowania czegoś w
 miejscu umieszczenia tej zmiennej. Zmienna ``luckyNumberList`` jest przekazywana
-do szablonu z wywołania ``render`` w kontrolerze.
+do szablonu z wywołania ``render`` w akcji.
 
 Wyrażenie ``{% extends 'base.html.twig' %}`` wskazuje na plik układu strony, który
 umieszczony jest w `app/Resources/views/base.html.twig`_ i tworzony jest automatycznie
