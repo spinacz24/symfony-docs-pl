@@ -16,12 +16,12 @@ z ``/blog`` na ``/news``? Ile odnośników trzeba odnaleźć i poprawić,
 aby dokonać takiej zmiany? Jeśli korzysta się z mechanizmu trasowania Symfony,
 taka zmiana jest bardzo prosta.
 
-Mechanizm trasowania Symfony2 pozwala na dynamiczne określanie ścieżek URL (czyli
+Mechanizm trasowania Symfony pozwala na dynamiczne określanie ścieżek URL (czyli
 ścieżek dostępu, zawartych w adresie URL żądania HTTP) odwzorowywanych dla
 różnych obszarów aplikacji. Pod koniec tego rozdziału, będziesz w stanie:
 
-* tworzyć złożone trasy odwzorowujące kontrolery;
-* generować ścieżki URL wewnątrz szablonów i kontrolerów;
+* tworzyć złożone trasy odwzorowujące akcje;
+* generować ścieżki URL wewnątrz szablonów i akcji;
 * ładować zasoby trasowania z pakietów (lub z czegokolwiek innego);
 * debugować swoje trasowania.
 
@@ -32,9 +32,9 @@ różnych obszarów aplikacji. Pod koniec tego rozdziału, będziesz w stanie:
 Działanie trasowania
 --------------------
 
-**Trasa** (*ang. route*) jest mapą od ścieżki URL do kontrolera. Na przykład, załóżmy,
+**Trasa** (*ang. route*) jest mapą od ścieżki URL do akcji. Na przykład, załóżmy,
 że chcemy dopasować ścieżkę URL jak ``/blog/moj-post`` czy ``/blog/wszystko-o-symfony``
-i wysłać go do kontrolera, który może odnaleźć i wyświetlić dany wpis blogu. Trasa
+i wysłać go do akcji, która może odnaleźć i wyświetlić dany wpis blogu. Trasa
 jest prosta:
 
 .. configuration-block::
@@ -95,22 +95,22 @@ jest prosta:
 Ścieżka zdefiniowana w trasie ``blog_show`` działa jak ``/blog/*``, gdzie
 znak wieloznaczny (``*``) otrzymuje nazwę ``slug``. Dla ścieżki URL ``/blog/moj-post``
 zmienna ``slug`` przybierze wartość ``moj-post``, która jest dostępna z poziomu
-kontrolera (czytaj dalej).
+akcji (wyjaśniono to dalej).
 
 Jeśli nie chce sie stosować adnotacji, bo nie podoba się ten sposób lub ponieważ
 nie chce się polegać na SensioFrameworkExtraBundle, można stosować trasowanie
 w formacie Yaml, XML lub PHP. W formatach tych parametr ``_controller`` jest
-specjalnym kluczem, który powiadamia Symfony o tym, który kontroler powinien być
-wykonany, gdy scieżka URL zostanie dopasowana do wzorca trasy. Wartością
+specjalnym kluczem, który powiadamia Symfony o tym, która akcja powinna być
+wykonana, gdy scieżka URL zostanie dopasowana do wzorca trasy. Wartością
 ``_controller`` jest ciąg znakowy określający :ref:`nazwę logiczną<controller-string-syntax>`.
 Ma to zastosowanie do wzorców, które wskazują określoną klasę i metodę PHP.
 
-Tak więc, utworzylismy trasę i połączyliśmy ja do kontrolera. Teraz, gdy odwiedzi
-się ``/blog/my-post``, wykonana zostanie akcja (kontroler) ``showAction`` a zmienna
+Tak więc, utworzylismy trasę i połączyliśmy ją do akcji. Teraz, gdy odwiedzi
+się ``/blog/my-post``, wykonana zostanie akcja ``showAction`` a zmienna
 ``$slug`` stanie się równoważnikiem ``my-post``.
 
-To jest właśnie zadanie mechanizmu trasowania Symfony2: odwzorować ścieżkę URL żądania
-na kontroler (akcję). W dalszej części artykułu podanych jest  wiele sztuczek,
+To jest właśnie zadanie mechanizmu trasowania Symfony: odwzorować ścieżkę URL żądania
+na akcję. W dalszej części artykułu podanych jest  wiele sztuczek,
 które sprawiają, że odwzorowanie nawet najbardziej skomplikowanych adresów URL staje się łatwe.
 
 
@@ -130,27 +130,27 @@ przykład poniższe żądanie HTTP:
 
     GET /blog/moj-post
 
-Zadaniem mechanizmu trasowania Symfony2 jest przetworzenie tej ścieżki URL
-i określenie, który kontroler powinien zostać uruchomiony. Cały proces wygląda
+Zadaniem mechanizmu trasowania Symfony jest przetworzenie tej ścieżki URL
+i określenie, która akcja powinnna zostać uruchomiona. Cały proces wygląda
 mniej więcej tak:
 
-#. Żądanie zostaje obsłużone przez kontroler wejścia Symfony2 (np. ``app.php``);
+#. Żądanie zostaje obsłużone przez kontroler wejścia Symfony (np. ``app.php``);
 
-#. Rdzeń Symfony2 (czyli :term:`Kernel`) odpytuje mechaniz trasowania o treść żądania;
+#. Rdzeń Symfony (czyli :term:`Kernel`) odpytuje mechaniz trasowania o treść żądania;
 
 #. Mechanizm trasowania dopasowuje ścieżkę zawartą w przychodzącym adresie URL do
-   konkretnej trasy i zwraca informacje o trasie, łącznie z nazwą kontrolera, który
-   powinien zostać uruchomiony;
+   konkretnej trasy i zwraca informacje o trasie, łącznie z nazwą akcji,
+   która powinna zostać uruchomiona;
 
-#. Rdzeń Symfony2 wykonuje kod kontrolera (akcji), który ostatecznie zwraca obiekt
+#. Rdzeń Symfony wykonuje kod akcji, która ostatecznie zwraca obiekt
    ``Response``.
 
 .. figure:: /images/request-flow.png
    :align: center
-   :alt: Przepływ żądania w Symfony2
+   :alt: Przepływ żądania w Symfony
 
-   Warstwa trasowania jest narzędziem, które tłumaczy przychodzący adres URL na określony
-   kontroler jaki ma być wykonany.
+   Warstwa trasowania jest narzędziem, które tłumaczy przychodzący adres URL na
+   oodpowiednią akcję jaka ma być wykonana.
 
 .. index::
    single: trasowanie; tworzenie tras
@@ -260,8 +260,8 @@ oraz z tablicy ``defaults`` przechowującej wartości domyślne:
 
         return $collection;
 
-Trasa ta dopasowuje stronę główną aplikacji (``/``) i odwzorowuje kontroler
-``AcmeDemoBundle:Main:homepage``. Ciąg znakowy ``_controller`` jest zamieniany
+Trasa ta dopasowuje stronę główną aplikacji (``/``) i odwzorowuje akcję
+``AppBundle:Main:homepage``. Ciąg znakowy ``_controller`` jest zamieniany
 na nazwę odpowiedniej funkcji PHP, która następnie zostaje wykonana.
 Ten proces będzie wyjaśniony w sekcji :ref:`controller-string-syntax`.
 
@@ -328,9 +328,9 @@ Do określenia wielu tras można wykorzystać jedno lub więcej
         return $collection;
 
 Wzorzec taki będzie pasował do wszystkiego, co wygląda jak ``/blog/*``. Co więcej,
-wartość przypisana do parametru ``{slug}`` będzie dostępna wewnątrz kontrolera.
+wartość przypisana do parametru ``{slug}`` będzie dostępna wewnątrz akcji.
 Innymi słowy, jeśli ścieżka URL wygląda tak: ``/blog/hello-world``,
-to zmienna ``$slug`` z wartością ``hello-world`` będzie dostępna w kontrolerze.
+to zmienna ``$slug`` z wartością ``hello-world`` będzie dostępna w akcji.
 Może być to użyte np. do pobrania wpisu na blogu, którego adres pasuje do tego
 ciągu znakowego.
 
@@ -457,7 +457,7 @@ parameter ``{page}``:
         return $collection;
 
 Podobnie jak poprzedni wieloznacznik ``{slug}``, wartość pasująca do ``{page}``
-będzie też dostępna dla kontrolera. Ta wartość może być użyta do określenia,
+będzie też dostępna dla akcji. Ta wartość może być użyta do określenia,
 którą część wpisu na blogu wyświetlić dla danej strony.
 
 Chwileczkę! Ponieważ wieloznaczniki są domyślnie wymagane, ta trasa już nie będzie
@@ -629,7 +629,7 @@ Spójrzmy na utworzone przez nas wcześniej trasy:
         return $collection;
 
 Czy nie występuje tu jakiś problem? Prosze zauważyć, że obie trasy mają wzorce,
-do których pasują ścieżki URL takie jak ``/blog/*``. Mechanizm trasowania Symfony2
+do których pasują ścieżki URL takie jak ``/blog/*``. Mechanizm trasowania Symfony
 zawsze będzie wybierał **pierwszą** trasę, którą znajdzie. Innymi słowy, trasa
 ``blog_show`` nigdy nie zostanie dopasowana. Ponadto ścieżka URL taka jak
 ``/blog/my-blog-post`` będzie pasowała do pierwszej trasy (``blog``) i zwracała
@@ -815,8 +815,8 @@ Dodawanie wymagania dotyczącego metody HTTP
 
 Oprócz ścieżki URL, można również dopasować metodę przychodzącego żądania
 (tj. GET, HEAD, POST, PUT, DELETE). Załóżmy, że mamy formularz kontaktowy
-z dwoma kontrolerami - jeden do wyświetlania formularza (dla żądania GET),
-a drugi do przetwarzania formularza, gdy zostanie on zgłoszony (z metodą POST).
+z dwoma akcjami - jedną do wyświetlania formularza (dla żądania GET),
+a drugą do przetwarzania formularza, gdy zostanie on zgłoszony (z metodą POST).
 Można to osiągnąć poprzez następującą konfigurację trasowania:
 
 .. configuration-block::
@@ -901,7 +901,7 @@ Można to osiągnąć poprzez następującą konfigurację trasowania:
 Pomimo faktu, iż te dwie trasy mają identyczne ścieżki (``/contact``), pierwsza
 z nich będzie pasować tylko do żądań GET, a druga tylko do żądań POST. Oznacza to,
 że można wyświetlać i zgłosić formularz poprzez ten sam adres URL, jednocześnie
-wykorzystując do tego oddzielne kontrolery dla tych dwóch różnych akcji.
+wykorzystując do tego oddzielne akcje dla tych dwóch różnych działań.
 
 .. note::
     Jeśli nie zostanie podane wymaganie dla `methods``, trasa będzie pasować do
@@ -1118,7 +1118,7 @@ ukośnika. Ścieżki URL pasujące do tej trasy mogą wyglądać np. tak:
     Przy zastosowaniu tego parametru dopasowaną wartością może być "format żądania"
     obiektu Request. Ostatecznie format żądania służy do takich rzeczy jak ustawienie
     nagłówka ``Content-Type`` odpowiedzi (np. żądany format json tłumaczony jest na
-    ``Content-Type application/json``). W kontrolerze do renderowania może być
+    ``Content-Type application/json``). W akcji do renderowania może być
     również stosowany inny szablon dla każdej wartości ``_format``.
     Parametr ``_format`` jest bardzo skutecznym sposobem na renderowanie tej samej
     treści w różnych formatach.
@@ -1136,10 +1136,10 @@ Specjalne parametry trasowania
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Jak mogliśmy sie przekonać, każda wartość parametr trasowania jest dostępna jako
-argument w metododzie kontrolera. Dodatkowo istnieją jeszcze trzy specjalne
+argument w metodzie kontrolera, zwanej akcją. Dodatkowo istnieją jeszcze trzy specjalne
 parametry - każdy z nich dodaje unikatową cząstkę funkcjonalności do aplikacji:
 
-* ``_controller``: określa który kontroler ma zostać użyty gdy trasa zostanie dopasowana;
+* ``_controller``: określa która akcja ma zostać użyta gdy trasa zostanie dopasowana;
 
 * ``_format``: służy do ustawienia formatu żądania (:ref:`czytaj więcej<book-routing-format-param>`);
 
@@ -1161,9 +1161,9 @@ Wzorzec nazwy kontrolera
 ------------------------
 
 Każda trasa musi posiadać parametr ``_controller``, który informuje Symfony,
-który kontroler powinien zostać uruchomiony, gdy trasa zostanie dopasowana.
-Ten parametr używa prostego wzorca zwanego *logiczną nazwa kontrolera*, który
-Symfony dopasowuje do nazwy konkretnej metody i klasy PHP.
+która akcja powinna zostać uruchomiona, gdy trasa zostanie dopasowana.
+Ten parametr używa prostego wzorca zwanego *logiczną nazwą kontrolera*, który
+Symfony dopasowuje to do nazwy konkretnej metody i klasy PHP.
 Wzorzec ten składa się z trzech części, każda z nich oddzielona jest dwukropkiem:
 
     **pakiet**:**kontroler**:**akcja**
@@ -1194,7 +1194,7 @@ Kontroler może wyglądać np. tak::
 Proszę zauważyć, że Symfony dodaje ciąg ``Controller`` do nazwy klasy (``Blog``
 => ``BlogController``) oraz ciąg ``Action`` do nazwy metody (``show`` => ``showAction``).
 
-Można również odnieść się do kontrolera używając w pełni kwalifikowanej nazwy klasy
+Można również odnieść się do akcji używając w pełni kwalifikowanej nazwy klasy
 oraz metody:
 ``Acme\BlogBundle\Controller\BlogController::showAction``.
 Jeśli przestrzega się kilku prostych konwencji, logiczna nazwa kontrolera jest
@@ -1203,12 +1203,12 @@ bardziej zwięzła i pozwala na większą elastyczność.
 .. note::
 
    Oprócz używania logicznej nazwy oraz w pełni kwalifikowanej nazwy klasy,
-   Symfony dostarcza trzeci sposób odwoływania się do kontrolera. Tą metoda używa
+   Symfony dostarcza trzeci sposób odwoływania się do akcji. Tą metoda używa
    tylko jednego dwukropka jako separatora (np. ``service_name:indexAction``)
-   i odwołuje się do kontrolera jako usługi (patrz :doc:`/cookbook/controller/service`).
+   i odwołuje się do akcji jako usługi (patrz :doc:`/cookbook/controller/service`).
 
-Parametry trasy a argumenty kontrolera
---------------------------------------
+Parametry trasy a argumenty akcji
+---------------------------------
 
 Parametry trasy (np. ``{slug}``) są szczególnie ważne, ponieważ każdy z nich
 jest dostępny jako argument metody kontrolera::
@@ -1220,12 +1220,12 @@ jest dostępny jako argument metody kontrolera::
 
 W rzeczywistości, cała kolekcja ``defaults`` jest scalana z wartościami parametrów
 w jedną pojedynczą tablicę. Każdy klucz tej tablicy jest dostępny jako argument
-kontrolera.
+akcji.
 
-Innymi słowy, dla każdego argumentu metody kontrolera, Symfony szuka parametru
+Innymi słowy, dla każdego argumentu akcji, Symfony szuka parametru
 o nazwie takiej samej jak argument i przypisuje jego wartość do tego argumentu.
 W powyżej rezentowanym zaawansowanym przykładzie, dowolna kombinacja (o dowolnej
-kolejności) nastęþujacych zmiennych może być użyta jako argumenty metody
+kolejności) następujacych zmiennych może być użyta jako argumenty akcji
 ``showAction()``:
 
 * ``$culture``
@@ -1456,7 +1456,7 @@ Generowanie ścieżek URL
 
 System trasowania powinien również być używany do generowania ścieżek URL.
 W rzeczywistości, trasowanie jest systemem dwukierunkowym: odwzorowuje ścieżkę URL
-na kontroler (i parametry), oraz z powrotem trasę (i parametry) na ścieżkę URL.
+na akcję (i parametry), oraz z powrotem trasę (i parametry) na ścieżkę URL.
 Ten dwukierunkowy system tworzony jest przez metody
 :method:`Symfony\\Component\\Routing\\Router::match` oraz
 :method:`Symfony\\Component\\Routing\\Router::generate`.
@@ -1494,7 +1494,7 @@ Z tej informacji można wygenerować łatwo każdą ścieżkę URL::
 
 .. note::
 
-    W kontrolerach, które rozszerzają bazową klase kontrolera Symfony
+    W kontrolerach, które rozszerzają bazową klasę kontrolera Symfony
     :class:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller`,
     można wykorzystać metodę
     :method:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller::generateUrl`,
@@ -1621,8 +1621,8 @@ W PHP trzeba przekazać ``true`` do  ``generate()``:
 Podsumowanie
 ------------
 
-Trasowanie to system odwzorowania adresu URL przychodzącego żądania na funkcję kontrolera,
-który ma być wywołany w celu przetworzenia żądania. Pozwala to zarówno na określanie
+Trasowanie to system odwzorowania adresu URL przychodzącego żądania na akcję w kontrolerze,
+która ma być wywołany w celu przetworzenia żądania. Pozwala to zarówno na określanie
 przyjaznych adresów URL, jak i oddzielenia funkcjonalności aplikacji od od struktury
 adresów URL. Trasowanie jest dwukierunkowym mechanizmem, co oznacza, że może być
 również wykorzystywany do generowania adresów URL.
