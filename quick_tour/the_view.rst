@@ -1,8 +1,8 @@
 .. highlight:: php
    :linenothreshold: 2
 
-Widok (View)
-============
+Widok
+=====
 
 Po przeczytaniu pierwszej części tego poradnika, dobrze jest poświęcić
 kolejne 10 minut dla Symfony. W drugiej części, nauczysz się
