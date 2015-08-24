@@ -119,7 +119,7 @@ Tłumaczenie tekstu jest realizowane przez usługę ``translator``
 (:class:`Symfony\\Component\\Translation\\Translator`). W celu przetłumaczenia
 bloku tekstu (nazywanego tu *komunikatem*), trzeba użyć metody
 :method:`Symfony\\Component\\Translation\\Translator::trans`.
-Załóżmy na przykład, że tłumaczymy prosty komunikat wewnątrz kontrolera::
+Załóżmy na przykład, że tłumaczymy prosty komunikat wewnątrz akcji::
 
     // tekst będzie *zawsze* drukowany po angielsku
     dump('Hello World');
@@ -771,7 +771,7 @@ Wykrywa ono również następujące translatory użyte w szablonach PHP:
 
     Ekstraktory nie są zdolne do badania komunikatów tłumaczonych poza szablonami,
     co oznacza że nie zostanie wykryty translator zastosowany w etykietach formularzy
-    lub wewnątrz kontrolerów.
+    lub wewnątrz akcji.
     Dynamiczne tłumaczenia obejmujące zmienne lub wyrażenia nie są wykrywane w
     szablonach, co oznacza że, poniższy przykład nie zostanie przeanalizowany:
 

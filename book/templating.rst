@@ -8,9 +8,9 @@ Tworzenie i stosowanie szablonów
 ================================
 
 Wiemy już, że :doc:`kontroler </book/controller>` jest odpowiedzialny za obsługę
-każdego żądania dostarczanego do aplikacji Symfony2. W rzeczywistości kontroler
+każdego żądania dostarczanego do aplikacji Symfony. W rzeczywistości kontroler
 przekazuje większość cięższych prac w inne miejsca, których kod może zostać
-przetestowany i ponownie wykorzystany. Kiedy kontroler ma wygenerować HTML, CSS
+przetestowany i ponownie wykorzystany. Kiedy akcja ma wygenerować HTML, CSS
 lub inną treść, to przekazuje to działanie silnikowi szablonowania. W tym rozdziale
 dowiemy się, jak napisać pełnowartościowe szablony, które mogą być użyte do zwracania
 treści do użytkownika, wypełniania treści wiadomości e-mail i wiele więcej. Dowiemy
@@ -57,7 +57,7 @@ PHP* - plik tekstowy parsowany przez PHP, który zawiera mieszankę tekstu i kod
 
 .. index:: single: Twig; wprowadzenie
 
-Pakiety Symfony2 są wyposażone w jeszcze bardziej silniejszy język szablonowania
+Pakiety Symfony są wyposażone w jeszcze bardziej silniejszy język szablonowania
 o nazwie `Twig`_. Twig pozwala pisać zwięzłe, czytelne szablony na kilka sposobów,
 które są bardziej przyjazne dla projektantów stron i są bardziej wydajne niż szablony PHP:
 
@@ -186,7 +186,7 @@ Dziedziczenie szablonów a układ strony
 --------------------------------------
 
 Niejednokrotnie szablony w projekcie współdzielą te same elementy, takie jak
-nagłówek, stopka, pasek boczny i inne. W Symfony2 myślimy o tym problemie inaczej -
+nagłówek, stopka, pasek boczny i inne. W Symfony myślimy o tym problemie inaczej -
 szablon może być dekorowany przez inny szablon. Działa to dokładnie tak samo jak
 klasa PHP - dziedziczenie szablonowe umożliwia zbudowanie szablonu podstawowego
 "układu strony" (ang. layout), który zawiera wszystkie wspólne elementy strony,
@@ -342,7 +342,7 @@ to używana jest zamiast tego zwartość z szablonu nadrzędnego. Zawartość ze
 
 Można używać wiele poziomów dziedziczenia, jeżeli jest to potrzebne. W następnym
 rozdziale wyjaśniony jest trójpoziomowy model dziedziczenia oraz to, jak szablony
-są organizowane wewnątrz projektu Symfony2.
+są organizowane wewnątrz projektu Symfony.
 
 Oto kilka wskazówek o których trzeba pamietać przy pracy z dziedziczeniem szablonów:
 
@@ -405,7 +405,7 @@ użyć ścieżkę ``base.html.twig`` a do zrenderowania lub rozszerzenia
 Odwoływanie się do szablonów w pakietach
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Symfony2 używa dla odwoływania się do szablonów składni
+Symfony używa dla odwoływania się do szablonów składni
 **pakiet**:**kontroler**:**szablon**.
 Umożliwia to na stosowanie wielu różnych typów szablonów, z których każdy znajduje
 się w określonej lokalizacji:
@@ -461,11 +461,11 @@ Nazwa pliku               Format  silnik
 ``blog/index.css.twig``   CSS     Twig
 ========================  ======  ======
 
-Domyślnie każdy szablon Symfony2 może być napisany dla silnika Twig albo PHP
+Domyślnie każdy szablon Symfony może być napisany dla silnika Twig albo PHP
 i mieć ostatnie rozszerzenie (np. ``.twig`` albo ``.php``).
 Pierwsza część rozszerzenia (np. ``.html``, ``.css`` itd.) jest ostatecznym
 formatem w jakim ma zostać wygenerowany szablon. Inaczej niż rozszerzenie wskazujące
-silnik, które determinuje jak parsowany będzie szablon Symfony2 , rozszerzenie
+silnik, które determinuje jak parsowany będzie szablon Symfony , rozszerzenie
 formatu jest organizacyjną taktyką stosowaną w przypadku tego samego aktywu
 (*ang. asset*), który może zostać przetworzony jako HTML (``index.html.twig``),
 XML (``index.xml.twig``), lub inny format. Dla uzyskania więcej informacji
@@ -490,7 +490,7 @@ grupie narzędzi, dostępnych aby pomóc w wykonaniu większości wspólnych zad
 wykonywanych przez szablony, takich jak dołączanie innych szablonów, tworzenie
 łączy do stron, czy dołączanie obrazów.
 
-Symfony2 dostarczany jest w pakietach zawierających kilka wyspecjalizowanych
+Symfony dostarczany jest w pakietach zawierających kilka wyspecjalizowanych
 znaczników i funkcji Twiga, które ułatwiają pracę projektantom szablonów.
 System szablonowania w PHP dostarcza rozszerzalny system *helperów*, które
 umożliwiających skorzystanie z użytecznych funkcjonalności w kontekście szablonu.
@@ -610,7 +610,11 @@ Rozwiązaniem jest osadzenie w szablonie wyniku działania całego kontrolera.
 Najpierw trzeba utworzyć kontroler, który przetwarza pewną liczbę najnowszych
 artykułów::
 
-    // src/Acme/ArticleBundle/Controller/ArticleController.php
+    // src/AppBundle/Controller/ArticleController.php
+    namespace AppBundle\Controller;
+
+    // ...
+
     class ArticleController extends Controller
     {
         public function recentArticlesAction($max = 3)
@@ -620,7 +624,7 @@ artykułów::
             $articles = ...;
 
             return $this->render(
-                'AcmeArticleBundle:Article:recentList.html.twig',
+                'article/recent_list.html.twig',
                 array('articles' => $articles)
             );
         }
@@ -631,9 +635,8 @@ Szablon ``recentList`` jest bardzo prosty:
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
-        {# src/Acme/ArticleBundle/Resources/views/Article/recentList.html.twig #}
+        {# app/Resources/views/article/recent_list.html.twig #}
         {% for article in articles %}
             <a href="/article/{{ article.slug }}">
                 {{ article.title }}
@@ -641,14 +644,14 @@ Szablon ``recentList`` jest bardzo prosty:
         {% endfor %}
 
     .. code-block:: html+php
-       :linenos:
 
-        <!-- src/Acme/ArticleBundle/Resources/views/Article/recentList.html.php -->
+        <!-- app/Resources/views/article/recent_list.html.php -->
         <?php foreach ($articles as $article): ?>
             <a href="/article/<?php echo $article->getSlug() ?>">
                 <?php echo $article->getTitle() ?>
             </a>
-        <?php endforeach; ?>
+        <?php endforeach ?>
+
 
 .. note::
 
@@ -662,19 +665,18 @@ Dla dołączenia kontrolera, trzeba się do niego odwołać używając standardo
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
         {# app/Resources/views/base.html.twig #}
 
         {# ... #}
         <div id="sidebar">
-            {{ render(controller('AcmeArticleBundle:Article:recentArticles', {
-                'max': 3
-            })) }}
+            {{ render(controller(
+                'AppBundle:Article:recentArticles',
+                { 'max': 3 }
+            )) }}
         </div>
 
     .. code-block:: html+php
-       :linenos:
 
         <!-- app/Resources/views/base.html.php -->
 
@@ -682,7 +684,7 @@ Dla dołączenia kontrolera, trzeba się do niego odwołać używając standardo
         <div id="sidebar">
             <?php echo $view['actions']->render(
                 new \Symfony\Component\HttpKernel\Controller\ControllerReference(
-                    'AcmeArticleBundle:Article:recentArticles',
+                    'AppBundle:Article:recentArticles',
                     array('max' => 3)
                 )
             ) ?>
@@ -704,18 +706,17 @@ Asynchroniczna zawartość z hinclude.js
 
 Kontrolery mogą być osadzane asynchronicznie przy wykorzystaniu biblioteki
 JavaScript `hinclude.js`_. Jako że osadzana treść pochodzi z innej strony (lub
-w tym przypadku z kontrolera), to Symfony2 używa standardowego helpera ``render``
+w tym przypadku z kontrolera), to Symfony używa standardowego helpera ``render``
 do konfigurowania znaczników ``hinclude.js``:
 
 .. configuration-block::
 
     .. code-block:: jinja
-       :linenos:
 
-        {% render url('...') with {}, {'standalone': 'js'} %}
+        {{ render_hinclude(controller('...')) }}
+        {{ render_hinclude(url('...')) }}
 
     .. code-block:: php
-       :linenos:
 
         <?php echo $view['actions']->render(
             new ControllerReference('...'),
@@ -778,16 +779,14 @@ JavaScript) można ustawić w konfiguracji aplikacji:
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         # app/config/config.yml
         framework:
             # ...
             templating:
-                hinclude_default_template: AcmeDemoBundle::hinclude.html.twig
+                hinclude_default_template: hinclude.html.twig
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -799,18 +798,19 @@ JavaScript) można ustawić w konfiguracji aplikacji:
 
             <!-- ... -->
             <framework:config>
-                <framework:templating hinclude-default-template="AcmeDemoBundle::hinclude.html.twig" />
+                <framework:templating hinclude-default-template="hinclude.html.twig" />
             </framework:config>
         </container>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
             // ...
-            'templating'      => array(
-                'hinclude_default_template' => array('AcmeDemoBundle::hinclude.html.twig'),
+            'templating' => array(
+                'hinclude_default_template' => array(
+                    'hinclude.html.twig',
+                ),
             ),
         ));
 
@@ -822,18 +822,18 @@ wszystkie zdefiniowane globalne szablony):
 .. configuration-block::
 
     .. code-block:: jinja
-       :linenos:
 
-        {{ render_hinclude(controller('...'),  {'default': 'AcmeDemoBundle:Default:content.html.twig'}) }}
+        {{ render_hinclude(controller('...'),  {
+            'default': 'default/content.html.twig'
+        }) }}
 
     .. code-block:: php
-       :linenos:
 
         <?php echo $view['actions']->render(
             new ControllerReference('...'),
             array(
                 'renderer' => 'hinclude',
-                'default' => 'AcmeDemoBundle:Default:content.html.twig',
+                'default'  => 'default/content.html.twig',
             )
         ) ?>
 
@@ -842,18 +842,16 @@ albo można również określić łańcuch tekstowy do wyświetlenia jako domyś
 .. configuration-block::
 
     .. code-block:: jinja
-       :linenos:
 
         {{ render_hinclude(controller('...'), {'default': 'Loading...'}) }}
 
     .. code-block:: php
-       :linenos:
 
         <?php echo $view['actions']->render(
             new ControllerReference('...'),
             array(
                 'renderer' => 'hinclude',
-                'default' => 'Loading...',
+                'default'  => 'Loading...',
             )
         ) ?>
 
@@ -880,15 +878,13 @@ konfigurację trasowania:
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         # app/config/routing.yml
         _welcome:
             path:     /
-            defaults: { _controller: AcmeDemoBundle:Welcome:index }
+            defaults: { _controller: AppBundle:Welcome:index }
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/routing.yml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -898,20 +894,19 @@ konfigurację trasowania:
                 http://symfony.com/schema/routing/routing-1.0.xsd">
 
             <route id="_welcome" path="/">
-                <default key="_controller">AcmeDemoBundle:Welcome:index</default>
+                <default key="_controller">AppBundle:Welcome:index</default>
             </route>
         </routes>
 
     .. code-block:: php
-       :linenos:
-        
+
         // app/config/routing.php
         use Symfony\Component\Routing\Route;
         use Symfony\Component\Routing\RouteCollection;
-        
+
         $collection = new RouteCollection();
         $collection->add('_welcome', new Route('/', array(
-            '_controller' => 'AcmeDemoBundle:Welcome:index',
+            '_controller' => 'AppBundle:Welcome:index',
         )));
 
         return $collection;
@@ -929,21 +924,20 @@ do odpowiedniej trasy:
 
         <a href="<?php echo $view['router']->generate('_welcome') ?>">Home</a>
 
+
 Zgodnie z oczkiwaniami wygenuruje to adres URL ``/``. Zobaczmy jak działa to
 z bardziej skomplikowaną trasą:
 
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         # app/config/routing.yml
         article_show:
             path:     /article/{slug}
-            defaults: { _controller: AcmeArticleBundle:Article:show }
+            defaults: { _controller: AppBundle:Article:show }
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -953,20 +947,19 @@ z bardziej skomplikowaną trasą:
                 http://symfony.com/schema/routing/routing-1.0.xsd">
 
             <route id="article_show" path="/article/{slug}">
-                <default key="_controller">AcmeArticleBundle:Article:show</default>
+                <default key="_controller">AppBundle:Article:show</default>
             </route>
         </routes>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\Route;
         use Symfony\Component\Routing\RouteCollection;
-        
+
         $collection = new RouteCollection();
         $collection->add('article_show', new Route('/article/{slug}', array(
-            '_controller' => 'AcmeArticleBundle:Article:show',
+            '_controller' => 'AppBundle:Article:show',
         )));
 
         return $collection;
@@ -978,9 +971,8 @@ jak i wartość parametru ``{slug}``. Używając tej trasy, przeróbmy szablon
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
-        {# src/Acme/ArticleBundle/Resources/views/Article/recentList.html.twig #}
+        {# app/Resources/views/article/recent_list.html.twig #}
         {% for article in articles %}
             <a href="{{ path('article_show', {'slug': article.slug}) }}">
                 {{ article.title }}
@@ -988,14 +980,16 @@ jak i wartość parametru ``{slug}``. Używając tej trasy, przeróbmy szablon
         {% endfor %}
 
     .. code-block:: html+php
-       :linenos:
 
-        <!-- src/Acme/ArticleBundle/Resources/views/Article/recentList.html.php -->
+        <!-- app/Resources/views/Article/recent_list.html.php -->
         <?php foreach ($articles in $article): ?>
-            <a href="<?php echo $view['router']->generate('article_show', array('slug' => $article->getSlug()) ?>">
+            <a href="<?php echo $view['router']->generate('article_show', array(
+                'slug' => $article->getSlug(),
+            )) ?>">
                 <?php echo $article->getTitle() ?>
             </a>
-        <?php endforeach; ?>
+        <?php endforeach ?>
+
 
 .. tip::
 
@@ -1008,8 +1002,14 @@ jak i wartość parametru ``{slug}``. Używając tej trasy, przeróbmy szablon
     To samo można zrobić w szablonach PHP przez przekazanie do metody trzeciego
     argumentu ``generate()``:
 
+    .. code-block:: html+jinja
+
+        <a href="{{ url('_welcome') }}">Home</a>
+
+    The same can be done in PHP templates by passing a third argument to
+    the ``generate()`` method:
+
     .. code-block:: html+php
-       :linenos:
 
         <a href="<?php echo $view['router']->generate(
             '_welcome',
@@ -1029,7 +1029,7 @@ Odnośniki do aktywów
 
 Szablony często również odwołują się do obrazów, skryptów Javascript, arkuszy stylów
 i innych :term:`aktywów<aktywa>`. Oczywiście można podawać sztywne ścieżki dostępu do
-tych aktywów (np. ``/images/logo.png``), ale Symfony2 oferuje bardziej dynamiczny sposób
+tych aktywów (np. ``/images/logo.png``), ale Symfony oferuje bardziej dynamiczny sposób
 poprzez funkcję ``assets``:
 
 .. configuration-block::
@@ -1236,7 +1236,7 @@ jak i ``contact.css``.
 Zmienne globalne szablonu
 -------------------------
 
-Podczas każdego żądania Symfony2 ustawia domyślnie szablonową zmienną globalną ``app``,
+Podczas każdego żądania Symfony ustawia domyślnie szablonową zmienną globalną ``app``,
 zarówno dla silnika szablonowego Twig jak i PHP. Zmienna ``app`` jest instancją
 :class:`Symfony\\Bundle\\FrameworkBundle\\Templating\\GlobalVariables`
 dającej automatyczny dostęp do określonych zmiennych:
@@ -1283,7 +1283,7 @@ dającej automatyczny dostęp do określonych zmiennych:
 Konfigurowanie i używanie usługi templating
 -------------------------------------------
 
-Sercem systemu szablonów Symfony2 jest obiekt ``Engine``. Ten szczególny obiekt
+Sercem systemu szablonów Symfony jest obiekt ``Engine``. Ten szczególny obiekt
 jest odpowiedzialny za przetwarzanie szablonów i zwracanie ich zawartości.
 Podczas przetwarzania szablonu w kontrolerze, w rzeczywistości wykorzystywana jest
 usługa silnika szablonowania. Na przykład::
@@ -1302,7 +1302,7 @@ jest równoważne z::
 .. _template-configuration:
 
 Ten silnik szablonowania (lub "usługa") jest wstępnie skonfigurowany do automatycznej
-pracy wewnątrz Symfony2. Można oczywiście to skonfigurować samemu w pliku konfiguracyjnym
+pracy wewnątrz Symfony. Można oczywiście to skonfigurować samemu w pliku konfiguracyjnym
 aplikacji:
 
 .. configuration-block::
@@ -1359,7 +1359,7 @@ Dostępne są różne opcje konfiguracyjne i omówione są one w
 Przesłanianie szablonów pakietowych
 -----------------------------------
 
-Społeczność Symfony2 szczyci się tworzeniem i utrzymywaniem wysokiej jakości pakietów
+Społeczność Symfony szczyci się tworzeniem i utrzymywaniem wysokiej jakości pakietów
 (zobacz `KnpBundles.org`_ aby zapoznać się z wielką ilością różnych funkcjonalności).
 W razie użycia niezależnego pakietu często trzeba przesłonić i dostosować jeden lub
 więcej jego szablonów.
@@ -1383,7 +1383,7 @@ znaleźliśmy to::
 
 
 Kiedy przetwarzany jest szablon ``AcmeBlogBundle:Blog:index.html.twig,``
-Symfony2 wyszukuje szablony kolejno w dwóch różnych lokalizacjach:
+Symfony wyszukuje szablony kolejno w dwóch różnych lokalizacjach:
 
 #. ``app/Resources/AcmeBlogBundle/views/Blog/index.html.twig``
 #. ``src/Acme/BlogBundle/Resources/views/Blog/index.html.twig``
@@ -1401,7 +1401,7 @@ będzie istniał, więc trzeba go utworzyć.
 
 Logika ta ma również zastosowanie do podstawowych szablonów pakietów. Załóżmy, że
 każdy szablon w ``AcmeBlogBundle`` dziedziczy z szablonu podstawowego o nazwie
-``AcmeBlogBundle::layout.html.twig``. Podobnie jak wcześniej, Symfony2 będzie
+``AcmeBlogBundle::layout.html.twig``. Podobnie jak wcześniej, Symfony będzie
 wyszukiwało szablony kolejno w dwóch miejscach:
 
 #. ``app/Resources/AcmeBlogBundle/views/layout.html.twig``
@@ -1411,7 +1411,7 @@ Po raz kolejny, aby przesłonić szablon, wystarczy skopiować go z pakietu do
 ``app/Resources/AcmeBlogBundle/views/layout.html.twig``. Można teraz swobodnie
 przystosować kopię do swoich potrzeb.
 
-Symfony2 zawsze rozpoczyna wyszukiwanie szablonów w katalogu ``app/Resources/{BUNDLE_NAME}/views/``.
+Symfony zawsze rozpoczyna wyszukiwanie szablonów w katalogu ``app/Resources/{BUNDLE_NAME}/views/``.
 Jeśli szablon nie istnieje tam, to kontynuuje i sprawdza wewnątrz katalogu
 ``Resources/views`` pakietu. Oznacza to, że wszystkie szablony pakietu mogą zostać
 przesłoniete przez umieszczenie ich w odpowiednim podkatalogu ``app/Resources``.
@@ -1429,7 +1429,7 @@ przesłoniete przez umieszczenie ich w odpowiednim podkatalogu ``app/Resources``
 Przesłanianie szablonów rdzenia
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Począwszy od Symfony2 rdzeń jest sam w sobie pakietem, tak więc szablony rdzenia
+Począwszy od Symfony rdzeń jest sam w sobie pakietem, tak więc szablony rdzenia
 mogą być przesłaniane w ten sam sposób. Na przykład, rdzenny ``TwigBundle`` zawiera
 szereg różnych szablonów dla "wyjątków" i "błędów", które mogą zostać przesłonięte
 przez skopiowanie ich z katalogu ``Resources/views/Exception`` pakietu ``TwigBundle``
@@ -1726,9 +1726,9 @@ różne typy szablonów: tradycyjne szablony PHP oraz eleganckie i wydajne szabl
 Twig. Obydwa typy obsługują hierarchię szablonów i są dostarczane z bogatym
 zestawem pomocniczych funkcji, zdolnych do wykonywania najpardziej typowych zadań.
 
-Ogólnie rzecz biorąc, system szablonowania w Symfony2 powinien być traktowany jako
+Ogólnie rzecz biorąc, system szablonowania w Symfony powinien być traktowany jako
 zaawansowane narzędzie, które ma się do dyspozycji. W niektórych przypadkach nie ma
-potrzeby renderowania szablonów i w Symfony2 jest to absoluynie dopuszczalne.
+potrzeby renderowania szablonów i w Symfony jest to absolutnie dopuszczalne.
 
 Dalsza lektura
 --------------
