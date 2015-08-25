@@ -3,8 +3,12 @@
 Dokumetacja Symfony
 ===================
 
-Jest to polskie tłumczenie oficjalnej dokumentacji platformy aplikacyjnej Symfony,
-publikowanej na stronach http://symfony.com/.
+Jest to polskie tłumczenie oficjalnej dokumentacji frameworka PHP Symfony,
+publikowanej na stronach http://symfony.com/. Prace nad tym tłumaczeniem
+są jeszcze w toku, ale podstawowe części zostały już przetłumaczone do wersji 2.3
+i trwa obecnie aktualizacja do wersji 2.7. Zapraszamy do współpracy - odwiedź
+nas na `GitHub <https://github.com/symfony-docs-pl/symfony-docs-pl/>`_.
+ 
 
 .. toctree::
    :hidden:
@@ -14,7 +18,7 @@ publikowanej na stronach http://symfony.com/.
 Krótki kurs
 -----------
 
-Zapoznaj się z podstawami przechodzą :doc:`krótki kurs Symfony <quick_tour/index>`:
+Zapoznaj się z podstawami przechodząc :doc:`krótki kurs Symfony <quick_tour/index>`:
 
 .. toctree::
     :hidden:
@@ -29,7 +33,7 @@ Zapoznaj się z podstawami przechodzą :doc:`krótki kurs Symfony <quick_tour/in
 Podręcznik
 ----------
 
-Tematyczne przewodniki po Symfony:
+Tematyczne przewodniki po Symfony. Można je czytać nie koniecznie po kolei.
 
 .. toctree::
     :hidden:
@@ -47,7 +51,9 @@ Receptariusz
 
     cookbook/index
 
-Przeczytaj :doc:`"Receptariusz" </cookbook/index>`.
+:doc:`"Receptariusz" </cookbook/index>`, to zbiór przepisów, wyjaśniających jak
+można wykonać pewne rzeczy, często potrzebne w praktyce programisty Symfony.  
+  
 
 
 Najlepsze praktyki
@@ -68,7 +74,7 @@ Komponenty
 
     components/index
 
-Przeczytaj dokumentację :doc:`komponentów </components/index>`.
+Chcesz szczegółów z budowy Symfony, przeczytaj dokumentację :doc:`komponentów </components/index>`.
 
 Dokumenty referencyjne
 ----------------------
@@ -98,7 +104,7 @@ Współpraca w projekcie Symfony:
 Utwórz swój własny framework
 ----------------------------
 
-Chcesz storzyć swój własny framework oparty na Symfony?
+Chcesz storzyć swój własny framework oparty na Symfony? Tu znajdziesz przepis.
 
 .. toctree::
     :hidden:
