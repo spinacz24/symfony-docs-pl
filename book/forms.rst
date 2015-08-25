@@ -8,16 +8,16 @@ Formularze
 ==========
 
 Radzenie sobie z formularzami HTML jest jednym z najczęstszych (i trudnych) zadań,
-z jakimi musi się uporać twórca aplikacji internetowych. Symfony2 integruje komponent
-*Form*, który znacznie ułatwia pracę z formularzami. W tej części podręcznika zbudujemy
-od podstaw skomplikowany formularz, ucząc się stopniowo najważniejszych funkcjonalności
-biblioteki formularzy.
+z jakimi musi się uporać twórca aplikacji internetowych. Symfony integruje z sobą
+komponent *Form*, który znacznie ułatwia pracę z formularzami. W tej części podręcznika
+zbudujemy od podstaw skomplikowany formularz, ucząc się stopniowo najważniejszych
+funkcjonalności biblioteki formularzy.
 
 .. note::
 
-   Komponent formularzy Symfony jest niezależną biblioteką, która może zostać użyta
-   poza projektami Symfony2. Więcej informacji znajdziesz w dokumentacji
-   `Symfony2 Form Component`_ dostępnej na Github.
+   `Komponent Form`_ jest niezależną biblioteką, która może zostać użyta
+   poza projektami Symfony. Więcej informacji znajdziesz w dokumentacji
+   :doc:`komponentu Form </components/form/introduction>` dostępnej też na Github.
 
 .. index::
    single: formularze; utworzenie prostego formularza
@@ -27,24 +27,23 @@ Utworzenie prostego formularza
 
 Załóżmy, że budujemy aplikację prostej listy zadań do zrobienia, która będzie
 wykorzystywana do wyświetlania "zadań". Ponieważ nasi użytkownicy będą mieli
-potrzebę edytowania i tworzenia zadań, to musimy zbudować formularz. Zanim zaczniemy,
-skupimy swoją uwagę na ogólnej klasie ``Task``, która będzie reprezentować
+potrzebę edytowania i tworzenia zadań, to musimy zbudować formularz. Zacznijmy
+od utworzenia ogólnej klasy ``Task``, która będzie reprezentować
 i przechowywać dane dla pojedynczego zadania::
 
-    // src/Acme/TaskBundle/Entity/Task.php
-    namespace Acme\TaskBundle\Entity;
+    // src/AppBundle/Entity/Task.php
+    namespace AppBundle\Entity;
 
     class Task
     {
         protected $task;
-
         protected $dueDate;
 
         public function getTask()
         {
             return $this->task;
         }
-        
+
         public function setTask($task)
         {
             $this->task = $task;
@@ -54,27 +53,19 @@ i przechowywać dane dla pojedynczego zadania::
         {
             return $this->dueDate;
         }
-        
+
         public function setDueDate(\DateTime $dueDate = null)
         {
             $this->dueDate = $dueDate;
         }
     }
 
-.. note::
-
-   Jeśli chcesz kodować ten przykład, utwórz najpierw pakiet ``AcmeTaskBundle``,
-   uruchamiając następujące polecenie (i zaakceptuj wszystkie domyślne opcje):
-
-   .. code-block:: bash
-
-        $ php app/console generate:bundle --namespace=Acme/TaskBundle
 
 Klasa ta, jak dotychczas, nie ma nic wspólnego z Symfony lub jakąkolwiek biblioteką.
 Jest ona zwykłym obiektem PHP, który bezpośrednio rozwiązuje problem wewnątrz naszej
 aplikacji (tj. potrzebę reprezentowania zadania w naszej aplikacji). Pod koniec tego
-rozdziału będziemy w stanie zgłosić dane do instancji ``Task`` (poprzez formularz HTM),
-zweryfikować swoje dane i utrwalić je w bazie danych.
+rozdziału będziemy w stanie zgłaszać dane do obiektu ``Task`` (poprzez formularz HTML),
+weryfikować swoje dane i utrwalać je w bazie danych.
 
 .. index::
    single: formularze; tworzenie formularza w kontrolerze
@@ -83,22 +74,22 @@ Budowanie formularza
 ~~~~~~~~~~~~~~~~~~~~
 
 Teraz po utworzeniu klasy ``Task``, następnym krokiem jest utworzenie i zrenderowanie
-rzeczywistego formularza HTML . W Symfony2 odbywa się to przez zbudowanie obiektu
+rzeczywistego formularza HTML . W Symfony odbywa się to przez zbudowanie obiektu
 formularza i zrenderowania formularza w szablonie. Na razie wszystko może być zrobione
 wewnątrz kontrolera::
 
-    // src/Acme/TaskBundle/Controller/DefaultController.php
-    namespace Acme\TaskBundle\Controller;
+    // src/AppBundle/Controller/DefaultController.php
+    namespace AppBundle\Controller;
 
+    use AppBundle\Entity\Task;
     use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-    use Acme\TaskBundle\Entity\Task;
     use Symfony\Component\HttpFoundation\Request;
 
     class DefaultController extends Controller
     {
         public function newAction(Request $request)
         {
-            // create a task and give it some dummy data for this example
+            // utworzenie formularza i wypełnienie go przykładowymi danymi
             $task = new Task();
             $task->setTask('Write a blog post');
             $task->setDueDate(new \DateTime('tomorrow'));
@@ -106,14 +97,15 @@ wewnątrz kontrolera::
             $form = $this->createFormBuilder($task)
                 ->add('task', 'text')
                 ->add('dueDate', 'date')
-                ->add('save', 'submit')
+                ->add('save', 'submit', array('label' => 'Create Task'))
                 ->getForm();
 
-            return $this->render('AcmeTaskBundle:Default:new.html.twig', array(
+            return $this->render('default/new.html.twig', array(
                 'form' => $form->createView(),
             ));
         }
     }
+    
 
 .. tip::
 
@@ -123,7 +115,7 @@ wewnątrz kontrolera::
    wówczas możliwy do wielokrotnego wykorzystania.
 
 Tworzenie formularza wymaga stosunkowo mało kodu, ponieważ obiekty formularza
-Symfony2 są budowane w "konstruktorze formularzy". Celem konstruktora formularzy
+Symfony są budowane w "konstruktorze formularzy". Celem konstruktora formularzy
 jest umożliwienie prostego tworzenia "recept" na formularz i używanie ich do
 rzeczywistego budowania formularzy.
 
@@ -131,14 +123,15 @@ W tym przykładzie dodaliśmy do formularza dwa pola, ``task`` i ``dueDate``,
 odnoszące się do właściwości ``task`` i ``dueDate`` klasy ``Task``.
 Mamy również do tych pól przypisany "typ" (np. ``text``, ``date``), który (między
 innymi) określa jakie znaczniki formularza HTML są renderowane dla danego pola.
-Na koniec dodamy przycisk zglaszjący dla przesyłania formularza na serwer.
+
+Na koniec dodamy przycisk zgłaszjący dla przesyłania formularza na serwer.
 
 .. versionadded:: 2.3
     W Symfony 2.3 dodano obsługę przycisków zgłaszających (*submit*). Wcześniej
     trzeba było dodawać przyciski do formularza HTML ręcznie (jak w przykładzie
     w następnym rozdziale).
 
-Symfony2 posiada wiele wbudowanych typów pól, które zostaną krótko omówione w
+Symfony posiada wiele wbudowanych typów pól, które zostaną krótko omówione w
 rozdziale :ref:`book-forms-type-reference`).
 
 .. index::
@@ -150,37 +143,55 @@ Renderowanie formularzy
 
 Teraz, gdy formularz został stworzony, następnym krokiem jest jego wyrenderowanie.
 Realizuje się to przekazując specjalny obiekt "widoku" formularza  do szablonu
-(``$form->createView()`` w powyższym kontrolerze) u używając pomocniczych funkcji
+(``$form->createView()`` w powyższym kontrolerze) i używając pomocniczych funkcji
 formularza:
 
 .. configuration-block::
 
     .. code-block:: html+jinja
 
-        {# src/Acme/TaskBundle/Resources/views/Default/new.html.twig #}
-
-        {{ form(form) }}
+        {# app/Resources/views/default/new.html.twig #}
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
 
     .. code-block:: html+php
 
-        <!-- src/Acme/TaskBundle/Resources/views/Default/new.html.php -->
-
-        <?php echo $view['form']->form($form) ?>
+        <!-- app/Resources/views/default/new.html.php -->
+        <?php echo $view['form']->start($form) ?>
+        <?php echo $view['form']->widget($form) ?>
+        <?php echo $view['form']->end($form) ?>
 
 .. image:: /images/book/form-simple.png
-    :align: center
+   :align: center
 
 .. note::
+   W przykładzie tym założono, że wysyła się formularz w żadaniu "POST" i to na
+   ten sam adres URL, który został wyświeylony w formularzu. Później dowiesz się,
+   jak zmienić metodę ``request`` i docelowy adres URL formularza.
 
-   Przykład ten zakłada, że stworzyliśmy trasę o nazwie ``task_new``, która wskazuje
-   utworzony wcześniej kontroler ``AcmeTaskBundle:Default:new``.
+To jest to! potrzeba tylko trzech linii, aby wyrenderować kompletny formularz:
 
-To jest to! Przy drukowaniu ``form(form)`` renderowane jest każde pole w formularzu,
-wraz z etykietą  i komunikatem błędu (jeśli wystąpi błąd). Funkcja ``form`` również
-obejmuje wszystko co jest potrzebne dla znacznika ``form`` HTML. Jest to proste,
-ale mało elastyczne (na razie). Zazwyczaj chce się indywidualnie renderować każde
-pole formularza, tak więc można kontrolować wygląd formularza. Więcej na ten temat
-w rozdziale ":ref:`form-rendering-template`".
+``form_start(form)``
+    Renderuje początkowy znacznik formularza, łącznie z prawidłowym atrybutem
+    ``enctype``, gdy stosuje się przesyłanie pliku.
+
+``form_widget(form)``
+    Renderuje wszystkie pola, w tym sam element pola, etykietę i komunikat błędu
+    dla pola.
+
+``form_end(form)``
+    Renderuje znacznik końcowy formularza i wszystkie pola, które nie mają być
+    jeszcze zrenderowane, w przypadku gdy renderuje się każde pole samodzielnie.
+    Jest to przydatne do renderowania ukrytych pól i wykorzystania automatycznego
+    :ref:`zabezpieczenia przed CSRF <forms-csrf>`.
+
+.. seealso::
+
+    Jest to bardzo proste, ale nieelastyczne (jeszcze). Zwykle, chce się
+    renderować każde pole indywidualnie, aby móc kontrolować wygląd formularza.
+    Dowiesz się jak to zrobić w rozdziale ":ref:`form-rendering-template`".
+
 
 Zanim przejdziemy dalej, zwróć uwagę na to, jak zostało zrenderowane pole wejściowe
 ``task``, mające wartość właściwości ``task`` obiektu ``$task`` (czyli "Write a blog
@@ -190,9 +201,9 @@ i przetłumaczenie ich na format, który jest odpowiedni do odtworzenia w formul
 .. tip::
 
    System formularza jest wystarczająco inteligentny aby uzyskać dostęp do wartości
-   chronionych właściwości zadania poprzez metody ``getTask()`` i ``setTask()``
+   chronionej właściwości ``task``, poprzez metody ``getTask()`` i ``setTask()``
    w klasie ``Task``. Gdy właściwość nie jest publiczna, to musi się użyć metod
-   akcesorów, tak że komponent formularza może pobierać i zapisywać dane we
+   akcesorów, tak aby komponent Form mógł pobierać i zapisywać dane we
    właściwościach. Dla właściwości logicznych można użyć metody "isser" lub "hasser"
    (np. ``isPublished()`` lub ``hasReminder()``) wewnątrz akcesora pobierającego
    (np. ``getPublished()`` lub ``getReminder()``).
@@ -206,39 +217,38 @@ Obsługa zgłoszeń formularza
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Drugą czynnością formularza jest przełożenie przesłanych z powrotem danych
-na właściwości obiektu. Aby tak się stało, trzeba powiązać z formularzem dane
-przesłane przez użytkownika. Do naszego kontrolera dodamy następujaca funkcjonalność::
+na właściwości obiektu. Aby tak się stało, trzeba powiązać dane przesłane przez
+użytkownika z formularzem. Do naszego kontrolera dodamy następujacą rzecz::
 
     // ...
     use Symfony\Component\HttpFoundation\Request;
 
     public function newAction(Request $request)
     {
-        // just setup a fresh $task object (remove the dummy data)
+        // tylko ustawienie świeżego obiektu $task (usunięcie przykładowych danych)
         $task = new Task();
 
         $form = $this->createFormBuilder($task)
             ->add('task', 'text')
             ->add('dueDate', 'date')
-            ->add('save', 'submit')
+            ->add('save', 'submit', array('label' => 'Create Task'))
             ->getForm();
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            // perform some action, such as saving the task to the database
+            // wykonanie jakiegoś działania, jak zapis zadania do bazy danych
 
-            return $this->redirect($this->generateUrl('task_success'));
+            return $this->redirectToRoute('task_success');
         }
 
         // ...
     }
    
-
 .. versionadded:: 2.3
     W Symfony 2.3 została dodana metoda :method:`Symfony\Component\Form\FormInterface::handleRequest`.
     Poprzednio ``$request`` był przekazywany do metody ``submit`` - strategia, która jest już
-    zdeprecjonowana i zostanie usunieta w Symfony 3.0. W celu poznania szczegółów tej metody proszę
+    przestarzała i zostanie usunięta w Symfony 3.0. W celu poznania szczegółów tej metody proszę
     zapoznać się z :ref:`cookbook-form-submit-request`.
 
 
@@ -269,7 +279,7 @@ Kontroler ten akceptuje powszechny wzorzec obsługi formularzy i ma trzy możliw
    zapisywane do formularza, ale tym razem metoda
    :method:`Symfony\Component\Form\FormInterface::isValid` zwraca ``true``.
    Teraz programista ma okazję aby wykonać kilka akcji, używając obiektu ``$task``
-   (np. utrwalić dane w bazie danych), przed przekierowaniem uzytkownika do innej
+   (np. utrwalić dane w bazie danych), przed przekierowaniem użytkownika do innej
    strony (np. do strony "Dziękujemy").
    
    .. note::
@@ -289,7 +299,7 @@ Zgłaszanie formularzy z wieloma przyciskami
     W Symfony 2.3 dodano obsługę przycisków w formularzach.
 
 Gdy formularz zawiera więcej niż jeden przycisk zgłaszający, to zachodzi potrzeba
-informacji o tym, który przycisk został kliknięty, w celu dostosowania programu
+informacji o tym, który przycisk został kliknięty, aby dostosować program
 w kontrolerze. Dodajmy do naszego formularza drugi przycisk z etykietą
 "Zapisz i dodaj"::
 
@@ -305,7 +315,7 @@ W kontrolerze użyjemy metody przycisku
 w celu zapytania, czy kliknięty został przycisk "Zapisz i dodaj"::
 
     if ($form->isValid()) {
-        // ... perform some action, such as saving the task to the database
+        // wykonanie jakiegoś działania, jak zapis zadania do bazy danych
 
         $nextAction = $form->get('saveAndAdd')->isClicked()
             ? 'task_new'
@@ -322,11 +332,11 @@ w celu zapytania, czy kliknięty został przycisk "Zapisz i dodaj"::
 Walidacja formularza
 --------------------
 
-W poprzednim rozdziale dowiedziałeś się w jaki sposób można wysłać formularz
-z danymi poprawnymi i niepoprawnymi. W Symfony2 walidacja jest stosowana do
+W poprzednim rozdziale dowiedzieliśmy się w jaki sposób można wysłać formularz
+z poprawnymi i niepoprawnymi danymi. W Symfony walidacja jest stosowana do
 wewnętrznego obiektu (np. ``Task``). Innymi słowami, nie chodzi o to czy
-"formularz" jest prawidłowy, ale o to czy obiekt ``$task`` jest prawidłowy
-po tym jak formularz zastosował dla niego zgłoszone dane. Wywołanie ``$form->isValid()``
+"formularz" jest prawidłowy, ale o to czy prawidłowy jest obiekt ``$task``,
+po tym jak formularz zastosował na nim zgłoszone dane. Wywołanie ``$form->isValid()``
 jest skrótem, który odpytuje obiekt ``$task`` o poprawność danych.
 
 Walidacja realizowana jest poprzez dodanie do klasy zestawu zasad (zwanych
@@ -336,22 +346,9 @@ być puste i musiało by być prawidłowym obiektem ``DateTime``.
 
 .. configuration-block::
 
-    .. code-block:: yaml
-       :linenos:
-
-        # Acme/TaskBundle/Resources/config/validation.yml
-        Acme\TaskBundle\Entity\Task:
-            properties:
-                task:
-                    - NotBlank: ~
-                dueDate:
-                    - NotBlank: ~
-                    - Type: \DateTime
-
     .. code-block:: php-annotations
-       :linenos:
 
-        // Acme/TaskBundle/Entity/Task.php
+        // AppBundle/Entity/Task.php
         use Symfony\Component\Validator\Constraints as Assert;
 
         class Task
@@ -368,17 +365,27 @@ być puste i musiało by być prawidłowym obiektem ``DateTime``.
             protected $dueDate;
         }
 
-    .. code-block:: xml
-       :linenos:
+    .. code-block:: yaml
 
-        <!-- Acme/TaskBundle/Resources/config/validation.xml -->
+        # AppBundle/Resources/config/validation.yml
+        AppBundle\Entity\Task:
+            properties:
+                task:
+                    - NotBlank: ~
+                dueDate:
+                    - NotBlank: ~
+                    - Type: \DateTime
+
+    .. code-block:: xml
+
+        <!-- AppBundle/Resources/config/validation.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
         <constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping
                 http://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd">
 
-            <class name="Acme\TaskBundle\Entity\Task">
+            <class name="AppBundle\Entity\Task">
                 <property name="task">
                     <constraint name="NotBlank" />
                 </property>
@@ -390,9 +397,8 @@ być puste i musiało by być prawidłowym obiektem ``DateTime``.
         </constraint-mapping>
 
     .. code-block:: php
-       :linenos:
 
-        // Acme/TaskBundle/Entity/Task.php
+        // AppBundle/Entity/Task.php
         use Symfony\Component\Validator\Mapping\ClassMetadata;
         use Symfony\Component\Validator\Constraints\NotBlank;
         use Symfony\Component\Validator\Constraints\Type;
@@ -414,7 +420,7 @@ być puste i musiało by być prawidłowym obiektem ``DateTime``.
         }
 
 
-To jest to! Jeśli ponownie zgłosimy formularz z nieprawidłowymi danymi, to zobaczymy
+Doskonale! Jeśli ponownie zgłosimy formularz z nieprawidłowymi danymi, to zobaczymy
 w formularzu odpowiednio wydrukowane komunikaty o błędach.
 
 .. _book-forms-html5-validation-disable:
@@ -428,7 +434,7 @@ w formularzu odpowiednio wydrukowane komunikaty o błędach.
    komunikatu o błędzie, jeśli dokonywana jest próba wysłania formularza z pustym polem.
    
    Renderowane formularze w pełni korzystają z tej nowej funkcjonalności, przez
-   dodanie stosownym atrybutów HTML wyzwalających walidację. Walidacja po stronie
+   dodanie stosownych atrybutów HTML wyzwalających walidację. Walidacja po stronie
    klienta może jednak zostać wyłączona przez dodanie atrybutu ``novalidate``
    w znaczniku ``form`` lub ``formnovalidate`` dla znacznika przycisku zgłaszającego
    (*ang. submit button*). Jest to szczególnie przydatne, gdy chce się przetestować
@@ -439,19 +445,17 @@ w formularzu odpowiednio wydrukowane komunikaty o błędach.
 
        .. code-block:: html+jinja
 
-           {# src/Acme/DemoBundle/Resources/views/Default/new.html.twig #}
-
+           {# app/Resources/views/default/new.html.twig #}
            {{ form(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
        .. code-block:: html+php
 
-           <!-- src/Acme/DemoBundle/Resources/views/Default/new.html.php -->
-
+           <!-- app/Resources/views/default/new.html.php -->
            <?php echo $view['form']->form($form, array(
                'attr' => array('novalidate' => 'novalidate'),
            )) ?>
 
-Walidacja jest bardzo zaawansowaną funkcjonalnością Symfony2 i opisana jest
+Walidacja jest bardzo zaawansowaną funkcjonalnością Symfony i opisana jest
 w rozdziale :doc:`/book/validation`.
 
 .. index::
@@ -469,17 +473,22 @@ w obiekcie, to należy określić, które grupy (grupa) mają być użyte::
         'validation_groups' => array('registration'),
     ))->add(...);
 
+.. versionadded:: 2.7
+    Metoda ``configureOptions()`` została wprowadzona w Symfony 2.7. Poprzednio,
+    stosowana była metoda ``setDefaultOptions()``.
+
 Jeżeli tworzy się :ref:`klasy formularza <book-form-creating-form-classes>`
-(dobra praktyka), to potrzeba dodać następujący kod do metody ``setDefaultOpt``::
+(dobra praktyka), to potrzeba dodać następujący kod do metody ``configureOptions()``::
 
-    use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+    use Symfony\Component\OptionsResolver\OptionsResolver;
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'validation_groups' => array('registration'),
         ));
     }
+    
 
 W obu przypadkach, do walidacji wewnętrznego obiektu zostaną użyte tylko
 zarejestrowane grupy walidacyjne.
@@ -501,20 +510,19 @@ W takim przypadku można pominąć wywołanie metody
 Jeśli nie jest to wskazane (z powodów niżej wymienionych) , to można ewentualnie
 ustawić opcję ``validation_groups`` na ``false`` lub pustą tablicę::
 
-    use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+    use Symfony\Component\OptionsResolver\OptionsResolver;
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'validation_groups' => false,
         ));
     }
 
-Po ustawieniu opcję ``validation_groups`` na ``false`` lub pustą tablicę formularz
-w dalszym ciagu będzie uruchamiał podstawowe sprawdzanie spójności, na przykład,
-czy przesłany plik nie jest za duży lub czy istnieją zgłoszone pola. Jeśli chce
-się wyłączyć walidację całkowicie, to należy usunąć wywołanie metody
-:method:`Symfony\\Component\\Form\\FormInterface::isValid` z kontrolera.
+Proszę zauważyć, że gdy się to zrobi, formularz w dalszym ciągu będzie uruchamiał
+podstawowe sprawdzanie spójności, na przykład, czy przesyłany plik nie jest za
+duży lub czy zgłoszone zostały nie istniejące pola. Jeśli chce sie wyłączyć walidacje,
+można użyć :ref:`zdarzenia POST_SUBMIT <cookbook-dynamic-form-modification-suppressing-form-validation>`.
 
 .. index::
    single: formularze; grupy walidacyjne
@@ -525,15 +533,16 @@ Grupy walidacyjne oparte na zgłoszonych danych
 
 Jeśli zachodzi potrzeba stworzenia jakiejś zaawansowanej logiki dla określenia
 grup walidacyjnych (np. w oparciu o zgłaszane dane), to można ustawić opcję
-``validation_groups`` na wywołanie zwrotne tablicy lub na domknięcie::
+``validation_groups`` na wywołanie zwrotne tablicy::
 
-    use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+    use Symfony\Component\OptionsResolver\OptionsResolver;
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    // ...
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'validation_groups' => array(
-                'Acme\AcmeBundle\Entity\Client',
+                'AppBundle\Entity\Client',
                 'determineValidationGroups',
             ),
         ));
@@ -542,24 +551,55 @@ grup walidacyjnych (np. w oparciu o zgłaszane dane), to można ustawić opcję
 Wywoła to statyczną metodę ``determineValidationGroups()`` klasy ``Client``
 po powiązaniu formularza, ale przed wykonaniem walidacji. Obiekt formularza jest
 przekazywany do tej metody jako argument (patrz następny przykład). Można również
-określić całą logikę inline przy użyciu domknięcia::
+określić całą logikę inline przy użyciu ``Closure``::
 
+    use AppBundle\Entity\Client;
     use Symfony\Component\Form\FormInterface;
-    use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+    use Symfony\Component\OptionsResolver\OptionsResolver;
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    // ...
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'validation_groups' => function(FormInterface $form) {
+            'validation_groups' => function (FormInterface $form) {
                 $data = $form->getData();
-                if (Entity\Client::TYPE_PERSON == $data->getType()) {
+
+                if (Client::TYPE_PERSON == $data->getType()) {
                     return array('person');
-                } else {
-                    return array('company');
                 }
+
+                return array('company');
             },
         ));
     }
+
+Użycie opcji ``validation_groups`` przesłania używaną domyślną wartość grupy
+walidacyjnej. Jeśli chce się stosować w walidacji domyślne ograniczenia jakiejś
+encji, trzeba ustawić tą opcję następująco::
+
+    use AppBundle\Entity\Client;
+    use Symfony\Component\Form\FormInterface;
+    use Symfony\Component\OptionsResolver\OptionsResolver;
+
+    // ...
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'validation_groups' => function (FormInterface $form) {
+                $data = $form->getData();
+
+                if (Client::TYPE_PERSON == $data->getType()) {
+                    return array('Default', 'person');
+                }
+
+                return array('Default', 'company');
+            },
+        ));
+    }
+
+Więcej informacji o działaniu grup walidacyjnych i domyślnych ograniczeń znajdziesz
+w rozdziale podrecznika :ref:`"Grupy walidacyjne" <book-validation-validation-groups>`.
+
 
 .. index::
    single: formularze; grupy walidacyjne
@@ -648,12 +688,12 @@ w dokumentacji każdego typu pola.
     :ref:`walidację HTML5<book-forms-html5-validation-disable>`.
 
     Należy również pamiętać, że ustawienie opcji ``required`` na ``true`` **nie da
-    rezultatu** w walidacji po stronie serwera. Innymi słowy, jeśli użytkownik wyśle
+    rezultatu** przy walidacji po stronie serwera. Innymi słowy, jeśli użytkownik wyśle
     pustą wartość dla tego pola (albo przykładowo posługuje się starą przeglądarką
     lub serwisem internetowym), to zostanie to zaakceptowane jako wartość prawidłowa,
     chyba że zostały użyte ograniczenia ``NotBlank`` lub ``NotNull``.
 
-    Innym słowami, opcja ``required`` jest "super", ale prawdziwą walidację po
+    Mówiąc inaczej, opcja ``required`` jest "super", ale prawdziwą walidację po
     stronie serwera należy stosować zawsze.
 
 .. sidebar:: Opcja ``label``
@@ -667,7 +707,8 @@ w dokumentacji każdego typu pola.
         ))
 
     Etykietę pola można również ustawić w szablonie generującym formularz
-    – patrz poniżej.
+    – patrz niżej. Jeśli nie potrzebujesz etykiety powiązanej z polem wejściowym,
+    możesz to wyłączyć, ustawiając ta wartość na ``false``.
 
 .. index::
    single: formularze; odgadywany typ pola
@@ -677,11 +718,11 @@ w dokumentacji każdego typu pola.
 Odgadywany typ pola
 -------------------
 
-Teraz, gdy ostały dodane metadane walidacyjne do klasy ``Task``, Symfony wie już
+Teraz, gdy zostały dodane metadane walidacyjne do klasy ``Task``, Symfony wie już
 trochę o swoich polach. Jeśli zezwoli się, to Symfony może "odgadywać" typ pola
-i ustawiać go. W tym przykładzie Symfony może odgadywać typ pola z zasad walidacyjnych,
-takich że zarówno pole ``task` jest zwykłym polem tekstowym jak i pole ``dueDate`` jest
-polem datowym::
+i ustawiać odgadnięty typ. W tym przykładzie Symfony może odgadywać typ pola z
+zasad walidacyjnych, takich że zarówno pole ``task`` jest zwykłym polem tekstowym,
+jak i pole ``dueDate`` jest polem datowym::
 
     public function newAction()
     {
@@ -723,24 +764,26 @@ wartości kilku opcji pola.
     będzie ręcznie dodać walidację po stronie serwera, te opcje typu pola można następnie
     odgadnąć na podstawie tej informacji.
 
-* ``required``: Opcja ``required`` może zostać odgadnięta w oparciu o zasady walidacyjne
-  (tzn. jest to opcja ``NotBlank`` lub ``NotNull``) lub o metadane Doctrine
-  (tzn. jest to opcja ``nullable``). Jest to bardzo przydatne, bo walidacja po
-  stronie serwera będzie automatycznie dopasowana do zasad walidacji.
+``required``
+   Opcja ``required`` może zostać odgadnięta w oparciu o zasady walidacyjne
+   (tzn. jest to opcja ``NotBlank`` lub ``NotNull``) lub o metadane Doctrine
+   (tzn. jest to opcja ``nullable``). Jest to bardzo przydatne, bo walidacja po
+   stronie serwera będzie automatycznie dopasowana do zasad walidacji.
 
-* ``max_length``: Jeżeli pole jest jakimś polem tekstowym, to opcja ``max_length`` może zostać odgadnięta
-  z ograniczeń walidacyjnych (jeżeli są użyte ``Length`` lub ``Range``) lub z metadanych
-  Doctrine (poprzez długość pól).
+``max_length``
+   Jeżeli pole jest jakimś polem tekstowym, to opcja ``max_length`` może zostać odgadnięta
+   z ograniczeń walidacyjnych (jeżeli są użyte ``Length`` lub ``Range``) lub z metadanych
+   Doctrine (poprzez długość pól).
 
 .. note::
 
-  Te opcje pola odgadywane są tylko gdy zastosuje się Symfony do odgadywania typu pola
+  Te opcje pola odgadywane są tylko gdy ustawi się Symfony do odgadywania typu pola
   (tj. gdy pominie się lub przekaże wartość ``null`` jako drugi argument ``add()``).
 
 Jeśli chce się zmienić jedną z odgadywanych wartości, to można zastąpić ją przez
 przekazanie opcji w tablicy opcji pola::
 
-    ->add('task', null, array('max_length' => 4))
+    ->add('task', null, array('attr' => array('maxlength' => 4)))
 
 .. index::
    single: formularze; renderowanie w szablonie
@@ -757,9 +800,8 @@ formularza:
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
-        {# src/Acme/TaskBundle/Resources/views/Default/new.html.twig #}
+        {# app/Resources/views/default/new.html.twig #}
         {{ form_start(form) }}
             {{ form_errors(form) }}
 
@@ -768,9 +810,8 @@ formularza:
         {{ form_end(form) }}
 
     .. code-block:: html+php
-       :linenos:
 
-        <!-- src/Acme/TaskBundle/Resources/views/Default/newAction.html.php -->
+        <!-- app/Resources/views/default/newAction.html.php -->
         <?php echo $view['form']->start($form) ?>
             <?php echo $view['form']->errors($form) ?>
 
@@ -778,29 +819,26 @@ formularza:
             <?php echo $view['form']->row($form['dueDate']) ?>
         <?php echo $view['form']->end($form) ?>
 
-W kodzie powyższego przykładu:
+Znasz już funkcje ``form_start()`` i ``form_end()``, ale co robią pozostałe
+funkcje?
 
-* ``form_start(form)`` - Renderuje znacznik rozpoczynający formularz;
+``form_errors(form)``
+   Renderuje wszystkie błędy wspólne dla całego formularza
+   (błędy specyficzne dla pól są wyświetlane następnie przy każdym polu);
 
-* ``form_errors(form)`` - Renderuje wszystkie błędy globalne dla całego formularza
-  (błędy specyficzne dla pól są wyświetlane następnie przy każdym polu);
-
-* ``form_row(form.dueDate)`` - Renderuje etykietę, wszystkie błędy i widget formularza
-  HTML dla danego pola (np. ``dueDate``), domyślnie wewnątrz bloku ``div``;
-
-* ``form_end()`` - Renderuje znacznik zamykający formularza i wszystkie pola które
-  nie zostały jeszcze wyrenderowane. Jest to przydatne dla renderowania ukrytych
-  pól i znaczników automatycznej :ref:`ochrony przed atakami CSRF<forms-csrf>`.
+``form_row(form.dueDate)``
+   Renderuje etykietę, wszystkie błędy i widget formularza
+   HTML dla danego pola (np. ``dueDate``), domyślnie wewnątrz bloku ``div``;
 
 
-Wiekszość prac jest wykonywana przez funkcje pomocniczą ``form_row``, która renderuje
-etykietę, błędy i widget HTML formularza dla każdego pola wewnątrz znacznika,
-domyślnie div. W rozdziale ":ref:`form-theming`" dowiesz się jak wyjście ``form_row``
+Większość prac jest wykonywana przez funkcję pomocniczą ``form_row``, która renderuje
+etykietę, błędy i widżet HTML formularza dla każdego pola wewnątrz znacznika,
+domyślnie ``div``. W rozdziale ":ref:`form-theming`" dowiesz się jak wyjście ``form_row``
 może zostać dopasowane na różnych poziomach.
 
 .. tip::
 
-    You can access the current data of your form via ``form.vars.value``:
+    Do bieżących danych formularza można uzyskać dostęp poprzez ``form.vars.value``:
 
     .. configuration-block::
 
@@ -818,16 +856,14 @@ może zostać dopasowane na różnych poziomach.
 Ręczne renderowanie każdego pola
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Funkcja pomocnicza ``form_row`` jest mocna ponieważ można bardzo szybko renderować
-każde pole formularza (i można również dostosować znacznik używany w "wierszu").
-Lecz ponieważ życie nie jest takie proste, to można również renderować calkowicie
-ręcznie każde pole. Produkt końcowy tego co poniżej jest taki sam jak ten, jaki
-używa funkcja ``form_row``:
+Funkcja pomocnicza ``form_row`` jest mocna ponieważ może bardzo szybko renderować
+każde pole formularza (i można w niej również dostosować znacznik używany w "wierszu").
+Istnieje też możliwość ręcznego ustawiania każdego pola z osobna. Dane wyjściowe
+poniższej prezentowanego kodu są takie same, jak dla funkcji ``form_row``:
 
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
         {{ form_start(form) }}
             {{ form_errors(form) }}
@@ -851,7 +887,6 @@ używa funkcja ``form_row``:
         {{ form_end(form) }}
 
     .. code-block:: html+php
-       :linenos:
 
         <?php echo $view['form']->start($form) ?>
 
@@ -882,14 +917,14 @@ ją jawnie:
 
     .. code-block:: html+jinja
 
-        {{ form_widget(form.task, {'attr': {'class': 'task_field'}}) }}
+        {{ form_label(form.task, 'Task Description') }}
 
     .. code-block:: html+php
 
         <?php echo $view['form']->label($form['task'], 'Task Description') ?>
 
 Niektóre typy pól mają dodatkowo renderowane opcje, które mogą być przekazane do
-widgetu. Opcje te są udokumentowane w dokumentacji każdego typu, ale jedną
+widżetu. Opcje te są udokumentowane w dokumentacji każdego typu, ale jedną
 z popularnniejszych opcji jest ``attr``, która umożliwia modyfikację atrybutów w
 elemencie formularza. Poniżej dodamy klasę ``task_field`` do renderowanego wejściowego
 pola tekstowego:
@@ -898,14 +933,14 @@ pola tekstowego:
 
     .. code-block:: html+jinja
 
-        {{ form_widget(form.task, { 'attr': {'class': 'task_field'} }) }}
+        {{ form_widget(form.task, {'attr': {'class': 'task_field'}}) }}
 
     .. code-block:: html+php
 
         <?php echo $view['form']->widget($form['task'], array(
             'attr' => array('class' => 'task_field'),
         )) ?>
-
+        
 Jeśli musisz renderować pola formularza "ręcznie", to możesz uzyskać dostęp do
 poszczególnych wartości atrybutów pól, takich jak ``id``, ``name`` i ``label``.
 Na przykład, aby pobrać wartość ``id``:
@@ -918,7 +953,8 @@ Na przykład, aby pobrać wartość ``id``:
 
     .. code-block:: html+php
 
-        <?php echo $form['task']->vars['id'] ?>
+        <?php echo $form['task']->vars['id']?>
+
 
 Aby pobrać wartość używaną w atrybucie nazwy pola formularza potrzeba użyć wartości
 ``full_name``:
@@ -933,7 +969,6 @@ Aby pobrać wartość używaną w atrybucie nazwy pola formularza potrzeba uży�
 
         <?php echo $form['task']->vars['full_name'] ?>
 
-
 Informacja o funkcjach szablonowych Twig
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -947,8 +982,8 @@ jakie można użyć w każdej z nich.
 
 .. _book-forms-changing-action-and-method:
 
-Zmiana akcji i metody formularza
---------------------------------
+Zmiana akcji i metody HTTP formularza
+-------------------------------------
 
 Dotychczas funkcja pomocnicza ``form_start()`` była używana do renderowania
 początkowego znacznika formularza i zakładaliśmy, że każdy formularz jest
@@ -969,7 +1004,7 @@ formularz w kontrolerze, to można użyć metod ``setAction()`` i ``setMethod()`
     która wskazuje na kontroler przetwarzający formularz.
 
 W rozdziale :ref:`book-form-creating-form-classes` można dowiedzieć się, jak
-przekształcić kod tworzący formularz na oddzielne klasy. W przypadku uzywania
+przekształcić kod tworzący formularz na oddzielne klasy. W przypadku używania
 zewnętrznej klasy formularza w kontrolerze można przekazać akcję i metodę jako
 opcje formularza::
 
@@ -984,22 +1019,13 @@ pomocniczych ``form()`` lub ``form_start()``:
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
-        {# src/Acme/TaskBundle/Resources/views/Default/new.html.twig #}
-        {{ form(form, {'action': path('target_route'), 'method': 'GET'}) }}
-
+        {# app/Resources/views/default/new.html.twig #}
         {{ form_start(form, {'action': path('target_route'), 'method': 'GET'}) }}
 
     .. code-block:: html+php
-       :linenos:
 
-        <!-- src/Acme/TaskBundle/Resources/views/Default/newAction.html.php -->
-        <?php echo $view['form']->form($form, array(
-            'action' => $view['router']->generate('target_route'),
-            'method' => 'GET',
-        )) ?>
-
+        <!-- app/Resources/views/default/newAction.html.php -->
         <?php echo $view['form']->start($form, array(
             'action' => $view['router']->generate('target_route'),
             'method' => 'GET',
@@ -1008,10 +1034,10 @@ pomocniczych ``form()`` lub ``form_start()``:
 .. note::
 
     Jeśli metodą formularza nie jest GET lub POST, ale PUT, PATCH lub DELETE, to
-    Symfony2 wstawia ukryte pole z nazwą "_method", które przechowuje nazwę tej
+    Symfony wstawia ukryte pole z nazwą "_method", które przechowuje nazwę tej
     metody. Taki formularz będzie zgłaszany w zwykłym żądaniu POST, ale router
-    Symfony2 jest w stanie wykryć parametr "_method" i zinterpretuje żądanie jako
-    PUT, PATCH lub DELETE. Pproszę zapoznać się z artykułem
+    Symfony jest w stanie wykryć parametr "_method" i zinterpretuje żądanie jako
+    PUT, PATCH lub DELETE. Proszę zapoznać się z artykułem
     ":doc:`/cookbook/routing/method_parameters`" w celu uzyskania więcej informacji.
     
 
@@ -1028,8 +1054,8 @@ Jednak lepszym rozwiązaniem jest zbudowanie formularza w oddzielnej, samodzieln
 klasie, która może być następnie używana wiele razy w różnych miejscach aplikacji.
 Utwórzmy nową klasę, która będzie miejscem logiki dla zbudowania formularza zadania::
 
-    // src/Acme/TaskBundle/Form/Type/TaskType.php
-    namespace Acme\TaskBundle\Form\Type;
+    // src/AppBundle/Form/Type/TaskType.php
+    namespace AppBundle\Form\Type;
 
     use Symfony\Component\Form\AbstractType;
     use Symfony\Component\Form\FormBuilderInterface;
@@ -1041,7 +1067,8 @@ Utwórzmy nową klasę, która będzie miejscem logiki dla zbudowania formularza
             $builder
                 ->add('task')
                 ->add('dueDate', null, array('widget' => 'single_text'))
-                ->add('save', 'submit');
+                ->add('save', 'submit')
+            ;
         }
 
         public function getName()
@@ -1050,15 +1077,24 @@ Utwórzmy nową klasę, która będzie miejscem logiki dla zbudowania formularza
         }
     }
 
-Nowa klasa zawiera wszystkie wskazówki potrzebne do utworzenia formularza zadania
-(zwróć uwagę na to, że metoda ``getName()`` powinna zwracać unikalny identyfikator
-dla „typu” tego formularza). Może być to stosowane do szybkiego zbudowania obietu
-formularza w kontrolerze::
+.. caution::
 
-    // src/Acme/TaskBundle/Controller/DefaultController.php
+    Metoda ``getName()`` zwraca identyfikator "type" tego formularza. Takie
+    identyfikatory muszą być unikalne w aplikacji. Jeśli nie chce zastąpić
+    wbudowanego typu, zastosowane identyfikatory powinny różnić się od domyślnego
+    typu Symfony i od każdego typu zdefiniowanego w obcych pakietach zainstalowanych
+    w aplikacji. Przemyśl poprzedzamoe swoich typóœ przedrostkiem ``app_``, co
+    pozwoli na uniknięcie konfliktu nazewniczego.
+
+
+Nowa klasa zawiera wszystkie wskazówki potrzebne do utworzenia formularza naszego
+zadania, co można wykorzystać do szybkiego zbudowania obiektu formularza w metodzie
+kontrolera (akcji)::
+
+    // src/AppBundle/Controller/DefaultController.php
 
     // add this new use statement at the top of the class
-    use Acme\TaskBundle\Form\Type\TaskType;
+    use AppBundle\Form\Type\TaskType;
 
     public function newAction()
     {
@@ -1077,19 +1113,19 @@ sposób na tworzenie formularzy, ale wybór zależy tylko od Ciebie.
 .. sidebar:: Ustawienie ``data_class``
 
     Każdy formularz musi znać nazwę klasy, która przechowuje wewnetrzne dane
-    (np. ``Acme\TaskBundle\Entity\Task``). Zazwyczaj jest ona odgadywana w oparciu
+    (np. ``AppBundle\Entity\Task``). Zazwyczaj jest ona odgadywana w oparciu
     o nazwę obiektu przekazywanego jako drugi argument metody ``createForm``
     (tj. obiektu klasu ``$task``). Później, gdy zaczniesz osadzanie formularza,
     nie będzie to wystarczające. Tak więc, choć nie zawsze jest to wystarczające,
     dobrym pomysłem jest jawnie określić opcję ``data_class`` przez dodanie
     następującego kodu do klasy typu formularza::
 
-        use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+        use Symfony\Component\OptionsResolver\OptionsResolver;
 
-        public function setDefaultOptions(OptionsResolverInterface $resolver)
+        public function configureOptions(OptionsResolver $resolver)
         {
             $resolver->setDefaults(array(
-                'data_class' => 'Acme\TaskBundle\Entity\Task',
+                'data_class' => 'AppBundle\Entity\Task',
             ));
         }
 
@@ -1107,9 +1143,11 @@ sposób na tworzenie formularzy, ale wybór zależy tylko od Ciebie.
 
         public function buildForm(FormBuilderInterface $builder, array $options)
         {
-            $builder->add('task')
+            $builder
+                ->add('task')
                 ->add('dueDate', null, array('mapped' => false))
-                ->add('save', 'submit');
+                ->add('save', 'submit')
+            ;
         }
 
     Dodatkowo, jeśli są jakieś pola w formularzu, które nie zostały dołączone
@@ -1129,40 +1167,45 @@ Definiowanie formularzy jako usługi
 Definiowanie typu formularza jako usługi jest dobrą praktyką i sprawia, że aplikacja
 jest naprawdę łatwa w użyciu.
 
+.. note::
+
+    Usługi i kontener usług zostanę omówione
+    :doc:`dalej w tej książce </book/service_container>` i rzecz stanie się
+    bardziej zrozumiała po przeczytaniu tego rozdziału.
+
 .. configuration-block::
 
     .. code-block:: yaml
 
-        # src/Acme/TaskBundle/Resources/config/services.yml
+        # src/AppBundle/Resources/config/services.yml
         services:
-            acme_demo.form.type.task:
-                class: Acme\TaskBundle\Form\Type\TaskType
+            app.form.type.task:
+                class: AppBundle\Form\Type\TaskType
                 tags:
                     - { name: form.type, alias: task }
 
     .. code-block:: xml
 
-        <!-- src/Acme/TaskBundle/Resources/config/services.xml -->
+        <!-- src/AppBundle/Resources/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd>
+            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-            <service id="acme_demo.form.type.task"
-                class="Acme\TaskBundle\Form\Type\TaskType">
-                <tag name="form.type" alias="task" />
-            </service>
+            <services>
+                <service id="app.form.type.task" class="AppBundle\Form\Type\TaskType">
+                    <tag name="form.type" alias="task" />
+                </service>
+            </services>
         </container>
 
     .. code-block:: php
 
-        // src/Acme/TaskBundle/Resources/config/services.php
-        use Symfony\Component\DependencyInjection\Definition;
-
+        // src/AppBundle/Resources/config/services.php
         $container
             ->register(
-                'acme_demo.form.type.task',
-                'Acme\TaskBundle\Form\Type\TaskType'
+                'app.form.type.task',
+                'AppBundle\Form\Type\TaskType'
             )
             ->addTag('form.type', array(
                 'alias' => 'task',
@@ -1171,7 +1214,7 @@ jest naprawdę łatwa w użyciu.
 
 Gotowe! Teraz można korzystać z typu formularza bezpośrednio w kontrolerze::
 
-    // src/Acme/TaskBundle/Controller/DefaultController.php
+    // src/AppBundle/Controller/DefaultController.php
     // ...
 
     public function newAction()
@@ -1184,7 +1227,7 @@ Gotowe! Teraz można korzystać z typu formularza bezpośrednio w kontrolerze::
 
 lub nawet stosować ten typ formularza wewnątrz innego formularza::
 
-    // src/Acme/TaskBundle/Form/Type/ListType.php
+    // src/AppBundle/Form/Type/ListType.php
     // ...
 
     class ListType extends AbstractType
@@ -1208,7 +1251,7 @@ Formularze a Doctrine
 Celem formularza jest przetłumaczenie danych z obiektu (np. ``Task``) na formularz
 HTML i przetłumaczenie przesłanych z powrotem przez użytkownika danych na oryginalny
 obiekt. Jako taki, temat utrwalania obiektu ``Task`` w bazie danych jest całkowicie
-niezależne od tematu formularza. Trzeba tu jednak zaznaczyć, że jeśli ma się
+niezależny od tematu formularza. Trzeba tu jednak zaznaczyć, że jeśli ma się
 skonfigurowaną klasę ``Task`` to aby została ona utrwalana poprzez Doctrine
 (czyli po dodaniu :ref:`metadanych odwzorowania <book-doctrine-adding-mapping>`),
 to utrwalenie jej po zgłoszeniu formularza może zostać zrealizowane, gdy formularz
@@ -1219,7 +1262,8 @@ jest prawidłowy::
         $em->persist($task);
         $em->flush();
 
-        return $this->redirect($this->generateUrl('task_success'));
+        return $this->redirectToRoute('task_success');
+        
     }
 
 Jeśli z jakiegoś powodu nie ma się dostępu do oryginalnego obiektu ``$task``,
@@ -1229,7 +1273,7 @@ można pobrać go z formularza::
 
 Więcej informacji znajdziesz w rozdziale :doc:`doctrine`.
 
-Kluczowe jest zrozumienie, że gdy formularz jest związywany, to przesłane dane
+Kluczowe jest zrozumienie, że gdy formularz zostaje wysłany, to przesłane dane
 są natychmiast transferowane do wewnętrznego obiektu. Jeśli chce się utrwalać te
 dane, to po prostu trzeba utrwalić sam obiekt (który zawiera już przesłane dane).
 
@@ -1250,8 +1294,8 @@ Osadzanie pojedyńczych obiektów
 Załóżmy, że każdy obiekt ``Task`` należy do prostego obiektu ``Category``.
 Rozpoczniemy oczywiście od utworzenia obiektu ``Category``::
 
-    // src/Acme/TaskBundle/Entity/Category.php
-    namespace Acme\TaskBundle\Entity;
+    // src/AppBundle/Entity/Category.php
+    namespace AppBundle\Entity;
 
     use Symfony\Component\Validator\Constraints as Assert;
 
@@ -1265,7 +1309,6 @@ Rozpoczniemy oczywiście od utworzenia obiektu ``Category``::
 
 Następnie dodamy nową właściwość ``category`` do klasy ``Task``::
 
-
     // ...
 
     class Task
@@ -1273,7 +1316,8 @@ Następnie dodamy nową właściwość ``category`` do klasy ``Task``::
         // ...
 
         /**
-         * @Assert\Type(type="Acme\TaskBundle\Entity\Category")
+         * @Assert\Type(type="AppBundle\Entity\Category")
+         * @Assert\Valid()
          */
         protected $category;
 
@@ -1290,16 +1334,22 @@ Następnie dodamy nową właściwość ``category`` do klasy ``Task``::
         }
     }
 
+.. tip::
+
+    Do właściwości ``category`` zostało dodane ograniczenie ``Valid``. Kaskaduje ono
+    walidację w odpowiedniej encji. Jeśli pominie się to ograniczenie, encje potomne
+    nie będa walidowane.
+
 Teraz, gdy aplikacja została zaktualizowana w celu odzwierciedlenia nowych wymagań,
 utworzymy klasę formularza, tak aby obiekt ``Category`` mógł być modyfikowany przez
 użytkownika::
 
-    // src/Acme/TaskBundle/Form/Type/CategoryType.php
-    namespace Acme\TaskBundle\Form\Type;
+    // src/AppBundle/Form/Type/CategoryType.php
+    namespace AppBundle\Form\Type;
 
     use Symfony\Component\Form\AbstractType;
     use Symfony\Component\Form\FormBuilderInterface;
-    use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+    use Symfony\Component\OptionsResolver\OptionsResolver;
 
     class CategoryType extends AbstractType
     {
@@ -1308,10 +1358,10 @@ użytkownika::
             $builder->add('name');
         }
 
-        public function setDefaultOptions(OptionsResolverInterface $resolver)
+        public function configureOptions(OptionsResolver $resolver)
         {
             $resolver->setDefaults(array(
-                'data_class' => 'Acme\TaskBundle\Entity\Category',
+                'data_class' => 'AppBundle\Entity\Category',
             ));
         }
 
@@ -1322,7 +1372,7 @@ użytkownika::
     }
 
 Ostatecznym celem jest umożliwienie, aby kategorie zadań mogły być modyfikowane
-wewnątrz formularza zadania. Aby tego dokonać dodamy pole ``category`` do obiektu
+wewnątrz formularza zadania. W tym celu dodamy pole ``category`` do obiektu
 ``TaskType``, którego typem jest instancja nowej klasy ``CategoryType``:
 
 .. code-block:: php
@@ -1338,23 +1388,13 @@ wewnątrz formularza zadania. Aby tego dokonać dodamy pole ``category`` do obie
     }
 
 Pola z ``CategoryType`` mogą teraz być renderowane obok pól z ``TaskType``.
-Aby aktywować walidację dla ``CategoryType`` trzeba dodać do ``TaskType`` opcję
-``cascade_validation``::
 
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
-    {
-        $resolver->setDefaults(array(
-            'data_class' => 'Acme\TaskBundle\Entity\Task',
-            'cascade_validation' => true,
-        ));
-    }
-
-Wyrenderujmy pola ``Category`` w ten sam sposób jak oryginalne pola ``Task``:
+Wyrenderujmy pola ``Category`` w ten sam sposób jak miało to miejsce w przypadku
+pól ``Task``:
 
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
         {# ... #}
 
@@ -1366,7 +1406,6 @@ Wyrenderujmy pola ``Category`` w ten sam sposób jak oryginalne pola ``Task``:
         {# ... #}
 
     .. code-block:: html+php
-       :linenos:
 
         <!-- ... -->
 
@@ -1376,7 +1415,7 @@ Wyrenderujmy pola ``Category`` w ten sam sposób jak oryginalne pola ``Task``:
         </div>
 
         <!-- ... -->
-
+    
 Gdy użytkownik zgłasza formularz, przesłane dane dla pól ``Category`` są używane
 do konstruowania instancji ``Category``, która jest ustawiona na pole ``category``
 instacji ``Task``.
@@ -1426,9 +1465,8 @@ nowy plik szablonowy, który zawierać będzie nowy znacznik:
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:  
 
-        {# src/Acme/TaskBundle/Resources/views/Form/fields.html.twig #}
+        {# app/Resources/views/form/fields.html.twig #}
         {% block form_row %}
         {% spaceless %}
             <div class="form_row">
@@ -1440,14 +1478,14 @@ nowy plik szablonowy, który zawierać będzie nowy znacznik:
         {% endblock form_row %}
 
     .. code-block:: html+php
-       :linenos:  
 
-        <!-- src/Acme/TaskBundle/Resources/views/Form/form_row.html.php -->
+        <!-- app/Resources/views/form/form_row.html.php -->
         <div class="form_row">
             <?php echo $view['form']->label($form, $label) ?>
             <?php echo $view['form']->errors($form) ?>
             <?php echo $view['form']->widget($form, $parameters) ?>
         </div>
+
 
 Fragment formularza ``form_row`` jest używany podczas renderowania większości pól
 poprzez funkcje ``form_row``. W celu powiadomienia komponentu formularza, by używał
@@ -1457,26 +1495,27 @@ części szablonu:
 .. configuration-block::
 
     .. code-block:: html+jinja
-       :linenos:
 
-        {# src/Acme/TaskBundle/Resources/views/Default/new.html.twig #}
-        {% form_theme form 'AcmeTaskBundle:Form:fields.html.twig' %}
+        {# app/Resources/views/default/new.html.twig #}
+        {% form_theme form 'form/fields.html.twig' %}
 
-        {% form_theme form 'AcmeTaskBundle:Form:fields.html.twig' 'AcmeTaskBundle:Form:fields2.html.twig' %}
+        {# or if you want to use multiple themes #}
+        {% form_theme form 'form/fields.html.twig' 'form/fields2.html.twig' %}
 
-        <!-- ... render the form -->
+        {# ... render the form #}
 
     .. code-block:: html+php
-       :linenos:
 
-        <!-- src/Acme/TaskBundle/Resources/views/Default/new.html.php -->
-        <?php $view['form']->setTheme($form, array('AcmeTaskBundle:Form')) ?>
+        <!-- app/Resources/views/default/new.html.php -->
+        <?php $view['form']->setTheme($form, array('form')) ?>
 
-        <?php $view['form']->setTheme($form, array('AcmeTaskBundle:Form', 'AcmeTaskBundle:Form')) ?>
+        <!-- or if you want to use multiple themes -->
+        <?php $view['form']->setTheme($form, array('form', 'form2')) ?>
 
         <!-- ... render the form -->
 
-Znacznik ``form_theme`` (w Twig) "importuje" fragmenty jkodu zdefiniowane w danym
+
+Znacznik ``form_theme`` (w Twig) "importuje" fragmenty kodu zdefiniowane w danym
 szablonie i używa ich podczas renderowania formularza. Innymi słowami, gdy później
 w szablonie wywoływana jest funkcja ``form_row``, to zostanie użyty blok ``form_row``
 z własnego motywu (zamiast domyślnego bloku ``form_row``, który dostarczany jest
@@ -1489,18 +1528,8 @@ zastąpiony podczas renderowania we własnej skórce, będzie pobrany z motywu g
 Jeśli stosuje się kilka niestandardowych motywów, to będą one wyszukiwane w kolejności
 bloków podanych w motywie globalnym.
 
-Aby dostosować jakiś fragment formularza, zachodzi potrzeba zastąpienia odpowiedniego
-fragmentu. To jak dokładnie dowiedzieć się który blok lub plik powinien być zastąpiony
-jest omówione w rozdziale następnym.
-
-.. code-block:: html+jinja
-
-    {# src/Acme/TaskBundle/Resources/views/Default/new.html.twig #}
-
-    {% form_theme form with 'AcmeTaskBundle:Form:fields.html.twig' %}
-
-    {% form_theme form with ['AcmeTaskBundle:Form:fields.html.twig', 'AcmeTaskBundle:Form:fields2.html.twig'] %}
-
+W celu dostosowania jakiegoś fragment formularza, zachodzi potrzeba zastąpienia
+tego fragmentu. Jest to omówione w rozdziale następnym.
 
 Więcej informacji można znaleźć w dokumencie
 :doc:`Jak dostosować renderowany formularz</cookbook/form/form_customization>`.
@@ -1514,7 +1543,7 @@ Nazewnictwo fragmentów formularza
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 W Symfony, każda renderowana część formularza (elementy HTML formularza, etykiety itd.)
-jest definiowana w szablonie podstawowym, który jest w Twig kolekcja bloków i kolekcją
+jest definiowana w szablonie podstawowym, który jest w Twig kolekcją bloków i kolekcją
 plików szablonowych w PHP.
 
 W Twig, każdy potrzebny blok jest zdefiniowany w pojedyńczym pliku szablonowym
@@ -1523,7 +1552,7 @@ Wewnątrz tego pliku, można zobaczyć każdy blok potrzebny do wygenerowania fo
 i każdego domyślnego typu pola.
 
 W PHP, fragmenty są indywidualnymi plikami szablonowymi. Domyślnie są one umieszczone
-w katalogu Resources/views/Form pakietu frameworka ( `zobacz na GitHub`_).
+w katalogu ``Resources/views/Form`` pakietu FrameworkBundle ( `zobacz to na GitHub`_).
 
 Każda nazwa fragmentu stosuje ten sam podstawowy wzorzec i składa się z dwóch części,
 rozdzielonych znakiem podkreślenia (``_``). Oto kilka przykładów:
@@ -1551,10 +1580,10 @@ są 4 fragmenty formularza (określane w części ``fragment``, które mogą by�
 .. note::
 
     Istnieją jeszcze 2 inne części - ``rows`` i ``rest``, ale bardzo
-    rzadko sie je używa, jeżeli w ogóle.
+    rzadko się je używa, jeżeli w ogóle.
 
 Znając typ pola (np. *textarea*) i część formularza, którą chce się dostosować
-(np. *widget*), można skonstruować nazwę fragmentu, który ma być przesłoniety
+(np. *widget*), można skonstruować nazwę fragmentu, który ma być przesłonięty
 (tj. ``textarea_widget``).
 
 .. index::
@@ -1588,12 +1617,14 @@ trzeba skopiować i dostosować bezpośrednio fragment ``form_errors``.
 .. index::
    single: formularze; dekorowanie globalne formularza
 
-Dekorowanie globalne formularza
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Dekorowanie formularza z zakresie globalnym
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 W powyższym przykładzie użyliśmy ``form_theme helper`` (w Twig) do "zaimportowania"
 dostosowanych fragmentów formularza do tego formularza. Można również powiadomić
 Symfony aby importował przeróbki formularza w całym projekcie.
+
+.. _book-forms-theming-global:
 
 Twig
 ....
@@ -1605,17 +1636,14 @@ aplikacji:
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         # app/config/config.yml
         twig:
-            form:
-                resources:
-                    - 'AcmeTaskBundle:Form:fields.html.twig'
+            form_themes:
+                - 'form/fields.html.twig'
             # ...
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1623,29 +1651,23 @@ aplikacji:
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xmlns:twig="http://symfony.com/schema/dic/twig"
             xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
-                                http://symfony.com/schema/dic/twig http://symfony.com/schema/dic/twig/twig-1.0.xsd">
+                http://symfony.com/schema/dic/twig http://symfony.com/schema/dic/twig/twig-1.0.xsd">
 
             <twig:config>
-                    <twig:form>
-                        <twig:resource>AcmeTaskBundle:Form:fields.html.twig</twig:resource>
-                    </twig:form>
-                    <!-- ... -->
+                <twig:theme>form/fields.html.twig</twig:theme>
+                <!-- ... -->
             </twig:config>
         </container>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('twig', array(
-            'form' => array(
-                'resources' => array(
-                    'AcmeTaskBundle:Form:fields.html.twig',
-                ),
+            'form_themes' => array(
+                'form/fields.html.twig',
             ),
             // ...
         ));
-
 
 Teraz wszystkie bloki wewnątrz szablonu ``fields.html.twig`` są udostępniane
 globalnie przy określaniu wyjścia formularza.
@@ -1658,7 +1680,7 @@ globalnie przy określaniu wyjścia formularza.
     .. code-block:: html+jinja
        :linenos:  
 
-        {% extends '::base.html.twig' %}
+        {% extends 'base.html.twig' %}
 
         {# import "_self" as the form theme #}
         {% form_theme form _self %}
@@ -1689,24 +1711,22 @@ PHP
 ...
 
 Aby automatycznie dołączyć własne szablony z wcześniej utworzonego katalogu
-``Acme/TaskBundle/Resources/views/Form`` do wszystkich szablonów, trzeba poprawić
+``app/Resources/views/Form`` do wszystkich szablonów, trzeba poprawić
 plik konfiguracyjny aplikacji:
 
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         # app/config/config.yml
         framework:
             templating:
                 form:
                     resources:
-                        - 'AcmeTaskBundle:Form'
+                        - 'Form'
         # ...
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1714,12 +1734,12 @@ plik konfiguracyjny aplikacji:
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xmlns:framework="http://symfony.com/schema/dic/symfony"
             xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
-                                http://symfony.com/schema/dic/symfony http://symfony.com/schema/dic/symfony/symfony-1.0.xsd">
+                http://symfony.com/schema/dic/symfony http://symfony.com/schema/dic/symfony/symfony-1.0.xsd">
 
-            <framework:config ...>
+            <framework:config>
                 <framework:templating>
                     <framework:form>
-                        <framework:resource>AcmeTaskBundle:Form</framework:resource>
+                        <framework:resource>Form</framework:resource>
                     </framework:form>
                 </framework:templating>
                 <!-- ... -->
@@ -1727,22 +1747,20 @@ plik konfiguracyjny aplikacji:
         </container>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
             'templating' => array(
                 'form' => array(
                     'resources' => array(
-                        'AcmeTaskBundle:Form',
+                        'Form',
                     ),
                 ),
-            )
+            ),
             // ...
         ));
 
-
-Teraz wszystkie fragmenty wewnątrz katalogu ``Acme/TaskBundle/Resources/views/Form``
+Teraz wszystkie fragmenty wewnątrz katalogu ``app/Resources/views/Form``
 są dostępne globalnie przy określaniu wyjscia formularza.
 
 .. index::
@@ -1774,16 +1792,16 @@ znajdują się wszystkie nie renderowane pola.
 
 Token CSRF może zostać dopasowany w konfiguracji formularza. Przykładowo::
 
-    use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+    use Symfony\Component\OptionsResolver\OptionsResolver;
 
     class TaskType extends AbstractType
     {
         // ...
 
-        public function setDefaultOptions(OptionsResolverInterface $resolver)
+        public function configureOptions(OptionsResolver $resolver)
         {
             $resolver->setDefaults(array(
-                'data_class'      => 'Acme\TaskBundle\Entity\Task',
+                'data_class'      => 'AppBundle\Entity\Task',
                 'csrf_protection' => true,
                 'csrf_field_name' => '_token',
                 // a unique key to help generate the secret token
@@ -1793,7 +1811,8 @@ Token CSRF może zostać dopasowany w konfiguracji formularza. Przykładowo::
 
         // ...
     }
-
+    
+.. _form-disable-csrf:
 
 Aby wyłączyć ochronę przed CSRF, trzeba ustawić opcję ``csrf_protection`` na ``false``.
 Dostosowanie może być również wykonane globalnie dla całego projektu. Więcej informacji
@@ -1804,11 +1823,20 @@ znajdziesz w rozdziale :ref:`Informacje o konfiguracji formularza<reference-fram
     Opcja ``intention`` jest opcjonalna, ale znacznie zwiększa bezpieczeństwo
     generowanego tokenu przez jego idywidualizację dla każdego formularza.
 
+.. caution::
+
+    Tokeny CSRF mają być różne dla każdego użytkownika. Dlatego też trzeba być
+    ostrożnym, jeśli próbuje się buforowac strony z formularzami zawierajacego ten
+    rodzaj ochrony. Wiecej informacji znajdziesz w artkule
+    :doc:`/cookbook/cache/form_csrf_caching`.
+
+
+
 .. index::
    single: formularze; bez klasy
 
-Stosowania formularza bez klasy
--------------------------------
+Stosowania formularza bez użycia klasy
+--------------------------------------
 
 W większości przypadków formularz jest związany z obiektem a pola formularza
 pobierają i przechowują swoje dane we właściwościach obiektu. Jest to dokładnie
@@ -1860,18 +1888,18 @@ ustawiona opcja ``data_class``), to ``$form->getData()`` ostatecznie zwraca tabl
     Można również uzyskać bezpośredni dostęp do wartości POST (w tym przypadku "name")
     za pomocą obiektu żądania, podobnie do tego::
 
-        $this->get('request')->request->get('name');
+        $request->request->get('name');
 
     Należy pamiętać, że w większości przypadków lepszym wyborem jest użycie metody
     ``getData()``, ponieważ zwracane są dane (zazwyczaj obiekt) po tym jak zostały
-    one przekształcone przez framework formularza.
+    one przetworzone przez komponent Form.
 
 Dodawanie walidacji
 ~~~~~~~~~~~~~~~~~~~
 
-Jedynym brakującym jeszcze elementem jest walidacja. Zazwyczaj, gdy wywołuje się
+Jedynym, nie omówionym jeszcze, elementem jest walidacja. Zazwyczaj, gdy wywołuje się
 metodę ``$form->isValid()``, to obiekt zostaje sprawdzony przez renderowanie
-ograniczenia, które zastosowało się dla tej klasy. Jeśli formularz jest odworowany
+ograniczenia, które zastosowało się dla tej klasy. Jeśli formularz jest odwzorowany
 na obiekt (np. przez użycie opcji ``data_class`` lub przekazanie obiektu do formularza),
 jest to podejście najlepsze. Zobacz :doc:`validation`
 w celu poznania szczegółów.
@@ -1941,8 +1969,11 @@ Dalsza lektura
 * :doc:`/cookbook/form/form_customization`
 * :doc:`/cookbook/form/dynamic_form_modification`
 * :doc:`/cookbook/form/data_transformers`
+* :doc:`/cookbook/security/csrf_in_login_form`
+* :doc:`/cookbook/cache/form_csrf_caching`
 
-.. _`Symfony2 Form Component`: https://github.com/symfony/Form
+
+.. _`Komponent Form`: https://github.com/symfony/Form
 .. _`DateTime`: http://php.net/manual/en/class.datetime.php
 .. _`Twig Bridge`: https://github.com/symfony/symfony/tree/2.2/src/Symfony/Bridge/Twig
 .. _`form_div_layout.html.twig`: https://github.com/symfony/symfony/blob/2.2/src/Symfony/Bridge/Twig/Resources/views/Form/form_div_layout.html.twig
