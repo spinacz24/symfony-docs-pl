@@ -4,7 +4,7 @@
 Przegląd
 ========
 
-Zacznij korzystać z Symfony w 10 minut! Ten rozdział wyjaśni Ci kilka
+Zacznij korzystać z Symfony w 10 minut! Ten rozdział wyjaśnia kilka
 najważniejszych pojęć Symfony i to, jak można rozpocząć
 szybko pracę, demonstrując prosty przykład aplikacji.
 
@@ -14,8 +14,8 @@ Jeśli nie, to zapraszamy do poznania zupełnie nowego sposobu tworzenia aplikac
 internetowych.
 
 Jedynym wymaganiem do śledzenia wykonywanego tu przykładu jest posiadanie **na swoim
-komputerze instalacji PHP 5.4 lub wersji wyżej**. Jeśli uzywasz rozwiązanie
-pakietowe PHP, takie jak WAMP, XAMP lub MAMP, sprawdź, czy używa taka instalacja
+komputerze instalacji PHP 5.4 lub wersji wyżej**. Jeśli używasz jakieś rozwiązanie
+pakietowe PHP, takie jak WAMP, XAMP lub MAMP, sprawdź, czy ta instalacja używa 
 PHP 5.4 lub wersji wyższej. Możesz również wykonać następujace polecenie w swoim
 terminalu lub konsoli poleceń, aby wyświetlić informację o zaistalowanej wersji
 PHP:
@@ -30,7 +30,7 @@ Instalowanie Symfony
 --------------------
 
 W przeszłości musieliśmy instalować Symfony ręcznie, dla każdego nowego projektu.
-Teraz mozemy wykorzystać **Symfony Installer**, który musi być najpierw zainstalowany
+Teraz możemy wykorzystać **Symfony Installer**, który musi być najpierw zainstalowany
 na komputerze przed pierwszym użyciem Symfony.
 
 Na systemach **Linux** i **Mac OS X**, trzeba wykonać następujace polecenia konsolowe:
@@ -66,7 +66,7 @@ poleceniem:
 Utworzenie pierwszego projektu Symfony
 --------------------------------------
 
-Gdy już Symfony Installer jest ustawiony, mozna utworzyć nowy projekt Symfony,
+Gdy już Symfony Installer jest ustawiony, można utworzyć nowy projekt Symfony,
 stosujac polecenie ``new``. Utwórzmy nowy projekt o nazwie ``myproject``:
 
 .. code-block:: bash
@@ -86,7 +86,7 @@ aplikacji.
 Uruchomienie Symfony
 --------------------
 
-W tym poradniku wykorzytujemy do uruchamiania aplikacji Symfony wewnetrzny serwer
+W tym poradniku wykorzytujemy do uruchamiania aplikacji Symfony wewnętrzny serwer
 internetowy dostarczany przez PHP. Dlatego, uruchamianie aplikacji serwera sprowadza
 się do skonfigurowanie się w katalogu projektu w wykonania polecenia:
 
@@ -95,8 +95,8 @@ się do skonfigurowanie się w katalogu projektu w wykonania polecenia:
     $ cd myproject/
     $ php app/console server:run
 
-Otwórz przegladarke i przejdź do adresu URL ``http://localhost:8000/app/example``,
-co powinno wyświetlic stronę powitalną :
+Otwórz przegladarkę i przejdź do adresu URL ``http://localhost:8000/app/example``,
+co powinno wyświetlić stronę powitalną :
 
 .. image:: /images/quick_tour/welcome.png
    :align: center
@@ -106,13 +106,13 @@ Gratulujemy! Twój pierwszy projekt Symfony jest gotowy do pracy.
 
 .. note::
 
-    Zamiast strony powitalnej można zobaczyć pustą stronę lub strone błędu.
-    Jest to spowodowane błędem uprawnień dostęþu do katalogu. Jest kilka
-    możliwych rozwiązań, w zależnosci od systemu operacyjnego. Sposoby te są
+    Zamiast strony powitalnej można zobaczyć pustą stronę lub stronę błędu.
+    Jest to spowodowane błędem uprawnień dostępu do katalogu. Jest kilka
+    możliwych rozwiązań, w zależności od systemu operacyjnego. Sposoby te są
     omówione w rozdziale :ref:`Ustawianie uprawnień <book-installation-permissions>`
     podręcznika.
 
-    Jeśli strona powitalna wydaje się nie być zrenderowana z aktywaniu CSS lub obrazów,
+    Jeśli strona powitalna nie została zrenderowana z aktywami CSS lub obrazów,
     zainstaluj je:
 
     .. code-block:: bash
@@ -146,17 +146,17 @@ Odzwzorowanie pomiędzy żądaniem użytkownika a tym kodem jest zdefiniowane w
 konfiguracji **trasowania** .
 Treści wyświetlane w przeglądarce są zazwyczaj renderowane przy uzyciu **szablonów**.
 
-Kiedy przeglądało sie ``http://localhost:8000/app/example``, Symfony wykonał kod
+Kiedy przeglądało się ``http://localhost:8000/app/example``, Symfony wykonał kod
 kontrolera, zdefiniowany w pliku ``src/AppBundle/Controller/DefaultController.php``
 i zrenderował szablon ``app/Resources/views/default/index.html.twig``.
-W nastęþnym rozdziale dowiesz sie o szczegółach wewnętrznego funkcjonowania kontrolerów
+W następnym rozdziale dowiesz się o szczegółach wewnętrznego funkcjonowania kontrolerów
 Symfony, trasach i szablonach.
 
 Akcje i kontrolery
 ~~~~~~~~~~~~~~~~~~
 
 Otwórz plik ``src/AppBundle/Controller/DefaultController.php`` i obejrzyj zawarty
-tam kod (na razie nie będziemy zajmować sie konfiguracją ``@Route``, ponieważ
+tam kod (na razie nie będziemy zajmować się konfiguracją ``@Route``, ponieważ
 zostanie to wyjaśnione w następnym rozdziale)::
 
     namespace AppBundle\Controller;
@@ -179,8 +179,8 @@ W aplikacji Symfony, **kontrolery**, to zazwyczaj klasy PHP, których nazwy są
 zakończone słowem ``Controller``. W tym przykładzie kontroler nosi nazwę
 ``Default`` a klasa PHP ma nazwę ``DefaultController``.
 
-Metody zdefioniowane w kontrolerze sa nazywane **akcjami** - są zwykle związane
-z jakimś jedym adresem URL aplikacji i ich nazwy konczą sie słowem ``Action``.
+Metody zdefioniowane w kontrolerze są nazywane **akcjami** - zwykle związane są
+z jakimś jedym adresem URL aplikacji i ich nazwy kończą się słowem ``Action``.
 W naszym przykładzie kontroler ``Default`` ma tylko jedną akcję o nazwie ``index``
 i definiuje metodę ``indexAction``.
 
@@ -192,9 +192,10 @@ i definiuje metodę ``indexAction``.
    metodę kontrolera, czyli na akcję. Tak więc, czytajac o "kontrolerze" proszę
    zwracać uwagę na kontekst.    
 
-Kod akcji jest zazwyczaj bardzo krótki - około 10-15 linii kodu - ponieważ
-odwołuja sie one do innych części aplikacji, w celu pobrania lub wygenerowania
-potrzebnych informacji i renderuje szablonu, w celu pokazania wyników użytkownikowi.
+Kod akcji jest zazwyczaj bardzo krótki - około 10-15 linii kodu - ponieważ akcje
+odwołują się do innych części aplikacji, w celu pobrania lub wygenerowania
+potrzebnych informacji i renderowania szablonu, aby ostatecznie pokazać wynik
+użytkownikowi.
 
 W tym przykładzie akcja ``index`` jest praktycznie pusta, ponieważ nie ma potrzeby
 wywoływania innych metod. Akcja ta tylko renderuje szablon z treścią *Homepage*.
@@ -202,9 +203,10 @@ wywoływania innych metod. Akcja ta tylko renderuje szablon z treścią *Homepag
 Trasowanie
 ~~~~~~~~~~
 
-System trasowania (*ang. routing*), nazywany też w polskiej literaturze "systemem przekierowań",
-w Symfony obsługuje żądania klienta, dopasowując ścieżkę dostępu (zawartą w adresie URL)
-do skonfigurowanych wzorców tras i przekazaniu sterowania właściwej akcji.
+System trasowania (*ang. routing*), nazywany też w polskiej literaturze "systemem
+przekierowań", w Symfony obsługuje żądania klienta, dopasowując ścieżkę dostępu
+(zawartą w adresie URL) do skonfigurowanych wzorców tras i przekazuje sterowanie
+właściwej akcji.
 Otwórzmy ponownie plik ``src/AppBundle/Controller/DefaultController.php`` i skupmy
 się na trzech pierwszych liniach metody ``indexAction``::
    
@@ -261,7 +263,7 @@ Metoda ``$this->render()`` jest wygodnym skrótem renderującym szablon.
 Symfony dostarcza kilka przydatnych skrótów do każdego kontrolera rozszerzającego
 klasę ``Controller``.
 
-Domyślnie, szablony aplikacji sa przechowywane w katalogu ``app/Resources/views/``.
+Domyślnie, szablony aplikacji są przechowywane w katalogu ``app/Resources/views/``.
 Dlatego szablon ``default/index.html.twig``, to to samo co
 ``app/Resources/views/default/index.html.twig``. Otwórz ten plik i przyjrzyj się
 temu kodowi:
@@ -285,7 +287,7 @@ szablony w Symfony.
 Praca ze środowiskami
 ---------------------
 
-Teraz, gdy już lepiej rozumiemy działanie Symfony, przyjrzymy sie bliżej stopce
+Teraz, gdy już lepiej rozumiemy działanie Symfony, przyjrzymy się bliżej stopce
 renderowanej na każdej stronie Symfony. Możesz tam zauważyć mały pasek z logo Symfony.
 Jest on nazywany "paskiem debugowania" (*ang. "Web Debug Toolbar"*) i jest to najlepszy
 przyjaciel programisty.
