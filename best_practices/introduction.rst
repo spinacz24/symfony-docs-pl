@@ -20,9 +20,9 @@ pragmatyczną filozofia Symfony.
 O czym jest ten przewodnik?
 ---------------------------
 
-Przewodnik ten ma na celu ujednolicenie i spisanie **najlepszych praktyck tworzenia
+Przewodnik ten ma na celu ujednolicenie i spisanie **najlepszych praktyk tworzenia
 aplikacji internetowych w jednolitym frameworku aplikacyjnym Symfony**. Są to najlepsze
-praktyki, pasujące do filozofiii tego frameworka, jaką wyznawał pierwotny jego
+praktyki, zgodne z filozofiia tego frameworka, jaką wyznawał pierwotny jego
 twórca, `Fabien Potencier`_.
 
 .. note::
@@ -51,7 +51,7 @@ Zasady te będziemy stale polepszać.
 
 Należy pamiętać, że są to **tylko zalecenia**, które Ty lub Twój zespół możecie,
 ale nie musicie przyjąć przy pracy nad aplikacją Symfony. Jeśli chcesz pozostać
-przy swoich starych praktykach i metodologiach, mozesz oczywiście to zrobić.
+przy swoich starych praktykach i metodologiach, możesz oczywiście to zrobić.
 Symfony jest na tyle elestyczne, że dostosuje się do Twoich potrzeb. To nigdy
 nie ulegnie zmianie.
 
@@ -64,10 +64,10 @@ posiadać wiedzę o Symfony w zakresie tu poruszanym. Jeśli jesteś nowicjuszem
 w Symfony, to witamy!
 Najpierw rozpocznij od :doc:`"Krótkiego kursu" </quick_tour/the_big_picture>`.
 
-Utrzymujemy celowo ten przewodnik kótkim. Nie będziemy powtarzać tu wyjaśnień,
+Utrzymujemy celowo ten przewodnik krótkim. Nie będziemy powtarzać tu wyjaśnień,
 jakie można znaleźć w rozległej dokumentacji Symfony, takich jak omówienie
-wstrzykiwania zależnosci lub wyjaśnienie roli kontrolera wejsciowego (*ang. front
-controller*). Skupiamy sie jedynie na wyjaśnieniu "jak to zrobić", zakadając, że
+wstrzykiwania zależnosci lub wyjaśnienie roli kontrolera wejściowego (*ang. front
+controller*). Skupiamy sie jedynie na wyjaśnieniu "jak to zrobić", zakładając, że
 Czytelnik ma dostateczną wiedzę.
 
 Aplikacja
