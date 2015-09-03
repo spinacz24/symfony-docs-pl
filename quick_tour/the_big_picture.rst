@@ -56,7 +56,7 @@ Na systemach **Windows**, trzeba wykonać następujące polecenie konsolowe:
 
 Polecenie to pobierze plik o nazwie ``symfony.phar``, który zawiera instalatora
 Symfony. Zapisz lub przenieś ten plik do katalogu, w którym mają być tworzone
-projekty Symfony i następnie uruchom niezwłocznie instalator Symfony, takim
+projekty Symfony i następnie uruchom instalator Symfony, takim
 poleceniem:
 
 .. code-block:: bash
@@ -88,7 +88,7 @@ Uruchomienie Symfony
 
 W tym poradniku wykorzytujemy do uruchamiania aplikacji Symfony wewnętrzny serwer
 internetowy dostarczany przez PHP. Dlatego, uruchamianie aplikacji serwera sprowadza
-się do skonfigurowanie się w katalogu projektu w wykonania polecenia:
+się do skonfigurowania się w katalogu projektu i wykonaniu polecenia:
 
 .. code-block:: bash
 
@@ -106,7 +106,7 @@ Gratulujemy! Twój pierwszy projekt Symfony jest gotowy do pracy.
 
 .. note::
 
-    Zamiast strony powitalnej można zobaczyć pustą stronę lub stronę błędu.
+    Zamiast strony powitalnej można czasem zobaczyć pustą stronę lub stronę błędu.
     Jest to spowodowane błędem uprawnień dostępu do katalogu. Jest kilka
     możliwych rozwiązań, w zależności od systemu operacyjnego. Sposoby te są
     omówione w rozdziale :ref:`Ustawianie uprawnień <book-installation-permissions>`
@@ -144,9 +144,9 @@ na *zasób* związany z tym żądaniem (stron HTML ``Homepage``).
 Kod, który ma być wykonany, jest zdefiniowany w **akcjach** i **kontrolerach**.
 Odzwzorowanie pomiędzy żądaniem użytkownika a tym kodem jest zdefiniowane w
 konfiguracji **trasowania** .
-Treści wyświetlane w przeglądarce są zazwyczaj renderowane przy uzyciu **szablonów**.
+Treści wyświetlane w przeglądarce są zazwyczaj renderowane przy użyciu **szablonów**.
 
-Kiedy przeglądało się ``http://localhost:8000/app/example``, Symfony wykonał kod
+Kiedy wywołało się ``http://localhost:8000/app/example``, Symfony wykonał kod
 kontrolera, zdefiniowany w pliku ``src/AppBundle/Controller/DefaultController.php``
 i zrenderował szablon ``app/Resources/views/default/index.html.twig``.
 W następnym rozdziale dowiesz się o szczegółach wewnętrznego funkcjonowania kontrolerów
@@ -175,11 +175,11 @@ zostanie to wyjaśnione w następnym rozdziale)::
         }
     }
 
-W aplikacji Symfony, **kontrolery**, to zazwyczaj klasy PHP, których nazwy są
+W aplikacji Symfony, **kontrolery**, to klasy PHP, których nazwy są
 zakończone słowem ``Controller``. W tym przykładzie kontroler nosi nazwę
 ``Default`` a klasa PHP ma nazwę ``DefaultController``.
 
-Metody zdefioniowane w kontrolerze są nazywane **akcjami** - zwykle związane są
+Metody zdefiniowane w kontrolerze są nazywane **akcjami** - zwykle związane są
 z jakimś jedym adresem URL aplikacji i ich nazwy kończą się słowem ``Action``.
 W naszym przykładzie kontroler ``Default`` ma tylko jedną akcję o nazwie ``index``
 i definiuje metodę ``indexAction``.
@@ -234,13 +234,13 @@ rozpoczynają się od ``/**``, natomiast zwykłe komentarze od ``/*``.
 
 Pierwsza wartość adnoacji ``@Route()`` określa adres URL, która spowoduje wykonanie
 określonej akcji. ponieważ nie trzeba dodawać schematu i hosta z adresu URL
-(np. ``http://example.com``), te adresy URL są zawsze wzgledne i nazywamy je
+(np. ``http://example.com``), te adresy URL są zawsze względne i nazywamy je
 *ściezkami*. W naszym przypadku, ścieżka ``/app/example`` odnosi się do aplikacji
 homepage. Druga wartość adnotacji ``@Route()`` (tj. ``name="homepage"``) jest
 opcjonalna i ustawia nazwę tej trasy. Na razie ta nazwa jest nieprzydatna, ale
 później stanie się potrzebna do linkowania stron.
 
-Uwzgledniajac to wszystko, adnotacja ``@Route("/app/example", name="homepage")``
+Uwzględniajac to wszystko, adnotacja ``@Route("/app/example", name="homepage")``
 tworzy nową trasę o nazwie ``homepage``, co powoduje, że Symfony wykonuje akcję
 ``index`` kontrolera ``Default``, gdy użytkownik odwiedzi adres URL aplikacji ze
 ścieżką ``/app/example``.
@@ -249,8 +249,8 @@ tworzy nową trasę o nazwie ``homepage``, co powoduje, że Symfony wykonuje akc
 
     Oprócz adnotacji PHP, trasy można konfigurować w plikach YAML, XML lub
     PHP, tak jak wyjaśniono to w rozdziale :doc:`Trasowanie </book/routing>`
-    podręcznika Symfony. ta elastyczność jest jedną z głównych cech Symfony -
-    frameworka, który nigdy nie narzuca konkrenego formatu konfiguracji.
+    podręcznika Symfony. ta elastyczność jest jedną z głównych cech frameworka
+    Symfony, który nigdy nie narzuca konkrenego formatu konfiguracji.
 
 Szablony
 ~~~~~~~~
@@ -303,16 +303,13 @@ i kwerendach bazy danych:
 .. image:: /images/quick_tour/profiler.png
    :align: center
 
-[Oczywiście nie będziesz chciał pokazywać tych narzędzi w środowisku produkcyjnym witryny.
-Dlatego znajdziesz w katalogu ``web/`` inny kontroler wejścia (``app.php``), który
-jest zoptymalizowany dla środowiska produkcyjnego.]
-Narzedzie to dostrcza bardzo dużo wewnetrznej informacji o aplikacji, dlatego z
+Narzędzie to dostrcza bardzo dużo wewnetrznej informacji o aplikacji, dlatego z
 pewnością nie można jej pokazywać publicznie. Symfony nie pokazuje tego paska
 narzędziowego, gdy aplikacja jest uruchamiana na serwerze produkcyjnym w "trybie
 publicznym".
 
 Skąd Symfony wie, czy aplikacja ma być uruchomiona w "trybie publicznym"? Dowiesz
-sie tego czytając o pojeciu **środowisk wykonawczych**.
+się tego czytając o pojeciu **środowisko wykonawcze**.
 
 .. _quick-tour-big-picture-environments-intro:
 
@@ -330,10 +327,10 @@ aplikację Symfony w środowisku ``dev``. W celu odwiedzenia tej aplikacji w śr
 Jeśli chce się, aby zawsze środowisko ``dev`` było pokazywane w adresie URL,
 trzeba odwiedzić adres ``http://localhost:8000/app_dev.php``.
 
-Zasadniczą różnicą pomiedzy tymi środowiskami jest to, że środowisko ``dev`` jest
-zoptymalizowane pod wzgledem dostarczania dużej ilości informacji dla programisty,
+Zasadniczą różnicą pomiędzy tymi środowiskami jest to, że środowisko ``dev`` jest
+zoptymalizowane pod względem dostarczania dużej ilości informacji dla programisty,
 co oznacza gorszą wydajność. Natomiast środowisko ``prod`` jest zoptymalizowane
-pod kątem jak najwiekszej wydajności, co oznacza, że debugowanie nie jest realizowane
+pod kątem jak największej wydajności, co oznacza, że debugowanie nie jest realizowane
 i niedostępna jest tego typu informacja, jak też cały pasek debugowania.
 
 Druga różnica między środowskami polega na używaniu przez aplikację innych opcji
@@ -375,7 +372,7 @@ Podsumowanie
 Gratulacje! Miałeś Czytelniku przedsmak kodowania Symfony. To nie było tak trudne, prawda?
 Jest dużo więcej do odkrycia, ale teraz trzeba zobaczyć, jak Symfony sprawia,
 że ​​naprawdę łatwo jest wdrożyć strony internetowe. Jeśli chcesz się dowiedzieć
-więcej o Symfony, zacznij lekturę następnej część przewodnika: ":doc:`the_view`.
+więcej o Symfony, zacznij lekturę następnej części przewodnika: ":doc:`the_view`.
 
 .. _Composer:             https://getcomposer.org/
 .. _executable installer: http://getcomposer.org/download
