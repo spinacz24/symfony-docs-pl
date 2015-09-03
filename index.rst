@@ -1,7 +1,7 @@
 .. _symfony2-documentation:
 
-Dokumetacja Symfony
-===================
+Dokumentacja Symfony
+====================
 
 Jest to polskie tłumczenie oficjalnej dokumentacji frameworka PHP Symfony,
 publikowanej na stronach http://symfony.com/. Prace nad tym tłumaczeniem
@@ -76,10 +76,10 @@ Komponenty
 
 Chcesz szczegółów z budowy Symfony, przeczytaj dokumentację :doc:`komponentów </components/index>`.
 
-Dokumenty referencyjne
-----------------------
+Informator API
+--------------
 
-Uzyskaj szybko potrzebne informacje wprost z dokumentów referencyjnych.
+Uzyskaj szybko potrzebne informacje wprost z dokumentów informacyjnych.
 
 .. toctree::
     :hidden:
