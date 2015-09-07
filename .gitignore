@@ -1,7 +1,5 @@
-/nbproject/private/
 .project
+.pydevproject
+.settings
+.git
 _build
-<<<<<<< HEAD
-
-=======
->>>>>>> refs/heads/2.7
