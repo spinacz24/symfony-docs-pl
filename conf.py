@@ -18,7 +18,7 @@ import sys, os
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #sys.path.insert(0, os.path.abspath('_exts'))
-sys.path.append(os.path.abspath('_exts'))
+sys.path.append(os.path.abspath('_theme/_exts'))
 
 # adding PhpLexer
 from sphinx.highlighting import lexers
@@ -36,10 +36,10 @@ from pygments.lexers.web import PhpLexer
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo',
               'sensio.sphinx.refinclude', 'sensio.sphinx.configurationblock', 'sensio.sphinx.phpcode',
-               'sensio.sphinx.bestpractice']
+               'sensio.sphinx.bestpractice', 'symfonycom.sphinx']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ['_theme/_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -59,7 +59,7 @@ copyright = '2013-2015, Symfony Community'
 # built documents.
 #
 # The short X.Y version.
-version = '2'
+# version = '2'
 # The full version, including alpha/beta/rc tags.
 # release = '2'
 
@@ -75,7 +75,7 @@ language = 'pl'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build', 'templates']
+exclude_patterns = ['_build', '_theme']
 
 # The reST default role (used for this markup: `text`) to use for all documents.
 #default_role = None
@@ -125,7 +125,7 @@ api_url = 'http://api.symfony.com/master/%s'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'default'
+html_theme = 'classic'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -154,7 +154,7 @@ html_theme = 'default'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+# html_static_path = ['_static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
@@ -198,7 +198,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'symfony-docs-pldoc'
+htmlhelp_basename = 'SymfonyDocPL'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -217,8 +217,8 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'symfony-docs-pl.tex', 'symfony-docs-pl Documentation',
-   'Symfony Community', 'manual'),
+  ('index', 'symfony-docs-pl.tex', u'Polska dokumentacja Symfony',
+   u'Społeczność Symfony', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -247,8 +247,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'symfony-docs-pl', 'symfony-docs-pl Documentation',
-     ['Symfony Community'], 1)
+    ('index', 'symfony-docs-pl', u'Polska dokumentacja Symfony',
+     [u'Społeczność Symfony'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -261,8 +261,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'symfony-docs-pl', 'symfony-docs-pl Documentation',
-   'Symfony Community', 'symfony-docs-pl', 'One line description of project.',
+  ('index', 'symfony-docs-pl', u'Polska dokumentacja Symfony',
+   u'Społeczność Symfony', 'symfony-docs-pl', u'Polski przekład oficjalnej dokumentacji Symfony',
    'Miscellaneous'),
 ]
 
@@ -280,9 +280,9 @@ texinfo_documents = [
 
 # Bibliographic Dublin Core info.
 epub_title = 'symfony-docs-pl'
-epub_author = 'Symfony Community'
-epub_publisher = 'Symfony Community'
-epub_copyright = '2013, Symfony Community'
+epub_author = u'Społeczność Symfony'
+epub_publisher = u'Społeczność Symfony'
+epub_copyright = u'2013-2015, Społeczność Symfony'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.
