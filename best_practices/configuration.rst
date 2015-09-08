@@ -10,7 +10,7 @@ Dlatego zaleca się, aby w Symfony podzielić konfigurację aplikacji na trzy cz
 Konfiguracja związana z infrastrukturą
 --------------------------------------
 
-.. best-practice::
+.. tip::
 
     Definiuj opcje konfiguracji związanej z infrastrukturą w pliku
     ``app/config/parameters.yml`` file.
@@ -46,7 +46,7 @@ pod warunkiem, że jest ona dobrze skofigurowana.
 Parametry kanoniczne
 ~~~~~~~~~~~~~~~~~~~~
 
-.. best-practice::
+.. tip::
 
     Definiuj wszystkie parametry aplikacji w pliku
     ``app/config/parameters.yml.dist``.
@@ -65,7 +65,7 @@ i doda je do lokalnego pliku ``parameters.yml``.
 Konfiguracja związana z aplikacją
 ---------------------------------
 
-.. best-practice::
+.. tip::
 
     Definiuj opcje konfiguracyjne związanez zachowaniem aplikacji w pliku
     ``app/config/config.yml`.
@@ -90,7 +90,7 @@ Jednym z najczęstszych błędów popełnianych podczas definiowania konfiguracj
 aplikacji jest tworzenie nowych opcji dla wartości, które nigdy sie nie zmienią,
 jak liczba elementów dla stronicowanych wyników.
 
-.. best-practice::
+.. tip::
 
     używaj stałych do definiowania opcji konfiguracyjnych, które rzedko się
     zmieniają.
@@ -159,7 +159,7 @@ ich łatwo przedefiniowywać w testach.
 Semantyczna konfiguracja: nie rób tego
 --------------------------------------
 
-.. best-practice::
+.. tip::
 
     Nie określaj w pakietach sematycznej konfiguracji dla wstrzykiwania zależności.
 
