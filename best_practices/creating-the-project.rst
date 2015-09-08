@@ -8,9 +8,9 @@ W przeszłości, projekty Symfony tworzyło sie przy użyciu `Composer`_, menad�
 zależności dla aplikacji PHP. Obecnie zaleca się użycie **Symfony Installer**,
 który trzeba zainstalować przed utorzeniem pierwszego projektu.
 
-.. best-practice::
+.. tip::
 
-    Do tworzenia nowych projektów opartych na Symfony uzywaj instalatora Symfony.
+    Do tworzenia nowych projektów opartych na Symfony używaj instalatora Symfony.
 
 Jak to zrobić? Przeczytaj :doc:`rozdział o instalacji </book/installation>`
 w podręczniku Symfony.
@@ -21,7 +21,7 @@ w podręczniku Symfony.
 Tworzenie aplikacji blogu
 -------------------------
 
-Teraz, gdy wszystko jest prawidłowo skonfigurowane, mozna utworzyć nowy projekt
+Teraz, gdy wszystko jest prawidłowo skonfigurowane, można utworzyć nowy projekt
 oparty na Symfony. W konsoli poleceń przechodzimy do katalogu projektów, w którym
 mamy uprawnienia do tworzenia i wykonywania plików (nadrzędny katalog naszego
 projektu Symfony) i wykonujemy następujące polecenia:
@@ -43,7 +43,7 @@ Symfony. Jeśli nie, zobaczy się na ekranie listę zmian koniecznych do przepro
 
 .. tip::
 
-    Wydania Symfony sa podpisywane cyfrowo ze względów bezpieczeństwa. Jeśli chcesz
+    Wydania Symfony są podpisywane cyfrowo ze względów bezpieczeństwa. Jeśli chcesz
     sprawdzić integralność swojej instalacji Symfony, zobacz
     `sumę sprawdzającą`_ i wykonaj czynności opisane w tej `procedurze`_, w celu
     zweryfikowania podpisów.
@@ -97,7 +97,7 @@ aplikacjach Symfony, to nie można go traktować jako pakietu Symfony. Ponadto, 
 InvoiceBundle zależy od ProductBundle, to traci sens uzywanie dwóch oddzielnych
 pakietów.
 
-.. best-practice::
+.. tip::
 
     Dla logiki swojej aplikacji twórz tylko jeden pakiet o nazwie AppBundle.
 
@@ -105,9 +105,9 @@ Implementując pojedynczy pakiet AppBundle w swoim projekcie powoduje się, że 
 jest bardziej zwarty i łatwiejszy do zrozumienia. Począwszy od Symfony 2.6, oficjalna
 dokumentacja Symfony używa dla takiego pakietu nazwę AppBundle.
 
-.. note::
+.. tip::
 
-    Nie poprzedzania nazwy AppBundle przedrostkiem wskazującym na dostawcę
+    Nie poprzedzaj nazwy AppBundle przedrostkiem wskazującym na dostawcę
     (np. AcmeAppBundle), ponieważ ten pakiet aplikacji nigdy nie będzie używany
     w innych aplikacjach, Tak więc nazwa AppBundle bedzie zawsze unikatowa w ramach
     danej aplikacji i nie bedzie powodować konfliktu nazewniczego.
@@ -138,7 +138,7 @@ najlepsze praktyki Symfony:
 
 .. tip::
 
-    Jeśli instalacja Symfony nie jest dostarczana ze wstęþnie wygenerowanym
+    Jeśli instalacja Symfony nie jest dostarczana ze wstępnie wygenerowanym
     pakietem AppBundle, można go wygenerować samemu, wykonując następujące
     polecenie konsolowe:
 
@@ -171,7 +171,7 @@ Trzeba zaznaczyć, że Symfony3 będzie używać nieco inną strukturę katalogo
     ├─ vendor/
     └─ web/
 
-Zmiany te sa dość powierzchowne, ale teraz zalecamy, aby używać opisaną wcześniej
+Zmiany te są dość powierzchowne, ale teraz zalecamy, aby używać opisaną wcześniej
 strukturę katalogową Symfony.
 
 .. _`Composer`: https://getcomposer.org/

@@ -8,9 +8,9 @@ Słownik
    
    akcja
       (*ang. action*)
-      Metoda kontrolera odpowiedzialna za zwrócenie obiektu ``Response``
-      reprezentującego konkretną stronę aplikacji. W Symfony akcje posiadają
-      nazwy kończące się słowem ``Action``.
+      Metoda :term:`kontrolera <kontroler>` odpowiedzialna za zwrócenie obiektu
+      ``Response`` reprezentującego konkretną stronę aplikacji. W Symfony akcje
+      posiadają nazwy kończące się słowem ``Action``.
    
    aktywa
       (*ang. assets*)
@@ -59,9 +59,11 @@ Słownik
 
    kontroler
       (*ang. controller*)
-      *Kontroler* to obiekt zawierający metody, zwane akcjami, które zawierają
-      całą logikę niezbędną do zwrócenia obiektu ``Response`` reprezentujacego
-      konkretną stronę. W Symfony kontrolery maja nazwy zakończone słowem ``Controler``.
+      W Symfony, *kontroler* to klasa, której metody, zwane akcjami zawierają całą
+      logikę niezbędną do zwrócenia obiektu ``Response`` reprezentujacego
+      konkretną stronę. W Symfony kontrolery mają nazwy zakończone słowem ``Controler``
+      a nazwy ich metod kończą sie słowem ``Action``. Wiecej wyjaśnień na ten temat
+      znajduje sie w rozdziale :ref:`book-controller`.
          
 
    usługa

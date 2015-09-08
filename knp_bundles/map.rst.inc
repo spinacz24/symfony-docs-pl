@@ -1,1 +1,0 @@
-* :doc:`KnpMenuBundle/index`
