@@ -243,7 +243,7 @@ przekształci go do odpowiedniej strony błędu ``500``::
 Pobieranie informacji z żądania
 -------------------------------
 
-Czasem kontroler potrzebuje mieć dostęp do inforamcji zwiąanych z żądaniem
+Czasem kontroler potrzebuje mieć dostęp do inforamcji związanych z żądaniem
 użytkownika, takich jak preferowany język, adres IP parametry zapytania URL.
 W celu uzyskania dostęþu do tych informacji, trzeba dodać do akcji nowy argument
 typu ``Request``. Nazwa tego nowego argumentu nie ma znaczenia, ale musi być
