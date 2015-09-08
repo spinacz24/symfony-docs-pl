@@ -1,1 +1,0 @@
-* :doc:`/sonata_bundles/SonataAdminBundle/index`
