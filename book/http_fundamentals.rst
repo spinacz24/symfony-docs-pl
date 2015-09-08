@@ -2,23 +2,23 @@
    :linenothreshold: 2
 
 .. index::
-   single: Symfony2; podstawy
+   single: Symfony; podstawy
    single: HTTP; podstawy
 
-Podstawy Symfony2 i HTTP
-========================
+Podstawy Symfony i HTTP
+=======================
 
-Ucząc się Symfony2, znalazłeś się na dobrej drodze aby być bardziej produktywnym
-twórcą nowoczesnych aplikacji internetowych. Symfony2 powstał po to, aby programista
+Ucząc się Symfony, znalazłeś się na dobrej drodze aby być bardziej produktywnym
+twórcą nowoczesnych aplikacji internetowych. Symfony powstał po to, aby programista
 otrzymał narzędzia pozwalające na szybsze programowanie i budowanie bardziej
 niezawodnych aplikacji internetowych, w swobodny sposób. Symfony wykorzystuje
 najlepsze pomysły z wielu technologii. Narzędzia i koncepcje, których się nauczysz
 reprezentują wysiłek tysięcy ludzi w ciągu wielu lat. Innymi słowami, nie jest to
 tylko nauka "Symfony" - nauczysz się podstaw internetu, najlepszych praktyk
 programistycznych oraz tego, jak stosować wiele wyśmienitych nowoczesnych bibliotek
-PHP, wewnątrz Symfony2 lub poza nim.
+PHP, wewnątrz Symfony lub poza nim.
 
-By być wiernym filozofii Symfony2, ten rozdział rozpoczyna się od wyjaśnienia
+By być wiernym filozofii Symfony, ten rozdział rozpoczyna się od wyjaśnienia
 podstawowego pojęcia z zakresu programowania aplikacji internetowych: protokołu HTTP.
 Niezależnie od stopnia zaawansowania oraz preferowanego języka rozdział ten jest
 **lekturą obowiązkową dla każdego**.
@@ -26,7 +26,7 @@ Niezależnie od stopnia zaawansowania oraz preferowanego języka rozdział ten j
 HTTP jest prosty
 ----------------
 
-HTTP (dla maniaków: Hypertext Transfer Protocol) jest tekstowym językiem
+HTTP (skrót od: Hypertext Transfer Protocol) jest tekstowym językiem
 umożliwiającym, aby dwa komputery mogły się ze sobą komunikować. To jest to! Dla
 przykładu, podczas sprawdzania najnowszego komiksu `xkcd`_ ma miejsce (w uproszczeniu)
 następująca rozmowa:
@@ -40,8 +40,8 @@ języka tekstowego i jest niezależny od języka programowania aplikacji interne
 Celem każdego serwera internetowego jest zawsze zrozumienie prostego tekstu żądania
 i zwrócenie tekstu odpowiedzi.
 
-Symfony2 jest zbudowany wokół tej rzeczywistości. Czy jesteś tego świadomy, czy
-też nie, HTTP jest czymś, co codziennie używasz serwując w internecie. Z Symfony2
+Symfony jest zbudowany wokół tej rzeczywistości. Czy jesteś tego świadomy, czy
+też nie, HTTP jest czymś, co codziennie używasz serwując w internecie. Z Symfony
 nauczysz się jak mistrzowsko to opanować.
 
 .. index::
@@ -180,7 +180,7 @@ Symfony jest zaprojektowany tak, aby dopasować sie do tej rzeczywistości.
     przeglądania jest rozszerzenie `Live HTTP Headers`_ do Firefox.
 
 .. index::
-   single: Symfony2; żądanie i odpowiedź
+   single: Symfony; żądanie i odpowiedź
 
 Żądanie i odpowiedź w PHP
 -------------------------
@@ -273,7 +273,7 @@ wartości w PHP wskazujące na to, czy użytkownik wykorzystuje bezpieczne poł�
       
     Klasa Request ma również publiczną właściwość attributes, która przechowuje
     specjalne dane dotyczące tego, jak aplikacja działa wewnętrznie.
-    We frameworku Symfony2 właściwość ``attributes`` przechowuje wartości zwracane
+    We frameworku Symfony właściwość ``attributes`` przechowuje wartości zwracane
     przez dopasowaną trasę, takie jak ``_controller``, ``id`` (jeżeli ma się
     wieloznacznik ``{id})`` a nawet nazwę dopasowanej trasy (``_route``).
     Właściwość ``attributes`` istnieje wyłącznie po to, aby być miejscem, gdzie
@@ -304,7 +304,7 @@ możliwości Symfony, to pamiętaj, że celem aplikacji jest zawsze *interpretac
 
 .. tip::
 
-    Klasy ``Request`` i ``Response` są częścią niezależnego komponentu włączonego
+    Klasy ``Request`` i ``Response`` są częścią niezależnego komponentu włączonego
     do Symfony o nazwie HttpFoundation. Jest to komponent niezależny i może
     być stosowany poza Symfony, dostarczając klas dla obsługi sesji i wysyłania plików.
     
@@ -371,7 +371,7 @@ w to WordPress.
 Bądź zorganizowany
 ~~~~~~~~~~~~~~~~~~
 
-Ale jak wiedzieć, która strona powinna być wygenerowana przez kontroler i jak można
+Lecz jak wiedzieć, który kontrolę ma wygenerować dana strone i jak można
 wykonać generowanie każdej strony w sposób jasny? Tak czy owak, trzeba sprawdzić
 przychodzące identyfikatory URI i wykonać różne części kodu, w zależności od tej wartości.
 Można to zrobić szybko i brzydko::
@@ -405,7 +405,7 @@ stać się łatwiejsze. Symfony stosuje taki sam prosty wzorzec dla każdego ż�
 
 .. figure:: /images/request-flow.png
    :align: center
-   :alt: Symfony2 request flow
+   :alt: Symfony request flow
 
 Przychodzące żądania są interpretowane przez trasowanie (ang. routing) i przekazywane
 są do funkcji (metody) kontrolera, który zwraca obiekt Response.
@@ -477,7 +477,7 @@ W pierwszej kolejności dodaj wpis dla ``/contact`` do pliku konfiguracji trasow
    :doc:`YAML </components/yaml/yaml_format>`. Konfiguracja trasowania może być
    również zapisana w innych formatach, takich jak XML lub PHP.
 
-Kiedy ktoś odwiedza stronę ``/contact``, to dopasowywana jest trasa i wykonywany
+Kiedy ktoś odwiedza stronę ``/contact``, to zostaje dopasowywana trasa i wykonywany
 jest określony kontroler. Jak można się dowiedzieć w :doc:`rozdziale Trasowanie </book/routing>`,
 łańcuch ``AcmeDemoBundle:Main:contact`` jest skróconą składnią wskazującą metodę
 ``contactAction`` wewnątrz klasy o nazwie ``MainController``::
@@ -504,8 +504,8 @@ co napisane jest w HTML) był zapisany w oddzielnym pliku. Odciąża to kontrole
 pozostawiając mu trudniejsze zadania: interakcję z bazą danych, obsługę przekazywanych
 danych lub wysyłanie wiadomości e-mail.
 
-Symfony2: Buduj swoja aplikacje a nie swoje narzędzia
------------------------------------------------------
+Symfony: Buduj swoja aplikacje a nie swoje narzędzia
+----------------------------------------------------
 
 Teraz już wiesz, że celem każdej aplikacji jest zinterpretowanie przychodzącego
 żądania HTTP i utworzenie odpowiedniej odpowiedzi. Gdy aplikacja jest rozbudowywana,
@@ -517,21 +517,21 @@ i obsługa bezpieczeństwa.
 
 Dobrą wiadomością jest to, że żadne z tych zadań nie jest wyjątkowe. Symfony oferuje
 pełny framework narzędzi, które pozwalają zbudować aplikację, a nie własne narzędzia.
-W Symfony2 nic nie jest narzucone programiście: ma on pełną swobodę w wykorzystaniu
+W Symfony nic nie jest narzucone programiście: ma on pełną swobodę w wykorzystaniu
 frameworka, tylko jakiejś jego części albo całości.
 
 
 
 .. index::
-   single: Symfony2; komponenty
+   single: Symfony; komponenty
 
 
-Samodzielne narzędzia: Symfony2 Components
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Samodzielne narzędzia: Symfony Components
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Więc czym jest Symfony2? Po pierwsze, Symfony2 jest zbiorem ponad dwudziestu
+Więc czym jest Symfony? Po pierwsze, Symfony jest zbiorem ponad dwudziestu
 niezależnych bibliotek, które mogą być wykorzystane w jakimkolwiek projekcie PHP.
-Biblioteki te, o nazwie Symfony2 Components, zawierają użyteczny kod dla niemal
+Biblioteki te, o nazwie Symfony Components, zawierają użyteczny kod dla niemal
 każdego rozwiązania, niezależnie od tego jak projekt jest tworzony. Oto kilka z nich:
 
 * :doc:`HttpFoundation </components/http_foundation/introduction>` -  zawiera klasy
@@ -561,17 +561,17 @@ każdego rozwiązania, niezależnie od tego jak projekt jest tworzony. Oto kilka
 * `Translation`_ zbiór bibliotek do tłumaczenia łańcuchów tekstowych w aplikacji.
 
 Każdy z tych komponentów jest samodzielny i może być wykorzystany oddzielnie w
-dowolnym projekcie PHP, niezależnie od tego, czy używa się frameworka Symfony2,
+dowolnym projekcie PHP, niezależnie od tego, czy używa się frameworka Symfony,
 czy też nie. Każda część jest zrobiona po to, aby być wykorzystana jeżeli zachodzi
 taka potrzeba
 
-Pełne rozwiązanie: *framework* Symfony2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Pełne rozwiązanie: *framework* Symfony
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Więc czym jest ten framework Symfony2? Framework Symfony2 jest biblioteką PHP
+Więc czym jest ten framework Symfony? Framework Symfony jest biblioteką PHP
 realizujący dwa oddzielne zadania:
 
-#. Zapewnienia wybór komponentów (czyli *Symfony2 Components*) i dodatkowych
+#. Zapewnienia wybór komponentów (czyli *Symfony Components*) i dodatkowych
    bibliotek (np. `Swift Mailer`_ dla wysyłania wiadomości e-mail);
 
 #. Zapewnienia sensowną konfigurację i "sklejenie" wszystkich bibliotek w całość.
@@ -580,10 +580,10 @@ Celem frameworka jest zintegrowanie wielu niezależnych narzędzi w jeden spójn
 interfejs programistyczny. Nawet sam framework jest pakietem (ang. bundle)
 (czyli wtyczką) mogącą zostać skonfigurowaną i całkowicie zmienioną.
 
-Symfony2 dostarcza potężny zestaw narzędzi do szybkiego tworzenia aplikacji
+Symfony dostarcza potężny zestaw narzędzi do szybkiego tworzenia aplikacji
 internetowych, bez narzucania programiście rozwiązań w zakresie funkcjonalności
 aplikacji. Zwykły użytkownik może szybko rozpocząć programowanie, stosując określoną
-dystrybucje Symfony2, która dostarcza framework z sensownymi domyślnymi ustawieniami.
+dystrybucje Symfony, która dostarcza framework z sensownymi domyślnymi ustawieniami.
 Dla bardziej zaawansowanych użytkowników praktycznie nie ma ograniczeń.
 
 .. _`xkcd`: http://xkcd.com/

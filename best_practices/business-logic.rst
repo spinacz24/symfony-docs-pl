@@ -93,7 +93,7 @@ aby uniknąć kolizji nazewniczej. Zgodnie z tym, naszą usługę *nazwalibyśmy
 ``app.utils.slugger``. Jednak używając skróconych nazw usług, nasz kod stanie się
 łatwiejszy do odczytania i stosowania.
 
-.. best-practice::
+.. tip::
 
     Nazwa usług we własnej aplikacji powinna byc jak najkrótsza, ale na tyle unikalna
     aby mozna było przeszukać projekt dla odnalezienia usługi, jeśli zajdzie taka konieczność.
@@ -120,7 +120,7 @@ Format usług: YAML
 
 W porzednim rozdziale użyliśmy formatu YAML do zdefiniowania usługi.
 
-.. best-practice::
+.. tip::
 
     Stosuj format YAML do definiowania własnych usług.
 
@@ -151,7 +151,7 @@ nazewniczej klasy jako parametr:
 
 Praktyka ta jest uciążliwa i całkowicie zbędna dla własnych usług:
 
-.. best-practice::
+.. tip::
 
     Nie definiuj parametrów dla klas własnych usług.
 
@@ -200,7 +200,7 @@ danych". Doctrine wie tylko o swoich encjach, poprzez odwzorowanie metadanych,
 skonfigurowanych dla klas modeli. Doctrine obsługuje cztery formaty metadanych:
 YAML, XML, PHP i adnotacje.
 
-.. best-practice::
+.. tip::
 
     Używaj adnotacji do definiowania informacji odwzorowującej encje Doctrine.
 

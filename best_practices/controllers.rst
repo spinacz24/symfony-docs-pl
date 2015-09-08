@@ -11,7 +11,7 @@ co najwyźej 20 linii kodu w każdej akcji. Nie należy tego traktować dosłown
 ale przestrzeganie tej zasady pomoże, gdy kontroler trzeba refaktoryzować
 i przekazać do usługi.
 
-.. best-practice::
+.. tip::
 
     Wykonuj kontroler jako rozszerzenie bazowej klasy FrameworkBundle i używaj
     adnotacji do konfigurowania trasowania, buforowania i zabezpieczeń, gdy tylko
@@ -72,7 +72,7 @@ organizowanie ich w podkatalogi:
 Konfiguracja szablonu
 ---------------------
 
-.. best-practice::
+.. tip::
 
     Nie uzywaj adnotacji ``@Template()`` do konfigurowania szablonu stosowanego
     w kontrolerze.
@@ -125,7 +125,7 @@ Jeśli używasz Doctrine, to możesz *ewentualnie* wykorzystać `ParamConverter`
 do automatycznego wykonywania zapytania dla encji i przekazywania go jako
 argument do kontrolera.
 
-.. best-practice::
+.. tip::
 
     Używaj triku ParamConverter do automatycznego wykonywania zapytania dla encji
     Doctrine, kiedy jest to proste i wygodne.
