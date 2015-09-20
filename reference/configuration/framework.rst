@@ -4,8 +4,8 @@
 Konfiguracja FrameworkBundle
 ============================
 
-``FrameworkBundle`` posiada większość z "podstawowych" funkcjonalności frameworka
-i może być konfigurowany w konfiguracji aplikacji poprzez klucz ``framework``.
+``FrameworkBundle`` obsługuje większość z "podstawowych" funkcjonalności frameworka
+Symfony i może być konfigurowany w ustawieniachi aplikacji poprzez klucz ``framework``.
 Podczas stosowania XML musi sie używać przestrzeni nazewniczej
 ``http://symfony.com/schema/dic/symfony``.
 
@@ -533,9 +533,9 @@ profiler jest włączony w środowiskach ``dev`` i ``test``.
 
 .. note::
 
-    The profiler works independently from the Web Developer Toolbar, see
-    the :doc:`WebProfilerBundle configuration </reference/configuration/web_profiler>`
-    on how to disable/enable the toolbar.
+    Profiler dziala niezależnie od paska narzedziowego debugowania. Proszę przeczytać
+    :doc:`WebProfilerBundle configuration </reference/configuration/web_profiler>`
+    aby dowiedzieć się, jak wyłączać i włączać pasek narzedziowy.
 
 collect
 .......
@@ -681,7 +681,7 @@ strict_requirements
 
 **typ**: ``mixed`` **domyślnie**: ``true``
 
-Określa zachowanie generatora trasowania. Podczas generowania trasy. która ma
+Określa zachowanie generatora trasowania. Podczas generowania trasy, która ma
 określone :ref:`wymagania <book-routing-requirements>`, generator może zachowywać
 się różnie w przypadku, gdy zastosowane parametry nie spełnią tych wymagań.
 
@@ -814,7 +814,7 @@ domyślny handler pliku, jest to ścieżka do miejsca, w którym tworzone są pl
 sesji.
 Więcej informacji można znaleźć w artykule :doc:`/cookbook/session/sessions_directory`.
 
-Ustawiajac tu ``null`` powoduje sie, że wykorzystywana będzie opcja ``save_path``
+Ustawiając tu ``null`` powoduje sie, że wykorzystywana będzie opcja ``save_path``
 z pliku ``php.ini``:
 
 .. configuration-block::
