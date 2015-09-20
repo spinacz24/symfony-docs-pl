@@ -8,12 +8,14 @@ Słownik
    
    akcja
       (*ang. action*)
+      
       Metoda :term:`kontrolera <kontroler>` odpowiedzialna za zwrócenie obiektu
       ``Response`` reprezentującego konkretną stronę aplikacji. W Symfony akcje
       posiadają nazwy kończące się słowem ``Action``.
    
    aktywa
       (*ang. assets*)
+      
       Aktywa w Symfony, to załadowane zasoby (pliki CSS, JavaScript, obrazy itd.),
       skrypty generowane z treści plików i skrypty tworzone "w locie".
       Zasób po załadowaniu jest aktywem - przetwarzane są aktywa, a nie zasoby.
@@ -21,17 +23,20 @@ Słownik
       
    dystrybucja
       (*ang. distribution*)
+      
       *Dystrybucja* jest zestawem instalacyjnych komponentów Symfony,
       zawierajacym wybrane pakiett (*ang. bundles*), rozsądną strukturę katalogów,
       domyślną konfigurację i opcjonalny systemem konfiguracyjny.
 
    projekt
       (*ang. project*)
+      
       *Projekt* jest katalogiem składającym się z *aplikacji*, zestawu pakietów,
       bibliotek dostawców, autoloadera i skryptów kontrolera wejścia.
 
    aplikcja
       (*ang. application*)
+      
       Pojecie *aplikacji* jest używane w tej dokumentacji w dwóch kontekstach.
       Pierwszy, to tradycyjne znaczenie `aplikacji internetowej`_.
       Drugi, to katalog zawierający *konfigurację* dla danego zestawu
@@ -39,6 +44,7 @@ Słownik
 
    pakiet
       (*ang. bundle*)
+      
       *Pakiet* jest katalogiem zawierającym zestaw plików (plików PHP,
       arkuszy atylów, plików JavaScript, obrazów ...) które *implementują*
       pojedyńczą funkcjonalność (blog, forum itp.). W Symfony, (*prawie*)
@@ -48,6 +54,7 @@ Słownik
 
    kontroler wejścia
    kontroler frontowy
+      
       (*ang. front controller*)
       *Kontroler wejścia* jest krótkim skryptem PHP umieszczonym w katalogu
       sieciowym projektu (np. web). Zazwyczaj *wszystkie* żądania są
@@ -59,6 +66,7 @@ Słownik
 
    kontroler
       (*ang. controller*)
+      
       W Symfony, *kontroler* to klasa, której metody, zwane akcjami zawierają całą
       logikę niezbędną do zwrócenia obiektu ``Response`` reprezentujacego
       konkretną stronę. W Symfony kontrolery mają nazwy zakończone słowem ``Controler``
@@ -68,6 +76,7 @@ Słownik
 
    usługa
       (*ang. service*)
+      
       *Usługa* to ogólny termin dla każdego obiektu PHP który wykonuje określone
       zadanie. Usługa zazwyczaj stosowana jest "globalnie", jako obiekt
       nawiązujący połączenie z bazą danych lub obiekt wysyłający wiadomości
@@ -77,6 +86,7 @@ Słownik
 
    kontener usług
       (*ang. service container*)
+      
       *Kontroler usług*, zwany też *kontenerem DI* (*od. ang. Dependency
       Injection Container*), jest specjalnym obiektem, który zarządza instancją
       usług wewnątrz aplikacji. Programista może *poinstruować* kontener usług
@@ -86,6 +96,7 @@ Słownik
         
    specyfikacja HTTP
       (*ang. HTTP Specification*)
+      
       *Specyfikacja Http* (Http Specification) jest dokumentem opisującym
       "Hypertext Transfer Protocol" - zbiór zasad leżących u podstaw klasycznej
       komunikacji żądanie-odpowiedź dla architektury klient-serwer.
@@ -96,6 +107,7 @@ Słownik
 
    środowisko
       (*ang. environment*)
+      
       *Środowisko* to specyficzna konfiguracja aplikacji reprezentowana przez
       określone oznaczenie (np. ``prod`` lub ``dev``). Ta sama aplikacja
       może być uruchamiana na tej samej maszynie używając różnej konfiguracji
@@ -106,6 +118,7 @@ Słownik
         
    dostawca
       (*ang. vendor*)
+      
       *Dostawca* to ktoś dostarczający biblioteki PHP i pakiety dołączne do Symfony.
       Pomimo skojarzenia tego słowa z kwestiami handlowymi (vendor w jezyku angielskim
       oznacza dosłownie "sprzedawcę"), dostawca w Symfony bardzo często (nawet
@@ -115,12 +128,14 @@ Słownik
 
    Acme
       (*nazwa własna*)
+      
       *Acme* jest prostą, przykładową nazwą firmy użytej w demo Symfony oraz dokumentacji.
       Jest użyta w przestrzeni nazw gdzie zwykle stosowana jest nazwa Twojej firmy
       (np. ``Acme\BlogBundle``).
 
    akcja
       (*ang. action*)
+      
       *Akcja* jest funkcją lub metodą PHP która jest wykonywana, na przykład,
       gdy zostaje dopasowana przekazana trasa. Termin *akcja* jest synonimem z słowa
       *kontroler*, choć kontroler może również odnosić się do całej klasy PHP która
@@ -128,6 +143,7 @@ Słownik
 
    zasób
       (*ang. asset*)
+      
       *Zasób* jest komponentem aplikacji internetowej, bedącym plikiem takim jak
       CSS, JavaScript, obraz czy wideo. Zasoby mogą być umiejscowione bezpośrednio
       w katalogu projektu ``web``, lub publikowane do katalogu ``web``
@@ -135,12 +151,14 @@ Słownik
 
    kernel
       (*ang. kernel*)
+      
       W Symfony *kernel*, to centralna klasa obsługująca zapytania HTTP, używająca
       wszystkich pakietów oraz bibliotek w niej zarejestrowanych.
       Zobacz: :ref:`the-app-dir` oraz :ref:`book-internals-kernel`.
 
    zapora
       (*ang. firewall*)
+      
       W Symfony *zapora* to nie to samo, co *zapora sieciowa*. Jest to mechanizm
       uwierzytelniania użytkowników (tzn. obsługuje proces identyfikacji użytkowników),
       albo dla całej aplikacji albo tylko jej części. Zobacz rozdział
@@ -148,6 +166,7 @@ Słownik
 
    Yaml
       (*nazwa własna*)
+      
       *YAML* jest to uniwersalny język ustrukturyzowanego reprezentowania danych
       (tej samej klasy co XML), lekki i przejrzysty, szeroko stosowany w plikach
       konfiguracyjnych Symfony. Zobacz rozdział :doc:`/components/yaml/introduction` 
