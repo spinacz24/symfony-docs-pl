@@ -1197,7 +1197,7 @@ zrobienia. Wewnątrz kontrolera wygląda to podobnie do tego::
 Wywołując w walidatorze metodę ``validateValue`` można przekazać tam surową wartość
 i obiekt ograniczenia, jakie chce się walidować. Pełną listę dostępnych ograniczeń,
 z pełną nazwą klasy dla każdego ograniczenia, znajdziesz w rozdziale
- :doc:`Informacje o ograniczeniach </reference/constraints>`.
+:doc:`Informacje o ograniczeniach </reference/constraints>`.
 
 Metoda ``validateValue`` zwraca obiekt
 :class:`Symfony\\Component\\Validator\\ConstraintViolationList`,
