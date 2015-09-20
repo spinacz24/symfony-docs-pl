@@ -76,7 +76,7 @@ Budowanie formularza
 Teraz po utworzeniu klasy ``Task``, następnym krokiem jest utworzenie i zrenderowanie
 rzeczywistego formularza HTML . W Symfony odbywa się to przez zbudowanie obiektu
 formularza i zrenderowania formularza w szablonie. Na razie wszystko może być zrobione
-wewnątrz kontrolera::
+wewnątrz akcji::
 
     // src/AppBundle/Controller/DefaultController.php
     namespace AppBundle\Controller;
@@ -109,7 +109,7 @@ wewnątrz kontrolera::
 
 .. tip::
 
-   Przykład ten pokazuje, jak zbudować formularz bezpośrednio w kontrolerze. Później,
+   Przykład ten pokazuje, jak zbudować formularz bezpośrednio w akcji. Później,
    w rozdziale ":ref:`book-form-creating-form-classes`" dowiemy się, jak zbudować
    formularz w samodzielnej klasie, co jet zalecane, jako że formularz staje się
    wówczas możliwy do wielokrotnego wykorzystania.
@@ -143,7 +143,7 @@ Renderowanie formularzy
 
 Teraz, gdy formularz został stworzony, następnym krokiem jest jego wyrenderowanie.
 Realizuje się to przekazując specjalny obiekt "widoku" formularza  do szablonu
-(``$form->createView()`` w powyższym kontrolerze) i używając pomocniczych funkcji
+(``$form->createView()`` w powyższej akcji) i używając pomocniczych funkcji
 formularza:
 
 .. configuration-block::
@@ -218,7 +218,7 @@ Obsługa zgłoszeń formularza
 
 Drugą czynnością formularza jest przełożenie przesłanych z powrotem danych
 na właściwości obiektu. Aby tak się stało, trzeba powiązać dane przesłane przez
-użytkownika z formularzem. Do naszego kontrolera dodamy następujacą rzecz::
+użytkownika z formularzem. W naszej akcji dodamy następujacą rzecz::
 
     // ...
     use Symfony\Component\HttpFoundation\Request;
@@ -252,7 +252,7 @@ użytkownika z formularzem. Do naszego kontrolera dodamy następujacą rzecz::
     zapoznać się z :ref:`cookbook-form-submit-request`.
 
 
-Kontroler ten akceptuje powszechny wzorzec obsługi formularzy i ma trzy możliwe tryby:
+W tej akcji akceptuje się powszechny wzorzec obsługi formularzy, co ma trzy możliwe tryby:
 
 #. Podczas początkowego ładowania strony w przeglądarce, formularz jest tworzony
    i renderowany. Metoda :method:`Symfony\Component\Form\FormInterface::handleRequest`
@@ -299,8 +299,8 @@ Zgłaszanie formularzy z wieloma przyciskami
     W Symfony 2.3 dodano obsługę przycisków w formularzach.
 
 Gdy formularz zawiera więcej niż jeden przycisk zgłaszający, to zachodzi potrzeba
-informacji o tym, który przycisk został kliknięty, aby dostosować program
-w kontrolerze. Dodajmy do naszego formularza drugi przycisk z etykietą
+informacji o tym, który przycisk został kliknięty, aby dostosować kod
+w akcji. Dodajmy do naszego formularza drugi przycisk z etykietą
 "Zapisz i dodaj"::
 
     $form = $this->createFormBuilder($task)
@@ -310,7 +310,7 @@ w kontrolerze. Dodajmy do naszego formularza drugi przycisk z etykietą
         ->add('saveAndAdd', 'submit')
         ->getForm();
 
-W kontrolerze użyjemy metody przycisku
+W akcji zastosujemy metodę przycisku
 :method:`Symfony\\Component\\Form\\ClickableInterface::isClicked`
 w celu zapytania, czy kliknięty został przycisk "Zapisz i dodaj"::
 
@@ -505,8 +505,8 @@ Wyłączanie walidacji
     poprzednich wersjach Symfony.
 
 Czasami jest to przydatne w celu całkowitego powstrzymania walidacji formularza.
-W takim przypadku można pominąć wywołanie metody
-:method:`Symfony\\Component\\Form\\FormInterface::isValid` w kontrolerze.
+W takim przypadku można pominąć wywołanie w akcji metody
+:method:`Symfony\\Component\\Form\\FormInterface::isValid`.
 Jeśli nie jest to wskazane (z powodów niżej wymienionych) , to można ewentualnie
 ustawić opcję ``validation_groups`` na ``false`` lub pustą tablicę::
 
@@ -1001,12 +1001,12 @@ formularz w kontrolerze, to można użyć metod ``setAction()`` i ``setMethod()`
 .. note::
 
     W tym przykładzie zakłada się, że utworzono trasę o nazwie ``target_route``,
-    która wskazuje na kontroler przetwarzający formularz.
+    która wskazuje na akcję przetwarzającą formularz.
 
 W rozdziale :ref:`book-form-creating-form-classes` można dowiedzieć się, jak
 przekształcić kod tworzący formularz na oddzielne klasy. W przypadku używania
-zewnętrznej klasy formularza w kontrolerze można przekazać akcję i metodę jako
-opcje formularza::
+zewnętrznej klasy formularza, można przekazać akcję i metodę jako
+opcję formularza::
 
     $form = $this->createForm(new TaskType(), $task, array(
         'action' => $this->generateUrl('target_route'),
@@ -1088,8 +1088,7 @@ Utwórzmy nową klasę, która będzie miejscem logiki dla zbudowania formularza
 
 
 Nowa klasa zawiera wszystkie wskazówki potrzebne do utworzenia formularza naszego
-zadania, co można wykorzystać do szybkiego zbudowania obiektu formularza w metodzie
-kontrolera (akcji)::
+zadania, co można wykorzystać do szybkiego zbudowania obiektu formularza w akcji::
 
     // src/AppBundle/Controller/DefaultController.php
 
@@ -1153,7 +1152,7 @@ sposób na tworzenie formularzy, ale wybór zależy tylko od Ciebie.
     Dodatkowo, jeśli są jakieś pola w formularzu, które nie zostały dołączone
     w przesłanych danych, to pola te zostaną jawnie ustawione na null.
 
-    Dane pola mogą być dostępne w kontrolerze przez::
+    Dane pola mogą być dostępne w akcji przez::
 
         $form->get('dueDate')->getData();
         

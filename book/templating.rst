@@ -406,29 +406,29 @@ Odwoływanie się do szablonów w pakietach
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Symfony używa dla odwoływania się do szablonów składni
-**pakiet**:**kontroler**:**szablon**.
+**pakiet**:**akcja**:**szablon**.
 Umożliwia to na stosowanie wielu różnych typów szablonów, z których każdy znajduje
 się w określonej lokalizacji:
 
-* ``AcmeBlogBundle:Blog:index.html.twig``: Ta składnia jest używana do określenia
+* ``AppBundle:Blog:index.html.twig``: Ta składnia jest używana do określenia
   szablonu dla określonej strony. Trzy części łańcucha, każdy oddzielony dwukropkiem
   (``:``) ma następujace znaczenie:
 
-  * ``AcmeBlogBundle``: (*pakiet*) szablon znajduje się wewnątrz ``AcmeBlogBundle``
-    (np. ``src/Acme/BlogBundle``);
+  * ``AppBundle``: (*pakiet*) szablon znajduje się wewnątrz ``AppBundle``
+    (np. ``src/AppBundle``);
    
-  * ``Blog``: (*kontroler*) wskazuje, że szablon znajduje się wewnątrz podkatalogu
+  * ``Blog``: (*akcja*) wskazuje, że szablon znajduje się wewnątrz podkatalogu
     ``Blog`` katalogu ``Resources/views``;
   
   * ``index.html.twig``: (*szablon*) aktualna nazwa pliku, to ``index.html.twig``.
 
-  Zakładając, że ``AcmeBlogBundle`` umieszczony jest w ``src/Acme/BlogBundle``,
-  to ostateczną ścieżką do układu strony będzie ``src/Acme/BlogBundle/Resources/views/Blog/index.html.twig``.
+  Zakładając, że ``AppBundle`` umieszczony jest w ``src/AppBundle``,
+  to ostateczną ścieżką do układu strony będzie ``src/AppBundle/Resources/views/Blog/index.html.twig``.
 
-* ``AcmeBlogBundle::layout.html.twig``: Składnia ta odwołuje się do szablonu podstawowego,
-  który jest specyficzny dla ``AcmeBlogBundle``. Ponieważ brakuje części "kontroler"
+* ``AppBundle::layout.html.twig``: Składnia ta odwołuje się do szablonu podstawowego,
+  który jest specyficzny dla ``AppBundle``. Ponieważ brakuje części "akcja"
   (np. ``Blog``), to szablon znajduje się na ścieżce ``Resources/views/layout.html.twig``
-  wewnątrz pakietu ``AcmeBlogBundle``.
+  wewnątrz pakietu ``AppBundle``.
 
 * ``::base.html.twig``: Składnia ta odwołuje się do szablonu lub ogólnego układu
   strony. Proszę zauważyć, że łańcuch rozpoczyna się od dwóch dwukropków
@@ -437,8 +437,8 @@ się w określonej lokalizacji:
   gałęzi w katalogu ``app/Resources/views/``.
 
 W rozdziale :ref:`overriding-bundle-templates` dowiemy się, jak każdy szablon
-umieszczony, na przykład, w ``AcmeBlogBundle``, może zostać przesłonięty przez
-umieszczenie szalonu z tą samą nazwą w katalogu ``app/Resources/AcmeBlogBundle/views/``.
+umieszczony, na przykład, w ``AppBundle``, może zostać przesłonięty przez
+umieszczenie szablonu z tą samą nazwą w katalogu ``app/Resources/views/``.
 Daje to możliwość przesłonięcia wszystkich szablonów w pakiecie dostawcy.
 
 .. tip::
@@ -449,7 +449,7 @@ Daje to możliwość przesłonięcia wszystkich szablonów w pakiecie dostawcy.
 Końcówka nazwy szablonu
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Format **pakiet**:**kontroler**:**szablon** każdego szablonu określa gdzie znajduje
+Format **pakiet**:**akcja**:**szablon** każdego szablonu określa gdzie znajduje
 się plik szablonu. Każda nazwa szablonu ma też dwa rozszerzenia, które określają
 *format* i *silnik* dla tego szablonu.
 
@@ -523,7 +523,7 @@ być wykorzystywany wielokrotnie.
     .. code-block:: html+jinja
        :linenos:
 
-        {# src/Acme/ArticleBundle/Resources/views/Article/articleDetails.html.twig #}
+        {# src/AppBundle/Resources/views/Article/articleDetails.html.twig #}
         <h2>{{ article.title }}</h2>
         <h3 class="byline">by {{ article.authorName }}</h3>
 
@@ -534,7 +534,7 @@ być wykorzystywany wielokrotnie.
     .. code-block:: html+php
        :linenos:
 
-        <!-- src/Acme/ArticleBundle/Resources/views/Article/articleDetails.html.php -->
+        <!-- src/AppBundle/Resources/views/Article/articleDetails.html.php -->
         <h2><?php echo $article->getTitle() ?></h2>
         <h3 class="byline">by <?php echo $article->getAuthorName() ?></h3>
 
@@ -549,29 +549,29 @@ Dołączanie tego szablonu do innego jest proste:
     .. code-block:: html+jinja
        :linenos:
 
-        {# src/Acme/ArticleBundle/Resources/views/Article/list.html.twig #}
-        {% extends 'AcmeArticleBundle::layout.html.twig' %}
+        {# src/AppBundle/Resources/views/Article/list.html.twig #}
+        {% extends 'AppBundle::layout.html.twig' %}
 
         {% block body %}
             <h1>Recent Articles<h1>
 
             {% for article in articles %}
-                {{ include('AcmeArticleBundle:Article:articleDetails.html.twig', {'article': article}) }}
+                {{ include('AppBundle:Article:articleDetails.html.twig', {'article': article}) }}
             {% endfor %}
         {% endblock %}
 
     .. code-block:: html+php
        :linenos:
 
-        <!-- src/Acme/ArticleBundle/Resources/Article/list.html.php -->
-        <?php $view->extend('AcmeArticleBundle::layout.html.php') ?>
+        <!-- src/AppBundle/Resources/Article/list.html.php -->
+        <?php $view->extend('AppBundle::layout.html.php') ?>
 
         <?php $view['slots']->start('body') ?>
             <h1>Recent Articles</h1>
 
             <?php foreach ($articles as $article): ?>
                 <?php echo $view->render(
-                    'AcmeArticleBundle:Article:articleDetails.html.php',
+                    'AppBundle:Article:articleDetails.html.php',
                     array('article' => $article)
                 ) ?>
             <?php endforeach; ?>
@@ -1224,7 +1224,7 @@ Wiersz linkujący w szablonie w naszym przykładzie teraz wyglądał będzie tak
 
 .. code-block:: html+jinja
 
-   <link href="{{ asset('bundles/acmedemo/css/contact.css') }}" type="text/css" rel="stylesheet" />
+   <link href="{{ asset('bundles/css/contact.css') }}" type="text/css" rel="stylesheet" />
 
 Wynikiem końcowym jest strona, która zawiera arkusze stylów, zarówno ``main.css``
 jak i ``contact.css``.
@@ -1241,12 +1241,23 @@ zarówno dla silnika szablonowego Twig jak i PHP. Zmienna ``app`` jest instancj�
 :class:`Symfony\\Bundle\\FrameworkBundle\\Templating\\GlobalVariables`
 dającej automatyczny dostęp do określonych zmiennych:
 
-* ``app.security`` - kontekst systemu bezpieczeństwa;
-* ``app.user`` - obiekt bieżącego użytkownika;
-* ``app.request`` - obiekt żądania;
-* ``app.session`` - obiekt sesji;
-* ``app.environment`` - bieżace środowisko (dev, prod, itd.).
-* ``app.debug`` - ``true`` jeżeli aplikacja jest w trybie debug, w przeciwnym razie ``false``.
+``app.security``
+   kontekst systemu bezpieczeństwa (przestarzałe od wersji 2.6);
+
+``app.user``
+   obiekt bieżącego użytkownika;
+
+``app.request``
+   obiekt żądania;
+
+``app.session``
+   obiekt sesji;
+
+``app.environment``
+   bieżace środowisko (dev, prod, itd.).
+   
+``app.debug``
+   ``true`` jeżeli aplikacja jest w trybie debug, w przeciwnym razie ``false``.
 
 .. configuration-block::
 
@@ -1268,7 +1279,7 @@ dającej automatyczny dostęp do określonych zmiennych:
 
 .. versionadded:: 2.6
     Zmienna globalna ``app.security`` (lub  metoda ``$app->getSecurity()``
-    w szablonie PHP) jest przestarzała od wersji Symfony 2.6. Uzyj zamiast tego
+    w szablonie PHP) jest przestarzała od wersji Symfony 2.6. Użyj zamiast tego
     ``app.user`` (``$app->getUser()``) oraz ``is_granted()`` (``$view['security']->isGranted()``).
 
 .. tip::
@@ -1288,14 +1299,14 @@ jest odpowiedzialny za przetwarzanie szablonów i zwracanie ich zawartości.
 Podczas przetwarzania szablonu w kontrolerze, w rzeczywistości wykorzystywana jest
 usługa silnika szablonowania. Na przykład::
 
-    return $this->render('AcmeArticleBundle:Article:index.html.twig');
+    return $this->render('AppBundle:Article:index.html.twig');
 
 jest równoważne z::
 
     use Symfony\Component\HttpFoundation\Response;
 
     $engine = $this->container->get('templating');
-    $content = $engine->render('AcmeArticleBundle:Article:index.html.twig');
+    $content = $engine->render('AppBundle:Article:index.html.twig');
 
     return $response = new Response($content);
 
@@ -1364,8 +1375,8 @@ Społeczność Symfony szczyci się tworzeniem i utrzymywaniem wysokiej jakości
 W razie użycia niezależnego pakietu często trzeba przesłonić i dostosować jeden lub
 więcej jego szablonów.
 
-Załóżmy, że dodaliśmy do swojego projektu wyimaginowany pakiet ``AcmeBlogBundle``
-o otwartym kodzie (np. w katalogu ``src/Acme/BlogBundle``). Następnie zdecydowaliśmy
+Załóżmy, że mamy w swoim projekcie pakiet osoby trzeciej ``AcmeBlogBundle``
+(np. w katalogu ``src/Acme/BlogBundle``). Następnie zdecydowaliśmy
 się na przesłonięcie strony "list" blogu, tak aby dostosować specyficzne znaczniki
 do naszej aplikacji. Badając kontroler Blog pakietu ``AcmeBlogBundle``,
 znaleźliśmy to::
@@ -1448,8 +1459,8 @@ Ta metoda działa doskonale z trzema różnymi typami szablonów, które właśn
   dla aplikacji (podobnie jak w poprzednim przykładzie). Wewnętrznie do szablonu
   tego będziemy się odwoływać przez ``::base.html.twig``;
 
-* Utwórzmy szablon dla każdej "sekcji" witryny. Na przykład, ``AcmeBlogBundle``,
-  miałby szablon o nazwie ``AcmeBlogBundle::layout.html.twig``, zawierający tylko
+* Utwórzmy szablon dla każdej "sekcji" witryny. Na przykład, ``AppBundle``,
+  miałby szablon o nazwie ``AppBundle::layout.html.twig``, zawierający tylko
   elementy specyficzne dla blogu:
 
   .. code-block:: html+jinja
@@ -1465,7 +1476,7 @@ Ta metoda działa doskonale z trzema różnymi typami szablonów, które właśn
   
 * Utwórzmy indywidualny szablon dla każdej strony i rozrzerzmy szablon każdej sekcji.
   Na przykład, strona "index" będzie wywoływana przez coś takiego, jak
-  ``AcmeBlogBundle:Blog:index.html.twig`` i zawierać będzie wykaz aktualnych wpisów blogu:
+  ``AppBundle:Blog:index.html.twig`` i zawierać będzie wykaz aktualnych wpisów blogu:
 
   .. code-block:: html+jinja
 
@@ -1479,7 +1490,7 @@ Ta metoda działa doskonale z trzema różnymi typami szablonów, które właśn
           {% endfor %}
       {% endblock %}
 
-Proszę zauważyć, że szablon ten rozszerza szablon sekcji (``AcmeBlogBundle::layout.html.twig``)
+Proszę zauważyć, że szablon ten rozszerza szablon sekcji (``AppBundle::layout.html.twig``)
 który z kolei rozszerza bazowy układ aplikacji (``::base.html.twig``). Jest to typowy
 model dziedziczenia trójpoziomowego.
 
@@ -1615,11 +1626,12 @@ na przykład wewnątrz kontrolera::
             // ...
         }
     }
+
 .. note::
 
     Wyjście funkcji ``dump()`` jest renderowane na programistycznym pasku narzędziowym.
 
-Ten sam mechanizm moze zostać uzyty w szablonach Twig dzięki funkcji ``dump``:
+Ten sam mechanizm może zostać uzyty w szablonach Twig dzięki funkcji ``dump``:
 
 .. code-block:: html+jinja
 
@@ -1716,7 +1728,7 @@ generowania zawartości stron w kontrolerze, to ich używanie nie jest obowiązk
 Obiekt ``Response`` zwracany przez kontroler może być utworzony bez stosowania szablonu::
 
     // utworzenie obiektu Response, którego zawartością jest przetworzony szablon
-    $response = $this->render('AcmeArticleBundle:Article:index.html.twig');
+    $response = $this->render('AppBundle:Article:index.html.twig');
 
     // utworzenie obiektu Response, którego zawartością jest prosty tekst
     $response = new Response('response content');
