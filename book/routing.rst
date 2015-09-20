@@ -16,9 +16,9 @@ z ``/blog`` na ``/news``? Ile odnośników trzeba odnaleźć i poprawić,
 aby dokonać takiej zmiany? Jeśli korzysta się z mechanizmu trasowania Symfony,
 taka zmiana jest bardzo prosta.
 
-Mechanizm trasowania Symfony pozwala na dynamiczne określanie ścieżek URL (czyli
-ścieżek dostępu, zawartych w adresie URL żądania HTTP) odwzorowywanych dla
-różnych obszarów aplikacji. Pod koniec tego rozdziału, będziesz w stanie:
+Mechanizm trasowania Symfony pozwala na dynamiczne odwzorowywanie ścieżek URL (czyli
+ścieżek dostępu, zawartych w adresie URL żądania HTTP) na różne obszary aplikacji.
+Pod koniec tego rozdziału, będziesz w stanie:
 
 * tworzyć złożone trasy odwzorowujące akcje;
 * generować ścieżki URL wewnątrz szablonów i akcji;
@@ -1152,8 +1152,8 @@ parametry - każdy z nich dodaje unikatową cząstkę funkcjonalności do aplika
     regionalne.
 
 .. index::
-   single: trasowanie; kontrolery
-   single: kontroler; format łańcucha nazewniczego
+   single: trasowanie; akcje
+   single: akcja; format łańcucha nazewniczego
 
 .. _controller-string-syntax:
 
