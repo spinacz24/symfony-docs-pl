@@ -1,14 +1,66 @@
-Jak kolejkować E-maile
-======================
+.. index::
+   single: wiadomości email; kolejkowanie
+   single: poczta elektroniczna; kolejkowanie
 
-Jeśli używasz ``SwiftmailerBundle`` do wysyłania e-maili z aplikacji Symfony2, e-maile będą domyślnie wysyłane natychmiast.
-Aby uniknąć problemów wydajnościowych w komunikacji pomiędzy ``Swiftmailer`` oraz transporterem e-mail, który może spowodować
-że użytkownik będzie musiał czekać na kolejną stronę zanim e-mail zostanie wysłany. Problem oczekiwania na stronę może zostać wyeliminowany 
-poprzez wybranie opcji "spool" (kolejkowania) e-maili zamiast natychmiastowego ich wysyłania. Oznacza to że ``Swiftmailer`` nie próbuje 
-wysłać e-maila, ale zamiast tego zapisuje je w np. pliku. Inny proces może tak zapisane e-maile odczytać z kolejki oraz je wysłać.
-Aktualnie w ``Swiftmailer`` dostępne jest tylko kolejkowanie do pliku.
+Jak kolejkować wiadomości email
+===============================
 
-Aby korzystać z kolejkowania, użyj następującej konfiguracji:
+Jeśli do wysyłania wiadomości email z aplikacji Symfony używa się pakietu
+SwiftmailerBundle, wiadomości będą domyślnie wysyłane natychmiast.
+Może to jednak spowodować problem wydajności w komunikacji pomiędzy Swift Mailer
+a transportem poczty, skutkujace tym, że użytkownik będzie musiał czekać
+na kolejną stronę zanim wiadomość zostanie wysłana. Problem oczekiwania na kolejne
+strony można wyeliminować ustawiając "kolejkowanie" wiadomości email w miejsce
+natychmiastowego ich wysyłania. Będzie to oznaczać, że Swift Mailer nie będzie
+próbował od wysłać wiadomość, ale zapisze ją w jakimś buforze, na przykład w pliku.
+Teraz, inny proces może odczytywać z bufora zapisane tam wiadomości i je
+wysłać. Obecnie Swift Mailer obsługuje tylko kolejkowanie do pliku lub pamięci.
+
+Kolejkowanie z użyciem pamięci
+------------------------------
+
+Podczas wykorzystywania pamięci do kolejkowania wiadomości email, zostana one
+wysłane po kolei zanim kernel zakończy działanie. Oznacza to, że wiadomość
+zostanie wysłana, tylko jeśli całość żądania została wykonana bez nieobsługiwanych
+wyjatków lub jakichś błędów. W celu skonfigurowania opcji Swift Mailer z obsługą
+pamięci trzeba ustawić następującą konfigurację:
+
+.. configuration-block::
+
+    .. code-block:: yaml
+
+        # app/config/config.yml
+        swiftmailer:
+            # ...
+            spool: { type: memory }
+
+    .. code-block:: xml
+
+        <!-- app/config/config.xml -->
+
+        <!--
+            xmlns:swiftmailer="http://symfony.com/schema/dic/swiftmailer"
+            http://symfony.com/schema/dic/swiftmailer
+            http://symfony.com/schema/dic/swiftmailer/swiftmailer-1.0.xsd
+        -->
+
+        <swiftmailer:config>
+             <swiftmailer:spool type="memory" />
+        </swiftmailer:config>
+
+    .. code-block:: php
+
+        // app/config/config.php
+        $container->loadFromExtension('swiftmailer', array(
+             // ...
+            'spool' => array('type' => 'memory')
+        ));
+
+Kolejkowanie z użyciem pliku
+----------------------------
+
+W celu wykorzystywania kolejkowania z uzyciem pliku trzeba ustawić następujacą
+konfigurację:
 
 .. configuration-block::
 
@@ -26,8 +78,9 @@ Aby korzystać z kolejkowania, użyj następującej konfiguracji:
         <!-- app/config/config.xml -->
 
         <!--
-        xmlns:swiftmailer="http://symfony.com/schema/dic/swiftmailer"
-        http://symfony.com/schema/dic/swiftmailer http://symfony.com/schema/dic/swiftmailer/swiftmailer-1.0.xsd
+            xmlns:swiftmailer="http://symfony.com/schema/dic/swiftmailer"
+            http://symfony.com/schema/dic/swiftmailer
+            http://symfony.com/schema/dic/swiftmailer/swiftmailer-1.0.xsd
         -->
 
         <swiftmailer:config>
@@ -41,41 +94,43 @@ Aby korzystać z kolejkowania, użyj następującej konfiguracji:
         // app/config/config.php
         $container->loadFromExtension('swiftmailer', array(
              // ...
+
             'spool' => array(
                 'type' => 'file',
                 'path' => '/path/to/spool',
-            )
+            ),
         ));
 
 .. tip::
 
-    Jeśli chcesz przechowywać kolejkę gdzieś w katalogu projektu,
-    pamiętaj że możesz użyć parametru `%kernel.root_dir%` w odniesieniu do głównego katalogu projektu:
+    Jeśli chcesz zapisać plik kolejkowania gdzieś w katalogu projektu, to pamiętaj,
+    że można wykorzystywać parametr ``%kernel.root_dir%`` jako odniesienie do
+    katalogu głównego projektu:
 
     .. code-block:: yaml
 
-        path: %kernel.root_dir%/spool
+        path: "%kernel.root_dir%/spool"
 
-Teraz, gdy Twoja aplikacja wysyła e-mail, nie będzie on wysyłany natychmiast, ale dodawany do kolejki.
-Wysyłanie wiadomości z kolejki jest robione osobno.
-Do wysyłania wiadomości z kolejki wykorzystywana jest specjalna komenda:
-
-.. code-block:: bash
-
-    php app/console swiftmailer:spool:send
-
-Komenda ta posiada opcję do ograniczenia ilości wysłanych wiadomości na raz:
+Teraz, gdy aplikacjia wysyła wiadomość, to nie jest ona wysyłana, ale zapisywana
+do bufora. Wysyłanie wiadomości z bufora jest dokonywane oddzielnie. Oto polecenie
+konsolowe powodujace wysłanie wiadomości z bufora:
 
 .. code-block:: bash
 
-    php app/console swiftmailer:spool:send --message-limit=10
+    $ php app/console swiftmailer:spool:send --env=prod
 
-Możesz także ustawić limit w sekundach:
+Jest możliwość ograniczenia ilości komunikatów do wysłania:
 
 .. code-block:: bash
 
-    php app/console swiftmailer:spool:send --time-limit=10
+    $ php app/console swiftmailer:spool:send --message-limit=10 --env=prod
 
-Oczywiście nie będziesz uruchamiał tego ręcznie w rzeczywistości.
-Zamiast tego komenda ta powinna być dołączona do cron joba lub też innego mechanizmu "zadań zaplanowanych",
-oraz odpalana w regularnych odstępach czasu.
+Można też ustawić limit czasu w sekundach:
+
+.. code-block:: bash
+
+    $ php app/console swiftmailer:spool:send --time-limit=10 --env=prod
+
+Oczywiście że w rzeczywistości nie uruchamia sie tego polecenia ręcznie.
+Zamiast tego, powyzsze polecenie konsolowe powinno być uruchamiane przez zadanie
+crona lub zadania harmonogramu (w Windowsie) w regularnych odstęþach czasu.
