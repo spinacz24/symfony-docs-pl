@@ -62,8 +62,8 @@ i przechowywać dane dla pojedynczego zadania::
 
 
 Klasa ta, jak dotychczas, nie ma nic wspólnego z Symfony lub jakąkolwiek biblioteką.
-Jest ona zwykłym obiektem PHP, który bezpośrednio rozwiązuje problem wewnątrz naszej
-aplikacji (tj. potrzebę reprezentowania zadania w naszej aplikacji). Pod koniec tego
+Jest zwykła klasa PHP, która bezpośrednio rozwiązuje problem wewnątrz naszej
+aplikacji (czyli. potrzebę reprezentowania zadania na użytek aplikacji). Pod koniec tego
 rozdziału będziemy w stanie zgłaszać dane do obiektu ``Task`` (poprzez formularz HTML),
 weryfikować swoje dane i utrwalać je w bazie danych.
 
@@ -181,7 +181,7 @@ To jest to! potrzeba tylko trzech linii, aby wyrenderować kompletny formularz:
     dla pola.
 
 ``form_end(form)``
-    Renderuje znacznik końcowy formularza i wszystkie pola, które nie mają być
+    Renderuje znacznik końcowy formularza i wszystkie pola, które nie zostały
     jeszcze zrenderowane, w przypadku gdy renderuje się każde pole samodzielnie.
     Jest to przydatne do renderowania ukrytych pól i wykorzystania automatycznego
     :ref:`zabezpieczenia przed CSRF <forms-csrf>`.
@@ -209,7 +209,7 @@ i przetłumaczenie ich na format, który jest odpowiedni do odtworzenia w formul
    (np. ``getPublished()`` lub ``getReminder()``).
 
 .. index::
-  single: formularze; obsługa zgłoszeń formularza
+   single: formularze; obsługa zgłoszeń formularza
   
 .. _book-form-handling-form-submissions:
 
