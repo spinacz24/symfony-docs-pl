@@ -9,9 +9,9 @@ Jeśli do wysyłania wiadomości email z aplikacji Symfony używa się pakietu
 SwiftmailerBundle, wiadomości będą domyślnie wysyłane natychmiast.
 Może to jednak spowodować problem wydajności w komunikacji pomiędzy Swift Mailer
 a transportem poczty, skutkujace tym, że użytkownik będzie musiał czekać
-na kolejną stronę zanim wiadomość zostanie wysłana. Problem oczekiwania na kolejne
-strony można wyeliminować ustawiając "kolejkowanie" wiadomości email w miejsce
-natychmiastowego ich wysyłania. Będzie to oznaczać, że Swift Mailer nie będzie
+na kolejną stronę zanim wiadomość zostanie wysłana. Problem ten można wyeliminować
+ustawiając "kolejkowanie" wiadomości w miejsce natychmiastowego ich wysyłania.
+Będzie to oznaczać, że Swift Mailer nie będzie
 próbował od wysłać wiadomość, ale zapisze ją w jakimś buforze, na przykład w pliku.
 Teraz, inny proces może odczytywać z bufora zapisane tam wiadomości i je
 wysłać. Obecnie Swift Mailer obsługuje tylko kolejkowanie do pliku lub pamięci.
@@ -19,7 +19,7 @@ wysłać. Obecnie Swift Mailer obsługuje tylko kolejkowanie do pliku lub pamię
 Kolejkowanie z użyciem pamięci
 ------------------------------
 
-Podczas wykorzystywania pamięci do kolejkowania wiadomości email, zostana one
+Podczas wykorzystywania pamięci do kolejkowania wiadomości email, zostaną one
 wysłane po kolei zanim kernel zakończy działanie. Oznacza to, że wiadomość
 zostanie wysłana, tylko jeśli całość żądania została wykonana bez nieobsługiwanych
 wyjatków lub jakichś błędów. W celu skonfigurowania opcji Swift Mailer z obsługą
