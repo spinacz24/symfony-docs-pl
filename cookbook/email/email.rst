@@ -124,7 +124,7 @@ Ogólnie rzecz biorąc wysyłanie wiadomości jest bardzo proste::
         return $this->render(...);
     }
 
-W celu odpowiedniego rozdzielenia elementów wiadomości, ciało wiadomości email
+W celu odpowiedniego rozdzielenia elementów wiadomości, ciało wiadomości
 jest umieszczane w szablonie i renderowane przez metodę ``renderView()``. Szablon
 ``registration.html.twig`` może wyglądać podobnie do tego:
 
