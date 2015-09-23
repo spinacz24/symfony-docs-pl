@@ -10,8 +10,8 @@ ich wysyłać do rzeczywistych odbiorców w czasie prac programistycznych.
 Jeśli w Symfony używa się SwiftmailerBundle, to możesz łatwo osiągnąć ten cel
 poprzez odpowiednie ustawienia konfiguracyjne, bez konieczności wprowadzania
 zmian w kodzie.
-Istnieją dwie podstawowe mozliwosci obsługi poczty elektronicznej podczas programowania:
-(a) całkowite wyłączenie wysyłania wiadomosci emaili lub (b) wysyłanie wszystkich
+Istnieją dwie podstawowe możliwości obsługi poczty elektronicznej podczas programowania:
+(a) całkowite wyłączenie wysyłania wiadomości email lub (b) wysyłanie wszystkich
 wiadomości na specjalny adres.
 
 Wyłączenie wysyłania
@@ -20,7 +20,7 @@ Wyłączenie wysyłania
 Można wyłączyć wysyłanie wiadomości email poprzez ustawienie opcji
 ``disable_delivery`` na ``true``.
 Jest to domyślna wartośc w środowisku ``test`` w Symfony Standard Edition.
-Jeśli ustawi sie tą opcję w pliku konfiguracyjnym ``test``, wiadomosci email nie
+Jeśli ustawi sie tą opcję w pliku konfiguracyjnym ``test``, wiadomości nie
 będą wysyłane podczas wywoływania testów, ale będą wysyłane w środowisku ``prod``
 oraz ``dev``:
 

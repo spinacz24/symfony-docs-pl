@@ -1590,7 +1590,7 @@ argument metody ``generate()``::
     // http://www.example.com/blog/my-blog-post
 
 Wewnątrz szablonu, w Twig, zamiast funkcji ``path()`` (generujacej wzgledną
-ścieżkę URL) wystarczy uzyć funkcję ``url()`` (generujaca bezwgledny adres URL).
+ścieżkę URL) wystarczy użyć funkcję ``url()`` (generująca bezwzględny adres URL).
 W PHP trzeba przekazać ``true`` do  ``generate()``:
 
 .. configuration-block::
