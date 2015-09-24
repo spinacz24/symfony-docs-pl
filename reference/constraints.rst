@@ -18,6 +18,7 @@ Walidacja poprzez ograniczenia
    constraints/Url
    constraints/Regex
    constraints/Ip
+   constraints/Uuid
 
    constraints/Range
 
@@ -46,24 +47,26 @@ Walidacja poprzez ograniczenia
    constraints/Image
 
    constraints/CardScheme
+   constraints/Currency
    constraints/Luhn
    constraints/Iban
    constraints/Isbn
    constraints/Issn
 
    constraints/Callback
+   constraints/Expression
    constraints/All
    constraints/UserPassword
    constraints/Valid
 
-Walidator został zaprojektowany do sprawdzania prawidłowości obiektów w stosunku
-do *ograniczeń*. W codziennym życiu ograniczeniem może być zasada: "To ciasto nie
-może być spalone". W Symfony2 ograniczenia są podobne: są twierdzeniami,
-że warunek jest prawdziwy.
+Walidator został zaprojektowany do sprawdzania prawidłowości obiektów względem
+okreśłonych *ograniczeń*. W codziennym życiu takim ograniczeniem może być zasada:
+"To ciasto nie może być spalone". W Symfony ograniczenia są podobne: są twierdzeniami
+(asercjami), że warunek jest prawdziwy.
 
 Obsługiwane ograniczenia
 ------------------------
 
-W Symfony2 natywnie dostępne są następujące ograniczenia:
+W Symfony natywnie dostępne są następujące ograniczenia:
 
 .. include:: /reference/constraints/map.rst.inc
