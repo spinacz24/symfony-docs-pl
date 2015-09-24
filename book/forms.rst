@@ -1616,7 +1616,7 @@ trzeba skopiować i dostosować bezpośrednio fragment ``form_errors``.
 .. index::
    single: formularze; dekorowanie globalne formularza
 
-Dekorowanie formularza z zakresie globalnym
+Dekorowanie formularza w zakresie globalnym
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 W powyższym przykładzie użyliśmy ``form_theme helper`` (w Twig) do "zaimportowania"

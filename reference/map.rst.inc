@@ -1,9 +1,9 @@
 * **Opcje konfiguracyjne**
 
-  Czy kiedykolwiek zastanawiałeś się, jakie opcje konfiguracji masz dostępne w postaci plików
-  takich jak ``app/config/config.yml``? W tej części dostępne są wszystkie konfiguracje
-  podzielone na klucze (np. ``framework``), które definiują wszystkie możliwe
-  sekcje konfiguracji z Symfony2.
+  Czy kiedykolwiek zastanawiałeś się, jakie opcje konfiguracji masz dostępne
+  w postaci plików takich jak ``app/config/config.yml``? W tej części omówione
+  są wszystkie konfiguracje podzielone na klucze (np. ``framework``), które
+  definiują wszystkie możliwe sekcje konfiguracji w Symfony.
 
   * :doc:`framework </reference/configuration/framework>`
   * :doc:`doctrine </reference/configuration/doctrine>`
@@ -27,4 +27,5 @@
 * **Pozostałe**
 
   * :doc:`/reference/dic_tags`
+  * :doc:`/reference/events`
   * :doc:`/reference/requirements`
