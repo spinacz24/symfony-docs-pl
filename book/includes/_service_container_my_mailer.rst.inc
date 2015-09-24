@@ -1,7 +1,6 @@
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         # app/config/config.yml
         services:
@@ -10,7 +9,6 @@
                 arguments:    [sendmail]
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -27,7 +25,6 @@
         </container>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/config.php
         use Symfony\Component\DependencyInjection\Definition;

@@ -111,7 +111,7 @@ trzeba dodać następujący kod:
 .. tip::
 
     Właściwości chronione i prywatne mogą być również walidowane, podobnie jak
-    metody akcesorów (getery) – zobacz :ref:`validator-constraint-targets`.
+    akcesory – zobacz :ref:`validator-constraint-targets`.
 
 .. versionadded:: 2.7
     Począwszy od Symfony 2.7, ładowane są pliki ograniczeń w formacie XML i Yaml
@@ -346,8 +346,8 @@ w artykule ":doc:`/cookbook/validation/custom_constraint`".
 Konfiguracja ograniczeń
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Niektóre ograniczenia, takie jak :doc:`NotBlank </reference/constraints/NotBlank>,
-są proste, podczas gdy inne, jak np. :doc:`Choice </reference/constraints/Choice>
+Niektóre ograniczenia, takie jak :doc:`NotBlank </reference/constraints/NotBlank>`,
+są proste, podczas gdy inne, jak np. :doc:`Choice </reference/constraints/Choice>`
 mają kilka dostępnych opcji konfiguracji. Załóżmy, że klasa ``Author`` ma właściwość
 ``gender``, które może przyjmować wartość "kobieta" albo "mężczyzna" albo "inny":
 
@@ -631,7 +631,7 @@ Metody akcesory
 Ograniczenia mogą również być stosowane do zwrócenia wartości metody.
 Symfony umożliwia dodanie ograniczenia do jakiejkolwiek publicznej metody,
 której nazwa zaczyna się od "get" lub "is" lub "has". W tym podręczniku metody te
-są kreślane jako (getter, isser i haser).
+są określane jako *akcesory* (getter, isser i haser).
 
 Zaletą tej techniki jest to, że pozwala dynamicznie walidować obiekt. Przykładowo
 załóżmy, że chcemy się upewnić, że pole hasła nie zgadza się z imieniem użytkownika
