@@ -3,3 +3,4 @@
 .settings
 .git
 _build
+*.pyc
