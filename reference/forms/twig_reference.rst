@@ -4,12 +4,12 @@
 Opis funkcji i zmiennych szablonów formularzowych Twig
 ======================================================
 
-Podczas pracy z formularzami w szablonie, ma się do dyspozycji dwa potężne narzędzia:
+Podczas pracy z formularzami ma się do dyspozycji w szablonie dwa potężne narzędzia:
 
 * :ref:`funkcje<reference-form-twig-functions>` do renderowania każdej części formularza;
 * :ref:`zmienne<twig-reference-form-variables>` do pobierania każdej informacji o jakimkowiek polu.
 
-Funkcje wykorzystuje się powszechnie do renderowania pól. Natomiast zmienne są tak
+Funkcje wykorzystuje się powszechnie do renderowania pól. Natomiast zmienne nie są tak
 powszechnie używane, ale są bardzo użyteczne, ponieważ umożliwiają dostęp do etykiety
 pól, atrybutu id, komunikatów błędów i wszystkiego, co jest związane z polem.
 
@@ -20,7 +20,7 @@ Funkcje renderowania formularza
 
 Ten informator obejmuje wszystkie możliwe funkcje Twig dostępne dla renderowania
 formularzy. Dostępnych jest kilka różnych funkcji i każda z nich jest odpowiedzialna
-za renderowanie innej części formularza (np. etykiety, komunikaty błedów, widgety itd.).
+za renderowanie innej części formularza (np. etykiety, komunikaty błedów, widżety itd.).
 
 .. _reference-forms-twig-form:
 
@@ -38,7 +38,7 @@ Renderuje kod HTML kompletnego formularza.
 Najczęściej używa się tej funkcji pomocniczej do prototypowania lub jeśli używa
 się indywidualnych motywów formularza. Jeśli potrzeba większej elastyczności
 w renderowaniu formularza, to zamiast tego należy użyć innych funkcji pomocniczych
-do renderowania indywidualnych części formularza:
+do renderowania poszczególnych części formularza:
 
 .. code-block:: jinja
    :linenos:
@@ -128,14 +128,14 @@ Renderuje każdy komunikat błędu dla danego pola.
 form_widget(view, variables)
 ----------------------------
 
-Renderuje widget HTML dla danego pola. Jeśli zastosuje się to do całego formularza,
+Renderuje widżet HTML dla danego pola. Jeśli zastosuje się to do całego formularza,
 lub kolekcji pól, to zrenderowane zostanie każdy wiersz w tym formularzu lub kolekcji
 pól.
 
 .. code-block:: jinja
    :linenos:
 
-    {# wyrenderowanie widgetu, ale z dodaniem do nigo klasy "foo" #}
+    {# wyrenderowanie widżetu, ale z dodaniem do nigo klasy "foo" #}
     {{ form_widget(form.name, {'attr': {'class': 'foo'}}) }}
 
 Drugim argumentem funkcji ``form_widget`` jest tablica zmiennych. Najbardziej
@@ -155,7 +155,7 @@ form_row(view, variables)
 -------------------------
 
 Renderuje "wiersz" danego pola, który jest kombinacją etykiety pola, komunikatu
-błędu i widgetu.
+błędu i widżetu.
 
 .. code-block:: jinja
    :linenos:
@@ -176,9 +176,9 @@ form_rest(view, variables)
 --------------------------
 
 Funkcja ta renderuje wszystkie pola które jeszcze nie zostały wyrenderowane
-dla danego formularza. Dobrym pomysłem jest wykorzystanie tej funkcji w środku
-formularza, ponieważ funkcja ta renderuje ukryte pola oraz pokazuje w oczywisty
-sposób które pola zostały przez pominięte (poprzez ich wyrenderowanie).
+dla danego formularza. Dobrym pomysłem jest wykorzystywanie tej funkcji
+w formularzu, ponieważ renderuje ona ukryte pola oraz pokazuje, które pola zostały
+przez nas pominięte (poprzez ich wyrenderowanie).
 
 .. code-block:: jinja
 
@@ -211,15 +211,15 @@ Więcej o zmiennych formularza
 
     Aby poznać pełną listę zmiennych, zobacz: :ref:`reference-form-twig-variables`.
 
-W prawie każdej powyzszej funkcji Twiga ostatni argument jest tablicą "zmiennych"
+W prawie każdej, powyżej omówionej funkcji Twiga, ostatni argument jest tablicą "zmiennych"
 używanych podczas renderowania poszczególnych części formularza. Na przykład,
-poniższy kod renderuje "widget" dla pola i modyfikuje jego atrybuty w celu dołączenie
+poniższy kod renderuje "widżet" dla pola i modyfikuje jego atrybuty w celu dołączenie
 konkretnej klasy:
 
 .. code-block:: jinja
    :linenos:
 
-    {# wyrenderowanie widgetu i dodanie do niego klasy "foo" #}
+    {# wyrenderowanie widżetu i dodanie do niego klasy "foo" #}
     {{ form_widget(form.name, { 'attr': {'class': 'foo'} }) }}
 
 Przeznaczenie tych zmiennych – co robią i skąd się biorą – mogą nie być od razu
@@ -232,27 +232,39 @@ Dla przykładu rozpatrzmy ``form_label``:
 .. code-block:: jinja
    :linenos:
 
-    {% block form_label %}
-        {% if not compound %}
+   {%- block form_label -%}
+    {% if label is not same as(false) -%}
+        {% if not compound -%}
             {% set label_attr = label_attr|merge({'for': id}) %}
-        {% endif %}
-        {% if required %}
+        {%- endif %}
+        {% if required -%}
             {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
-        {% endif %}
-        {% if label is empty %}
-            {% set label = name|humanize %}
-        {% endif %}
-        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
-    {% endblock form_label %}
-
+        {%- endif %}
+        {% if label is empty -%}
+            {%- if label_format is not empty -%}
+                {% set label = label_format|replace({
+                    '%name%': name,
+                    '%id%': id,
+                }) %}
+            {%- else -%}
+                {% set label = name|humanize %}
+            {%- endif -%}
+        {%- endif -%}
+        <label{% for attrname, attrvalue in label_attr %}
+            {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ translation_domain
+                  is same as(false) ? label : label|trans({},
+                     translation_domain) }}</label>
+    {%- endif -%}
+   {%- endblock form_label -%}
+    
 Blok ten wykorzystuje kilka zmiennych: ``compound``, ``label_attr``, ``required``,
 ``label``, ``name`` i ``translation_domain``. Dostępne są one przez system renderowania
 formularza. Lecz dużo ważniejsze są zmienne, które można nadpisać podczas wywołania
 ``form_label`` (ponieważ w tym przykładzie renderowana jest etykieta).
 
-To jakie zmienne są dostępne do napisania zależy od tego, która część formularza
-jest renderowana (np. etykieta versus widget) i jakie pole jest renderowane
-(np. widget ``choice`` ma dodatkową opcję ``expanded``).
+To jakie zmienne są dostępne do nadpisania zależy od tego, która część formularza
+jest renderowana (np. etykieta versus widżet) i jakie pole jest renderowane
+(np. widżet ``choice`` ma dodatkową opcję ``expanded``).
 Przeglądając `form_div_layout.html.twig`_, można zobaczyć jakie opcje są dostępne.
 
 .. tip::
@@ -272,7 +284,7 @@ Przeglądając `form_div_layout.html.twig`_, można zobaczyć jakie opcje są do
 
     .. code-block:: jinja
 
-        {# to **nie** działa - zmienne nie są rekursywane #}
+        {# to **nie** działa - zmienne nie są przekazywane rekursywnie #}
         {{ form_widget(form, { 'attr': {'class': 'foo'} }) }}
 
 .. _reference-form-twig-variables:
@@ -284,7 +296,7 @@ Poniższe zmienne są wspólne dla wszystkich typów pól. Niektóre typy pól m
 więcej zmiennych a tutaj zastosowano tylko niektóre z nich.
 
 Załóżmy, że mamy w szablonie zmienną ``form`` i chcemy odwołać się do zmiennej w
-polu ``name``, to udostępnieie zmiennych jest realizowane przez użycie publicznej
+polu ``name``, wówczas udostępnienie zmiennych jest realizowane przez użycie publicznej
 właściwości ``vars`` w obiekcie :class:`Symfony\\Component\\Form\\FormView`:
 
 .. configuration-block::
@@ -305,49 +317,74 @@ właściwości ``vars`` w obiekcie :class:`Symfony\\Component\\Form\\FormView`:
             <?php echo $view['form']->get('name')->vars['label'] ?>
         </label>
 
-+----------------+----------------------------------------------------------------------------------------+
-| Zmienna        | Zastosowanie                                                                           |
-+================+========================================================================================+
-| ``id``         | Atrybut  HTML ``id`` do wyrenderowania.                                                |
-+----------------+----------------------------------------------------------------------------------------+
-| ``name``       | Nazwa pola (np. ``title``) - ale nie nazwa atrybutu HTML ``name``, która jest ustalana |
-|                | w zmiennej ``full_name``.                                                              |
-+----------------+----------------------------------------------------------------------------------------+
-| ``full_name``  | Atrybut HTML ``name`` do wyrenderowania.                                               |
-+----------------+----------------------------------------------------------------------------------------+
-| ``errors``     | Tablica jakichkolwiek komunikatów błędów związanych z *tym* określonym polem           |
-|                | (np. ``form.title.errors``). Należy pamiętać, że nie można używać ``form.errors``      |
-|                | do określania, czy formularz jest prawidłowy, ponieważ zwraca tylko komunikaty błędów  |
-|                | "globalnych": niektóre indywidualne pola mogą mieć komunikaty błedów. Zamiast tego     |
-|                | trzeba użyć opcji ``valid``.                                                           |
-+----------------+----------------------------------------------------------------------------------------+
-| ``valid``      | Zwraca ``true`` lub ``false`` w zależności od tego, czy cały formularz jest właściwy.  |
-+----------------+----------------------------------------------------------------------------------------+
-| ``value``      | Wartość, która będzie użyta podczas renderowania  (zwykle atrybut HTML ``).            |
-+----------------+----------------------------------------------------------------------------------------+
-| ``read_only``  | Jeśli ``true``, do pola dodawane jest ``readonly="readonly"``.                         |
-+----------------+----------------------------------------------------------------------------------------+
-| ``disabled``   | Jeśli ``true``, do pola dodawane jest ``disabled="disabled"``.                         |
-+----------------+----------------------------------------------------------------------------------------+
-| ``required``   | Jeśli ``true``, to do pola zostanie dodany atrybut ``required`` w celu aktywowania     |
-|                | walidacji HTML5. Dodatkowo do etykiety dodawana jest klasa ``required``.               |
-+----------------+----------------------------------------------------------------------------------------+
-| ``max_length`` | Dodaje do elementu atrybut HTML ``maxlength``.                                         |
-+----------------+----------------------------------------------------------------------------------------+
-| ``pattern``    | Dodaje do elementu atrybut HTM ``pattern``.                                            |
-+----------------+----------------------------------------------------------------------------------------+
-| ``label``      | Łańcuch tekstowy etykiety do wyrenderowania.                                           |
-+----------------+----------------------------------------------------------------------------------------+
-| ``multipart``  | Jeśli ``true``, to ``form_enctype`` wyrenderuje ``enctype="multipart/form-data"``.     |
-|                | Ma to zastosowanie tylko do głównego elementu formularza.                              |
-+----------------+----------------------------------------------------------------------------------------+
-| ``attr``       | Tablica par klucz-wartość do wyrenderowania jako atrybuty HTML pola.                   |
-+----------------+----------------------------------------------------------------------------------------+
-| ``label_attr`` | Tablica par klucz-wartość do wyrenderowania jako atrybuty HTML etykiety.               |
-+----------------+----------------------------------------------------------------------------------------+
-| ``compound``   | Wskazuje, czy pole w rzeczywistości posiada grupę pól potomnych.                       |
-|                | Na przykład, pole ``choice`` , które jest w rzeczywistości grupą pól wyboru.           |
-+----------------+----------------------------------------------------------------------------------------+
+
+.. versionadded:: 2.3
+    Zmienne ``method`` i ``action`` zostały wprowadzone w Symfony 2.3.
+
++------------------------+----------------------------------------------------------------------------------------+
+| Zmienna                | Zastosowanie                                                                           |
++========================+========================================================================================+
+| ``form``               | Bieżaca instancja ``FormView``.                                                        |
++------------------------+----------------------------------------------------------------------------------------+
+| ``id``                 | Atrybut  HTML ``id`` do wyrenderowania.                                                |
++------------------------+----------------------------------------------------------------------------------------+
+| ``name``               | Nazwa pola (np. ``title``) - ale nie nazwa atrybutu HTML ``name``, który jest ustalany |
+|                        | w zmiennej ``full_name``.                                                              |
++------------------------+----------------------------------------------------------------------------------------+
+| ``full_name``          | Atrybut HTML ``name`` do wyrenderowania.                                               |
++------------------------+----------------------------------------------------------------------------------------+
+| ``errors``             | Tablica jakichkolwiek komunikatów błędów związanych z określonym polem                 |
+|                        | (np. ``form.title.errors``). Należy pamiętać, że nie można używać ``form.errors``      |
+|                        | do określania, czy formularz jest prawidłowy, ponieważ zwraca tylko komunikaty błędów  |
+|                        | "globalnych": niektóre indywidualne pola mogą mieć komunikaty błedów. Zamiast tego     |
+|                        | trzeba użyć opcji ``valid``.                                                           |
++------------------------+----------------------------------------------------------------------------------------+
+| ``submitted``          | Zwraza ``true`` lub ``false`` w zalezności od tego, czy formularz został zgłoszony.    |
++------------------------+----------------------------------------------------------------------------------------+
+| ``valid``              | Zwraca ``true`` lub ``false`` w zależności od tego, czy formularz przeszedł walidację. |
++------------------------+----------------------------------------------------------------------------------------+
+| ``value``              | Wartość, która będzie użyta podczas renderowania  (zwykle atrybut HTML ``).            |
++------------------------+----------------------------------------------------------------------------------------+
+| ``read_only``          | Jeśli ``true``, do pola dodawane jest atrybut HTML ``readonly="readonly"``.            |
++------------------------+----------------------------------------------------------------------------------------+
+| ``disabled``           | Jeśli ``true``, do pola dodawane jest atrybut HTML ``disabled="disabled"``.            |
++------------------------+----------------------------------------------------------------------------------------+
+| ``required``           | Jeśli ``true``, to do pola zostanie dodany atrybut ``required`` w celu aktywowania     |
+|                        | walidacji HTML5. Dodatkowo do etykiety dodawana jest klasa ``required``.               |
++------------------------+----------------------------------------------------------------------------------------+
+| ``max_length``         | Dodaje do elementu atrybut HTML ``maxlength``.                                         |
++------------------------+----------------------------------------------------------------------------------------+
+| ``pattern``            | Dodaje do elementu atrybut HTM ``pattern``.                                            |
++------------------------+----------------------------------------------------------------------------------------+
+| ``label``              | Łańcuch tekstowy etykiety do wyrenderowania.                                           |
++------------------------+----------------------------------------------------------------------------------------+
+| ``multipart``          | Jeśli ``true``, to ``form_enctype`` wyrenderuje ``enctype="multipart/form-data"``.     |
+|                        | Ma to zastosowanie tylko do głównego elementu formularza.                              |
++------------------------+----------------------------------------------------------------------------------------+
+| ``attr``               | Tablica par klucz-wartość do wyrenderowania jako atrybuty HTML pola.                   |
++------------------------+----------------------------------------------------------------------------------------+
+| ``label_attr``         | Tablica par klucz-wartość do wyrenderowania jako atrybuty HTML etykiety.               |
++------------------------+----------------------------------------------------------------------------------------+
+| ``compound``           | Wskazuje, czy pole w rzeczywistości posiada grupę pól potomnych.                       |
+|                        | Na przykład, pole ``choice`` , które jest grupą pól wyboru.                            |
++------------------------+----------------------------------------------------------------------------------------+
+| ``block_prefixes``     | Tablica wszystkich nazw typów nadrzednych.                                             |
++------------------------+----------------------------------------------------------------------------------------+
+| ``translation_domain`` | Domena translacyjna formularza.                                                        |
++------------------------+----------------------------------------------------------------------------------------+
+| ``cache_key``          | Unikalny klucz uzywany przy buforowaniu.                                               |
++------------------------+----------------------------------------------------------------------------------------+
+| ``data``               | Znormalizowane dane typu.                                                              |
++------------------------+----------------------------------------------------------------------------------------+
+| ``method``             | Metoda HTTP bieżącegi formularza (POST, GET itp.).                                     |
++------------------------+----------------------------------------------------------------------------------------+
+| ``action``             | Akcja dla bieżącego formularza.                                                        |
++------------------------+----------------------------------------------------------------------------------------+
+
+
+.. seealso::
+   Proszę zapoznać sie też z `dokumentacją Twig`_.
 
 .. _`form_div_layout.html.twig`: https://github.com/symfony/symfony/blob/master/src/Symfony/Bridge/Twig/Resources/views/Form/form_div_layout.html.twig
+.. _`dokumentacją Twig`: http://twig.sensiolabs.org/doc/templates.html#test-operator
  
