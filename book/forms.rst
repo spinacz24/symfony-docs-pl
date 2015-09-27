@@ -1083,7 +1083,7 @@ Utwórzmy nową klasę, która będzie miejscem logiki dla zbudowania formularza
     identyfikatory muszą być unikalne w aplikacji. Jeśli nie chce zastąpić
     wbudowanego typu, zastosowane identyfikatory powinny różnić się od domyślnego
     typu Symfony i od każdego typu zdefiniowanego w obcych pakietach zainstalowanych
-    w aplikacji. Przemyśl poprzedzamoe swoich typóœ przedrostkiem ``app_``, co
+    w aplikacji. Przemyśl poprzedzanie swoich typów przedrostkiem ``app_``, co
     pozwoli na uniknięcie konfliktu nazewniczego.
 
 
@@ -1114,7 +1114,7 @@ sposób na tworzenie formularzy, ale wybór zależy tylko od Ciebie.
     Każdy formularz musi znać nazwę klasy, która przechowuje wewnetrzne dane
     (np. ``AppBundle\Entity\Task``). Zazwyczaj jest ona odgadywana w oparciu
     o nazwę obiektu przekazywanego jako drugi argument metody ``createForm``
-    (tj. obiektu klasu ``$task``). Później, gdy zaczniesz osadzanie formularza,
+    (tj. obiektu klasy ``$task``). Później, gdy zaczniesz osadzanie formularza,
     nie będzie to wystarczające. Tak więc, choć nie zawsze jest to wystarczające,
     dobrym pomysłem jest jawnie określić opcję ``data_class`` przez dodanie
     następującego kodu do klasy typu formularza::
@@ -1466,14 +1466,12 @@ nowy plik szablonowy, który zawierać będzie nowy znacznik:
     .. code-block:: html+jinja
 
         {# app/Resources/views/form/fields.html.twig #}
-        {% block form_row %}
-        {% spaceless %}
-            <div class="form_row">
-                {{ form_label(form) }}
-                {{ form_errors(form) }}
-                {{ form_widget(form) }}
-            </div>
-        {% endspaceless %}
+        {%- block form_row -%}
+         <div class="form_row">
+                {{- form_label(form) -}}
+                {{- form_errors(form) -}}
+                {{- form_widget(form) -}}
+         </div>
         {% endblock form_row %}
 
     .. code-block:: html+php
@@ -1697,7 +1695,7 @@ globalnie przy określaniu wyjścia formularza.
 
     Znacznik ``{% form_theme form _self %}`` umożliwia dostosowywanie bloków
     formularza bezpośrednio w szablonie, który będzie używał tych dostosowań.
-    Użyj tej metody aby szybko wykonać dostosowanie wyjścia formularza, które
+    Używaj tej metody do szybkiego dostosowania wyjścia formularza, które
     będzie tylko czasem potrzebne w pojedynczym szablonie.
 
     .. caution::
@@ -1760,7 +1758,7 @@ plik konfiguracyjny aplikacji:
         ));
 
 Teraz wszystkie fragmenty wewnątrz katalogu ``app/Resources/views/Form``
-są dostępne globalnie przy określaniu wyjscia formularza.
+są dostępne globalnie przy określaniu wyjścia formularza.
 
 .. index::
    single: formularze; ochrona przed CSRF

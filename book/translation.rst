@@ -73,34 +73,35 @@ w konfiguracji:
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         # app/config/config.yml
         framework:
-            translator: { fallback: en }
+            translator: { fallbacks: [en] }
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xmlns:framework="http://symfony.com/schema/dic/symfony"
-            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd
-                                http://symfony.com/schema/dic/symfony http://symfony.com/schema/dic/symfony/symfony-1.0.xsd">
+            xsi:schemaLocation="http://symfony.com/schema/dic/services
+                http://symfony.com/schema/dic/services/services-1.0.xsd
+                http://symfony.com/schema/dic/symfony
+                http://symfony.com/schema/dic/symfony/symfony-1.0.xsd">
 
             <framework:config>
-                <framework:translator fallback="en" />
+                <framework:translator>
+                    <framework:fallback>en</framework:fallback>
+                </framework:translator>
             </framework:config>
         </container>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
-            'translator' => array('fallback' => 'en'),
+            'translator' => array('fallbacks' => array('en')),
         ));
 
 W rozdziale :ref:`book-translation-fallback` omówiono szczegóły dotyczące klucza
@@ -145,7 +146,7 @@ formatach. Zalecanym formatem jest XLIFF:
     .. code-block:: xml
        :linenos:
 
-        <!-- messages.pl.xliff -->
+        <!-- messages.pl.xlf -->
         <?xml version="1.0"?>
         <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
             <file source-language="en" datatype="plaintext" original="file.ext">
@@ -283,7 +284,7 @@ w celu pomocy z tłumaczeniem komunikatów w postaci *statycznych bloków tekstu
     {% trans %}Hello %name%{% endtrans %}
 
     {% transchoice count %}
-        {0} There are no apples|{1} There is one apple|]1,Inf] There are %count% apples
+        {0} There are no apples|{1} There is one apple|]1,Inf[ There are %count% apples
     {% endtranschoice %}
 
 Znacznik ``transchoice`` automatycznie pobiera zmienną ``%count%`` z bieżącego
@@ -310,7 +311,7 @@ Można również określić domenę komunikatu i przekazać kilka dodatkowych zm
     {% trans with {'%name%': 'Fabien'} from "app" into "fr" %}Hello %name%{% endtrans %}
 
     {% transchoice count with {'%name%': 'Fabien'} from "app" %}
-        {0} %name%, there are no apples|{1} %name%, there is one apple|]1,Inf] %name%, there are %count% apples
+        {0} %name%, there are no apples|{1} %name%, there is one apple|]1,Inf[ %name%, there are %count% apples
     {% endtranschoice %}
 
 .. _book-translation-filters:
@@ -377,7 +378,7 @@ Usługa translacyjna jest dostępna w szablonie PHP przy zastosowaniu helpera
     <?php echo $view['translator']->trans('Symfony is great') ?>
 
     <?php echo $view['translator']->transChoice(
-        '{0} There is no apples|{1} There is one apple|]1,Inf[ There are %count% apples',
+        '{0} There are no apples|{1} There is one apple|]1,Inf[ There are %count% apples',
         10,
         array('%count%' => 10)
     ) ?>
@@ -418,7 +419,7 @@ ze wzorcem: ``domena.identyfikator.typ``:
 Typ może mieć nazwę każdego zarejestrowanego loadera. Domyślnie, Symfony
 dostarcza kilka loaderów, w tym:
 
-* ``xliff``: plik XLIFF;
+* ``xlf``: plik XLIFF;
 * ``php``: plik PHP;
 * ``yml``: plik YAML.
 
@@ -452,10 +453,10 @@ mamy klucz translacyjny ``Hello World``. W celu znalezienia polskiego tłumaczen
 Symfony w rzeczywistości sprawdza zasoby dla kilku różnych identyfikatorów narodowych:
 
 1. Najpierw, Symfony przeszukuje polskie zasoby translacyjnego ``pl_PL``
-   (np. ``messages.pl_PL.xliff``), kolejno w trzech katalogach translacyjnych;
+   (np. ``messages.pl_PL.xlf``), kolejno w trzech katalogach translacyjnych;
 
 2. Jeśli nie znaleziono tego tłumaczenia, Symfony przeszukuje zasoby ``pl``
-   (np. ``messages.pl.xliff``);
+   (np. ``messages.pl.xlf``);
 
 3. Jeśli tłumaczenie dalej nie zostało znalezione, Symfony używa parametru
    konfiguracyjnego ``fallback``, którego domyślna wartość , to ``en``.
@@ -470,6 +471,9 @@ Symfony w rzeczywistości sprawdza zasoby dla kilku różnych identyfikatorów n
     doda brakujące tłumaczenie do pliku dziennika zdarzeń. Więcej informacji można 
     znaleźć w :ref:`reference-framework-translator-logging`.
 
+.. index::
+   single: tłumaczenia; rezerwowe
+   single: tłumaczenia; domyślne identyfikatory narodowe
 
 .. _book-translation-user-locale:
 
@@ -484,17 +488,28 @@ poprzez obiekt ``request``::
     public function indexAction(Request $request)
     {
         $locale = $request->getLocale();
-
-        $request->setLocale('en_US');
     }
 
-.. tip::
+Dla indywidualnego utworzenia identyfikatora narodowego można stworzyć własny
+nasłuch zdarzenia tak, aby był on ustawiony przed wszystkimi innymi częściami
+systemu (czyli translatorem), w ten sposób::
 
-    Przczytaj :doc:`/cookbook/session/locale_sticky_session`, aby dowiedzieć się
-    jak identyfikator narodowy jest przechowywany w sesji.
+        public function onKernelRequest(GetResponseEvent $event)
+        {
+            $request = $event->getRequest();
 
-.. index::
-   single: tłumaczenia; rezerwowe i domyślne identyfikatory narodowe
+            // some logic to determine the $locale
+            $request->getSession()->set('_locale', $locale);
+        }
+
+Więcej szczegółów można znaleźć w artykule :doc:`/cookbook/session/locale_sticky_session`.
+
+.. note::
+
+    Skonfigurowanie identyfikatora narodowych w kontrolerze przy użyciu ``$request->setLocale()``
+    jest spóźnione i nie wpłynie na tłumaczenia. W celu skonfigurowania ustawień
+    narodowych poprzez nasłuch (tak jak wyżej), adres URL (patrz dalej) lub wywołanie
+    ``setLocale()`` trzeba to zrobić bezposrednio w usłudze ``translator``.
 
 Prosze przecztać rozdział :ref:`book-translation-locale-url` traktujacy o ustawianiu
 identyfikatora narodowego użytkownika poprzez trasowanie.
@@ -523,9 +538,9 @@ Jest to w pełni obsługiwane przez specjalny parametr ``_locale``:
 
         contact:
             path:     /{_locale}/contact
-            defaults: { _controller: AcmeDemoBundle:Contact:index }
+            defaults: { _controller: AppBundle:Contact:index }
             requirements:
-                _locale: en|fr|de
+                _locale: en|pl|de
 
     .. code-block:: xml
        :linenos:
@@ -537,14 +552,15 @@ Jest to w pełni obsługiwane przez specjalny parametr ``_locale``:
                 http://symfony.com/schema/routing/routing-1.0.xsd">
 
             <route id="contact" path="/{_locale}/contact">
-                <default key="_controller">AcmeDemoBundle:Contact:index</default>
-                <requirement key="_locale">en|fr|de</requirement>
+                <default key="_controller">AppBundle:Contact:index</default>
+                <requirement key="_locale">en|pl|de</requirement>
             </route>
         </routes>
 
     .. code-block:: php
        :linenos:
 
+        // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
 
@@ -552,13 +568,13 @@ Jest to w pełni obsługiwane przez specjalny parametr ``_locale``:
         $collection->add('contact', new Route(
             '/{_locale}/contact',
             array(
-                '_controller' => 'AcmeDemoBundle:Contact:index',
+                '_controller' => 'AppBundle:Contact:index',
             ),
             array(
                 '_locale'     => 'en|pl|de',
             )
         ));
-
+        
         return $collection;
 
 Podczas stosowania specjalnego parametru ``_locale`` w trasie, dopasowanie
@@ -570,6 +586,17 @@ zostanie automatycznie ustawiony jako identyfikator narodowy dla bieżącego ż�
 Można teraz w swojej aplikacji używać identyfikatora narodowego do tworzenia tras
 dla innych stron tłumaczeń.
 
+.. tip::
+
+    Read :doc:`/cookbook/routing/service_container_parameters` to learn how to
+    avoid hardcoding the ``_locale`` requirement in all your routes.
+
+
+.. index::
+   single: Translations; Fallback and default locale
+
+.. _book-translation-default-locale:
+
 Ustawienie domyślnego identyfikatora narodowego
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -580,22 +607,27 @@ definiując klucz ``default_locale`` w opcji ``framework``:
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         # app/config/config.yml
         framework:
             default_locale: en
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/config.xml -->
-        <framework:config>
-            <framework:default-locale>en</framework:default-locale>
-        </framework:config>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:framework="http://symfony.com/schema/dic/symfony"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services
+                http://symfony.com/schema/dic/services/services-1.0.xsd
+                http://symfony.com/schema/dic/symfony
+                http://symfony.com/schema/dic/symfony/symfony-1.0.xsd">
+
+            <framework:config default-locale="en" />
+        </container>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -699,7 +731,7 @@ pakietu.
     .. code-block:: xml
        :linenos:
 
-        <!-- validators.en.xliff -->
+        <!-- validators.en.xlf -->
         <?xml version="1.0"?>
         <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
             <file source-language="en" datatype="plaintext" original="file.ext">
@@ -711,7 +743,13 @@ pakietu.
                 </body>
             </file>
         </xliff>
+    
+    .. code-block:: yaml
+       :linenos:
 
+        # validators.en.yml
+        author.name.not_blank: Please enter an author name.
+    
     .. code-block:: php
        :linenos:
 
@@ -720,12 +758,7 @@ pakietu.
             'author.name.not_blank' => 'Please enter an author name.',
         );
 
-    .. code-block:: yaml
-       :linenos:
-
-        # validators.en.yml
-        author.name.not_blank: Please enter an author name.
-
+    
 Tłumaczenie zawartości bazy danych
 ----------------------------------
 
@@ -784,20 +817,20 @@ Załóżmy, że opcja default_locale ma wartość ``fr`` i że awaryjne ustawien
 to ``en`` (zobacz :ref:`book-translation-configuration` i :ref:`book-translation-fallback`
 dla poznania szczegółów o tej konfiguracji).
 Załóżmy też, że mamy już ustawienie regionalne ``fr`` dla niektórych tłumaczeń
-w AcmeDemoBundle:
+w AppBundle:
 
 .. configuration-block::
 
     .. code-block:: xml
 
-        <!-- src/Acme/AcmeDemoBundle/Resources/translations/messages.fr.xliff -->
+        <!-- src/Acme/AppBundle/Resources/translations/messages.fr.xlf -->
         <?xml version="1.0"?>
         <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
             <file source-language="en" datatype="plaintext" original="file.ext">
                 <body>
                     <trans-unit id="1">
-                        <source>Symfony2 is great</source>
-                        <target>J'aime Symfony2</target>
+                        <source>Symfony is great</source>
+                        <target>J'aime Symfony</target>
                     </trans-unit>
                 </body>
             </file>
@@ -807,14 +840,15 @@ w AcmeDemoBundle:
     .. code-block:: yaml
 
         # src/Acme/AcmeDemoBundle/Resources/translations/messages.fr.yml
-        Symfony2 is great: J'aime Symfony2
+        Symfony is great: J'aime Symfony
 
     .. code-block:: php
 
         // src/Acme/AcmeDemoBundle/Resources/translations/messages.fr.php
         return array(
-            'Symfony2 is great' => 'J\'aime Symfony2',
+            'Symfony is great' => 'J\'aime Symfony',
         );
+    
 
 a dla ustawienia ``en``:
 
@@ -822,7 +856,7 @@ a dla ustawienia ``en``:
 
     .. code-block:: xml
 
-        <!-- src/Acme/AcmeDemoBundle/Resources/translations/messages.en.xliff -->
+        <!-- src/Acme/AppBundle/Resources/translations/messages.en.xlf -->
         <?xml version="1.0"?>
         <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
             <file source-language="en" datatype="plaintext" original="file.ext">
@@ -837,22 +871,22 @@ a dla ustawienia ``en``:
 
     .. code-block:: yaml
 
-        # src/Acme/AcmeDemoBundle/Resources/translations/messages.en.yml
+        # src/Acme/AppBundle/Resources/translations/messages.en.yml
         Symfony is great: Symfony is great
 
     .. code-block:: php
 
-        // src/Acme/AcmeDemoBundle/Resources/translations/messages.en.php
+        // src/Acme/AppBundle/Resources/translations/messages.en.php
         return array(
             'Symfony is great' => 'Symfony is great',
         );
 
-W celu sprawdzenia wszystkich komunikatów w ustawieniu ``fr`` dla AcmeDemoBundle,
+W celu sprawdzenia wszystkich komunikatów w ustawieniu ``fr`` dla AppBundle,
 trzeba urychomić:
 
 .. code-block:: bash
 
-    $ php app/console debug:translation fr AcmeDemoBundle
+    $ php app/console debug:translation fr AppBundle
 
 Wynikiem będzie:
 
@@ -888,7 +922,7 @@ translacyjnego w ustawieniu ``fr`` i uruchomi się polecenie debugujące, otrzym
 .. image:: /images/book/translation/debug_4.png
     :align: center
 
-Mozna teraz zobaczyć, że tłumaczenia komunikatów z ustawień ``fr`` i ``en`` są
+Można teraz zobaczyć, że tłumaczenia komunikatów z ustawień ``fr`` i ``en`` są
 takie same, co może oznaczać że, przypuszczalnie skopiowało się komunikaty francuskie
 na komunikaty angielskie i może zapomniało sie je przetłumaczyć.
 
@@ -897,15 +931,15 @@ domeny:
 
 .. code-block:: bash
 
-    $ php app/console debug:translation en AcmeDemoBundle --domain=messages
+    $ php app/console debug:translation en AppBundle --domain=messages
 
 Gdy pakiety mają duzo komunikatów, przydatne jest wyswietlenie tylko nieużywanych
 lub brakujących komunikatów, używając przełącznika ``--only-unused`` lub ``--only-missing``:
 
 .. code-block:: bash
 
-    $ php app/console debug:translation en AcmeDemoBundle --only-unused
-    $ php app/console debug:translation en AcmeDemoBundle --only-missing
+    $ php app/console debug:translation en AppBundle --only-unused
+    $ php app/console debug:translation en AppBundle --only-missing
 
 
 Podsumowanie

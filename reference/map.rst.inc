@@ -22,7 +22,7 @@
   * :doc:`/reference/constraints`
   * :doc:`/reference/forms/twig_reference`
 
-* :doc:`/reference/twig_reference`
+* :doc:`Informator rozszerzeń Twig (formularz, filtry, znaczniki itd.) </reference/twig_reference>`
 
 * **Pozostałe**
 
