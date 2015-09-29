@@ -129,9 +129,14 @@ as its default value::
         ));
     }
 
+<<<<<<< HEAD
 Oczywiście, gdy obsługuje się kilka żądanych formatów, trzeba dostarczyć szablon
 dla każdego obsługiwanego formatu wyjścia. W naszym przypadku trzeba utworzyć
 nowy szablon ``hello.xml.twig``:
+=======
+Dzięki użyciu stosowanego formatu żądania (zdefiniowanego w specjalnej zmiennej ``_format``),
+Symfony2 automatycznie wybiera odpowiedni szablon, w tym przypadku ``hello.xml.twig``:
+>>>>>>> refs/heads/nowe_rozdz
 
 .. code-block:: xml+php
 
@@ -159,11 +164,20 @@ W celu ograniczenia obsługiwanych formatów w danej akcji, trzeba użyć w adno
     // ...
 
     /**
+<<<<<<< HEAD
      * @Route("/hello/{name}.{_format}",
      *     defaults = {"_format"="html"},
      *     requirements = { "_format" = "html|xml|json" },
      *     name = "hello"
      * )
+=======
+     * @Route(
+     *     "/hello/{name}.{_format}",
+     *     defaults = { "_format" = "html" },
+     *     requirements = { "_format" = "html|xml|json" },
+     *     name = "_demo_hello"
+     * @Template()
+>>>>>>> refs/heads/nowe_rozdz
      */
     public function helloAction($name, $_format)
     {
@@ -197,8 +211,13 @@ Jeśli chce się przekierować użytkownika do innej strony, to trzeba użyć me
         }
     }
 
+<<<<<<< HEAD
 Metoda ``redirectToRoute()`` pobiera jako argumenty nazwę trasy i opcjonalną tablicę
 parametrów i przekierowuje uzytkownika do adresu URL generowanego przez te argumenty.
+=======
+Kontroler będzie teraz również dopasowaywał ścieżkę URL taka jak ``/demo/hello/Fabien.xml``
+lub ``/demo/hello/Fabien.json``.
+>>>>>>> refs/heads/nowe_rozdz
 
 Wyświetlanie stron błędów
 -------------------------
@@ -225,9 +244,14 @@ w kontrolerach::
 Dla błędów ``500``, wystarczy zrzucić w kontrolerze zwykły wyjątek PHP a Symfony
 przekształci go do odpowiedniej strony błędu ``500``::
 
+<<<<<<< HEAD
     // src/AppBundle/Controller/DefaultController.php
     // ...
+=======
+Można także wewnętrznie przekazać akcję do innej akcji używając metodę ``forward()``::
+>>>>>>> refs/heads/nowe_rozdz
 
+<<<<<<< HEAD
     class DefaultController extends Controller
     {
         /**
@@ -239,10 +263,32 @@ przekształci go do odpowiedniej strony błędu ``500``::
             throw new \Exception('Something went horribly wrong!');
         }
     }
+=======
+    * @Route(
+     *     "/hello/{name}.{_format}",
+     *     defaults = { "_format" = "html" },
+     *     requirements = { "_format" = "html|xml|json" },
+     *     name = "_demo_hello"
+
+Wyświetlanie stron błędów
+-------------------------
+
+Podczas wykonywania każdej aplikacji internetowej nieuchronnie zdarzają się błędy.
+W przypadku błędu ``404``, Symfony zawiera przydatny skrót, który można wykorzystać
+w kontrolerach::
+
+    throw $this->createNotFoundException();
+
+Dla błędów ``500``, wystarczy zrzucić w kontrolerze zwykły wyjątek PHP a Symfony
+przekształci go do odpowiedniej strony błędu ``500``::
+
+    throw new \Exception('Something went wrong!');
+>>>>>>> refs/heads/nowe_rozdz
 
 Pobieranie informacji z żądania
 -------------------------------
 
+<<<<<<< HEAD
 Czasem kontroler potrzebuje mieć dostęp do inforamcji związanych z żądaniem
 użytkownika, takich jak preferowany język, adres IP parametry zapytania URL.
 W celu uzyskania dostęþu do tych informacji, trzeba dodać do akcji nowy argument
@@ -250,14 +296,29 @@ typu ``Request``. Nazwa tego nowego argumentu nie ma znaczenia, ale musi być
 poprzedzona typem argumentu o wartości ``Request`` (nie
 zapomnij dodać w kontrolerze nowe wyrażenie ``use``, aby zaimportować klasę
 ``Request``)::
+=======
+Symfony automatycznie wstrzykuje obiekt ``Request`` gdy kontroler ma argument,
+który jest typem odgadywanym w ``Symfony\Component\HttpFoundation\Request``::
+>>>>>>> refs/heads/nowe_rozdz
 
+<<<<<<< HEAD
     // src/AppBundle/Controller/DefaultController.php
     namespace AppBundle\Controller;
+=======
+    use Symfony\Component\HttpFoundation\Request;
+>>>>>>> refs/heads/nowe_rozdz
 
+<<<<<<< HEAD
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
     use Symfony\Bundle\FrameworkBundle\Controller\Controller;
     use Symfony\Component\HttpFoundation\Request;
+=======
+    public function indexAction(Request $request)
+    {
+        $request->isXmlHttpRequest(); // is it an Ajax request?
+>>>>>>> refs/heads/nowe_rozdz
 
+<<<<<<< HEAD
     class DefaultController extends Controller
     {
         /**
@@ -267,13 +328,26 @@ zapomnij dodać w kontrolerze nowe wyrażenie ``use``, aby zaimportować klasę
         {
             // is it an Ajax request?
             $isAjax = $request->isXmlHttpRequest();
+=======
+        $request->getPreferredLanguage(array('en', 'fr'));
+>>>>>>> refs/heads/nowe_rozdz
 
+<<<<<<< HEAD
             // what's the preferred language of the user?
             $language = $request->getPreferredLanguage(array('en', 'fr'));
+=======
+        $request->query->get('page');   // get a $_GET parameter
+>>>>>>> refs/heads/nowe_rozdz
 
+<<<<<<< HEAD
             // get the value of a $_GET parameter
             $pageName = $request->query->get('page');
+=======
+        $request->request->get('page'); // get a $_POST parameter
+    }
+>>>>>>> refs/heads/nowe_rozdz
 
+<<<<<<< HEAD
             // get the value of a $_POST parameter
             $pageName = $request->request->get('page');
         }
@@ -284,6 +358,10 @@ zapomnij dodać w kontrolerze nowe wyrażenie ``use``, aby zaimportować klasę
 
 W szablonie, można także uzyskać dostęp do obiektu ``Request`` poprzez
 zmienną ``app.request``, automatycznie dostarczaną przez Symfony:
+=======
+W szablonie, możesz także uzyskać dostęp do obiektu ``Request`` poprzez
+zmienną ``app.request``:
+>>>>>>> refs/heads/nowe_rozdz
 
 .. code-block:: html+jinja
 
@@ -305,7 +383,62 @@ Przechowywania i pobierania informacji z sesji można łatwo uzyskać w dowolnym
 
     use Symfony\Component\HttpFoundation\Request;
 
+<<<<<<< HEAD
     public function indexAction(Request $request)
+=======
+    // przechowanie atrybutu do ponownego użycia w późniejszym żądaniu użytkownika
+    $session->set('foo', 'bar');
+
+    // pobranie wartości atrybutu session
+    $foo = $session->get('foo');
+
+    // użycie domyślnej wartości, jeśli atrybut nie istnieje
+    $foo = $session->get('foo', 'default_value');
+
+Można również zapisać "wiadomości fleszowe", które będą automatycznie usuwane po
+następnym żądaniu. Są one przydatne, gdy chce się ustawić komunikat o sukcesie,
+przed przekierowaniem użytkownika na inną stronę (która będzie następnie pokazywać
+ten komunikat)::
+
+    // przechowanie (w kontrolerze) komunikatu dla następnych żądań
+    $session->getFlashBag()->add('notice', 'Congratulations, your action succeeded!');
+
+    // wyświetlenie z powrotem komunikatu w następnym żądaniu (w szablonie)
+
+    {% for flashMessage in app.session.flashbag.get('notice') %}
+        <div>{{ flashMessage }}</div>
+    {% endfor %}
+
+Jest to przydatne gdy chce się ustawić komunikat o powodzeniu przed przekierowaniem
+użytkownika do innej strony (która wyświetli ten komunikat)::
+
+    // store a message for the very next request (in a controller)
+    $session->getFlashBag()->add('notice', 'Congratulations, your action succeeded!');
+
+.. code-block:: html+jinja
+
+    {# wyświetlenie komunikatu fleszowego w szablonie #}
+    <div>{{ app.session.flashbag.get('notice') }}</div>
+
+Buforowanie zasobów
+-------------------
+
+Gdy tylko witryna zacznie generować więcej ruchu, zachodzi potrzeba uniknnięcia
+ciągłego generowania tych samych zasobów. Symfony2 używa nagłówków buforowania
+HTTP do zarządzania zasobami pamięci podręcznej. Dla prostych strategi buforowania,
+można użyć wygodnej adnotacji ``@Cache()``::
+
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+
+    /**
+     * @Route("/hello/{name}", name="_demo_hello")
+     * @Template()
+     * @Cache(maxage="86400")
+     */
+    public function helloAction($name)
+>>>>>>> refs/heads/nowe_rozdz
     {
         $session = $request->getSession();
 
@@ -319,6 +452,7 @@ Przechowywania i pobierania informacji z sesji można łatwo uzyskać w dowolnym
         $foo = $session->get('foo', 'default_value');
     }
 
+<<<<<<< HEAD
 Można również zapisać "wiadomości fleszowe", które będą automatycznie usuwane po
 następnym żądaniu. Są one przydatne, gdy chce się ustawić komunikat o sukcesie,
 przed przekierowaniem użytkownika na inną stronę::
@@ -334,6 +468,12 @@ przed przekierowaniem użytkownika na inną stronę::
 Następnie mozna wyświetlić ten komunikat w szabloni, tak jak tu:
 
 .. code-block:: html+jinja
+=======
+W tym przykładzie zasoby będą buforowane przez jeden dzień(``86400`` sekund).
+Buforowanie zasobów jest zarządzane przez rdzeń Symfony2. Ponieważ jednak buforowanie
+jest zarządzane przy wykorzystaniu nagłówków HTTP buforowania, można zastosować
+Varnish lubr Squid bez zmieniania nawet jednej linii kodu swojej aplikacji.
+>>>>>>> refs/heads/nowe_rozdz
 
     {% for flashMessage in app.session.flashbag.get('notice') %}
         <div class="flash-notice">

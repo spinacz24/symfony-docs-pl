@@ -460,8 +460,9 @@ Następnie trzeba stworzyć kontroler, który będzie wyświetlał formularz log
 
     use Symfony\Bundle\FrameworkBundle\Controller\Controller;
     use Symfony\Component\HttpFoundation\Request;
-    use Symfony\Component\Security\Core\SecurityContext;
+    use Symfony\Component\Security\Core\SecurityContextInterface;
 
+    class SecurityController extends Controller
     class SecurityController extends Controller
     {
         public function loginAction(Request $request)
@@ -469,20 +470,25 @@ Następnie trzeba stworzyć kontroler, który będzie wyświetlał formularz log
             $session = $request->getSession();
 
             // get the login error if there is one
-            if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
+            if ($request->attributes->has(SecurityContextInterface::AUTHENTICATION_ERROR)) {
                 $error = $request->attributes->get(
-                    SecurityContext::AUTHENTICATION_ERROR
+                    SecurityContextInterface::AUTHENTICATION_ERROR
                 );
+            } elseif (null !== $session && $session->has(SecurityContextInterface::AUTHENTICATION_ERROR)) {
+                $error = $session->get(SecurityContextInterface::AUTHENTICATION_ERROR);
+                $session->remove(SecurityContextInterface::AUTHENTICATION_ERROR);
             } else {
-                $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
-                $session->remove(SecurityContext::AUTHENTICATION_ERROR);
+                $error = '';
             }
+
+            // last username entered by the user
+            $lastUsername = (null === $session) ? '' : $session->get(SecurityContextInterface::LAST_USERNAME);
 
             return $this->render(
                 'AcmeSecurityBundle:Security:login.html.twig',
                 array(
                     // last username entered by the user
-                    'last_username' => $session->get(SecurityContext::LAST_USERNAME),
+                    'last_username' => $lastUsername,
                     'error'         => $error,
                 )
             );
@@ -895,7 +901,7 @@ to ``access_control`` będzie dopasować każdy ``ip``, ``host`` lub ``method``:
 
 +-----------------+-----------+-------------+------------+----------------------------------+--------------------------------------------------------------+
 | **URI**         | **IP**    | **HOST**    | **METHOD** | ``access_control``               | Dlaczego?                                                    |
-+-----------------+-----------+-------------+------------+----------------------------------+--------------------------------------------------------------+
++=================+===========+=============+============+==================================+==============================================================+
 | ``/admin/user`` | 127.0.0.1 | example.com | GET        | reguła #1 (``ROLE_USER_IP``)     | Adres URI dopasowuje ``path`` a IP dopasowuje ``ip``.        |
 +-----------------+-----------+-------------+------------+----------------------------------+--------------------------------------------------------------+
 | ``/admin/user`` | 127.0.0.1 | symfony.com | GET        | reguła #1 (``ROLE_USER_IP``)     | ``path`` i ``ip`` nadal są dopasowywane. Dopasowywane jest   |
@@ -933,8 +939,6 @@ Po tym jak Symfony2 określi, który wpis ``access_control`` zostanie użyty
   zostaje zabroniony (wewnętrznie zrzucany jest wyjątek
   :class:`Symfony\\Component\\Security\\Core\\Exception\\AccessDeniedException`;
   
-* ``allow_if`` Jeśli wyrażenie zwraca false, wówczas dostęp jest zabroniony;  
-   
 * ``requires_channel``: Jeśli kanał przychodzącego żądania (np. ``http``)
   nie zostaje dopasowany do tej wartości (np. ``https``), użytkownik zostanie
   przekierowany (np. przekierowany z ``http`` na ``https`` lub odwrotnie).
@@ -1040,63 +1044,6 @@ pętli zwrotnej IPv6):
 * Druga reguła kontroli dostępu nie jest sprawdzana, bo dopasowana została już
   pierwsza reguła.
 
-.. index::
-   single: bezpieczeństwo; zabezpieczenie przez wyrażenie
-
-.. _book-security-allow-if:
-
-Zabezpieczenie z wyrażeniem
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. versionadded:: 2.4
-    Możliwość zastosowania ``allow_if`` została wprowadzona w Symfony 2.4.
-
-Przy dopasowaniu ``access_control``, można odmówić dostępu  za pomocą klucza
-``roles`` lub zastosowania bardziej złożonej logiki z wyrażeniem zawierającym
-klucz ``allow_if``:
-
-.. configuration-block::
-
-    .. code-block:: yaml
-       :linenos:
-
-        # app/config/security.yml
-        security:
-            # ...
-            access_control:
-                -
-                    path: ^/_internal/secure
-                    allow_if: "'127.0.0.1' == request.getClientIp() or has_role('ROLE_ADMIN')"
-
-    .. code-block:: xml
-       :linenos:
-
-            <access-control>
-                <rule path="^/_internal/secure"
-                    allow-if="'127.0.0.1' == request.getClientIp() or has_role('ROLE_ADMIN')" />
-            </access-control>
-
-    .. code-block:: php
-       :linenos:
-
-            'access_control' => array(
-                array(
-                    'path' => '^/_internal/secure',
-                    'allow_if' => '"127.0.0.1" == request.getClientIp() or has_role("ROLE_ADMIN")',
-                ),
-            ),
-
-W przypadki, w którym użytkownik próbuje uzyskać dostęp do jakiegokolwiek ścieżki
-URL rozpoczynającej się od ``/_internal/secure``, dostęp będzie udzielany, jeśli
-adresem IP jest `127.0.0.1`` lub jeśli użytkownik ma rolę ``ROLE_ADMIN``.
-
-Wewnątrz wyrażenia ma się dostęp do wielu różnych zmiennych i funkcji, w tym
-``request`` - obiektem Symfony
-:class:`Symfony\\Component\\HttpFoundation\\Request` (zobacz
-:ref:`component-http-foundation-request`).
-
-Dla poznania innych funkcji i zmiennych zobacz
-:ref:`functions and variables <book-security-expression-variables>`.
 
 .. index::
    single: bezpieczeństwo; zabezpieczenie przez kanał
@@ -1135,95 +1082,6 @@ Wystarczy użyć argument ``requires_channel`` we wpisie ``access_control``:
                 array('path' => '^/cart/checkout', 'role' => 'IS_AUTHENTICATED_ANONYMOUSLY', 'requires_channel' => 'https'),
             ),
 
-
-.. index::
-   single: bezpieczeństwo; zabezpieczenie kontrolera
-   pair: kontroler; bezpieczeństwo
-
-.. _book-security-securing-controller:
-   
-Zabezpieczanie kontrolera
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Ochrona aplikacja w oparciu o wzorce URL jest łatwa, ale w niektórych przypadkach
-może nie być dostatecznie funkcjonalna. Gdy jest to konieczne, można łatwo wymusić
-autoryzację wewnątrz kontrolera::
-
-    // ...
-    use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
-    public function helloAction($name)
-    {
-        if (false === $this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            throw new AccessDeniedException();
-        }
-
-        // ...
-    }
-
-.. _book-security-securing-controller-annotations:
-
-.. versionadded:: 2.5
-    Metoda ``createAccessDeniedException`` zoatała wprowadzona w Symfony 2.5.
-
-Metoda :method:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller::createAccessDeniedException()`
-tworzy specjalny obiekt :class:`Symfony\\Component\\Security\\Core\Exception\\AccessDeniedException`,
-który ostatecznie wywołuje odpowiedź 403 HTTP.
-
-Dzięki pakietowi SensioFrameworkExtraBundle można łatwo zabezpieczyć kontroler używając adnotacji::
-
-    // ...
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-
-    /**
-     * @Security("has_role('ROLE_ADMIN')")
-     */
-    public function helloAction($name)
-    {
-        // ...
-    }
-
-Więcej informacji można znaleźć w
-:doc:`dokumentacji FrameworkExtraBundle </bundles/SensioFrameworkExtraBundle/annotations/security>`.
-
-.. index::
-   pair: bezpieczeństwo; usługi
-
-Zabezpieczenie innych usług
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-W rzeczywistości, cokolwiek w Symfony może zostać zabezpieczone przy zastosowaniu
-strategii podobnej do opisanej w poprzednim rozdziale. Na przykład załóżmy, że
-mamy usługę (tj. klasę PHP), której zadaniem jest wysyłanie poczty elektronicznej
-z od jednego użytkownika do drugiego. Można ograniczyć możliwość użycia tej klasy,
-nie ważne gdzie będzie to użyte, od – do użytkowników mających określoną rolę.
-
-Więcej informacji o tym, jak można użyć komponentu zabezpieczeń do zabezpieczenia
-różnych serwisów i metod w swojej aplikacji znajduje sie w artykule
-:doc:`Jak zabezpieczyć dowolną usługę lub metodę w swojej aplikacji</cookbook/security/securing_services>`.
-
-.. index::
-   single: bezpieczeństwo; ACL
-   single: bezpieczeństwo; kontrolne listy dostępowe
-   single: ACL 
-
-Listy kontroli dostępu (ACL): zabezpieczenie poszczególnych obiektów bazy danych
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Wyobraź sobie, że projektujemy system blogu, w którym użytkownicy mogą dodawać
-komentarze do wpisów. Teraz chcemy, aby użytkownik mógł edytować swoje komentarze,
-ale nie innych użytkowników. Będziemy chcieć również, aby administrator, miał
-możliwość edytowania wszystkich komentarzy.
-
-Komponent bezpieczeństwa dostarczany jest z opcjonalny systemem list kontroli
-dostępu (*ang. Access Control Lists - ACL*), które można wykorzystać, gdy zachodzi
-potrzeba kontroli dostępu do poszczególnych instancji obiektu w swoim systemie.
-Bez ACL można zabezpieczyć system tak, aby tylko niektórzy użytkownicy mogli
-edytować wszystkie komentarze. Natomiast z ACL, można ograniczyć lub uniemożliwić
-dostęp do określonych komentarzy.
-
-Więcej informacji znajduje sie w artykule
-:doc:`Jak używac kontrolnych list dostępowych (ACL)</cookbook/security/acl>`.
 
 .. index::
    single: bezpieczeństwo; użytkownicy
@@ -1459,30 +1317,50 @@ ale zasłonić ich hasła za pomocą sha1, zrób to co poniżej:
                 in_memory:
                     memory:
                         users:
-                            ryan:  { password: bb87a29949f3a1ee0559f8a57357487151281386, roles: 'ROLE_USER' }
-                            admin: { password: 74913f5cd5f61ec0bcfdb775414c2fb3d161b620, roles: 'ROLE_ADMIN' }
+                            ryan:
+                                password: $2a$12$w/aHvnC/XNeDVrrl65b3dept8QcKqpADxUlbraVXXsC03Jam5hvoO
+                                roles: 'ROLE_USER'
+                            admin:
+                                password: $2a$12$HmOsqRDJK0HuMDQ5Fb2.AOLMQHyNHGD0seyjU3lEVusjT72QQEIpW
+                                roles: 'ROLE_ADMIN'
 
             encoders:
                 Symfony\Component\Security\Core\User\User:
-                    algorithm:   sha1
-                    iterations: 1
-                    encode_as_base64: false
+                    algorithm: bcrypt
+                    cost: 12
 
     .. code-block:: xml
        :linenos:
 
         <!-- app/config/security.xml -->
-        <config>
-            <!-- ... -->
-            <provider name="in_memory">
-                <memory>
-                    <user name="ryan" password="bb87a29949f3a1ee0559f8a57357487151281386" roles="ROLE_USER" />
-                    <user name="admin" password="74913f5cd5f61ec0bcfdb775414c2fb3d161b620" roles="ROLE_ADMIN" />
-                </memory>
-            </provider>
+        <?xml version="1.0" encoding="UTF-8"?>
+        <srv:container xmlns="http://symfony.com/schema/dic/security"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:srv="http://symfony.com/schema/dic/services"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services
+                http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-            <encoder class="Symfony\Component\Security\Core\User\User" algorithm="sha1" iterations="1" encode_as_base64="false" />
-        </config>
+            <config>
+                <!-- ... -->
+                <provider name="in_memory">
+                    <memory>
+                        <user
+                            name="ryan"
+                            password="$2a$12$w/aHvnC/XNeDVrrl65b3dept8QcKqpADxUlbraVXXsC03Jam5hvoO"
+                            roles="ROLE_USER" />
+                        <user
+                            name="admin"
+                            password="$2a$12$HmOsqRDJK0HuMDQ5Fb2.AOLMQHyNHGD0seyjU3lEVusjT72QQEIpW"
+                            roles="ROLE_ADMIN" />
+                    </memory>
+                </provider>
+
+                <encoder
+                    class="Symfony\Component\Security\Core\User\User"
+                    algorithm="bcrypt"
+                    cost="12" />
+            </config>
+        </srv:container>
 
     .. code-block:: php
        :linenos:
@@ -1494,20 +1372,29 @@ ale zasłonić ich hasła za pomocą sha1, zrób to co poniżej:
                 'in_memory' => array(
                     'memory' => array(
                         'users' => array(
-                            'ryan' => array('password' => 'bb87a29949f3a1ee0559f8a57357487151281386', 'roles' => 'ROLE_USER'),
-                            'admin' => array('password' => '74913f5cd5f61ec0bcfdb775414c2fb3d161b620', 'roles' => 'ROLE_ADMIN'),
+                            'ryan' => array(
+                                'password' => '$2a$12$w/aHvnC/XNeDVrrl65b3dept8QcKqpADxUlbraVXXsC03Jam5hvoO',
+                                'roles' => 'ROLE_USER',
+                            ),
+                            'admin' => array(
+                                'password' => '$2a$12$HmOsqRDJK0HuMDQ5Fb2.AOLMQHyNHGD0seyjU3lEVusjT72QQEIpW',
+                                'roles' => 'ROLE_ADMIN',
+                            ),
                         ),
                     ),
                 ),
             ),
             'encoders' => array(
                 'Symfony\Component\Security\Core\User\User' => array(
-                    'algorithm'         => 'sha1',
-                    'iterations'        => 1,
-                    'encode_as_base64'  => false,
+                    'algorithm'         => 'bcrypt',
+                    'iterations'        => 12,
                 ),
             ),
         ));
+
+.. versionadded:: 2.2
+    Koder BCrypt został wprowadzony do Symfony 2.2.
+
 
 Przez ustawienie opcji ``iterations`` na 1 a ``encode_as_base64`` na false, hasło
 jest przepuszczane przez algorytm sha1 tylko raz i bez dodatkowego szyfrowania.
@@ -1851,6 +1738,8 @@ Kontrola dostępu
 Teraz, gdy ma się użytkownika i role, można pójść dalej, niż autoryzacja w oparciu
 o wzorzec URL.
 
+.. _book-security-securing-controller:
+
 Kontrola dostępu w kontrolerze
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1877,96 +1766,19 @@ autoryzację wewnątrz kontrolera::
    posiadanie głównej zapory obejmującej wszystkie ścieżki URL (tak jak
    pokazano to w tym rozdziale).
 
-.. index::
-   single: kontrola dostępu; z wyrażeniami 
+Można także wybrać do zainstalowania i stosowania opcjonalny pakiet `JMSSecurityExtraBundle`_,
+który może zabezpieczać kontroler przy użyciu adnotacji::
 
-.. _book-security-expressions:
-
-Złożona kontrola dostępu z wyrażeniami
---------------------------------------
-
-.. versionadded:: 2.4
-   Funkcjonalność wyrażeń została wprowadzona w Symfony 2.4.
-
-W uzupełnieniu roli takiej jak ``ROLE_ADMIN``, metoda ``isGranted`` akceptuje
-również obiekt :class:`Symfony\\Component\\ExpressionLanguage\\Expression`::
-
-    use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-    use Symfony\Component\ExpressionLanguage\Expression;
     // ...
+    use JMS\SecurityExtraBundle\Annotation\Secure;
 
-    public function indexAction()
+    /**
+     * @Secure(roles="ROLE_ADMIN")
+     */
+    public function helloAction($name)
     {
-        if (!$this->get('security.context')->isGranted(new Expression(
-            '"ROLE_ADMIN" in roles or (user and user.isSuperAdmin())'
-        ))) {
-            throw new AccessDeniedException();
-        }
-
         // ...
     }
-
-W tym przykładzie, jeśli bieżący użytkownik ma rolę ``ROLE_ADMIN`` lub jeśli metoda
-``isSuperAdmin()`` obiektu bieżącego użytkownika zwraca ``true``, to dostęp zostanie
-udzielony (uwaga: obiekt użytkownika może nie mieć metody ``isSuperAdmin``, ale
-jakąś inną tożsamą metodę – metoda ``isSuperAdmin`` została wymyślona na potrzeby
-tego przykładu).
-
-W kodzie tym użyto *wyrażenia dostępowego* (instancji klasy Expression, którą tu
-w skrócie będziemy nazywać po prostu *wyrażeniem*) – o składni języka wyrażeń
-można dowiedzieć się więcej w :doc:`/components/expression_language/syntax`.
-
-.. _book-security-expression-variables:
-
-Wewnątrz *wyrażeń* ma się dostęp do kilku zmiennych::
-
-* ``user``: obiekt użytkownika (lub ciąg ``anon``, jeśli nie ma uwierzytelniania);
-* ``roles``: tablica ról jakie posiada użytkownik, w tym z
-  :ref:`ról hierarchicznych <book-security-role-hierarchy>`, ale bez atrybutów
-  ``IS_AUTHENTICATED_*`` (zobacz funkcje poniżej);
-* ``object``: obiekt (jeśli występuje), który jest przekazywany jako drugi argument
-  do ``isGranted``;
-* ``token``: obiekt tokenu;
-* ``trust_resolver``: obiekt
-  :class:`Symfony\\Component\\Security\\Core\\Authentication\\AuthenticationTrustResolverInterface`,
-  w którym prawdopodobnie bedzie wyykorzystywana jakaś funkcja ``is_*`` (omówione poniżej).
-
-Dodatkowo w wewnątrz *wyrażeń* ma się dostęp do kilku funkcji:
-
-* ``is_authenticated``: zwraca ``true`` jeśli użytkownik został uwierzytelniony
-  poprzez mechanizmy "pamiętaj mnie" lub "pełne" uwierzytelnianie – czyli zwraca
-  true, jeśli użytkownik jest zalogowany;
-* ``is_anonymous``: równowazne z zastosowaniem ``IS_AUTHENTICATED_ANONYMOUSLY``
-  w funkcji ``isGranted``;
-* ``is_remember_me``: podobnie, ale równoważne z ``IS_AUTHENTICATED_REMEMBERED``,
-  patrz niżej;
-* ``is_fully_authenticated``: podobnie, ale nie jest równoważne z ``IS_AUTHENTICATED_FULLY``,
-  patrz niżej;
-* ``has_role``: sprawdza, czy użytkownik posiada określona rolę – równoważne z
-  wyrażeniem takim jak ``'ROLE_ADMIN' in roles``.
-
-.. sidebar:: ``is_remember_me`` jest różne w zależnosci od zaznaczenia ``IS_AUTHENTICATED_REMEMBERED``
-
-    Funkcje ``is_remember_me`` i ``is_authenticated_fully`` są *podobne* w wykorzystaniu
-    ``IS_AUTHENTICATED_REMEMBERED`` i ``IS_AUTHENTICATED_FULLY`` w funkcji ``isGranted``,
-    ale nie są **tożsame**. Następujący przykład pokazuje różnice::
-
-        use Symfony\Component\ExpressionLanguage\Expression;
-        // ...
-
-        $sc = $this->get('security.context');
-        $access1 = $sc->isGranted('IS_AUTHENTICATED_REMEMBERED');
-
-        $access2 = $sc->isGranted(new Expression(
-            'is_remember_me() or is_fully_authenticated()'
-        ));
-
-    Tutaj, ``$access1`` i ``$access2`` będą miały tą samą wartość. W przeciwieństwie
-    do zachowania ``IS_AUTHENTICATED_REMEMBERED`` i ``IS_AUTHENTICATED_FULLY``,
-    funkcja ``is_remember_me`` *tylko* zwraca ``true``, jeśli uzytkownik jest
-    uwierzytelniony poprzez ciasteczko remember-me cookie a ``is_fully_authenticated``
-    *tylko* zwraca ``true``, jeśli użytkownik jest rzeczywiście zalogowany podczas
-    sesji (czyli jest pełnoprawny).
 
 Kontrola dostępu w innych usługach
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

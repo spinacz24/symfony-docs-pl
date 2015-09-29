@@ -455,7 +455,11 @@ zawartością:
 
     {
         "require": {
+<<<<<<< HEAD
             "symfony/symfony": "2.5.*"
+=======
+            "symfony/symfony": "2.3.*"
+>>>>>>> refs/heads/nowe_rozdz
         },
         "autoload": {
             "files": ["model.php","controllers.php"]
@@ -500,16 +504,12 @@ do poprawienia naszego blogu:
         $response = show_action($request->query->get('id'));
     } else {
         $html = '<html><body><h1>Page Not Found</h1></body></html>';
-        $response = new Response($html, Response::HTTP_NOT_FOUND);
+        $response = new Response($html, 404);
     }
 
     // echo the headers and send the response
     $response->send();
     
-.. versionadded:: 2.4
-    Obsługa stałych kodu statusu HTTP zostały dodane w Symfony 2.4.
-
-
 Kontrolery są teraz odpowiedzialne za zwrócenie obiektu ``Response``.
 Aby to ułatwić, można dodać nową funkcję ``render_template()``, która nawiasem
 mówiąc, działa trochę jak silnik szablonowania Symfony2:

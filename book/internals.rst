@@ -173,6 +173,9 @@ zdarzeniach):
 
 #. Zwracana jest odpowiedź HTTP.
 
+#. Odbiornik zdarzenia ``kernel.terminate`` może wykonywać zadania po przesłaniu
+   odpowiedzi przez serwer.
+
 Jeśli podczas przetwarzania zostanie zgłoszony wyjątek, wyzwalane jest zdarzenie
 ``kernel.exception`` i odbiorniki otrzymują możliwość konwersji wyjątku na odpowiedź.
 Jeśli wszystko działa poprawnie, to wyzwalane jest zdarzenie ``kernel.response``,
@@ -365,6 +368,8 @@ Pakiet ``FrameworkBundle`` rejestruje kilka detektorów nasłuchujących:
 Zdarzenie ``kernel.terminate``
 ..............................
 
+*Klasa zdarzenia*: :class:`Symfony\\Component\\HttpKernel\\Event\\PostResponseEvent`
+
 Celem zdarzenia jest wykonanie "cięższych" zadań po tym, jak odpowiedź już została
 zaserwowana klientowi.
 
@@ -414,8 +419,8 @@ i ustawiając nowy obiekt ``Exception`` lub nie robić nic::
 
         return new Response(
             'Error',
-            Response::HTTP_NOT_FOUND, // ignored
-            array('X-Status-Code' => Response::HTTP_OK)
+            404 // ignored
+            array('X-Status-Code' => Response::200)
         );
         
      .. versionadded:: 2.4
@@ -591,7 +596,6 @@ programistycznego:
         $container->loadFromExtension('web_profiler', array(
             'toolbar'             => true,
             'intercept-redirects' => true,
-            'verbose'             => true,
         ));
 
 Gdy opcja ``only-exceptions`` jest ustawiona na ``true``, to Web Profiler będzie

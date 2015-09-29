@@ -331,7 +331,7 @@ ta zawiera jakiś tekst lub czy odpowiedź nie jest dokumentem XML lub HTML::
         $this->assertTrue($client->getResponse()->isNotFound());
         // Ustalenie kodu statusu 200
         $this->assertEquals(
-            Response::HTTP_OK,
+            Response::200,
             $client->getResponse()->getStatusCode()
         );
 
@@ -342,9 +342,7 @@ ta zawiera jakiś tekst lub czy odpowiedź nie jest dokumentem XML lub HTML::
         // lub tylko sprawdzenie, czy odpowiedź jest przekierowywana na jakiś adres URL
         $this->assertTrue($client->getResponse()->isRedirect());
         
-    .. versionadded:: 2.4
-        Obsługę stałych kodu statusu HTTP dodano w Symfony 2.4.
-        
+           
 
 .. index::
    single: testy; klient
