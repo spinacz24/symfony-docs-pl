@@ -13,7 +13,7 @@ narzut w obciążeniu serwera niż serwowanie statycznego pliku.
 
 Dla większości aplikacji internetowych, to jest norma. Symfony2 jest błyskawiczne
 i każde żądanie obsługiwane jest szybko, bez zbędnego obciążenia serwera,  chyba
-że robi się w aplikacji „podnoszenie ciężarów”.
+że robi się w aplikacji "podnoszenie ciężarów".
 
 Gdy witryna się rozrasta, to ten narzut może stać się problemem. Przetwarzanie,
 które zwykle jest wykonywane przy każdym żądaniu, powinno być wykonywane tylko
@@ -172,6 +172,10 @@ jądro buforowania::
 
 Jądro buforowania będzie działać natychmiast jako odwrotne proxy – będzie buforować
 odpowiedzi z aplikacji i zwracać je klientowi.
+
+Teraz, gdy używa się już "proxy", potrzeba skonfiguraować ``127.0.0.1`` w konfiguracji
+``trusted_proxies`` (zobacz :ref:`<reference-framework-trusted-proxies>`). Bez tego,
+adres IP klienta i innych rzeczy nie będzie działać prawidłowo.
 
 .. tip::
 
@@ -602,6 +606,12 @@ porównuje nagłówek ``ETag`` ustawiony w obiekcie ``Request`` z nagłówkiem o
 ustawionym w obiekcie ``Response``. Jeśli są one zgodne, to metoda ta automatycznie
 ustawia ``Response`` na kod statusu 304.
 
+.. note::
+   Pamięć podręczna ustawia nagłówek ``If-None-Match`` żądania na ``Etag`` oryginalnie
+   buforowanej odpowiedzi przed odesłaniem żądania  z powrotem do aplikacji. W ten
+   sposób pamięć podręczna i serwer  komunikują się ze sobą i decydują, czy zasób
+   został zaktualizowany od czasu zbuforowania.
+
 Algorytm ten jest dość prosty i bardzo ogólny, Ale trzeba utworzyć cały obiekt
 ``Response`` przed obliczeniem ETag, co jest nieoptymalne. Innymi słowami, pozwala
 to na oszczędność przepustowości ale nie czasu użycia CPU.
@@ -778,6 +788,11 @@ Ponieważ w wielu przypadkach wygasanie jest lepsze niż walidacja, to można mi
 pożytek ze stosowania obu metod. Innymi słowami, wykorzystując obie metody, można
 polecić pamięci podręcznej obsługę buforowanej zawartości podczas ponownego sprawdzenia
 (wygasanie) w pewnym przedziale aby zweryfikowała czy zawartość jest jeszcze świeża.
+
+.. note::
+   Można również zdefiniować nagłówki buforowania HTTP dla wygasania i walidacji
+   bez wykorzystywania adnotacji. Proszę zobaczyć
+   :doc:`dokumentację FrameworkExtraBundle </bundles/SensioFrameworkExtraBundle/annotations/cache>`.
 
 .. index::
     pair: pamięć podręczna; konfiguracja

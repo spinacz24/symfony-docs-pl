@@ -10,6 +10,8 @@ Podręcznik
    from_flat_php_to_symfony2
    installation
    page_creation
+   bundles
+   configurations
    controller
    routing
    templating
