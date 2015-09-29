@@ -921,6 +921,7 @@ informacji można uzyskać a artykule :doc:`/components/routing/hostname_pattern
 w dokumentacji komponentu Routing.
 
 .. index::
+<<<<<<< HEAD
    single: trasowanie; wyrażenia warunkowe
 
 .. _book-routing-conditions:
@@ -1013,6 +1014,10 @@ są przekazywane do wyrażenia:
 .. index::
    single: Routing; zaawansowany przykład
    single: Routing; parametr _format
+=======
+   single: Routing; Advanced example
+   single: Routing; _format parameter
+>>>>>>> refs/heads/nowe_rozdz
 
 .. _advanced-routing-example:
 

@@ -13,7 +13,11 @@ Zajmijmy się więc teraz architekturą Symfony.
 Struktura katalogów
 -------------------
 
+<<<<<<< HEAD
 Struktura katalogów Symfony jest dość elastyczna, ale zalecana struktura katalogów
+=======
+Struktura katalogów Symfony2 jest dość elastyczna, ale zalecana struktura katalogów
+>>>>>>> refs/heads/nowe_rozdz
 jest następująca:
 
 ``app/``
@@ -48,8 +52,13 @@ kontroler wejścia środowiska produkcyjnego, z takim kodem::
     $response = $kernel->handle($request);
     $response->send();
 
+<<<<<<< HEAD
 Kontroler ten najpierw ładuje aplikacje wykorzystując klasę kernela (``AppKernel``).
 Następnie, tworzy obiekt ``Request`` używając globalnych zmiennych
+=======
+Kontroler ten najpierw ładuje aplikacje wykorzystując klasę kernela (w tym przypadku
+``AppKernel``). Następnie, tworzy obiekt ``Request`` używając globalnych zmiennych
+>>>>>>> refs/heads/nowe_rozdz
 PHP i przekazuje ten obiekt do kernela. Następnym krokiem jest przesłanie zawartości
 odpowiedzi zwracanej przez kernel z powrotem do użytkownika.
 
@@ -71,7 +80,11 @@ Ta klasa musi implementować dwie metody:
     Wczytuje konfigurację aplikacji (więcej na ten temat później).
 
 Automatyczne ładowanie jest obsługiwane poprzez `Composer`_, co oznacza, że można
+<<<<<<< HEAD
 wykorzystać dowolną klasę PHP, nie robiąc nic w ogóle! Wszystkie zależności są
+=======
+wykorzystać dowolna klasę PHP, nie robiąc nic w ogóle! Wszystkie zależności są
+>>>>>>> refs/heads/nowe_rozdz
 przechowywane w katalogu ``vendor/``, ale to jest tylko konwencja.
 Można przechowywać je tam gdzie się chce, globalnie na serwerze lub lokalnie w projektach.
 
@@ -86,12 +99,16 @@ Pakiet jest czymś w rodzaju wtyczki w innych programach. Więc dlaczego został
 pakietem (*ang. bundle*) a nie wtyczką (*ang. plugin*)? To dlatego, że wszystko w Symfony
 należy do jakiegoś pakietu, od funkcji rdzenia frameworka po kod napisany dla aplikacji.
 
+<<<<<<< HEAD
 Cały kod, jaki sie pisze dla aplikacji jest zorganizowany w pakiety. W Symfony
 mówi się, że pakiet jest ustrukturyzowanym zestawem plików (pliki PHP, arkusze stylów,
 pliki JavaScripts, obrazy itd.), które implementuja pojedyncze funkcjonalności
 (blog, forum  itd.) i które mogą być łatwo współdzielone przez innych programistów.
 
 Pakiety są obywatelem numer jeden w Symfony. Zapewnia to elastyczność w używaniu
+=======
+Pakiety są obywatelem numer jeden w Symfony2. Zapewnia to elastyczność w używaniu
+>>>>>>> refs/heads/nowe_rozdz
 wbudowanych pakietów funkcyjnych rozpowszechnianych przez osoby trzecie lub w dystrybucji
 własnych pakietów. Stwarza to możliwość łatwego doboru i wyboru odpowiednich
 dla swojej aplikacji funkcjonalności i umożliwia łatwą optymalizację całości.
@@ -183,8 +200,11 @@ XML, czy też PHP. Wystarczy popatrzeć na domyślną konfigurację Symfony:
         password:  "%mailer_password%"
         spool:     { type: memory }
 
+<<<<<<< HEAD
     # ...
 
+=======
+>>>>>>> refs/heads/nowe_rozdz
 Każdy wpis pierwszego poziomu, jak np. ``framework``, ``twig`` lub ``doctrine``,
  definiuje konfigurację dla określonego pakietu. Dla przykładu, ``framework``
  konfiguruje pakiet FrameworkBundle a ``swiftmailer`` konfiguruje SwiftmailerBundle.
@@ -244,11 +264,19 @@ Rozszerzenie pakietów
 
 Stosując tą konwencję, można następnie wykorzystać
 :doc:`dziedziczenia pakietów </cookbook/bundles/inheritance>` do "napisania" plików,
+<<<<<<< HEAD
 kontrolerów lub szablonów. Na przykład, można utworzyć pakiet ``NewBundle``
 i  określić, że zastępuje on pakiet AppBundle. Gdy Symfony ładuje kontroler
 ``AppBundle:Default:index``, to najpierw będzie wyszukiwał klasy ``DefaultController``
 w pakiecie NewBundle i jeśli jej nie znajdzie, to rozpocznie przeszukiwanie
 pakietu AppBundle. Oznacza to, że pakiet może zastąpić prawie każdą część
+=======
+kontrolerów lub szablonów. Na przykład, można utworzyć pakiet ``AcmeNewBundle``
+i  określić, że zastępuje on pakiet AcmeDemoBundle. Gdy Symfony ładuje kontroler
+``AcmeDemoBundle:Welcome:index``, to najpierw będzie wyszukiwał klasy ``WelcomeController``
+w pakiecie AcmeNewBundle i jeśli jej nie znajdzie, to rozpocznie przeszukiwanie
+pakietu AcmeDemoBundle. Oznacza to, że pakiet może zastąpić prawie każdą część
+>>>>>>> refs/heads/nowe_rozdz
 innego pakietu.
 
 Rozumiesz teraz dlaczego Symfony jest tak elastyczny? Współdziel swoje pakiety
@@ -276,6 +304,7 @@ Ale jak może tak szybko działać, skoro parsuje oraz interpretuje kilkadziesi�
 plików YAML oraz XML dla każdego zapytania. Prędkość jest po części związana
 z systemem buforowania. Konfiguracja aplikacji jest parsowana tylko dla pierwszego
 żądania i przetwarzana do kodu PHP przechowywanego w katalogu ``app/cache/``.
+<<<<<<< HEAD
 
 W środowisku programistycznym, Symfony jest wystarczająco inteligentny aby czyścić
 pamięć podręczną po zmianie pliku. Natomiast w środowisku produkcyjnym, to do 
@@ -286,6 +315,12 @@ użyć tego poleenia:
 .. code-block:: bash
 
     $ php app/console cache:clear --env=prod
+=======
+W środowisku programistycznym, Symfony2 jest wystarczająco inteligentny aby czyścić
+pamięć podręczną po zmianie pliku. Natomiast w środowisku produkcyjnym, to do 
+do zadań programisty należy czyszczenie pamięci podręcznej po zmianie kodu lub
+konfiguracji.
+>>>>>>> refs/heads/nowe_rozdz
 
 Podczas tworzenia aplikacji, dużo rzeczy może pójść źle. Pliki dzienników zdarzeń,
 znajdujące się w katalogu ``app/logs/``, informują o wszystkich żądaniach

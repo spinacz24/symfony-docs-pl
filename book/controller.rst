@@ -170,8 +170,12 @@ trzeba utworzyć trasę (*ang. route*) odwzorowującą wzorzec ścieżki URL na 
         # app/config/routing.yml
         hello:
             path:      /hello/{name}
+<<<<<<< HEAD
             # uses a special syntax to point to the controller - see note below
             defaults:  { _controller: AppBundle:Hello:index }
+=======
+            defaults:  { _controller: AcmeHelloBundle:Hello:index }
+>>>>>>> refs/heads/nowe_rozdz
 
     .. code-block:: xml
 
@@ -183,8 +187,12 @@ trzeba utworzyć trasę (*ang. route*) odwzorowującą wzorzec ścieżki URL na 
                 http://symfony.com/schema/routing/routing-1.0.xsd">
 
             <route id="hello" path="/hello/{name}">
+<<<<<<< HEAD
                 <!-- uses a special syntax to point to the controller - see note below -->
                 <default key="_controller">AppBundle:Hello:index</default>
+=======
+                <default key="_controller">AcmeHelloBundle:Hello:index</default>
+>>>>>>> refs/heads/nowe_rozdz
             </route>
         </routes>
 
@@ -199,6 +207,8 @@ trzeba utworzyć trasę (*ang. route*) odwzorowującą wzorzec ścieżki URL na 
             // uses a special syntax to point to the controller - see note below
             '_controller' => 'AppBundle:Hello:index',
         )));
+
+        return $collection;
 
         return $collection;
 
@@ -240,10 +250,73 @@ przekazywany do tej metody::
     // ...
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
+<<<<<<< HEAD
     /**
      * @Route("/hello/{name}", name="hello")
      */
     public function indexAction($name)
+=======
+    namespace Acme\HelloBundle\Controller;
+    use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+    class HelloController extends Controller
+    {
+        public function indexAction($name)
+        {
+          // ...
+        }
+    }
+
+Kontroler ma pojedynczy argument ``$name``, który odpowiada parametrowi ``{name}``
+z dopasowanej trasy (w naszym przykładzie ma on wartość ``ryan``). W rzeczywistości
+podczas wykonywania kontrolera Symfony2 dopasowuje każdy argument kontrolera
+do parametru trasy. Rozważmy następujący przykład:
+
+.. configuration-block::
+
+    .. code-block:: yaml
+       :linenos:
+
+        # app/config/routing.yml
+        hello:
+            path:      /hello/{firstName}/{lastName}
+            defaults:  { _controller: AcmeHelloBundle:Hello:index, color: green }
+
+    .. code-block:: xml
+       :linenos:
+
+        <!-- app/config/routing.xml -->
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <routes xmlns="http://symfony.com/schema/routing"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/routing
+                http://symfony.com/schema/routing/routing-1.0.xsd">
+
+            <route id="hello" path="/hello/{firstName}/{lastName}">
+                <default key="_controller">AcmeHelloBundle:Hello:index</default>
+                <default key="color">green</default>
+            </route>
+        </routes>
+
+    .. code-block:: php
+       :linenos:
+
+        // app/config/routing.php
+        use Symfony\Component\Routing\Route;
+        use Symfony\Component\Routing\RouteCollection;
+
+        $collection = new RouteCollection();
+        $collection->add('hello', new Route('/hello/{firstName}/{lastName}', array(
+            '_controller' => 'AcmeHelloBundle:Hello:index',
+            'color'       => 'green',
+        )));
+
+        return $collection;
+
+W tym przykładzie kontroler może przyjąć kilka argumentów::
+
+    public function indexAction($first_name, $last_name, $color)
+>>>>>>> refs/heads/nowe_rozdz
     {
         // ...
     }
@@ -320,10 +393,17 @@ Należy pamiętać o następujących wskazówkach:
 
 * **Kolejność argumentów akcji nie ma znaczenia**
 
+<<<<<<< HEAD
     Symfony potrafi dopasować nazwy parametrów z trasy do nazw zmiennych z sygnatury
     metody kontrolera. Innymi słowy, Symfony rozumie, że parametr ``{last_name}``
     pasuje do argumentu ``$last_name``. Argumenty akcji mogą być kompletnie
     pomieszane i nadal będą działać poprawnie::
+=======
+  Symfony potrafi dopasować nazwy parametrów z trasy do nazw zmiennych z sygnatury
+  metody kontrolera. Innymi słowy, Symfony rozumie, że parametr ``{last_name}``
+  pasuje do argumentu ``$last_name``. Argumenty kontrolera mogą być kompletnie
+  pomieszane i nadal będą działać poprawnie::
+>>>>>>> refs/heads/nowe_rozdz
 
         public function indexAction($last_name, $color, $first_name)
         {
@@ -332,16 +412,22 @@ Należy pamiętać o następujących wskazówkach:
 
 * **Każdy wymagany argument akcji musi pasować do parametru trasowania**
 
-    Poniższy kod zgłosi wyjątek ``RuntimeException``, ponieważ parametr ``foo``
-    nie został określony w trasie::
+  Poniższy kod zgłosi wyjątek ``RuntimeException``, ponieważ parametr ``foo``
+  nie został określony w trasie::
 
         public function indexAction($first_name, $last_name, $color, $foo)
         {
             // ..
         }
+<<<<<<< HEAD
     
     Rozwiązaniem problemu może być przypisanie wartości domyślnej do argumentu.
     Poniższy przykład nie zgłosi wyjątku::
+=======
+
+  Rozwiązaniem problemu może być przypisanie wartości domyślnej do argumentu.
+  Poniższy przykład nie zgłosi wyjątku::
+>>>>>>> refs/heads/nowe_rozdz
 
         public function indexAction($first_name, $last_name, $color, $foo = 'bar')
         {
@@ -350,8 +436,13 @@ Należy pamiętać o następujących wskazówkach:
 
 * **Nie wszystkie parametry trasowania muszą być argumentami akcji**
 
+<<<<<<< HEAD
     Jeśli, na przykład, ``last_name`` nie jest istotny dla akcji,
     można go całkowicie pominąć::
+=======
+  Jeśli, na przykład, ``last_name`` nie jest istotny dla kontrolera,
+  można go całkowicie pominąć::
+>>>>>>> refs/heads/nowe_rozdz
 
         public function indexAction($first_name, $color)
         {
@@ -393,10 +484,14 @@ i **z podpowiadanym typem Request**::
 .. index::
    single: kontroler; podstawowa klasa kontrolera
 
-Bazowa klasa kontrolera
------------------------
+Podstawowa klasa kontrolera
+---------------------------
 
+<<<<<<< HEAD
 Symfony udostępnia klasę ``Controller`` będącą klasą bazową dla kontrolerów
+=======
+Symfony2 udostępnia klasę ``Controller`` będącą klasą podstawową (bazową) dla kontrolerów
+>>>>>>> refs/heads/nowe_rozdz
 aplikacji. Pomaga ona w najbardziej typowych zadaniach kontrolera i daje klasie
 kontrolera dostęp do każdego potrzebnego zasobu. Rozszerzając klasę ``Controller``
 można skorzystać z kilku metod pomocniczych a za pośrednictwem kontenera ze wszystkich
@@ -417,18 +512,50 @@ klasę ``HelloController`` tak, aby była rozszerzeniem klasy ``Controller``::
     
 W rzeczywistości niczego to nie zmienia w sposobie działania kontrolera.
 W następnym rozdziale dowiesz się o metodach pomocniczych (helperach), które są
+<<<<<<< HEAD
 udostępnione przez klasę kontrolera bazowego. Te metody to po prostu skróty
 do rdzennych funkcji Symfon, które są dostępne niezależnie od tego, czy używa
 się klasy ``Controller``, czy nie. Dobrym sposobem na zobaczenie rdzennej funkcjonalności
 w działaniu jest zapoznanie sie z `klasą Controller`_.
+=======
+udostępnione przez klasę kontrolera podstawowego. Te metody to po prostu skróty
+do rdzennych funkcji Symfony2, które są dla dostępne niezależnie od tego, czy używa
+się klasy ``Controller``, czy nie. Dobrym sposobem na zapoznanie się z klasą
+:class:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller` jest zobaczenie
+jak ona działa.
+.
+>>>>>>> refs/heads/nowe_rozdz
 
 .. seealso::
 
+<<<<<<< HEAD
     Informacje o tym jak działać będzie kontroler, który nie rozszerza klasy bazowej,
     można znaleźć w artykule :doc:`Kontrolery jako usługi </cookbook/controller/service>`.
     Stosując kontroler, który nie rozszerza kontrolera ``Controler``, można
     uzyskać więcej kontroli nad jawnymi obiektami i zależnościami,
     które sa wstrzykiwane do kontrolera.
+=======
+    Rozszerzenie klasy bazowej w Symfony jest *opcjonalne* - zawiera ona użyteczne
+    skróty, ale nie są one obowiązkowe. Można również rozszerzyć klasę
+    :class:`Symfony\\Component\\DependencyInjection\\ContainerAware`. Spowoduje to
+    dostępność obiektu kontenera usług poprzez właściwość ``container``.
+
+.. note::
+
+    Można również zdefiniować własne
+    :doc:`kontrolery jako usługi</cookbook/controller/service>`.
+
+.. index::
+   single: kontroler; typowe zadania
+
+Typowe zadania kontrolera
+-------------------------
+
+Choć kontroler może praktycznie wykonywać prawie wszystko, większość kontrolerów
+będzie wykonywać te same podstawowe zadania w kółko. Zadania takie jak jak przekierowania, forwardowanie,
+przetwrzanie szablonów i udostępnianie rdzennych usług są w Symfony2 bardzo
+łatwe w użyciu.
+>>>>>>> refs/heads/nowe_rozdz
 
 .. index::
    single: kontroler; przekierowania
@@ -477,10 +604,78 @@ należy zmodyfikować trzeci argument::
 
       use Symfony\Component\HttpFoundation\RedirectResponse;
 
+<<<<<<< HEAD
         public function indexAction()
         {
             return new RedirectResponse($this->generateUrl('homepage'));
         }
+=======
+
+.. index::
+   single: kontroler; przekazywania
+
+Przekazywanie (forwarding)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Można również łatwo dokonać przekazania do innego wewnętrznego kontrolera przy
+użyciu metody ``forward()``. Metoda ta sprawia, że zamiast przekierowywać przegladarkę
+użytkownika wykonywane jest wewnętrzne podżądanie i wywoływany jest określony kontroler.
+Metoda ``forward()`` zwraca obiekt ``Response``, który jest zwracany przez ten kontroler::
+
+    public function indexAction($name)
+    {
+        $response = $this->forward('AcmeHelloBundle:Hello:fancy', array(
+            'name'  => $name,
+            'color' => 'green'
+        ));
+
+        // ... zmodyfikowanie odpowiedzi lub zwrócenie jej bezpośrednio
+
+        return $response;
+    }
+
+Należy zwrócić uwagę, że metoda ``forward()`` wykorzystuje tą samą reprezentację
+znakową kontrolera jaka jest używana w konfiguracji trasowania. W powyższym przykładzie
+klasa docelowego kontrolera ``HelloController`` będzie się znajdować wewnątrz pakietu
+``AcmeHelloBundle``. Tablica przekazana do metody staje sie argumentami wynikowego
+kontrolera. Taki sam interfejs jest stosowany podczas osadzania kontrolerów w szablonach
+(zobacz do rozdziału :ref:`templating-embedding-controller`). Metoda docelowego
+kontrolera musi wyglądać następująco::
+
+    public function fancyAction($name, $color)
+    {
+        // ... utworzenie i zwrócenie obiektu Response
+    }
+
+Kolejność argumentów ``fancyAction`` nie ma znaczenia, podobnie jak w przypadku
+tworzenia kontrolera dla trasy. Symfony2 dopasowuje nazwy indeksów (np. ``name``)
+do nazw argumentów metody (np. ``$name``). Jeśli zmieni się kolejność argumentów,
+Symfony2 wciąż będzie w stanie przekazywać właściwą wartości do każdej zmiennej.
+
+.. tip::
+
+    Podobnie jak inne metody podstawowej klasy ``Controller``, metoda ``forward``
+    jest skrótem do rdzennej funkcjonalności Symfony2. Przekazanie może być też
+    dokonane bezpośrednio przez usługę ``http_kernel`` zawracajac obiekt
+    ``Response``::
+
+        use Symfony\Component\HttpKernel\HttpKernelInterface;
+
+        $path = array(
+            '_controller' => 'AcmeHelloBundle:Hello:fancy',
+            'name'        => $name,
+            'color'       => 'green',
+        );
+        $request = $this->container->get('request');
+        $subRequest = $request->duplicate(array(), null, $path);
+
+        $httpKernel = $this->container->get('http_kernel');
+        $response = $httpKernel->handle(
+            $subRequest,
+            HttpKernelInterface::SUB_REQUEST
+        );
+        
+>>>>>>> refs/heads/nowe_rozdz
 
 .. index::
    single: kontroler; renderowanie szablonów
@@ -511,11 +706,42 @@ Silnik szablonowania Symfony jest szczegółowo wyjaśniony w rozdziale
 
 .. sidebar:: Odwoływanie się do szablonów umieszczonych w pakietach
 
+<<<<<<< HEAD
     Można również umieszczać szablony w katalogu ``Resources/views`` pakietu
     i odwoływać się do nich stosując składnię ``BundleName:DirectoryName:FileName``.
     Na przykład, ``AppBundle:Hello:index.html.twig`` będzie odwoływał się do szablonu
     umieszczonego w  ``src/AppBundle/Resources/views/Hello/index.html.twig``.
     Zobacz :ref:`template-referencing-in-bundle`.
+=======
+    Można nawet uniknąć wywoływania metody ``render`` stosujac adnotację ``@Template``.
+    Zobacz do dokumentacji :doc:`FrameworkExtraBundle</bundles/SensioFrameworkExtraBundle/annotations/view>`
+    w celu poznania szczegółów.
+    
+
+.. tip::
+
+    Metoda ``renderView`` jest skrótem usługi ``templating``.
+    Usługa ``templating`` może być również użyta bezpośrednio::
+
+        $templating = $this->get('templating');
+        $content = $templating->render(
+            'AcmeHelloBundle:Hello:index.html.twig',
+            array('name' => $name)
+        );
+
+.. note::
+
+    Możliwe jest także renderowanie szablonów znajdujących się w głębszych podkatalogach,
+    jednak należy uważać, aby nie wpaść w pułapkę nadmiernie rozbudowanej struktury
+    katalogów:::
+
+        $templating->render(
+            'AcmeHelloBundle:Hello/Greetings:index.html.twig',
+            array('name' => $name)
+        );
+        // renderowany jest index.html.twig znajdujacy się w Resources/views/Hello/Greetings.
+        
+>>>>>>> refs/heads/nowe_rozdz
 
 .. index::
    single: kontroler; dostęp do usług
@@ -526,6 +752,7 @@ Silnik szablonowania Symfony jest szczegółowo wyjaśniony w rozdziale
 Dostęp do innych usług
 ~~~~~~~~~~~~~~~~~~~~~~
 
+<<<<<<< HEAD
 Symfony dostarczane jest z wieloma przydatnymi obiektami nazywanymi usługami.
 Są one używane do renderowania szablonów, wysyłania wiadomości email, wykonywania
 zapytań do bazy danych i innych wymyślnych "działań".
@@ -533,6 +760,13 @@ zapytań do bazy danych i innych wymyślnych "działań".
 Rozszerzając klasę kontrolera podstawowego, można uzyskać dostęp do
 każdej usługi Symfony poprzez metodę ``get()``. Poniżej znajduje się kilka
 popularnych usług, jakie można wykorzystać::
+=======
+Rozszerzając klasę kontrolera podstaowego, można uzyskać dostęp do
+każdej usługi Symfony2 poprzez metodę ``get()``. Poniżej znajduje się kilka
+popularnych usług, jakie mogą być potrzebne::
+
+    $request = $this->getRequest();
+>>>>>>> refs/heads/nowe_rozdz
 
     $templating = $this->get('templating');
 
@@ -607,15 +841,15 @@ zapamiętuje atrybuty w pliku cookie, używając natywnych sesji PHP.
 
 Przechowywanie i pobieranie informacji z sesji może być wykonać w każdej akcji::
 
-    use Symfony\Component\HttpFoundation\Request;
+    $session = $this->getRequest()->getSession();
 
-    public function indexAction(Request $request)
-    {
-        $session = $request->getSession();
+    // zapisanie atrybutu do odczytania w kolejnym żądaniu
+    $session->set('foo', 'bar');
 
-        // store an attribute for reuse during a later user request
-        $session->set('foo', 'bar');
+    // w innym kontrolerze i innym żądaniu
+    $foo = $session->get('foo');
 
+<<<<<<< HEAD
         // get the attribute set by another controller in another request
         $foobar = $session->get('foobar');
 
@@ -623,6 +857,11 @@ Przechowywanie i pobieranie informacji z sesji może być wykonać w każdej akc
         $filters = $session->get('filters', array());
     }
     
+=======
+    // użycie domyślnej wartości, jeśli nie istnieje klucz
+    $filters = $session->get('filters', array());
+
+>>>>>>> refs/heads/nowe_rozdz
 Atrybuty te pozostają przypisane użytkownikowi przez pozostałą część sesji.
 
 .. index::
@@ -639,21 +878,23 @@ następne żądanie. Tego typu komunikaty nazywane są "fleszowymi".
 
 Na przykład, wyobraźmy sobie, że przetwarzane jest zgłoszenie formularza::
 
-    use Symfony\Component\HttpFoundation\Request;
-
-    public function updateAction(Request $request)
+    public function updateAction()
     {
         $form = $this->createForm(...);
 
-        $form->handleRequest($request);
-
+        $form->handleRequest($this->getRequest());
+        
         if ($form->isValid()) {
-            // do some sort of processing
+            // obsługa formularza
 
+<<<<<<< HEAD
             $this->addFlash(
                 'notice',
                 'Your changes were saved!'
             );
+=======
+            $this->get('session')->getFlashBag()->add('notice', 'Zmiany zostały zapisane!');
+>>>>>>> refs/heads/nowe_rozdz
 
             // $this->addFlash is equivalent to $this->get('session')->getFlashBag()->add
 
@@ -674,19 +915,31 @@ komunikatu ``notice``:
 
     .. code-block:: html+jinja
 
-        {% for flashMessage in app.session.flashbag.get('notice') %}
-            <div class="flash-notice">
-                {{ flashMessage }}
-            </div>
-        {% endfor %}
+        {% if app.session.started %}
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="flash-notice">
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+        {% endif %}
 
     .. code-block:: html+php
 
+<<<<<<< HEAD
         <?php foreach ($view['session']->getFlash('notice') as $message): ?>
             <div class="flash-notice">
                 <?php echo "<div class='flash-error'>$message</div>" ?>
             </div>
         <?php endforeach ?>
+=======
+        <?php if ($view['session']->isStarted()): ?>
+            <?php foreach ($view['session']->getFlashBag()->get('notice') as $message): ?>
+                <div class="flash-notice">
+                    <?php echo "<div class='flash-error'>$message</div>" ?>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+>>>>>>> refs/heads/nowe_rozdz
 
 Zgodnie z założeniem, komunikaty fleszowe są przeznaczone do użycia dokładnie
 przy jednym żądaniu (są one wyświetlane natychmiast). Zostały zaprojektowane tak,
@@ -707,12 +960,18 @@ jest zwracana klientowi::
 
     use Symfony\Component\HttpFoundation\Response;
 
+<<<<<<< HEAD
     // utworzenie prostego obiektu Response z kodem stanu 200 (domyślny)
     $response = new Response('Hello '.$name, Response::HTTP_OK);
+=======
+    // utworzenie prostego obiektu Response z kodem statusu 200 (domyślnie)
+    $response = new Response('Hello '.$name, 200);
+>>>>>>> refs/heads/nowe_rozdz
 
     // utworzenie odpowiedzi w formacie JSON z kodem stanu 200
     $response = new Response(json_encode(array('name' => $name)));
     $response->headers->set('Content-Type', 'application/json');
+<<<<<<< HEAD
 
 Właściwość ``headers`` jest obiektem :class:`Symfony\\Component\\HttpFoundation\\HeaderBag`
 i ma kilka ciekawych metod do pobierania i ustawiania nagłówków. Nazwy nagłówków
@@ -721,6 +980,8 @@ lub nawet ``content_type``.
 
 Istnieja również specjalne klasy do łatwiejszego wykonywania pewnego rodzaju
 odpowiedzi:
+=======
+>>>>>>> refs/heads/nowe_rozdz
 
 * dla JSON istnieje :class:`Symfony\\Component\\HttpFoundation\\JsonResponse`.
   Czytaj :ref:`component-http-foundation-json-response`.
@@ -743,23 +1004,26 @@ odpowiedzi:
 Obiekt Request
 --------------
 
+<<<<<<< HEAD
 Poza wartościami wieloznaczników trasowania, akcja również uzyskuje dostęp
 do obiektu ``Request``.
 Framework wstrzykuje obiekt ``Request`` do akcji, jeśli argument ma podpowiadany
 typ :class:`Symfony\\Component\\HttpFoundation\\Request`::
+=======
+Rozszerzając podstawową klasę ``Controller``, kontroler uzyskuje również dostęp
+do obiektu``Request``. Framework wstrzykuje obiekt ``Request`` w kontroler, jeśli
+zmienna jest typu odgadywanego w `Symfony\Component\HttpFoundation\Request`::
+>>>>>>> refs/heads/nowe_rozdz
 
-    use Symfony\Component\HttpFoundation\Request;
+    $request = $this->getRequest();
 
-    public function indexAction(Request $request)
-    {
-        $request->isXmlHttpRequest(); // is it an Ajax request?
+    $request->isXmlHttpRequest(); // żądanie Ajax?
 
-        $request->getPreferredLanguage(array('en', 'fr'));
+    $request->getPreferredLanguage(array('en', 'fr'));
 
-        $request->query->get('page'); // get a $_GET parameter
+    $request->query->get('page'); // pobieramy parametr $_GET
 
-        $request->request->get('page'); // get a $_POST parameter
-    }
+    $request->request->get('page'); // pobieramy parametr $_POST
 
 Podobnie jak w przypadku obiektu ``Response``, nagłówki żądania są przechowywane w
 obiekcie ``HeaderBag`` i są równie łatwo dostępne.

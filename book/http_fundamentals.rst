@@ -287,15 +287,12 @@ interfejsu do tworzenia odpowiedzi, jakie mają być zwracane klientowi::
     $response = new Response();
 
     $response->setContent('<html><body><h1>Hello world!</h1></body></html>');
-    $response->setStatusCode(Response::HTTP_OK);
+    $response->setStatusCode(200);
     $response->headers->set('Content-Type', 'text/html');
 
     // prints the HTTP headers followed by the content
     $response->send();
     
-.. versionadded:: 2.4
-    W Symfony 2.4 dodano obsługę stałych stanu HTTP.
-
 Gdyby Symfony nie oferował nic ponadto, to miałbyś już narzędzie do łatwego
 uzyskiwania dostępu do informacji żądania i obiektowo zorientowany interfejs do
 tworzenia odpowiedzi. Nawet jak nauczysz się wykorzystywać wiele zaawansowanych
@@ -388,7 +385,7 @@ Można to zrobić szybko i brzydko::
     } elseif ($path == '/contact') {
         $response = new Response('Contact us');
     } else {
-        $response = new Response('Page not found.', Response::HTTP_NOT_FOUND);
+        $response = new Response('Page not found.', 404);
     }
     $response->send();
 

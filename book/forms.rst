@@ -43,7 +43,11 @@ i przechowywać dane dla pojedynczego zadania::
         {
             return $this->task;
         }
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> refs/heads/nowe_rozdz
         public function setTask($task)
         {
             $this->task = $task;
@@ -97,7 +101,11 @@ wewnątrz akcji::
             $form = $this->createFormBuilder($task)
                 ->add('task', 'text')
                 ->add('dueDate', 'date')
+<<<<<<< HEAD
                 ->add('save', 'submit', array('label' => 'Create Task'))
+=======
+                ->add('save', 'submit', array('label' => 'Create Post'))
+>>>>>>> refs/heads/nowe_rozdz
                 ->getForm();
 
             return $this->render('default/new.html.twig', array(
@@ -124,7 +132,11 @@ odnoszące się do właściwości ``task`` i ``dueDate`` klasy ``Task``.
 Mamy również do tych pól przypisany "typ" (np. ``text``, ``date``), który (między
 innymi) określa jakie znaczniki formularza HTML są renderowane dla danego pola.
 
+<<<<<<< HEAD
 Na koniec dodamy przycisk zgłaszjący dla przesyłania formularza na serwer.
+=======
+Na koniec dodamy przycisk zglaszjący dla przesyłania formularza na serwer.
+>>>>>>> refs/heads/nowe_rozdz
 
 .. versionadded:: 2.3
     W Symfony 2.3 dodano obsługę przycisków zgłaszających (*submit*). Wcześniej
@@ -176,6 +188,7 @@ To jest to! potrzeba tylko trzech linii, aby wyrenderować kompletny formularz:
     Renderuje początkowy znacznik formularza, łącznie z prawidłowym atrybutem
     ``enctype``, gdy stosuje się przesyłanie pliku.
 
+<<<<<<< HEAD
 ``form_widget(form)``
     Renderuje wszystkie pola, w tym sam element pola, etykietę i komunikat błędu
     dla pola.
@@ -192,6 +205,14 @@ To jest to! potrzeba tylko trzech linii, aby wyrenderować kompletny formularz:
     renderować każde pole indywidualnie, aby móc kontrolować wygląd formularza.
     Dowiesz się jak to zrobić w rozdziale ":ref:`form-rendering-template`".
 
+=======
+To jest to! Przy drukowaniu ``form(form)`` renderowane jest każde pole w formularzu,
+wraz z etykietą  i komunikatem błędu (jeśli wystąpi błąd). Funkcja ``form`` również
+obejmuje wszystko co jest potrzebne dla znacznika ``form`` HTML. Jest to proste,
+ale mało elastyczne (na razie). Zazwyczaj chce się indywidualnie renderować każde pole
+formularza, tak więc można kontrolować wygląd formularza. Więcej na ten temat w
+rozdziale ":ref:`form-rendering-template`".
+>>>>>>> refs/heads/nowe_rozdz
 
 Zanim przejdziemy dalej, zwróć uwagę na to, jak zostało zrenderowane pole wejściowe
 ``task``, mające wartość właściwości ``task`` obiektu ``$task`` (czyli "Write a blog
@@ -231,7 +252,11 @@ użytkownika z formularzem. W naszej akcji dodamy następujacą rzecz::
         $form = $this->createFormBuilder($task)
             ->add('task', 'text')
             ->add('dueDate', 'date')
+<<<<<<< HEAD
             ->add('save', 'submit', array('label' => 'Create Task'))
+=======
+            ->add('save', 'submit', array('label' => 'Create Post'))
+>>>>>>> refs/heads/nowe_rozdz
             ->getForm();
 
         $form->handleRequest($request);
@@ -247,8 +272,13 @@ użytkownika z formularzem. W naszej akcji dodamy następujacą rzecz::
    
 .. versionadded:: 2.3
     W Symfony 2.3 została dodana metoda :method:`Symfony\Component\Form\FormInterface::handleRequest`.
+<<<<<<< HEAD
     Poprzednio ``$request`` był przekazywany do metody ``submit`` - strategia, która jest już
     przestarzała i zostanie usunięta w Symfony 3.0. W celu poznania szczegółów tej metody proszę
+=======
+    Poprzednio ``$request`` było przekazywane do metody ``submit`` - strategia, która jest już
+    zdeprecjonowana i zostanie usunieta w Symfony 3.0. W celu poznania szczegółów tej metody proszę
+>>>>>>> refs/heads/nowe_rozdz
     zapoznać się z :ref:`cookbook-form-submit-request`.
 
 
@@ -306,8 +336,8 @@ w akcji. Dodajmy do naszego formularza drugi przycisk z etykietą
     $form = $this->createFormBuilder($task)
         ->add('task', 'text')
         ->add('dueDate', 'date')
-        ->add('save', 'submit')
-        ->add('saveAndAdd', 'submit')
+        ->add('save', 'submit', array('label' => 'Create Post'))
+        ->add('saveAndAdd', 'submit', array('label' => 'Save and Add'))
         ->getForm();
 
 W akcji zastosujemy metodę przycisku
@@ -1036,7 +1066,11 @@ pomocniczych ``form()`` lub ``form_start()``:
     Jeśli metodą formularza nie jest GET lub POST, ale PUT, PATCH lub DELETE, to
     Symfony wstawia ukryte pole z nazwą "_method", które przechowuje nazwę tej
     metody. Taki formularz będzie zgłaszany w zwykłym żądaniu POST, ale router
+<<<<<<< HEAD
     Symfony jest w stanie wykryć parametr "_method" i zinterpretuje żądanie jako
+=======
+    Symfony2 jest w stanie wykryć parametr ``_method`` i zinterpretuje żądanie jako
+>>>>>>> refs/heads/nowe_rozdz
     PUT, PATCH lub DELETE. Proszę zapoznać się z artykułem
     ":doc:`/cookbook/routing/method_parameters`" w celu uzyskania więcej informacji.
     
