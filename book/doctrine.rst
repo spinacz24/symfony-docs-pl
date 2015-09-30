@@ -7,9 +7,11 @@
 Bazy danych a Doctrine
 ======================
 
-Jednym z najczęstszych i trudnych zadań każdej aplikacji jest utrwalanie
-i odczytywanie informacji zapisanej w bazie danych. Na szczęście Symfony jest zintegrowany
-z biblioteką PHP `Doctrine`_, której jedynym celem jest dostarczenie skutecznych
+Jednym z najczęstszych i trudnych zadań każdej aplikacji jest utrzymywanie
+informacji zapisanej w bazie danych i jej odczytywanie . Chociaż framework Symfony
+nie jest domyślnie zintegrowany z żadną biblioteką `ORM`_, to dystrybucja Symfony Standard
+Edition, będąca najczęściej wykorzystywaną dystrybucją Symfony, dostarczana jest
+ze zintegrowaną biblioteką `Doctrine`_, której jedynym celem jest dostarczenie skutecznych
 narzędzi do uczynienia tego zadania łatwym. W tym rozdziale zapoznasz się z podstawami
 filozofii stojącej za Doctrine i zobaczysz jak można łatwo pracować z bazą danych.
 
@@ -23,7 +25,7 @@ filozofii stojącej za Doctrine i zobaczysz jak można łatwo pracować z bazą 
 
     Można również utrwalić dane w `MongoDB`_ stosując bibliotekę Doctrine ODM.
     Więcej informacji na ten temat znajdziesz w dokumentacji
-    ":doc:`DoctrineMongoDBBundle</bundles/DoctrineMongoDBBundle/index>`".
+    "`DoctrineMongoDBBundle`_".
 
 Prosty przykład: "Produkty"
 ---------------------------
@@ -32,15 +34,6 @@ Najprostszym sposobem zrozumienia działania Doctrine jest zobaczenia jej w dzia
 W tym rozdziale skonfigurujemy bazę danych, utworzymy obiekt ``Product``, zachowamy
 go w bazie danych i pobierzemy go z powrotem.
 
-.. sidebar:: Ćwiczenie przykładowego kodu
-
-    Jeśli chcesz przećwiczyć przykład z tego rozdziału, to utwórz pakiet
-    ``AcmeStoreBundle`` poleceniem:
-    
-
-    .. code-block:: bash
-
-        $ php app/console generate:bundle --namespace=Acme/StoreBundle
 
 Skonfigurowanie bazy danych
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -71,7 +64,6 @@ bazą danych. Zgodnie z konwencją informacja ta zapisywana jest w pliku
     .. configuration-block::
 
         .. code-block:: yaml
-           :linenos:
 
             # app/config/config.yml
             doctrine:
@@ -83,22 +75,29 @@ bazą danych. Zgodnie z konwencją informacja ta zapisywana jest w pliku
                     password: "%database_password%"
 
         .. code-block:: xml
-           :linenos:
-           
+
             <!-- app/config/config.xml -->
-            <doctrine:config>
-                <doctrine:dbal
-                    driver="%database_driver%"
-                    host="%database_host%"
-                    dbname="%database_name%"
-                    user="%database_user%"
-                    password="%database_password%"
-                >
-            </doctrine:config>
+            <?xml version="1.0" encoding="UTF-8" ?>
+            <container xmlns="http://symfony.com/schema/dic/services"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:doctrine="http://symfony.com/schema/dic/doctrine"
+                xsi:schemaLocation="http://symfony.com/schema/dic/services
+                    http://symfony.com/schema/dic/services/services-1.0.xsd
+                    http://symfony.com/schema/dic/doctrine
+                    http://symfony.com/schema/dic/doctrine/doctrine-1.0.xsd">
+
+                <doctrine:config>
+                    <doctrine:dbal
+                        driver="%database_driver%"
+                        host="%database_host%"
+                        dbname="%database_name%"
+                        user="%database_user%"
+                        password="%database_password%" />
+                </doctrine:config>
+            </container>
 
         .. code-block:: php
-           :linenos:
-           
+
             // app/config/config.php
             $configuration->loadFromExtension('doctrine', array(
                 'dbal' => array(
@@ -116,7 +115,7 @@ bazą danych. Zgodnie z konwencją informacja ta zapisywana jest w pliku
     informacje), na przykład wewnątrz konfiguracji Apache. Więcej informacji na
     ten temat można uzyskać w artykule :doc:`/cookbook/configuration/external_parameters`.
 
-Teraz, gdy Doctrine posiada informacje o bazie danych, Symfony2 może użyć tej biblioteki
+Teraz, gdy Doctrine posiada informacje o bazie danych, Symfony może użyć tej biblioteki
 do utworzenia bazy danych:
 
 .. code-block:: bash
@@ -126,7 +125,7 @@ do utworzenia bazy danych:
 .. sidebar:: Konfiguracja bazy danych do UTF8
 
     Częstym błędem, który popełniają nawet doświadczeni programiści jest rozpoczęcie
-    projektu Symfony2 bez ustawienia domyślnych wartości ``charset`` i ``collation``
+    projektu Symfony bez ustawienia domyślnych wartości ``charset`` i ``collation``
     dla swojej bazy danych, co skutkuje łacińskim porządkiem sortowania, który jest
     domyślny dla większości systemów baz danych. Mogą oni nawet pamiętać, aby to zrobić
     za pierwszym razem, ale zapominają że czynią to już po uruchomieniu dość popularnych
@@ -147,8 +146,13 @@ do utworzenia bazy danych:
     .. code-block:: ini
 
         [mysqld]
-        collation-server = utf8_general_ci
-        character-set-server = utf8
+        # W versji 5.5.3 wprowadzono zestawa "utf8mb4", który jest zalecany
+        collation-server     = utf8mb4_general_ci # Replaces utf8_general_ci
+        character-set-server = utf8mb4            # Replaces utf8
+    
+    Trzeba mieć na uwadze, że MySQL nie obsługuje 4-bajtowych znaków unicode
+    w zestawach ``utf8`` i łańcuchy tekstowe zawierajace takie znaki są
+    obcinane. Zostało to naprawione przez wprowadzenie `nowego zestawu znakowego utf8mb4`_.    
 
 .. note::
 
@@ -158,7 +162,6 @@ do utworzenia bazy danych:
     .. configuration-block::
 
         .. code-block:: yaml
-           :linenos:
 
             # app/config/config.yml
             doctrine:
@@ -168,19 +171,26 @@ do utworzenia bazy danych:
                     charset: UTF8
 
         .. code-block:: xml
-           :linenos:
 
             <!-- app/config/config.xml -->
-            <doctrine:config
-                driver="pdo_sqlite"
-                path="%kernel.root_dir%/sqlite.db"
-                charset="UTF-8"
-            >
-                <!-- ... -->
-            </doctrine:config>
+            <?xml version="1.0" encoding="UTF-8" ?>
+            <container xmlns="http://symfony.com/schema/dic/services"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:doctrine="http://symfony.com/schema/dic/doctrine"
+                xsi:schemaLocation="http://symfony.com/schema/dic/services
+                    http://symfony.com/schema/dic/services/services-1.0.xsd
+                    http://symfony.com/schema/dic/doctrine
+                    http://symfony.com/schema/dic/doctrine/doctrine-1.0.xsd">
+
+                <doctrine:config>
+                    <doctrine:dbal
+                        driver="pdo_sqlite"
+                        path="%kernel.root_dir%/sqlite.db"
+                        charset="UTF-8" />
+                </doctrine:config>
+            </container>
 
         .. code-block:: php
-           :linenos:
 
             // app/config/config.php
             $container->loadFromExtension('doctrine', array(
@@ -197,32 +207,31 @@ Utworzenie klasy encji
 Załóżmy, że budujemy aplikację w której powinny być wyświetlane produkty. Nawet
 bez myślenia o Doctrine lub bazach danych wiesz już, że do reprezentowania produktów
 potrzebny jest obiekt ``Product``. Utworzymy taką klasę wewnątrz katalogu ``Entity``
-w ``AcmeStoreBundle``::
+w ``AppBundle``::
 
-    // src/Acme/StoreBundle/Entity/Product.php
-    namespace Acme\StoreBundle\Entity;
+    // src/AppBundle/Entity/Product.php
+    namespace AppBundle\Entity;
 
     class Product
     {
         protected $name;
-
         protected $price;
-
         protected $description;
     }
 
 Klasa ta, często nazywana "encją" (co oznacza podstawową klasę przechowującą dane),
-jest prosta i pomaga spełnić w aplikacji wymóg procesów biznesowy potrzebujących
-produktów . Na razie nie może ona być utrwalona w bazie danych - jest to tylko prosta
+jest prosta i pomaga spełnić w aplikacji wymóg procesów biznesowych potrzebujących
+produktów. Na razie nie może ona być utrwalona w bazie danych - jest to tylko prosta
 klasa PHP.
 
 .. tip::
 
-    Gdy poznasz koncepcje stojące za Doctrine, powinieneś sam tworzyć encje:
+    Gdy się już pozna koncepcje stojące za Doctrine ie bedzie problemu z samodzielnym
+    tworzeniem encji:
     
     .. code-block:: bash
 
-        $ php app/console doctrine:generate:entity --entity="AcmeStoreBundle:Product" --fields="name:string(255) price:float description:text"
+       $ php app/console doctrine:generate:entity
 
 .. index::
     single: Doctrine; dodawanie metadanych odwzorowania
@@ -233,25 +242,24 @@ Dodanie informacji odwzorowania
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Doctrine umożliwia pracę z bazami danych w sposób o wiele bardziej interesujacy
-niż tylko pobieranie wierszy do tablic z tabel kolumnowych. Zamiast tego, Doctrine
-umożliwia utrwalanie w bazie danych całych obiektów. Działa to poprzez odwzorowanie
+niż tylko pobieranie wierszy do tablic z tabel bazy danych. Doctrine umożliwia
+ponadto utrwalanie w bazie danych całych obiektów. Działa to poprzez odwzorowanie
 (mapowanie) klasy na tabelę bazy danych a właściwości klasy na kolumny tabeli:
 
 .. image:: /images/book/doctrine_image_1.png
    :align: center
 
-Aby to wykonać w Doctrine trzeba utworzyć "metadane" lub w konfiguracji ustawić
-odwzorowanie klasy Product i jej właściwości na bazę danych. Metadane można określić
-w kilku różnych formatach, włączając w to YAML, XML lub bezpośrednio w klasie
-``Product`` poprzez adnotacje:
+W celu wykonania tego w Doctrine, trzeba utworzyć "metadane" lub w konfiguracji
+ustawić odwzorowanie klasy Product i jej właściwości na bazę danych. Metadane
+można określić w kilku różnych formatach, włączając w to YAML, XML lub bezpośrednio
+w klasie ``Product`` poprzez adnotacje:
 
 .. configuration-block::
 
     .. code-block:: php-annotations
-       :linenos:
 
-        // src/Acme/StoreBundle/Entity/Product.php
-        namespace Acme\StoreBundle\Entity;
+        // src/AppBundle/Entity/Product.php
+        namespace AppBundle\Entity;
 
         use Doctrine\ORM\Mapping as ORM;
 
@@ -262,8 +270,8 @@ w kilku różnych formatach, włączając w to YAML, XML lub bezpośrednio w kla
         class Product
         {
             /**
-             * @ORM\Id
              * @ORM\Column(type="integer")
+             * @ORM\Id
              * @ORM\GeneratedValue(strategy="AUTO")
              */
             protected $id;
@@ -285,10 +293,9 @@ w kilku różnych formatach, włączając w to YAML, XML lub bezpośrednio w kla
         }
 
     .. code-block:: yaml
-       :linenos:
 
-        # src/Acme/StoreBundle/Resources/config/doctrine/Product.orm.yml
-        Acme\StoreBundle\Entity\Product:
+        # src/AppBundle/Resources/config/doctrine/Product.orm.yml
+        AppBundle\Entity\Product:
             type: entity
             table: product
             id:
@@ -306,21 +313,21 @@ w kilku różnych formatach, włączając w to YAML, XML lub bezpośrednio w kla
                     type: text
 
     .. code-block:: xml
-       :linenos:
 
-        <!-- src/Acme/StoreBundle/Resources/config/doctrine/Product.orm.xml -->
+        <!-- src/AppBundle/Resources/config/doctrine/Product.orm.xml -->
+        <?xml version="1.0" encoding="UTF-8" ?>
         <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
-                            http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-            <entity name="Acme\StoreBundle\Entity\Product" table="product">
-                <id name="id" type="integer" column="id">
+            <entity name="AppBundle\Entity\Product" table="product">
+                <id name="id" type="integer">
                     <generator strategy="AUTO" />
                 </id>
-                <field name="name" column="name" type="string" length="100" />
-                <field name="price" column="price" type="decimal" scale="2" />
-                <field name="description" column="description" type="text" />
+                <field name="name" type="string" length="100" />
+                <field name="price" type="decimal" scale="2" />
+                <field name="description" type="text" />
             </entity>
         </doctrine-mapping>
 
@@ -328,7 +335,7 @@ w kilku różnych formatach, włączając w to YAML, XML lub bezpośrednio w kla
 
     W pakiecie można zdefiniować metadane tylko w jednorodnym formacie. Na przykład,
     nie jest możliwe zmieszanie definicji w formacie YAML z adnotacjami umieszczonymi
-    w pliku PHP z definicją klasy encji.
+    nad definicją klasy encji.
 
 .. tip::
 
@@ -344,7 +351,7 @@ każdy z własnymi opcjami. Więcej informacji na ten temat można znaleźć w r
 
     Można również zapoznać się z `Basic Mapping Documentation`_ w celu poznania
     szczegółowej informacji o odzwzorowaniu. Jeżeli stosuje się adnotacje, to trzeba
-    poprzedzić wszystkie adnotacje przedrostkiem ``ORM\`` (np. ``ORM\Column(..)``),
+    poprzedzić wszystkie adnotacje przedrostkiem ``ORM\`` (np. ``ORM\Column(...)``),
     co nie jest opisane w dokumentacji Doctrine. Musi się również dołączyć wyrażenie
     ``use Doctrine\ORM\Mapping as ORM;``, które importuje przedrostek adnotacji ORM.
 
@@ -358,7 +365,7 @@ każdy z własnymi opcjami. Więcej informacji na ten temat można znaleźć w r
     poznania sposobu prawidłowego sposobu rozwiązania konfliktu tych nazw.
     Ewentualnie, jeżeli ma się wolną rękę w wyborze schematu bazy danych,
     to wystarczy odwzorować inną nazwę tabeli lub kolumny. Zobacz do rozdziałów
-    `Persistent classes`_ i `Property Mapping`_ w dokumentacji Doctrine.
+    `Creating Classes for the Database`_ i `Property Mapping`_ w dokumentacji Doctrine.
 
 .. note::
 
@@ -377,10 +384,12 @@ każdy z własnymi opcjami. Więcej informacji na ten temat można znaleźć w r
 .. index::
       single: metoda akcesor
 
+.. _book-doctrine-generating-getters-and-setters:
+
 Wygenerowanie metod akcesorów
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Chociaż już Doctrine wie jak utrwalić obiekt ``Product`` w bazie danych, sama klasa
+Chociaż Doctrine już wie jak utrwalić obiekt ``Product`` w bazie danych, to sama klasa
 nie jest jeszcze przydatna. Ponieważ ``Product`` jest zwykłą klasą PHP, to potrzeba
 utworzyć metody akcesorów pobierających i ustawiających (*ang. getter i setter*)
 (tj. ``getName()`` i ``setName()``) w celu uzyskania dostępu do właściwości tego
@@ -389,7 +398,7 @@ w wyniku polecenia:
 
 .. code-block:: bash
 
-    $ php app/console doctrine:generate:entities Acme/StoreBundle/Entity/Product
+    $ php app/console doctrine:generate:entities AppBundle/Entity/Product
 
 Zastosowanie tego polecenia daje pewność, że w klasie ``Product`` zostaną wygenerowane
 wszystkie niezbędne akcesory. Polecenie to jest bezpieczne – można uruchamiać je
@@ -406,12 +415,12 @@ metod).
 
     Przy pomocy polecenia ``doctrine:generate:entities`` można:
 
-        * generować akcesory;
-
-        * generować klasy repozytorium konfigurowane adnotacją
-          ``@ORM\Entity(repositoryClass="...")``;
-
-        * generować właściwy konstrukltor dla relacji 1:n i n:m.
+    * generować akcesory;
+   
+   * generować klasy repozytorium konfigurowane adnotacją
+     ``@ORM\Entity(repositoryClass="...")``;
+   
+   * generować właściwy konstruktor dla relacji 1:n i n:m.
 
     Polecenie ``doctrine:generate:entities`` zabezpiecza kopię zapasową oryginalego
     pliku ``Product.php`` mianując ją nazwą ``Product.php~``. W niektórych przypadkach
@@ -429,7 +438,10 @@ w informacji odwzorowania Doctrine) lub w całej przestrzeni nazw:
 
 .. code-block:: bash
 
-    $ php app/console doctrine:generate:entities AcmeStoreBundle
+    # wygenerowanie wszystkich encji w AppBundle
+    $ php app/console doctrine:generate:entities AppBundle
+
+    # wygenerowanie wszystkich encji w rzestrzeni nazewniczej Acme
     $ php app/console doctrine:generate:entities Acme
 
 .. note::
@@ -442,13 +454,15 @@ w informacji odwzorowania Doctrine) lub w całej przestrzeni nazw:
       single: Doctrne; tworzenie schematu
       single: Doctrne; tworzenie tabel bazy danych
 
+.. _book-doctrine-creating-the-database-tables-schema:
+
 Utworzenie schematu i tabel bazy danych
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Mamy już teraz użyteczną klasę ``Product`` z informacją odwzorowania instruującą
-Doctrine jak tą klase obsługiwać. Nie mamy jeszcze odpowiadającej tej klasie
+Doctrine jak tą klasę obsługiwać. Nie mamy jeszcze odpowiadającej tej klasie
 tabeli ``product`` w bazie danych. Doctrine może automatycznie tworzyć tabele
-bazy danych potrzebne dla każdej znanej encji w aplikacji. Aby to zrobić,
+bazy danych potrzebne dla każdej znanej encji w aplikacji. Do zrobienia tego
 wystarczy uruchomić polecenie:
 
 
@@ -467,7 +481,7 @@ wystarczy uruchomić polecenie:
     kolumny do istniejącej tabeli ``product``.
 
     Lepszym sposobem skorzystania z zaawansowanych możliwości tego polecenia jest
-    użycie :doc:`migracji</bundles/DoctrineMigrationsBundle/index>`, które umożliwiają
+    użycie `migracji`_, które umożliwiają
     wygenerowanie tych wyrażeń SQL i zabezpieczenie ich w klasach migracyjnych,
     które można uruchamiać systematycznie na swoim serwerze produkcyjnym w celu
     śledzenia i migracji schematu bazy danych, bezpiecznie i niezawodnie.
@@ -481,17 +495,15 @@ Utrwalanie obiektów w bazie danych
 
 Teraz mamy już encję ``Product`` odwzorowaną w odpowiadającej jej tabeli ``product``,
 można więc przekazać dane do bazy danych. Dokonanie tego z poziomu kontrolera jest
-całkiem proste. Dodamy następujaca metodę do ``DefaultController`` pakietu:
+całkiem proste. Dodamy następujaca metodę do ``DefaultController`` pakietu::
 
-.. code-block:: php
-    :linenos:
-
-    // src/Acme/StoreBundle/Controller/DefaultController.php
+   // src/AppBundle/Controller/DefaultController.php
 
     // ...
-    use Acme\StoreBundle\Entity\Product;
+    use AppBundle\Entity\Product;
     use Symfony\Component\HttpFoundation\Response;
 
+    // ...
     public function createAction()
     {
         $product = new Product();
@@ -500,6 +512,7 @@ całkiem proste. Dodamy następujaca metodę do ``DefaultController`` pakietu:
         $product->setDescription('Lorem ipsum dolor');
 
         $em = $this->getDoctrine()->getManager();
+
         $em->persist($product);
         $em->flush();
 
@@ -511,21 +524,30 @@ całkiem proste. Dodamy następujaca metodę do ``DefaultController`` pakietu:
     Jeśli wykonujesz nasz przykład, to aby zobaczyć jak to działa musisz utworzyć
     trasę wskazującą na tą akcję.
 
+.. tip::
+
+    W tym artykule pokazuje się pracę z Doctrine z poziomu kontrolera z użyciem
+    metody :method:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller::getDoctrine`
+    tego kontrolera. Metoda ta jest skrótem do pobierania usługi ``doctrine``.
+    Można pracować z Doctrine gdziekolwiek wstrzykując tą usługę do swojej usługi.
+    Proszę przeczytać :doc:`/book/service_container` w celu uzyskania informacji
+    o tworzeniu własnych usług.
+
 Spójrzmy na powyższy kod bardziej szczegółowo:
 
 
-* **linie 9-12** W tej sekcji tworzymy instancję klasy i działamy z obiektem ``$product``
+* **linie 10-13** W tej sekcji tworzymy instancję klasy i działamy z obiektem ``$product``
   jak z innym zwykłym obiektem PHP;
 
-* **linia 14** W tej linii pobieramy obiekt *menadżera encji* Doctrine, który jest
+* **linia 15** W tej linii pobieramy obiekt *menadżera encji* Doctrine, który jest
   odpowiedzialny za obsługę procesu utrwalania i pobierania obiektów z formularza
   do bazy danych;
 
-* **linia 15** Metoda ``persist()`` powiadamia Doctrine aby "zarządzała" obiektem
+* **linia 16** Metoda ``persist()`` powiadamia Doctrine aby "zarządzała" obiektem
   ``$product``. W rzeczywistości to nie powoduje wprowadzenia zapytania do bazy danych
   (na razie);
 
-* **linia 16** Gdy wywoływana jest metoda ``flush()``, Doctrine przeszukuje wszystkie
+* **linia 17** Gdy wywoływana jest metoda ``flush()``, Doctrine przeszukuje wszystkie
   zarządzane obiekty, by sprawdzić, czy muszą one zostać utrwalone w bazie danych.
   W naszym przykładzie obiekt ``$product`` nie został jeszcze utrwalony, tak więc
   menadżer encji wykona zapytanie ``INSERT`` i utworzony zostanie wiersz w tabeli
@@ -535,11 +557,11 @@ Spójrzmy na powyższy kod bardziej szczegółowo:
 
   W rzeczywistości, ponieważ Doctrine ma informacje o wszystkich zarządzanych encjach,
   to gdy wywoła się metodę ``flush()``, przeliczy ona całkowity wskaźnik zmian
-  i wykona możliwie najlepsze zapytanie (zapytania). Przykładowo, jeżeli do utrwalenia
-  jest w sumie 100 obiektów ``Product`` i wywoła się metodę ``flush()``, to Doctrine
-  utworzy pojedyncze wyrażenie i ponownie go użyje dla każdego zapisu. Ten wzorzec
-  projektowy jest nazywany *wzorcem jednostki pracy* (*ang. Unit of Work Pattern*) [1]_
-  a jest używany, bo jest szybki i skuteczny.
+  i wykona zapytania w możliwie najlepszej kolejności. Wykorzystywane sa przy tym
+  przygotowane i zbuforowane wyrażenia poprawiające trochę wydajność.  
+  Przykładowo, jeżeli do utrwalenia jest w sumie 100 obiektów ``Product`` i wywoła
+  się metodę ``flush()``, to Doctrine wykona 100 zapytań ``INSERT`` wykorzystując
+  pojedynczy spreparowany obiekt.
 
 Podczas tworzenia lub aktualizowania obiektów działanie jest zawsze takie samo.
 W następnym rozdziale poznasz, jak Doctrine jest wystarczająco inteligentny aby
@@ -548,7 +570,8 @@ automatycznie wystawiać zapytanie ``UPDATE``, jeżeli rekord już istnieje w ba
 .. tip::
 
     Doctrine dostarcza bibliotekę pozwalającą programowo załadować dane testowe
-    do projektu. Więcej informacji uzyskasz w :doc:`/bundles/DoctrineFixturesBundle/index`.
+    do projektu (czyli tzw. "dane fikstur"). Więcej informacji uzyskasz w
+    dokumentacji pakietu `DoctrineFixturesBundle`_.
 
 Pobieranie obiektów z bazy danych
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -560,7 +583,7 @@ produktu na podstawie jego wartości ``id``::
     public function showAction($id)
     {
         $product = $this->getDoctrine()
-            ->getRepository('AcmeStoreBundle:Product')
+            ->getRepository('AppBundle:Product')
             ->find($id);
 
         if (!$product) {
@@ -575,8 +598,7 @@ produktu na podstawie jego wartości ``id``::
 .. tip::
 
     Możesz osiągnąć odpowiednik tego bez pisania jakiegokolwiek kodu używając skrótu
-    ``@ParamConverter``. Zobacz dokumentację
-    :doc:`FrameworkExtraBundle</bundles/SensioFrameworkExtraBundle/annotations/converters>`.
+    ``@ParamConverter``. Zobacz dokumentację `FrameworkExtraBundle documentation`_.
     
 Gdy przesyła się zapytanie dotyczące określonego typu obiektu, zawsze używa się czegoś,
 co nazywa się "repozytorium". Można myśleć o repozytorium jak o klasie PHP, której
@@ -584,12 +606,12 @@ jedynym zadaniem jest pomoc w pobieraniu encji pewnych klas. Można uzyskać dos
 obiektu repozytorium dla klasy encji poprzez::
 
     $repository = $this->getDoctrine()
-        ->getRepository('AcmeStoreBundle:Product');
+        ->getRepository('AppBundle:Product');
 
 .. note::
 
-    Łańcuch ``AcmeStoreBundle:Product`` jest skrótem, jaki można używać zawsze
-    w Doctrine zamiast pełnej nazwy encji (tj. ``Acme\StoreBundle\Entity\Product``).
+    Łańcuch ``AppBundle:Product`` jest skrótem, jaki można używać zawsze
+    w Doctrine zamiast pełnej nazwy encji (tj. ``AppBundle\Entity\Product``).
     Będzie to działać dopóty ważna jest encja w przestrzeni nazw ``Entity`` pakietu.
 
 Po utworzeniu repozytorium ma się dostęp do wszelkiego rodzaju przydatnych metod::
@@ -616,7 +638,9 @@ Można również wykorzystać przydatne metody ``findBy`` i ``findOneBy`` do ła
 pobierania obiektu na podstawie różnych warunków::
 
     // zapytanie o jeden produkt o określonej nazwie i cenie
-    $product = $repository->findOneBy(array('name' => 'foo', 'price' => 19.99));
+    $product = $repository->findOneBy(
+        array('name' => 'foo', 'price' => 19.99)
+    );
 
     // zapytanie o wszystkie produkty pasujace do określonej nazwy, posortowane wg. ceny
     $products = $repository->findBy(
@@ -631,10 +655,12 @@ pobierania obiektu na podstawie różnych warunków::
 
     .. image:: /images/book/doctrine_web_debug_toolbar.png
        :align: center
-       :scale: 50
-       :width: 350
+       :scale: 100
 
     Po kliknięciu na ikonę otworzy się profiler, pokazując dokładnie wykonane zapytania.
+    
+    Ikona zmieni kolor na żółty, gdy będzie więcej niż 50 zapytań na stronę.
+    Moze to wskazywać, że coś nie jest poprawne.
 
 Aktualizacja obiektu
 ~~~~~~~~~~~~~~~~~~~~
@@ -646,7 +672,7 @@ aktualizacji danych::
     public function updateAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $product = $em->getRepository('AcmeStoreBundle:Product')->find($id);
+        $product = $em->getRepository('AppBundle:Product')->find($id);
 
         if (!$product) {
             throw $this->createNotFoundException(
@@ -657,7 +683,7 @@ aktualizacji danych::
         $product->setName('New product name!');
         $em->flush();
 
-        return $this->redirect($this->generateUrl('homepage'));
+        return $this->redirectToRoute('homepage');
     }
 
 Aktualizacja obiektu obejmuje tylko trzy kroki:
@@ -681,7 +707,7 @@ menadżera encji::
     $em->flush();
 
 Jak można się spodziewać, metoda ``remove()`` powiadamia Doctrine, że chce się
-usunąć daną encję z bazy danych. Zapytanie ``DELETE`` nie jest wykonywane, do
+usunąć dany obiekt z bazy danych. Zapytanie ``DELETE`` nie jest wykonywane, do
 czasu wywołania metody ``flush()``.
 
 .. _`book-doctrine-queries`:
@@ -708,90 +734,56 @@ Odpytywanie obiektów z użyciem DQL
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Proszę sobie wyobrazić, że chcemy zapytać o produkty, ale tylko takie, które kosztują więcej
-niż ``19.99`` i są uporządkowane od najtańszych do najdroższych. Wewnątrz kontrolera
-utwórz następujący kod::
+niż ``19.99`` i są uporządkowane od najtańszych do najdroższych. Do wykonania
+zapytania można użyć natywnego języka podobnego do SQL o nazwie DQL::
 
     $em = $this->getDoctrine()->getManager();
     $query = $em->createQuery(
-        'SELECT p FROM AcmeStoreBundle:Product p WHERE p.price > :price ORDER BY p.price ASC'
+        'SELECT p FROM AppBundle:Product p WHERE p.price > :price ORDER BY p.price ASC'
     )->setParameter('price', '19.99');
 
     $products = $query->getResult();
-
-Jeżeli zna się SQL, to z DQL powinno się czuć bardzo naturalnie.
-Największą różnicą jest to, że w DQL powinienno sie myśleć w kategoriach "obiektów"
-zamiast wierszy bazy danych. Z tego powodu należy wybrać ``AcmeStoreBundle:Product``
-i następnie oznaczyć jego alias jako ``p``.
-
-Metoda ``getResult()`` zwraca tablicę wyników. Jeżeli odpytuje się tylko jeden
-obiekt, to zamiast niej można użyć metody ``getSingleResult()``::
-
-    $product = $query->getSingleResult();
-
-.. caution::
-
-    Metoda ``getSingleResult()`` zrzuca wyjątek ``Doctrine\ORM\NoResultExceptionexception``
-    jeśli zwracany jest brak wyników zapytania oraz wyjątek ``Doctrine\ORM\NonUniqueResultException``
-    jeśli zwracanych jest więcej niż jeden wynik. Jeżeli używa się tą metodę, to
-    zachodzi potrzeba opakowania kodu w blok ``try-catch`` i zapewnienie aby zwracany
-    był tylko jeden wynik (jeśli wyszukuje się coś, co może zwrócić więcej niż jeden
-    wynik)::
-
-        $query = $em->createQuery('SELECT ...')
-            ->setMaxResults(1);
-
-        try {
-            $product = $query->getSingleResult();
-        } catch (\Doctrine\Orm\NoResultException $e) {
-            $product = null;
-        }
-        // ...
-
-Składnia DQL jest bardzo mocna, umożliwiająca łatwe tworzenie złączeń pomiędzy encjami
-(ten temat jest omówiony w sekcji :ref:`Relations<book-doctrine-relations>`),
-grupowanie itd. Więcej informacji można uzyskać w rozdziale `Doctrine Query Language`_
-oficjalnej dokumentacji Doctrine.
-
-.. sidebar:: Konfiguracja parametrów
-
-    Należy zwrócić uwagę na metodę ``setParameter()``. Podczas pracy z Doctrine,
-    dobrym pomysłem jest ustawienie wszystkich wartości zewnętrznych jako
-    "wieloznaczników", tak jak w pierwszym przykładzie:
+    // dla uzyskania jednego wyniku:
+    // $product = $query->setMaxResults(1)->getOneOrNullResult();
     
 
-    .. code-block:: text
+Jeżeli zna się SQL, to z DQL powinno się czuć bardzo naturalnie.
+Największą różnicą jest to, że w DQL powinno sie myśleć w kategoriach "obiektów"
+zamiast wierszy bazy danych. Z tego powodu trzeba wybrać z (``FROM``) *obiektu*
+ ``AppBundle:Product`` (opcjonalny skrót dla ``AppBundle\Entity\Product``)
+ a następnie aliasować to jako ``p``.
+ 
+.. tip::
 
-        ... WHERE p.price > :price ...
+    Trzeba barać pod uwagę metodę ``setParameter()``. Podczas pracy z Doctrine,
+    dobrym pomysłem jest ustawianie wszystkich zewnętrznych wartości jako
+    "wieloznaczniki" (``:price`` w poprzednim przykładzie) bo zabezpiecza to
+    przed atakami wstrzykiwania SQL.
 
-    Następnie można ustawić wartość wieloznacznika price przez wywołanie metody
-    ``setParameter()``::
+Metoda ``getResult()`` zwraca tablicę wyników. W celu pobrania tylko jedengo
+wyniku trzeba uzyć ``getOneOrNullResult()``::
 
-        ->setParameter('price', '19.99')
-
-    Stosowanie parametrów zamiast bezpośredniego wprowadzania wartości w łańcuchu
-    zapytania zapobiega atakom wstrzyknięcia SQL i powinno być zawsze stosowane.
-    Jeśli używa się wielu parametrów, to można ustawić ich wartości naraz stosując
-    metodę ``setParameters()``::
-
-        ->setParameters(array(
-            'price' => '19.99',
-            'name'  => 'Foo',
-        ))
-
+    $product = $query->setMaxResults(1)->getOneOrNullResult();
+ 
 .. index::
-      single: Doctrine; QueryBuilder 
+      budowniczy zapytań
+      single: Doctrine; QueryBuilder
+      single: Doctrine; builder zapytań
+       
 
 Stosowanie budowniczego zapytań Doctrine
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Zamiast pisać bezpośrednio zapytania, można alternatywnie wykorzystać obiekt
-``QueryBuilder`` Doctrine, udostępniający obiektowo-zorientowany interfejs.
-Jeżeli używa się z IDE, to można również skorzystać z autouzupełniania podczas
-wpisywania nazw metod. Z poziomu kontrolera::
+Zamiast pisać łańcuch DQL, można użyć pomocny obiekt o nazwie ``QueryBuilder``
+do zbudowania łańcucha zapytania. Jest to przydatne, gdy rzeczywiste zapytanie
+uzależnione jest od dynamicznych warunków, jako że kod staje sie trudny do odczytania
+z DQL po rozpoczęciu łączenia łańcuchów::
 
     $repository = $this->getDoctrine()
-        ->getRepository('AcmeStoreBundle:Product');
+        ->getRepository('AppBundle:Product');
 
+    // createQueryBuilder automatically selects FROM AppBundle:Product
+    // and aliases it to "p"
     $query = $repository->createQueryBuilder('p')
         ->where('p.price > :price')
         ->setParameter('price', '19.99')
@@ -799,36 +791,39 @@ wpisywania nazw metod. Z poziomu kontrolera::
         ->getQuery();
 
     $products = $query->getResult();
-
-Obiekt ``QueryBuilder`` zawiera wszystkie niezbędne metody do do budowy zapytania.
-Przez wywołanie metody ``thegetQuery()`` budowniczy zapytań zwraca zwykły obiekt
-``Query``, który jest taki sam, jak obiekt zbudowany w poprzednim rozdziale.
+    // to get just one result:
+    // $product = $query->setMaxResults(1)->getOneOrNullResult();
+    
+Obiekt ``QueryBuilder`` zawiera wszystkie niezbędne metody do budowy zapytania.
+Przez wywołanie metody ``thegetQuery()`` budowniczego zapytań zwraca zwykły obiekt
+``Query``, który może być użyty do pobranie wyniku zapytania.
 
 Więcej informacji o konstruktorze zapytań Doctrine można znaleźć w dokumentacji
 `Query Builder`_.
+
+.. _book-doctrine-custom-repository-classes:
 
 Własne klasy repozytorium
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 W poprzednich rozdziałach rozpoczęliśmy konstruowanie i używanie bardziej złożonych
 zapytań wewnątrz kontrolera. W celu izolacji, testowania i ponownego wykorzystania
-zapytań, dobrym pomysłem jest utworzenie własnej klasy repozytorium dla encji
+zapytań, dobrą praktyką jest utworzenie własnej klasy repozytorium dla encji
 i dodanie tam metod tworzących logikę zapytania.
 
-Aby to zrobić, należy dodać nazwę klasy repozytorium do definicji odwzorowania.
+Dla wykonania tego, należy dodać nazwę klasy repozytorium do definicji odwzorowania.
 
 .. configuration-block::
 
     .. code-block:: php-annotations
-       :linenos:
 
-        // src/Acme/StoreBundle/Entity/Product.php
-        namespace Acme\StoreBundle\Entity;
+        // src/AppBundle/Entity/Product.php
+        namespace AppBundle\Entity;
 
         use Doctrine\ORM\Mapping as ORM;
 
         /**
-         * @ORM\Entity(repositoryClass="Acme\StoreBundle\Entity\ProductRepository")
+         * @ORM\Entity(repositoryClass="AppBundle\Entity\ProductRepository")
          */
         class Product
         {
@@ -836,25 +831,27 @@ Aby to zrobić, należy dodać nazwę klasy repozytorium do definicji odwzorowan
         }
 
     .. code-block:: yaml
-       :linenos:
 
-        # src/Acme/StoreBundle/Resources/config/doctrine/Product.orm.yml
-        Acme\StoreBundle\Entity\Product:
+        # src/AppBundle/Resources/config/doctrine/Product.orm.yml
+        AppBundle\Entity\Product:
             type: entity
-            repositoryClass: Acme\StoreBundle\Entity\ProductRepository
+            repositoryClass: AppBundle\Entity\ProductRepository
             # ...
 
     .. code-block:: xml
-       :linenos:
 
-        <!-- src/Acme/StoreBundle/Resources/config/doctrine/Product.orm.xml -->
+        <!-- src/AppBundle/Resources/config/doctrine/Product.orm.xml -->
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-        <!-- ... -->
-        <doctrine-mapping>
+            <entity
+                name="AppBundle\Entity\Product"
+                repository-class="AppBundle\Entity\ProductRepository">
 
-            <entity name="Acme\StoreBundle\Entity\Product"
-                    repository-class="Acme\StoreBundle\Entity\ProductRepository">
-                    <!-- ... -->
+                <!-- ... -->
             </entity>
         </doctrine-mapping>
 
@@ -863,17 +860,16 @@ polecenia, które użyliśmy wcześniej do wygenerowania metod akcesorów:
 
 .. code-block:: bash
 
-    $ php app/console doctrine:generate:entities Acme
+    $ php app/console doctrine:generate:entities AppBundle
 
-Następnie dodajemy nowa metodę ``findAllOrderedByName()`` do nowo utworzonej klasy
+Następnie dodajemy nową metodę ``findAllOrderedByName()`` do nowo utworzonej klasy
 repozytorium. Metoda ta będzie przepytywać wszystkie encje ``Product`` w kolejności
 alfabetycznej.
 
 .. code-block:: php
-   :linenos:
 
-    // src/Acme/StoreBundle/Entity/ProductRepository.php
-    namespace Acme\StoreBundle\Entity;
+    // src/AppBundle/Entity/ProductRepository.php
+    namespace AppBundle\Entity;
 
     use Doctrine\ORM\EntityRepository;
 
@@ -882,10 +878,13 @@ alfabetycznej.
         public function findAllOrderedByName()
         {
             return $this->getEntityManager()
-                ->createQuery('SELECT p FROM AcmeStoreBundle:Product p ORDER BY p.name ASC')
+                ->createQuery(
+                    'SELECT p FROM AppBundle:Product p ORDER BY p.name ASC'
+                )
                 ->getResult();
         }
     }
+    
 
 .. tip::
 
@@ -895,7 +894,7 @@ alfabetycznej.
 Można używać tej nowej metody, podobnie jak domyślnych metod wyszukujących repozytorium::
 
     $em = $this->getDoctrine()->getManager();
-    $products = $em->getRepository('AcmeStoreBundle:Product')
+    $products = $em->getRepository('AppBundle:Product')
                 ->findAllOrderedByName();
 
 .. note::
@@ -916,9 +915,11 @@ trzeba będzi utrzymać klasę poprzez Doctrine, to możemy pozwolić, aby Doctr
 utworzyła tą klasę.
 
 .. code-block:: bash
-
-    $ php app/console doctrine:generate:entity --entity="AcmeStoreBundle:Category" --fields="name:string(255)"
-
+   
+    $ php app/console doctrine:generate:entity --no-interaction \
+        --entity="AppBundle:Category" \
+        --fields="name:string(255)"
+    
 Zadanie to wygeneruje encję ``Category``, z polami ``id`` i ``name``,
 oraz związanymi funkcjami akcesorów.
 
@@ -931,9 +932,8 @@ właściwości ``products`` w klasie ``Category``:
 .. configuration-block::
 
     .. code-block:: php-annotations
-       :linenos:
 
-        // src/Acme/StoreBundle/Entity/Category.php
+        // src/AppBundle/Entity/Category.php
 
         // ...
         use Doctrine\Common\Collections\ArrayCollection;
@@ -954,37 +954,41 @@ właściwości ``products`` w klasie ``Category``:
         }
 
     .. code-block:: yaml
-       :linenos:
 
-        # src/Acme/StoreBundle/Resources/config/doctrine/Category.orm.yml
-        Acme\StoreBundle\Entity\Category:
+        # src/AppBundle/Resources/config/doctrine/Category.orm.yml
+        AppBundle\Entity\Category:
             type: entity
             # ...
             oneToMany:
                 products:
                     targetEntity: Product
                     mappedBy: category
-            # don't forget to init the collection in entity __construct() method
+            # don't forget to init the collection in the __construct() method
+            # of the entity
 
     .. code-block:: xml
-       :linenos:
 
-        <!-- src/Acme/StoreBundle/Resources/config/doctrine/Category.orm.xml -->
+        <!-- src/AppBundle/Resources/config/doctrine/Category.orm.xml -->
+        <?xml version="1.0" encoding="UTF-8" ?>
         <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
-                            http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+                http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-            <entity name="Acme\StoreBundle\Entity\Category">
+            <entity name="AppBundle\Entity\Category">
                 <!-- ... -->
-                <one-to-many field="products"
-                    target-entity="product"
-                    mapped-by="category"
-                />
+                <one-to-many
+                    field="products"
+                    target-entity="Product"
+                    mapped-by="category" />
 
-                <!-- don't forget to init the collection in entity __construct() method -->
+                <!--
+                    don't forget to init the collection in
+                    the __construct() method of the entity
+                -->
             </entity>
         </doctrine-mapping>
+
 
 Po pierwsze, ponieważ obiekt ``Category`` będzie odnosić się do wielu obiektów
 klasy ``Product``, to dodawana jest właściwość będąca tablicą produktów w celu
@@ -1013,9 +1017,8 @@ Następnie, ponieważ każda klasa ``Product`` odnosi się dokładnie do jednego
 .. configuration-block::
 
     .. code-block:: php-annotations
-       :linenos:
 
-        // src/Acme/StoreBundle/Entity/Product.php
+        // src/AppBundle/Entity/Product.php
 
         // ...
         class Product
@@ -1030,10 +1033,9 @@ Następnie, ponieważ każda klasa ``Product`` odnosi się dokładnie do jednego
         }
 
     .. code-block:: yaml
-       :linenos:
 
-        # src/Acme/StoreBundle/Resources/config/doctrine/Product.orm.yml
-        Acme\StoreBundle\Entity\Product:
+        # src/AppBundle/Resources/config/doctrine/Product.orm.yml
+        AppBundle\Entity\Product:
             type: entity
             # ...
             manyToOne:
@@ -1045,24 +1047,23 @@ Następnie, ponieważ każda klasa ``Product`` odnosi się dokładnie do jednego
                         referencedColumnName: id
 
     .. code-block:: xml
-       :linenos:
 
-        <!-- src/Acme/StoreBundle/Resources/config/doctrine/Product.orm.xml -->
+        <!-- src/AppBundle/Resources/config/doctrine/Product.orm.xml -->
+        <?xml version="1.0" encoding="UTF-8" ?>
         <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
-                            http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+                http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-            <entity name="Acme\StoreBundle\Entity\Product">
+            <entity name="AppBundle\Entity\Product">
                 <!-- ... -->
-                <many-to-one field="category"
-                    target-entity="products"
-                    join-column="category"
-                >
-                    <join-column
-                        name="category_id"
-                        referenced-column-name="id"
-                    />
+                <many-to-one
+                    field="category"
+                    target-entity="Category"
+                    inversed-by="products"
+                    join-column="category">
+
+                    <join-column name="category_id" referenced-column-name="id" />
                 </many-to-one>
             </entity>
         </doctrine-mapping>
@@ -1072,7 +1073,7 @@ powiadamiająca Doctrine, aby wygenerowało brakujące metody akcesorów:
 
 .. code-block:: bash
 
-    $ php app/console doctrine:generate:entities Acme
+    $ php app/console doctrine:generate:entities AppBundle
 
 Zignorujmy na moment metadane Doctrine. Teraz mamy dwie klasy, ``Category``
 i ``Product`` z naturalną relacją jeden-do-wielu. Klasa ``Category`` przechowuje
@@ -1106,8 +1107,7 @@ tablicy ``category`` i kolumnie ``product.category_id`` oraz nowym kluczu zewnę
 
     Zadanie to powinno być wykonywane tylko w czasie programowania. W celu
     poznania bardziej solidnej metody systematycznego aktualizowania produkcyjnej
-    bazy danych, przeczytaj artykuł
-    :doc:`Doctrine migrations</bundles/DoctrineMigrationsBundle/index>`.
+    bazy danych, przeczytaj artykuł `migrations`_.
 
 Zapisywanie powiązanych encji
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1117,8 +1117,8 @@ kontrolera::
 
     // ...
 
-    use Acme\StoreBundle\Entity\Category;
-    use Acme\StoreBundle\Entity\Product;
+    use AppBundle\Entity\Category;
+    use AppBundle\Entity\Product;
     use Symfony\Component\HttpFoundation\Response;
 
     class DefaultController extends Controller
@@ -1131,6 +1131,7 @@ kontrolera::
             $product = new Product();
             $product->setName('Foo');
             $product->setPrice(19.99);
+            $product->setDescription('Lorem ipsum dolor');
             // relate this product to the category
             $product->setCategory($category);
 
@@ -1140,7 +1141,8 @@ kontrolera::
             $em->flush();
 
             return new Response(
-                'Created product id: '.$product->getId().' and category id: '.$category->getId()
+                'Created product id: '.$product->getId()
+                .' and category id: '.$category->getId()
             );
         }
     }
@@ -1159,7 +1161,7 @@ a następnie uzyskać dostęp do powiązanego obiektu ``Category``::
     public function showAction($id)
     {
         $product = $this->getDoctrine()
-            ->getRepository('AcmeStoreBundle:Product')
+            ->getRepository('AppBundle:Product')
             ->find($id);
 
         $categoryName = $product->getCategory()->getName();
@@ -1182,10 +1184,10 @@ dane kategorii nie są faktycznie pobierane, dopóki się nie zapyta o tą kateg
 
 Można również zapytać w drugą stronę::
 
-    public function showProductAction($id)
+    public function showProductsAction($id)
     {
         $category = $this->getDoctrine()
-            ->getRepository('AcmeStoreBundle:Category')
+            ->getRepository('AppBundle:Category')
             ->find($id);
 
         $products = $category->getProducts();
@@ -1206,13 +1208,14 @@ które są powiązane z określonym obiektem ``Category`` poprzez ich wartość 
     przykład::
 
         $product = $this->getDoctrine()
-            ->getRepository('AcmeStoreBundle:Product')
+            ->getRepository('AppBundle:Product')
             ->find($id);
 
         $category = $product->getCategory();
 
-        // prints "Proxies\AcmeStoreBundleEntityCategoryProxy"
-        echo get_class($category);
+        // prints "Proxies\AppBundleEntityCategoryProxy"
+        dump(get_class($category));
+        die();
 
     Ten obiekt proxy rozszerza prawdziwy obiekt ``Category``, wyglądając i funkcjonując
     jak on. Różnica jest taka, że przez użycie obiektu proxy, Doctrine może opóźnić
@@ -1242,12 +1245,12 @@ Jeśli wiesz z góry, że będziesz potrzebował dostępu do obu obiektów, to m
 uniknąć drugiego zapytania przez zastosowanie złączenia w oryginalnym zapytaniu.
 Dodamy następującą metodę do klasy ``ProductRepository``::
 
-    // src/Acme/StoreBundle/Entity/ProductRepository.php
+    // src/AppBundle/Entity/ProductRepository.php
     public function findOneByIdJoinedToCategory($id)
     {
         $query = $this->getEntityManager()
             ->createQuery('
-                SELECT p, c FROM AcmeStoreBundle:Product p
+                SELECT p, c FROM AppBundle:Product p
                 JOIN p.category c
                 WHERE p.id = :id'
             )->setParameter('id', $id);
@@ -1267,7 +1270,7 @@ i powiązany z nim obiekt ``Category``::
     public function showAction($id)
     {
         $product = $this->getDoctrine()
-            ->getRepository('AcmeStoreBundle:Product')
+            ->getRepository('AppBundle:Product')
             ->findOneByIdJoinedToCategory($id);
 
         $category = $product->getCategory();
@@ -1297,7 +1300,7 @@ Konfiguracja
 Doctrine jest wysoce konfigurowalna, ale prawdopodobnie nigdy nie trzeba będzie
 martwić się o większość opcji konfiguracyjnych tej biblioteki. Aby dowiedzieć się
 więcej o konfiguracji Doctrine, proszę przeczytać rozdział
-:doc:`reference manual</reference/configuration/doctrine>` w dokumentacji Doctrine.
+:doc:`Informator konfiguracji </reference/configuration/doctrine>` w dokumentacji Doctrine.
 
 Wywołania zwrotne cyklu życia encji
 -----------------------------------
@@ -1330,42 +1333,42 @@ kolumnę datową na bieżącą datę, ale tylko wtedy, gdy encja jest pierwszy r
 (tj. dołożona):
 
 .. configuration-block::
-   :linenos:
 
     .. code-block:: php-annotations
-       :linenos:
+
+        // src/AppBundle/Entity/Product.php
 
         /**
          * @ORM\PrePersist
          */
-        public function setCreatedValue()
+        public function setCreatedAtValue()
         {
-            $this->created = new \DateTime();
+            $this->createdAt = new \DateTime();
         }
 
     .. code-block:: yaml
-       :linenos:
 
-        # src/Acme/StoreBundle/Resources/config/doctrine/Product.orm.yml
-        Acme\StoreBundle\Entity\Product:
+        # src/AppBundle/Resources/config/doctrine/Product.orm.yml
+        AppBundle\Entity\Product:
             type: entity
             # ...
             lifecycleCallbacks:
-                prePersist: [ setCreatedValue ]
+                prePersist: [setCreatedAtValue]
 
     .. code-block:: xml
-       :linenos:
 
-        <!-- src/Acme/StoreBundle/Resources/config/doctrine/Product.orm.xml -->
+        <!-- src/AppBundle/Resources/config/doctrine/Product.orm.xml -->
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-        <!-- ... -->
-        <doctrine-mapping>
-
-            <entity name="Acme\StoreBundle\Entity\Product">
-                    <!-- ... -->
-                    <lifecycle-callbacks>
-                        <lifecycle-callback type="prePersist" method="setCreatedValue" />
-                    </lifecycle-callbacks>
+            <entity name="AppBundle\Entity\Product">
+                <!-- ... -->
+                <lifecycle-callbacks>
+                    <lifecycle-callback type="prePersist" method="setCreatedAtValue" />
+                </lifecycle-callbacks>
             </entity>
         </doctrine-mapping>
 
@@ -1378,20 +1381,9 @@ kolumnę datową na bieżącą datę, ale tylko wtedy, gdy encja jest pierwszy r
 Teraz, tuż przed pierwszym utrwaleniem encji, Doctrine automatycznie wywoła tą
 metodę i ustawi pole ``created`` na bieżącą datę.
 
-
-Może to być powtórzone dla każdego zdarzenia cyklu życia encji, którymi są:
-
-* ``preRemove``
-* ``postRemove``
-* ``prePersist``
-* ``postPersist``
-* ``preUpdate``
-* ``postUpdate``
-* ``postLoad``
-* ``loadClassMetadata``
-
-Więcej ogólnych informacji na temat zdarzeń cyklu życia encji i wywołań zwrotnych
-tego cyklu można znaleźć w rozdziale `Lifecycle Events`_ dokumentacji Doctrine.
+Istnieje kilka innych zdarzeń cyklu życia, które można podłączyć. Więcej ogólnych
+informacji o zdarzeniach i wywołaniach zwrotnych cyklu życia można znaleźć
+w artykule `Lifecycle Events`_ dokumentacji Doctrine.
 
 .. sidebar:: Wywołania zwrotne cyklu życia i nasłuchiwanie zdarzeń
 
@@ -1408,17 +1400,6 @@ tego cyklu można znaleźć w rozdziale `Lifecycle Events`_ dokumentacji Doctrin
     sięgnąć do artykułu :doc:`How to Register Event Listeners and Subscribers
     </cookbook/doctrine/event_listeners_subscribers>`.
 
-Rozszerzenia Doctrine: Timestampable, Sluggable itd.
-----------------------------------------------------
-
-Doctrine jest dość elastyczną biblioteką i dostępna jest duża liczba rozszerzeń
-osób trzecich, pozwalających łatwo wykonywać na encjach powtarzające się, popularne
-zadania. Są to takie rozszerzenia, jak *Sluggable*, *Timestampable*, *Loggable*,
-*Translatable* i *Tree*.
-
-Więcej informacji o tym jak znaleźć i stosować te rozszerzenia mozna znaleźć w artykule
-:doc:`How using common Doctrine extensions</cookbook/doctrine/common_extensions>`. 
-
 
 .. _book-doctrine-field-types:
 
@@ -1427,169 +1408,9 @@ Informacje o typach pól Doctrine
 
 Doctrine dostarczana jest z dużą liczbą dostępnych typów pól.
 Każdy z nich odwzorowuje typ danych PHP na określony typ kolumny w bazie danych.
-Doctrine obsługuje następujące typy danych:
-
-* **Łańcuchy**
-
-  * ``string`` (stosowane dla krótkich łańcuchów)
-  * ``text`` (stosowane dla dłuższych łańcuchów)
-
-* **Liczby**
-
-  * ``integer``
-  * ``smallint``
-  * ``bigint``
-  * ``decimal``
-  * ``float``
-
-* **Daty i czas** (używaj dla tych pól w PHP obiektu `DateTime`_)
-
-  * ``date``
-  * ``time``
-  * ``datetime``
-
-* **Inne typy**
-
-  * ``boolean``
-  * ``object`` (serializowane i przechowywane w polu ``CLOB``)
-  * ``array`` (serializowane i przechowywane w polu ``CLOB``)
-  * ``simple_array`` (serializowane przy użyciu :phpfunction:`implode()`
-    i :phpfunction:`explode()`, z przecinkiem jako ogranicznikiem i przechowywane
-    w polu ``CLOB`` field)
-  * ``json_array`` (serializowane przy użyciu :phpfunction:`json_encode()`
-    i :phpfunction:`json_decode()` i przechowywane w polu ``CLOB``)
-  * ``guid``
-
-Aby uzyskać więcej informacji przeczytaj artykuł `Mapping Types`_ w dokumentacji
-Doctrine.
-
-Opcje pól
-~~~~~~~~~
-
-Każde pole może mieć przypisany mu zestaw opcji. Dostępne opcje to ``type``
-(domyślnie ``string``), ``name``, ``lenght``, ``unique`` i ``nullable``.
-Rozpatrzmy kilka przykładów:
-
-.. configuration-block::
-
-    .. code-block:: php-annotations
-       :linenos:
-
-        /**
-         * Pole tekstowe o długości 255 znaków, które nie może być puste
-         * (odzwierciedlają to wartości domyślne dla opcji "type", "length"
-         * i *nullable*)
-         *
-         * @ORM\Column()
-         */
-        protected $name;
-
-        /**
-         * Pole tekstowe o długości 150 znaków, które utrzymuje kolumnę "email_address"
-         * i ma unikalny indeks.
-         *
-         * @ORM\Column(name="email_address", unique=true, length=150)
-         */
-        protected $email;
-
-    .. code-block:: yaml
-       :linenos:
-
-        fields:
-            # Pole tekstowe odługości 255 znaków, które nie może być puste
-            # (odzwierciedlają to wartości domyślne dla opcji "length" i *nullable*).
-            # Atrybut type jest konieczny w definicji yaml
-            name:
-                type: string
-
-            # Pole tekstowe o długości 150 znaków, które utrzymuje kolumnę "email_address"
-            # i ma unikalny indeks.
-            email:
-                type: string
-                column: email_address
-                length: 150
-                unique: true
-
-    .. code-block:: xml
-       :linenos:
-
-        <!--
-            Pole tekstowe odługości 255 znaków, które nie może być puste
-            (odzwierciedlają to wartości domyślne dla opcji "length" i *nullable*).
-            Atrybut type jest konieczny w definicji yaml
-        -->
-        <field name="name" type="string" />
-        <field name="email"
-            type="string"
-            column="email_address"
-            length="150"
-            unique="true"
-        />
-
-.. note::
-
-    Istnieje kilka innych opcji, tutaj nie wymienionych. Więcej szczegółów
-    znajdziesz w artykule `Property Mapping`_ dokumentacji Doctrine.
-
-.. index::
-   single: Doctrine; polecenie ORM z konsoli
-   pair: CLI; Doctrine ORM
-
-Polecenia konsoli
------------------
-
-ORM Doctrine2 oferuje w przestrzeni nazw ``doctrine`` kilka poleceń
-konsoli . W celu wyświetlenia tych poleceń uruchom konsolę bez jakichkolwiek
-argumentów:
-
-.. code-block:: bash
-
-    $ php app/console
-
-Zostanie wydrukowana lista dostępnych poleceń, z których wiele rozpoczyna się
-przedrostkiem ``doctrine:``. Możesz znaleźć więcej informacji o tych poleceniach
-(lub dowolnego polecenia Symfony) przez uruchomienie polecenia ``help``.
-Na przykład, aby uzyskać informacje o ``doctrine:database:createtask``, uruchom:
-
-.. code-block:: bash
-
-    $ php app/console help doctrine:database:create
-
-Niektóre ważniejsze lub iteresujące zadania, to:
-
-* ``doctrine:ensure-production-settings`` - sprawdza, czy bieżące środowisko jest
-  skutecznie skonfigurowane jako produkcyjne. Zawsze powinno być uruchamiane w
-  środowisku ``prod``:
-
-  .. code-block:: bash
-
-      $ php app/console doctrine:ensure-production-settings --env=prod
-
-* ``doctrine:mapping:import`` - pozwala Doctrine na introspekcję istniejącej
-  bazy danych i utworzenie informacji odwzorowania. Więcej informacji znajdziesz
-  w artykule :doc:`/cookbook/doctrine/reverse_engineering`.
-
-* ``doctrine:mapping:info`` - informuje o wszystkich encjach zarejestrowanych
-  w Doctrine i o ewentualnych błędach w ich odzwzorowaniu.
-
-* ``doctrine:query:dql`` i ``doctrine:query:sql`` - umożliwia wykonanie zapytań
-  DQL lub SQL z linii poleceń.
-
-.. note::
-
-   Aby móc załadować do bazy danych dane testowe, potrzeba zainstalować pakiet
-   ``DoctrineFixturesBundle``. Opis jak to zrobić zawarty jest w dokumentacji
-   ":doc:`/bundles/DoctrineFixturesBundle/index`".
-
-.. tip::
-
-    Strona ta pokazuje pracę z Doctrine w kontrolerze. Możesz również pracować
-    z Doctrine w innym miejscu aplikacji. Metoda
-    :method:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller::getDoctrine`
-    kontrolera zwraca usługę ``doctrine``, z którą możesz pracować w ten sam sposób
-    w każdym miejscu aplikacji, przez wstrzyknięcie tej usługi do własnych usług.
-    Przeczytaj :doc:`/book/service_container` w celu uzyskania więcej informacji
-    o tworzeniu własnych usług.
+Dla każdego typu pola można dalej skonfigurować ``Column``, ustawiając zachowanie
+``length``, ``nullable``, opcję ``name`` i inne opcje. Lista wszystkich dostępnych
+typów jest dostępna w artykule `Mapping Types`_ dokumentacji Doctrine.
 
 Podsumowanie
 ------------
@@ -1606,19 +1427,20 @@ na wykonywanie różnych akcji na wszystkich etapach życia encji.
 Więcej informacji o Doctrine znajduje w :doc:`cookbook</cookbook/index>`,
 w artykułach:
 
-* :doc:`/bundles/DoctrineFixturesBundle/index`
+Dalsza lektura
+~~~~~~~~~~~~~~
+
+Więcej informacji o Doctrine mozna znaleźć w rozdziale *Doctrine*
+:doc:`cookbook </cookbook/index>`. Kilka przydatnych artykułów, to:
+
 * :doc:`/cookbook/doctrine/common_extensions`
-
-.. rubric:: Przypisy
-
-.. [1] Wzorzec ten opisany został po raz pierwszy w *Pattern of Enterprise Application
-       Architecture* przez Martina Fowlera. Polskojęzyczny opis wzorca znajduje się
-       w książce "PHP Obiekty, wzorce, narzędzia" Matta Zandstra, wyd. III Helion S.A.
-       2011.
+* :doc:`/cookbook/doctrine/console`
+* `DoctrineFixturesBundle`_
+* `DoctrineMongoDBBundle`_
 
 
 .. _`Doctrine`: http://www.doctrine-project.org/
-.. _`MongoDB`: http://www.mongodb.org/
+.. _`MongoDB`: https://www.mongodb.org/
 .. _`Basic Mapping Documentation`: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/basic-mapping.html
 .. _`Query Builder`: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/query-builder.html
 .. _`Doctrine Query Language`: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/dql-doctrine-query-language.html
@@ -1629,3 +1451,10 @@ w artykułach:
 .. _`Lifecycle Events`: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/events.html#lifecycle-events
 .. _`Reserved SQL keywords`: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/basic-mapping.html#quoting-reserved-words
 .. _`Persistent classes`: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/basic-mapping.html#persistent-classes
+.. _`Creating Classes for the Database`: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/basic-mapping.html#creating-classes-for-the-database
+.. _`DoctrineMongoDBBundle`: https://symfony.com/doc/current/bundles/DoctrineMongoDBBundle/index.html
+.. _`migracji`: https://symfony.com/doc/current/bundles/DoctrineMigrationsBundle/index.html
+.. _`DoctrineFixturesBundle`: https://symfony.com/doc/current/bundles/DoctrineFixturesBundle/index.html
+.. _`FrameworkExtraBundle documentation`: https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html
+.. _`nowszy zestaw znakowy utf8mb4`: https://dev.mysql.com/doc/refman/5.5/en/charset-unicode-utf8mb4.html
+.. _`ORM`: https://pl.wikipedia.org/wiki/Mapowanie_obiektowo-relacyjne 

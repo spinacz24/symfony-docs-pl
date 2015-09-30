@@ -1,14 +1,14 @@
 .. highlight:: php
    :linenothreshold: 2
 
-Symfony2 versus zwykły PHP
-==========================
+Symfony versus zwykły PHP
+=========================
 
-**Dlaczego Symfony2 jest lepszy niż otworzenie pliku i pisanie zwykłego PHP?**
+**Dlaczego Symfony jest lepszy niż otworzenie pliku i pisanie zwykłego PHP?**
 
 Jeśli jeszcze nigdy Drogi Czytelnku nie używałeś frameworka PHP i nie jesteś zaznajomiony
-z filozofią MVC lub gdy tylko zastanawiasz się dlaczego tyle rozgłosu jest wokół Symfony2,
-to ten rozdział jest dla Ciebie. Zamiast wmawiać Ci, że Symfony2 pozwala tworzyć
+z filozofią MVC lub gdy tylko zastanawiasz się dlaczego tyle rozgłosu jest wokół Symfony,
+to ten rozdział jest dla Ciebie. Zamiast wmawiać Ci, że Symfony pozwala tworzyć
 oprogramowanie szybciej i lepiej niż przez pisanie skryptów w zwykłym PHP, pokażemy
 Ci to na przykładach.
 
@@ -17,7 +17,7 @@ tak, aby była lepiej zorganizowana. Będziemy podróżować w czasie, obserwuj�
 dla których tworzenie stron internetowych ewaluowało na przestrzeni ostatnich lat
 i gdzie jest teraz.
 
-Na koniec zobaczysz jak Symfony2 może uwolnić Cię od prozaicznych zadań i pozwala
+Na koniec zobaczysz jak Symfony może uwolnić Cię od prozaicznych zadań i pozwala
 uzyskać kontrolę nad kodem.
 
 Prosty blog w zwykłym PHP
@@ -80,7 +80,7 @@ się kilka problemów, które należy wziąć pod uwagę:
 
      Innym problemem, tutaj nie wymienionym, jest fakt, że baza danych
      jest w tej aplikacji ograniczona do MySQL. Choć o tym tutaj nie mówimy,
-     to Symfony2 w pełni integruje `Doctrine`_, bibliotekę dostarczającą
+     to Symfony w pełni integruje `Doctrine`_, bibliotekę dostarczającą
      abstakcyjną warstwę dostępu do baz danych i `mapowanie obiektowo-relacyjne`_
      (*ang. Object-Relational Mapping - ORM*).
 
@@ -259,7 +259,7 @@ układu:
 
 Masz teraz wprowadzoną metodologię, która umożliwia ponowne wykorzystanie układu.
 Niestety, aby to osiągnąć, zmuszony jesteś do użycia w szablonie kilku kiepskich
-funkcji PHP (``ob_start()``, ``ob_get_clean()``). Symfony2 wykorzystuje komponent
+funkcji PHP (``ob_start()``, ``ob_get_clean()``). Symfony wykorzystuje komponent
 ``Templating``, umożliwiający osiągnąć ten cel w sposób prosty i przejrzysty.
 Zobaczymy to już wkrótce.
 
@@ -417,7 +417,7 @@ Plik ``index.php`` jako kontroler wejścia przybrał teraz całkiem nową rolę,
 która polega na załadowaniu podstawowych bibliotek i trasowaniu aplikacji, tak
 aby wywołany został jeden z dwóch kontrolerów (funkcje ``list_action()``
 i ``show_action()``). Aktualnie nasz kontroler wejścia zaczyna wyglądać i
-działać jak mechanizm Symfony2 do obsługi i trasowania żądań.
+działać jak mechanizm Symfony do obsługi i trasowania żądań.
 
 .. tip::
 
@@ -425,7 +425,7 @@ działać jak mechanizm Symfony2 do obsługi i trasowania żądań.
    adresów URL. Proszę zauważyć, że ścieżka URL do strony wpisu bloga może być
    zmieniona z ``/show`` na ``/read`` tylko przez zmianę kodu w jednym miejscu.
    Przedtem musiał by być zmieniony cały plik aby można było zmienić nazwę strony.
-   W Symfony2 adresy URL są bardziej elastyczne.
+   W Symfony adresy URL są bardziej elastyczne.
 
 Do teraz nasza aplikacja ewoluowała z pojedynczego pliku PHP w strukturę, która
 jest zorganizowana i umożliwia wielokrotne wykorzystanie kodu. Powinniśmy być
@@ -438,11 +438,11 @@ trzeba będzie przeznaczyć na obsługę zgłoszeń formularzy, walidację danyc
 wejściowych, rejestrowanie i bezpieczeństwo. Czy nie warto mieć gotowe rozwiązanie
 tych rutynowych problemów?
 
-Dodanie odrobiny Symfony2
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Dodanie odrobiny Symfony
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-Na ratunek - Symfony2. Nim zaczniesz używać Symfony2, musisz się upewnić, czy
-PHP wie jak znaleźć klasy Symfony2. Uzyskuje się to poprzez autoloadera, który
+Na ratunek - Symfony. Nim zaczniesz używać Symfony, musisz się upewnić, czy
+PHP wie jak znaleźć klasy Symfony. Uzyskuje się to poprzez autoloadera, który
 jest dostarczany przez Symfony. Autoloader jest narzędziem pozwalającym na
 rozpoczęcie używania klas PHP bez konieczności jawnego dołączania pliku
 zawierającego klasę.
@@ -456,8 +456,8 @@ zawartością:
     {
         "require": {
 <<<<<<< HEAD
-            "symfony/symfony": "2.5.*"
-=======
+"symfony/symfony": "2.5.*"
+==========================
             "symfony/symfony": "2.3.*"
 >>>>>>> refs/heads/nowe_rozdz
         },
@@ -478,7 +478,7 @@ którego zadaniem jest automatyczne załadowanie wszystkich plików Symfony Fram
 jak również plików wymienionych w sekcji ``autoload`` pliku ``composer.json``.
 
 Filozofią rdzenia Symfony jest przekonanie, że głównym zadaniem aplikacji jest
-interpretacja każdego żądania i zwracanie odpowiedzi. W tym celu Symfony2 dostarcza
+interpretacja każdego żądania i zwracanie odpowiedzi. W tym celu Symfony dostarcza
 klasy :class:`Symfony\\Component\\HttpFoundation\\Request` jak i
 :class:`Symfony\\Component\\HttpFoundation\\Response`.
 Klasy te są obiektowo zorientowaną reprezentacją surowego żądania HTTP, które ma
@@ -512,7 +512,7 @@ do poprawienia naszego blogu:
     
 Kontrolery są teraz odpowiedzialne za zwrócenie obiektu ``Response``.
 Aby to ułatwić, można dodać nową funkcję ``render_template()``, która nawiasem
-mówiąc, działa trochę jak silnik szablonowania Symfony2:
+mówiąc, działa trochę jak silnik szablonowania Symfony:
 
 .. code-block:: php
    :linenos:
@@ -547,7 +547,7 @@ mówiąc, działa trochę jak silnik szablonowania Symfony2:
         return $html;
     }
 
-Po wprowadzenie niewielkiej części Symfony2, aplikacja stała się bardziej elastyczna
+Po wprowadzenie niewielkiej części Symfony, aplikacja stała się bardziej elastyczna
 i niezawodna. Klasa ``Request`` zapewnia niezawodny sposób dostępu do informacji
 o żądaniu HTTP. Konkretniej, metoda ``getPathInfo()`` zwraca oczyszczony adres
 URI (zawsze zwrane jest  ``/show a nigdy`` ``/index.php/show``). Tak więc, nawet
@@ -559,8 +559,8 @@ czemu nagłówki HTTP i zawartość są dodawane poprzez interfejs obiektowo zor
 Chociaż odpowiedzi w naszej aplikacji są proste, to uzyskana teraz elastyczność
 zacznie procentować, gdy aplikacja zacznie się rozrastać.
 
-Prosta aplikacja w Symfony2
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Prosta aplikacja w Symfony
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Nasz blog przebył długą drogę, ale nadal zawiera wiele kodu jak dla tak prostej
 aplikacji. Po drodze, wykonaliśmy prosty system trasowania i metodę stosującą
@@ -569,9 +569,9 @@ Jeśli z jakiegoś powodu chcesz kontynuować budowę tego "szkieletu", można
 przynajmniej posłużyć się samodzielnymi komponentami Symfony, takimi jak
 `Routing`_ i `Templating`_, które rozwiązują wiele problemów.
 
-Zamiast ponownie rozwiązywać już rozwiązane problemy, możesz pozwolić aby Symfony2
+Zamiast ponownie rozwiązywać już rozwiązane problemy, możesz pozwolić aby Symfony
 zajęło się tymi problemami. Oto przykładowa aplikacja, tym razem zbudowana w całości
-w Symfony2::
+w Symfony::
 
     // src/Acme/BlogBundle/Controller/BlogController.php
     namespace Acme\BlogBundle\Controller;
@@ -663,7 +663,7 @@ Układ jest niemal identyczny:
     Szablon wpisu na blogu pozostawiamy jako wzorzec, jako że utworzenie na jego
     podstawie szablonu wykazu wpisów na blogu będzie trywialne.
 
-Kiedy uruchamia się silnik Symfony2 (o nazwie ``Kernel``), potrzebuje on mapy,
+Kiedy uruchamia się silnik Symfony (o nazwie ``Kernel``), potrzebuje on mapy,
 tak aby wiedzieć jaki kontroler należy wykonać na podstawie informacji z żądania
 HTTP. Informacje te są dostarczane w czytelnej formie przez mapę konfiguracji
 trasowania:
@@ -680,9 +680,9 @@ trasowania:
         path:     /blog/show/{id}
         defaults: { _controller: AcmeBlogBundle:Blog:show }
 
-Teraz Symfony2 obsługuje wszystkie prozaiczne zadania, kontroler wejścia jest
+Teraz Symfony obsługuje wszystkie prozaiczne zadania, kontroler wejścia jest
 dziecinnie prosty. Ponieważ to nie tak mało, nie musisz go zmieniać po utworzeniu
-(a jeśli używasz dystrybucji Symfony2, to nawet nie trzeba go tworzyć)::
+(a jeśli używasz dystrybucji Symfony, to nawet nie trzeba go tworzyć)::
 
     // web/app.php
     require_once __DIR__.'/../app/bootstrap.php';
@@ -694,20 +694,20 @@ dziecinnie prosty. Ponieważ to nie tak mało, nie musisz go zmieniać po utworz
     $kernel->handle(Request::createFromGlobals())->send();
 
 Jedynym zadaniem kontrolera wejściowego jest inicjacja silnika (``Kernela``)
- Symfony2 i przekazaniu mu do przetworzenia obiektu ``Request``.
- Rdzeń Symfony2 następnie używa mapy trasowania do ustalenia kontrolera, który
+ Symfony i przekazaniu mu do przetworzenia obiektu ``Request``.
+ Rdzeń Symfony następnie używa mapy trasowania do ustalenia kontrolera, który
  należy wywołać. Tak jak wcześniej, metoda kontrolera jest odpowiedzialna za
  zwrócenie w efekcie końcowym obiektu ``Response``. Tam naprawdę niewiele tego.
 
 Otwórz :ref:`diagram przepływu żądania<request-flow-figure>`, aby obejrzeć
-wizualną prezentację tego, jak Symfony2 obsługuje żądanie.
+wizualną prezentację tego, jak Symfony obsługuje żądanie.
 
-W czym pomógł Symfony2
-~~~~~~~~~~~~~~~~~~~~~~
+W czym pomógł Symfony
+~~~~~~~~~~~~~~~~~~~~~
 
 W dalszym rozdziale dowiesz się więcej o tym, jak działa każda część Symfony
 i jaka jest zalecana organizacja projektu. Teraz zobaczmy, jak migracja blogu,
-od zwykłego PHP do Symfony2, ułatwiła nam życie:
+od zwykłego PHP do Symfony, ułatwiła nam życie:
 
 * Aplikacja ma teraz jasny i konsekwentnie zorganizowany kod (choć Symfony nie
   wymusza tego). Kod nabywa zdolności do wielokrotnego wykorzystania i pozwala
@@ -719,27 +719,27 @@ od zwykłego PHP do Symfony2, ułatwiła nam życie:
   :ref:`automatyczne ładowanie<autoloading-introduction-sidebar>`,
   :doc:`trasowanie<routing>` czy renderowanie w :doc:`kontrolerach<controller>`;
 
-* Symfony2 daje dostęp do otwartych narzędzi, takich jak Doctrine i komponentów
+* Symfony daje dostęp do otwartych narzędzi, takich jak Doctrine i komponentów
   szablonowania, bezpieczeństwa, formularzy, walidacji i tłumaczeń (by wymienić
   tylko kilka);
 
 * Dzięki komponentowi ``Routing`` aplikacja posiada teraz **przyjazne, w pełni
   elastyczne ściezki URL**;
 
-* Architektura Symfony2 ukierunkowana na HTTP daje dostęp do zaawansowanych narzędzi,
+* Architektura Symfony ukierunkowana na HTTP daje dostęp do zaawansowanych narzędzi,
   takich jak buforowanie HTTP wspierane przez wewnętrzną pamięć podręczną HTTP
-  Symfony2 lub bardziej zaawansowane narzędzia, takie jak ``Varnish``. Wszystko o
+  Symfony lub bardziej zaawansowane narzędzia, takie jak ``Varnish``. Wszystko o
   :doc:`buforowaniu<http_cache>` jest opisane w dalszej części podręcznika.
 
-Być może najważniejszym pożytkiem przy używaniu Symfony2 jest dostęp do całego
+Być może najważniejszym pożytkiem przy używaniu Symfony jest dostęp do całego
 zestawu wysokiej jakości narzędzi o otwartym kodzie, opracowanych przez społeczność
-Symfony2. Dobry wybór społecznościowych narzędzi Symfony2 można znaleźć na stronie
+Symfony. Dobry wybór społecznościowych narzędzi Symfony można znaleźć na stronie
 `KnpBundles.com`_.
 
 Lepsze szablony
 ---------------
 
-Jeśli zdecydujesz się na używanie Symfony2, to jest on wyposażony w silnik szablonów
+Jeśli zdecydujesz się na używanie Symfony, to jest on wyposażony w silnik szablonów
 o nazwie `Twig`_, który sprawia, że szablony są szybsze w pisaniu i łatwiejsze w
 czytaniu. Oznacza to też, że nasza przykładowa aplikacja może zawierać jeszcze
 mniej kodu. Dla przykładu przekształćmy szablon wykazu wpisów bloga na szablon
@@ -782,7 +782,7 @@ Odpowiedni szablon ``layout.html.twig`` jest równie prosty:
         </body>
     </html>
 
-Twig jest dobrze obsługiwany przez Symfony2, podobnie jak szablony PHP. Twig
+Twig jest dobrze obsługiwany przez Symfony, podobnie jak szablony PHP. Twig
 zostanie omówiony dokładniej w dalszej części podręcznika. Więcej informacji
 można znaleźć w rozdziale ":doc:`templating`".
 

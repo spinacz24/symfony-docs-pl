@@ -11,22 +11,20 @@ Ilekroć pisze się nową linie kodu, to również potencjalnie dodaje się nowe
 Aby tworzyć lepsze i bardziej niezawodne aplikacje, należy używać testów, zarówno
 funkcjonalnych jak i jednostkowych.
 
-Framework testowy PHPUnit
--------------------------
+Framework testowania PHPUnit
+----------------------------
 
-Symfony2 integruje się z niezależną biblioteką o nazwie PHPUnit w celu udostępnienia
-zaawansowanego frameworka testowego. Rozdział niniejszy nie opisuje samej PHPUnit,
+Symfony integruje się z niezależną biblioteką o nazwie PHPUnit w celu udostępnienia
+zaawansowanego frameworka testowania. Rozdział niniejszy nie opisuje samej PHPUnit,
 ale biblioteka ta ma świetną `dokumentację`_.
 
 
 .. note::
-
-    Symfony2 współpracuje z PHPUnit 3.5.11 lub wersjami wyższymi, ale do testowania
-    rdzenia Symfony jest niezbędna wersja 3.6.4.
-
-
+    Zaleca sie używanie najnowszej stabilnej wersji PHPUnit (do testowania kodu
+    rdzenia Symfony konieczna jest wersja 4.2 lub wyższa).
+    
 Każdy test, czy to jednostkowy czy funkcjonalny, jest klasą PHP, która powinna się
-znajdować w podkatalogu Tests/ własnego pakietu. Jeśli zastosuje się tą zasadę,
+znajdować w podkatalogu ``Tests/`` własnego pakietu. Jeśli zastosuje się tą zasadę,
 to będzie można uruchomić wszystkie testy swojej aplikacji, po wydaniu tego polecenia:
 
 
@@ -42,7 +40,9 @@ Jeśli jesteś ciekaw informacji o opcjach PHPUnit, przejrzyj plik ``app/phpunit
 
 .. tip::
 
-    Raport kodowy może zostać wygenerowane przez użycie opcji ``--coverage-html``.
+    Raport z pokrycia kodu może zostać wygenerowany przez użycie argumentu ``--coverage-html``.
+    Proszę zapoznać sie z komunikatmi pomocy wyświetlanymi po zastosowaniu
+    argumentu ``--help``.
 
 .. index::
    single: testy; testy jednostkowe
@@ -51,17 +51,16 @@ Jeśli jesteś ciekaw informacji o opcjach PHPUnit, przejrzyj plik ``app/phpunit
 Testy jednostkowe
 -----------------
 
-Test jednostkowy dotyczy zazwyczaj określonej klasy PHP. Zagadnienia związane z
-testowaniem działania całej aplikacji są omówione w rozdziale
-:ref:`Testy funkcjonalne<functional_tests>`.
+Test jednostkowy dotyczy zazwyczaj określonej klasy PHP, zwanej w nomenklaturze
+PHPUnit *jednostką*. Zagadnienia związane z testowaniem działania całej aplikacji
+są omówione w rozdziale :ref:`Testy funkcjonalne<functional_tests>`.
 
-Pisanie testów jednostkowych dla Symfony2 nie różni się niczym od pisania standardowych
-testów jednostkowych PHPUnit. Załóżmy, że mamy bardzo prosta klasę o nazwie ``Calculator``
-w katalogu ``Utility/`` swojego pakietu::
-
-
-    // src/Acme/DemoBundle/Utility/Calculator.php
-    namespace Acme\DemoBundle\Utility;
+Pisanie testów jednostkowych dla Symfony nie różni się niczym od pisania standardowych
+testów jednostkowych PHPUnit. Załóżmy, że mamy bardzo prostą klasę o nazwie ``Calculator``
+w katalogu ``Util/`` swojego pakietu::
+   
+   / src/AppBundle/Util/Calculator.php
+    namespace AppBundle\Util;
 
     class Calculator
     {
@@ -70,16 +69,15 @@ w katalogu ``Utility/`` swojego pakietu::
             return $a + $b;
         }
     }
+    
+Aby przetestowac powyższy kod, trzeba utworzyć plik ``CalculatorTest`` w katalogu
+``Tests/Util`` swojego pakietu::
 
 
-Aby sprawdzić powyższy kod, trzeba utworzyć plik ``CalculatorTest`` w katalogu
-``Tests/Utility`` swojego pakietu::
+    // src/AppBundle/Tests/Util/CalculatorTest.php
+    namespace AppBundle\Tests\Util;
 
-
-    // src/Acme/DemoBundle/Tests/Utility/CalculatorTest.php
-    namespace Acme\DemoBundle\Tests\Utility;
-
-    use Acme\DemoBundle\Utility\Calculator;
+    use AppBundle\Util\Calculator;
 
     class CalculatorTest extends \PHPUnit_Framework_TestCase
     {
@@ -88,7 +86,7 @@ Aby sprawdzić powyższy kod, trzeba utworzyć plik ``CalculatorTest`` w katalog
             $calc = new Calculator();
             $result = $calc->add(30, 12);
 
-            // assert that your calculator added the numbers correctly!
+            // przyjęcie, że kalkulator doda poprawnie liczby!
             $this->assertEquals(42, $result);
         }
     }
@@ -97,27 +95,30 @@ Aby sprawdzić powyższy kod, trzeba utworzyć plik ``CalculatorTest`` w katalog
 .. note::
 
     Zgodnie z konwencją, podkatalog ``Tests/`` powinien replikować strukturę
-    katalogu pakietu. Więc, jeśli testowana jest klasa w katalogu ``Utility/``
-    pakietu, to test powinien znajdować się w katalogu ``Tests/Utility/``.
+    katalogu pakietu. Więc, jeśli testowana jest klasa w katalogu ``Util/``
+    pakietu, to test powinien znajdować się w katalogu ``Tests/Util/``.
 
 
 Podobnie jak w prawdziwej aplikacji, automatycznie jest włączane autoładowanie
 poprzez plik ``bootstrap.php.cache`` (jak skonfigurowano to domyślnie w pliku
-``phpunit.xml.dist``).
+``app/phpunit.xml.dist``).
 
 Uruchomienie testów dla określonego pliku lub katalogu jest również bardzo proste:
 
 
 .. code-block:: bash
 
-    # run all tests in the Utility directory
-    $ phpunit -c app src/Acme/DemoBundle/Tests/Utility/
+    # uruchomienie wszystkich testów aplikacji
+    $ phpunit -c app
 
-    # run tests for the Calculator class
-    $ phpunit -c app src/Acme/DemoBundle/Tests/Utility/CalculatorTest.php
+    # uruchomienie wszystkich testów w katalogu Util
+    $ phpunit -c app src/AppBundle/Tests/Util
 
-    # run all tests for the entire Bundle
-    $ phpunit -c app src/Acme/DemoBundle/
+    # uruchomienie testów dla klasy Calculator
+    $ phpunit -c app src/AppBundle/Tests/Util/CalculatorTest.php
+
+    # uruchomienie wszystkich testów dla całego pakietu
+    $ phpunit -c app src/AppBundle/
 
 .. index::
    single: testy; testy funkcjonalne
@@ -137,63 +138,58 @@ mają bardzo specyficzną procedurę:
 * Przetestowanie odpowiedzi;
 * Wyczyszczenie i powtórzenie testu.
 
-Pierwszy test funkcjonalny
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Przykład testu funkcjonalnego
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Testy funkcjonalne, to proste pliki PHP, które zazwyczaj umieszcza się w katalogu
 ``Tests/Controller`` pakietu. Jeśli chce się przetestować strony obsługiwane przez
-klasę ``DemoController``, należy rozpocząć od utworzenia nowego pliku
-``DemoControllerTest.php``, który rozszerza klasę ``WebTestCase``.
+klasę ``PostController``, należy rozpocząć od utworzenia nowego pliku
+``PostControllerTest.php``, który rozszerza klasę ``WebTestCase``.
 
-Na przykład Symfony2 Standard Edition dostarcza prosty test funkcjonalny z własnym
-kontrolerem ``DemoController`` (`DemoControllerTest`_), którego kod jest następujący::
+Dla przykładu, test może wyglądać tak::
 
-
-    // src/Acme/DemoBundle/Tests/Controller/DemoControllerTest.php
-    namespace Acme\DemoBundle\Tests\Controller;
+    // src/AppBundle/Tests/Controller/PostControllerTest.php
+    namespace AppBundle\Tests\Controller;
 
     use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-    class DemoControllerTest extends WebTestCase
+    class PostControllerTest extends WebTestCase
     {
-        public function testIndex()
+        public function testShowPost()
         {
             $client = static::createClient();
 
-            $crawler = $client->request('GET', '/demo/hello/Fabien');
+            $crawler = $client->request('GET', '/post/hello-world');
 
             $this->assertGreaterThan(
                 0,
-                $crawler->filter('html:contains("Hello Fabien")')->count()
+                $crawler->filter('html:contains("Hello World")')->count()
             );
         }
     }
 
 .. tip::
 
-    Aby uruchomić testy funkcjonalne, klasa ``WebTestCase`` inicjuje jądro aplikacji.
-    W większości przypadków odbywa się to automatycznie. Jednak, gdy jądro jest
+    Aby uruchomić testy funkcjonalne, klasa ``WebTestCase`` inicjuje kernel aplikacji.
+    W większości przypadków odbywa się to automatycznie. Jednak, gdy kernel jest
     zlokalizowane w niestandardowym katalogu, to zachodzi konieczność zmiany pliku
     ``phpunit.xml.dist`` przez ustawienie zmiennej środowiskowej ``KERNEL_DIR``
-    na katalog jądra aplikacji:
+    na katalog kernela aplikacji:
 
 .. code-block:: xml
 
+        <?xml version="1.0" charset="utf-8" ?>
         <phpunit>
-            <!-- ... -->
             <php>
                 <server name="KERNEL_DIR" value="/path/to/your/app/" />
             </php>
             <!-- ... -->
         </phpunit>
 
-
 Metoda ``createClient()`` zwraca klienta, podobnego do przeglądarki, który będzie
 używany do analizy witryny::
 
-
-    $crawler = $client->request('GET', '/demo/hello/Fabien');
-
+    $crawler = $client->request('GET', '/post/hello-world');
 
 Metoda ``request()`` (przeczytaj :ref:`więcej o metodzie request<book-testing-request-method-sidebar>`)
 zwraca obiekt ``Crawler``, który może zostać użyty do wyboru elementów z odpowiedzi
@@ -201,23 +197,25 @@ oraz symulowania kliknięcia łącza i wysłania formularza.
 
 .. tip::
 
-    Crawler działa tylko gdy odpowiedź jest dokumentem XML lub HTML.
+    ``Crawler`` działa tylko gdy odpowiedź jest dokumentem XML lub HTML.
     Aby pobrać surową zawartość odpowiedzi, trzeba wywołać
     ``$client->getResponse()->getContent()``.
 
-W pierwszej kolejności wybiera się z Crawlera kliknięcie łącza, stosując albo
-wyrażenie Xpath lub selektora CSS, a następnie stosuje się klienta do kliknięcia
-łącza. Na przykład, następujący kod odnajdzie wszystkie łącza w tekście powitania,
-następnie wybierze drugi z nich i w końcu wykona na nim klikniecie::
+W pierwszej kolejności wybiera się z obiektu ``Crawler`` kliknięcie łącza, stosując
+albo wyrażenie Xpath albo wykorzystując selektor CSS, a następnie stosuje się klienta
+do kliknięcia łącza. Na przykład:::
 
-
-    $link = $crawler->filter('a:contains("Greet")')->eq(1)->link();
-
+    $link = $crawler
+        ->filter('a:contains("Greet")') // find all links with the text "Greet"
+        ->eq(1) // select the second link in the list
+        ->link()
+    ;
+    
+    // and click it
     $crawler = $client->click($link);
 
-
 Przesłanie formularza jest podobnie proste. Poniższy kod wybierze przycisk formularza,
-ewentualnie zastąpi niektóre wartości formularza i przesłoni odpowiedni formularz::
+ewentualnie zastąpi niektóre wartości formularza i przesłoni rzeczywisty formularz::
 
 
     $form = $crawler->selectButton('submit')->form();
@@ -233,9 +231,9 @@ ewentualnie zastąpi niektóre wartości formularza i przesłoni odpowiedni form
 .. tip::
 
     Formularz może również obsługiwać ładowanie i zawierać metody wypełniania różnych
-    typów pól pól formularza (np. ``select()`` i ``tick()``). Więcej informacji na ten
+    typów pól formularza (np. ``select()`` i ``tick()``). Więcej informacji na ten
     temat można znaleźć w rozdziale :doc:`Formularze</book/forms>` w dalszej części
-    dokumentu.
+    dokumentacji.
 
 Teraz można łatwo poruszać się po strukturze aplikacji, używając metod asercji
 do testowania tego, czy elementy rzeczywiście wykonują to, co się od nich oczekuje.
@@ -249,48 +247,11 @@ Oto zastosowanie Crawlera do wykonania asercji na elementach DOM::
 albo do przetestowania bezpośrednio zawartość odpowiedzi, sprawdzając czy treść
 ta zawiera jakiś tekst lub czy odpowiedź nie jest dokumentem XML lub HTML:: 
 
-
-    $this->assertRegExp(
-        '/Hello Fabien/',
+    $this->assertContains(
+        'Hello World',
         $client->getResponse()->getContent()
     );
 
-.. _book-testing-request-method-sidebar:
-
-
-.. sidebar:: Więcej o metodzie request():
-
-    Pełna sygnatura metody ``request()``, to::
-
-
-        request(
-            $method,
-            $uri,
-            array $parameters = array(),
-            array $files = array(),
-            array $server = array(),
-            $content = null,
-            $changeHistory = true
-        )
-
-
-    Tablica ``server`` jest surowymi wartościami, które oczekuje się znaleźć w super
-    globalnej zmiennej `$_SERVER`_. Na przykład, aby ustawić nagłówki HTTP `Content-Type`,
-    `Referer` i `X-Requested-With`, trzeba przekazać następujący kod (należy
-    pamiętać o dodawaniu przedrostka `HTTP_` w niestandardowych nagłówkach)::
-    
-
-        $client->request(
-            'GET',
-            '/demo/hello/Fabien',
-            array(),
-            array(),
-            array(
-                'CONTENT_TYPE'          => 'application/json',
-                'HTTP_REFERER'          => '/foo/bar',
-                'HTTP_X-Requested-With' => 'XMLHttpRequest',
-            )
-        );
 
 
 .. index::
@@ -303,18 +264,18 @@ ta zawiera jakiś tekst lub czy odpowiedź nie jest dokumentem XML lub HTML::
         use Symfony\Component\HttpFoundation\Response;
 
         // ...
-        
-        // Twierdzenie, że jest co najmniej jeden znacznik h2 z klasą "subtitle"
-        // with the class "subtitle"
+
+        // Przyjecie, że istnieje co najmniej jeden znacznik h2
+        // z klasa "subtitle"
         $this->assertGreaterThan(
             0,
             $crawler->filter('h2.subtitle')->count()
         );
 
-        // Twierdzenie, że na stronie istnieją dokładnie 4 znaczniki h2
+        // Przyjęcie, że na stronie istnieją dokładnie 4 znaczniki h2
         $this->assertCount(4, $crawler->filter('h2'));
 
-        // Twierdzenie, że nagłówek "Content-Type", to "application/json"
+        // Przyjecie, że nagłówek "Content-Type", to "application/json"
         $this->assertTrue(
             $client->getResponse()->headers->contains(
                 'Content-Type',
@@ -322,45 +283,87 @@ ta zawiera jakiś tekst lub czy odpowiedź nie jest dokumentem XML lub HTML::
             )
         );
 
-        // Twierdzenie, że treść odpowiedzi dopasowuje wyrażenie regularne.
-        $this->assertRegExp('/foo/', $client->getResponse()->getContent());
+        // Przyjęcie, że treść odpowiedzi zawiera łańcuch tekstowy
+        $this->assertContains('foo', $client->getResponse()->getContent());
+        // ...or matches a regex
+        $this->assertRegExp('/foo(bar)?/', $client->getResponse()->getContent());
 
-        // Twierdzenie, że kod statusu odpowiedzi, to 2xx
+        // Przyjecie, że kod stanu odpowiedzi, to 2xx
         $this->assertTrue($client->getResponse()->isSuccessful());
-        // Twierdzenie, że kod statusu odpowiedzi, to 404
+        // Przyjecie, że kod stanu odpowiedzi, to 404
         $this->assertTrue($client->getResponse()->isNotFound());
-        // Ustalenie kodu statusu 200
+        // Przejęcie, ze stan kodu wynosi 200
         $this->assertEquals(
-            Response::200,
+            200, // or Symfony\Component\HttpFoundation\Response::HTTP_OK
             $client->getResponse()->getStatusCode()
         );
 
-        // Twierdzenie, że odpowiedź zostaje przekierowana na /demo/contact
+        // Przyjęcie, że odpowiedź jest przekierowywana do /demo/contact
         $this->assertTrue(
             $client->getResponse()->isRedirect('/demo/contact')
         );
-        // lub tylko sprawdzenie, czy odpowiedź jest przekierowywana na jakiś adres URL
+        // ...lub po prostu sparwdzenie, ze odpowiedź jest przekierowywana na jakiś adres URL
         $this->assertTrue($client->getResponse()->isRedirect());
-        
-           
 
+    .. versionadded:: 2.4
+        Obsługa stałych kodu stanu HTTP została dodana w Symfony 2.4.
+        
 .. index::
    single: testy; klient
 
-Praca z klientem testowym
--------------------------
+Praca z klientem testowania
+---------------------------
 
-Klient testowy symuluje klienta HTTP, takiego jak przeglądarka i wykonuje żądania
-do aplikacji Symfony2::
+Klient testowania symuluje klienta HTTP, takiego jak przeglądarka i wykonuje żądania
+do aplikacji Symfony::
 
-
-    $crawler = $client->request('GET', '/hello/Fabien');
-
-
+    $crawler = $client->request('GET', '/post/hello-world');
+    
 Metoda ``request()`` pobiera jako argumenty metodę HTTP i adres URL a zwraca instancję
 ``Crawler``.
 
-Użyjmy instancji Crawler do odnalezienie w odpowiedzi elementów DOM. Elementy te mogą
+.. tip::
+
+    Sztywne podawanie adresów URL jest najlepszą praktyką dla testów funkcjonalnych.
+    Jeśli test generuje ścieżki URL używając routera Symfony, to nie wykrywa żadnych
+    zmian na ścieżkach URL applikacji, które mogą wpłynąć na końcowych użytkowników.
+
+.. _book-testing-request-method-sidebar:
+
+.. sidebar:: Więcej o metodzie ``request()``:
+
+    Pełna sygnatura metody ``request()`` jest następująca::
+
+        request(
+            $method,
+            $uri,
+            array $parameters = array(),
+            array $files = array(),
+            array $server = array(),
+            $content = null,
+            $changeHistory = true
+        )
+
+    Tablica ``server`` jest surową wartością, jaką można oczekiwać przy zwykłym
+    odczytywaniu wartości z superglobalnej zmiennej PHP `$_SERVER`_. Na przykład,
+    aby ustawić nagłówki HTTP ``Content-Type``, ``Referer`` i ``X-Requested-With``,
+    trzeba przekazać co nastęþuje (pamietając o przedrostku ``HTTP_`` dla nie
+    standardowych nagłówków)::
+
+        $client->request(
+            'GET',
+            '/post/hello-world',
+            array(),
+            array(),
+            array(
+                'CONTENT_TYPE'          => 'application/json',
+                'HTTP_REFERER'          => '/foo/bar',
+                'HTTP_X-Requested-With' => 'XMLHttpRequest',
+            )
+        );
+
+
+Użyjmy Crawler do odnalezienie w odpowiedzi elementów DOM. Elementy te mogą
 być następnie użyte do klikania łączy i składania formularzy::
 
 
@@ -382,7 +385,7 @@ dobre API dla ładowania plików.
     :ref:`book-testing-crawler`.
 
 Metoda ``request`` może również zostać użyta do bezpośredniego symulowania składania
-formularza lub wykonania bardziej złożonych żądań::
+formularza lub wykonania bardziej złożonych żądań. Oto przydatny przykład::
 
 
     // Bezpośrednie przesłanie formularza (ale przy użyciu Crawler jest to łatwiejsze)
@@ -451,31 +454,25 @@ Dostęp do wewnętrznych obiektów
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. versionadded:: 2.3
-    W Symfony 2.3 dodano metody ``getInternalRequest()`` i ``getInternalResponse()``.
+    W Symfony 2.3 dodano metody
+    :method:`Symfony\\Component\\BrowserKit\\Client::getInternalRequest` i
+    :method:`Symfony\\Component\\BrowserKit\\Client::getInternalResponse`
 
 Jeśli używa się klienta do testowania aplikacji, to można uzyskać dostęp do obiektów
 wewnętrznych klienta::
 
 
-    $history   = $client->getHistory();
+    $history = $client->getHistory();
     $cookieJar = $client->getCookieJar();
 
 
-Można również pobrać obiekty związane z ostatnim żądaniem.
-
-Przykład dla Symfony < 2.3::
-
-    $request  = $client->getRequest();
-    $response = $client->getResponse();
-    $crawler  = $client->getCrawler();
-
-Przykład dla Symfony 2.3::
-
-   // instancja żądania HttpKernel
-    $request  = $client->getRequest();
+Można również pobrać obiekty związane z ostatnim żądaniem::
+   
+    // instancja żądania HttpKernel
+    $request = $client->getRequest();
 
     // instancja żądania BrowserKit
-    $request  = $client->getInternalRequest();
+    $request = $client->getInternalRequest();
 
     // instancja odpowiedzi HttpKernel
     $response = $client->getResponse();
@@ -483,14 +480,12 @@ Przykład dla Symfony 2.3::
     // instancja odpowiedzi BrowserKit
     $response = $client->getInternalResponse();
 
-    $crawler  = $client->getCrawler();
+    $crawler = $client->getCrawler();
 
-
-Jeśli żądania nie są izolowane, to można uzyskać również dostęp do kontenera i jądra::
-
+Jeśli żądania nie są izolowane, to można uzyskać również dostęp do kontenera i kernela::
 
     $container = $client->getContainer();
-    $kernel    = $client->getKernel();
+    $kernel = $client->getKernel();
 
 
 Dostęp do kontenera
@@ -504,10 +499,13 @@ można uzyskać dostęp do kontenera wstrzykiwania zależności::
 
     $container = $client->getContainer();
 
-
-Trzeba pamiętać, że nie działa to, jeśli izoluje się klienta lub jeśli używa się
+Trzeba pamiętać, że to nie działa, jeśli izoluje się klienta lub jeśli używa się
 warstwy HTTP. W celu uzyskania listy dostępnych w aplikacji usług, użyj zadania
-konsoli ``container:debug``.
+konsoli ``debug:container``.
+
+.. versionadded:: 2.6
+    W wersjacha poprzedzających Symfony 2.6 polecenie to było wywoływane jako
+    ``container:debug``.
 
 .. tip::
 
@@ -553,6 +551,11 @@ wymusić to metodą ``followRedirects()``::
 
     $client->followRedirects();
 
+Gdy do metody ``followRedirects()`` przekaże się ``false``, przekierowania nie
+będą już dokonywane::
+
+    $client->followRedirects(false);
+
 
 .. index::
    single: testy; Crawler
@@ -565,7 +568,6 @@ Crawler
 Instancja Crawlera zwracana jest po każdym wykonaniu żądania w kliencie.
 Umożliwia to przechodzenie po dokumencie HTML, wybór węzłów, odnajdowanie łączy
 i formularzy.
-
 
 Przechodzenie
 ~~~~~~~~~~~~~
@@ -581,35 +583,51 @@ wybiera ostatni z nich i następnie wybiera jego bezpośredni element rodziciels
         ->first()
     ;
 
-
 Dostępnych jest też wiele innych metod:
 
-+------------------------+-----------------------------------------------------+
-| Metoda                 | Opis                                                |
-+========================+=====================================================+
-| ``filter('h1.title')`` | Zwraca węzły, które pasują do określonego selektora |
-+------------------------+-----------------------------------------------------+
-| ``filterXpath('h1')``  | Zwraca węzły, które pasują do określonego wyrażenia |
-|                        | XPath                                               |
-+------------------------+-----------------------------------------------------+
-| ``eq(1)``              | Zwraca węzeł o określonym indeksie                  |
-+------------------------+-----------------------------------------------------+
-| ``first()``            | Zwraca pierwszy węzeł                               |
-+------------------------+-----------------------------------------------------+
-| ``last()``             | Zwraca ostatni węzeł                                |
-+------------------------+-----------------------------------------------------+
-| ``siblings()``         | Zwraca rodzeństwo                                   |
-+------------------------+-----------------------------------------------------+
-| ``nextAll()``          | Zwraca wszystkie następne węzły rodzeństwa          |
-+------------------------+-----------------------------------------------------+
-| ``previousAll()``      | Zwraca wszysystkie poprzedzające węzły rodzeństwa   |
-+------------------------+-----------------------------------------------------+
-| ``parents()``          | Zwraca węzły nadrzędne (rodziców)                   |
-+------------------------+-----------------------------------------------------+
-| ``children()``         | Zwraca węzły podrzędne (dzieci)                     |
-+------------------------+-----------------------------------------------------+
-| ``reduce($lambda)``    | Węzły, dla których wywoływanie nie zwróci false     |
-+------------------------+-----------------------------------------------------+
+``filter('h1.title')``
+   
+   Zwraca węzły, które pasują do określonego selektora.
+   
+``filterXpath('h1')`
+   
+   Zwraca węzły, które pasują do określonego wyrażenia XPath.
+   
+``eq(1)``
+   
+   Zwraca węzeł o określonym indeksie.
+   
+``first()``
+   
+   Zwraca pierwszy węzeł.
+   
+``last()``
+   
+   Zwraca ostatni węzeł.
+   
+``siblings()``
+   
+   Zwraca rodzeństwo
+   
+``nextAll()``
+   
+   Zwraca wszystkie następne węzły rodzeństwa.
+
+``previousAll()``
+   
+   Zwraca wszysystkie poprzedzające węzły rodzeństwa.
+   
+``parents()``
+   
+   Zwraca węzły nadrzędne (rodziców).
+   
+``children()``
+   
+   Zwraca węzły podrzędne (dzieci).
+   
+``reduce($lambda)``
+   
+   Węzły, dla których wywoływanie nie zwróci false.
 
 Ponieważ każda z tych metod zwraca nową instancję ``Crawler``, więc można zawęzić
 wybór węzła przez łańcuchowe wywołanie tych metod::
@@ -629,7 +647,6 @@ wybór węzła przez łańcuchowe wywołanie tych metod::
 
     Aby uzyskać liczbę węzłów przechowywanych w Crawler, trzeba użyć funkcję
     ``count($crawler)``.
-
 
 Pozyskiwanie informacji
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -656,36 +673,31 @@ Crawler może pozyskiwać informację z węzłów::
     });
 
 
-Łącza
-~~~~~
+Odnośniki
+~~~~~~~~~
 
-Aby wybrać łacza, można użyć metody przechodzenia lub wygodny skrót ``selectLink()`::
-
+Do wybrania odnośników, można użyć metody przechodzenia lub wygodny skrót ``selectLink()`::
 
     $crawler->selectLink('Click here');
-
 
 Wyrażenie to wybiera wszystkie łącza, które zawierają określony tekst lub klikalne
 obrazy, dla których atrybut ``alt`` zawiera dany tekst. Podobnie jak w przypadku
 innych metod filtrujących kod ten zwraca inny obiekt klasy ``Crawler``.
 
 Po wybraniu łącza, uzyskuje się dostęp do specjalnego obiektu ``Link``, który posiada
-użyteczne, pomocne metody dla połączeń (takie jak ``getMethod()`` i ``getUri()``).
+przydatne, pomocne metody dla połączeń (takie jak ``getMethod()`` i ``getUri()``).
 Aby kliknąć łącze, trzeba użyć metodę ``click()`` klienta i przekazać to jako obiekt
 ``Link``::
-
 
     $link = $crawler->selectLink('Click here')->link();
 
     $client->click($link);
 
-
 Formularze
 ~~~~~~~~~~
 
 Wybór formularzy dokonuje się przy użyciu metody ``selectButton()``, podobnie jak
-w przypadku łączy::
-
+w przypadku odnosnikow::
 
     $buttonCrawlerNode = $crawler->selectButton('submit');
 
@@ -767,8 +779,8 @@ od jego typu::
 
 .. tip::
 
-    Jeśli świadomie chcesz wybrać "nieprawidłowe" wartości pól select/radio, zobacz
-    :ref:`components-dom-crawler-invalid`.
+    Jeśli świadomie chcesz wybrać "nieprawidłowe" wartości pól select/radio,
+    zapoznaj się z :ref:`components-dom-crawler-invalid`.
 
 .. tip::
 
@@ -785,7 +797,7 @@ od jego typu::
 Konfiguracja testowania
 -----------------------
 
-Stosowany w testach funkcjonalnych klient tworzy jądro, które uruchamia specyficzne
+Stosowany w testach funkcjonalnych klient tworzy kernel, który uruchamia specyficzne
 środowisko testowe. Ponieważ Symfony ładuje ``app/config/config_test.yml`` w środowisku
 testowym, to można zmienić jakiekolwiek z ustawień aplikacji specjalnie dla testowania.
 
@@ -796,7 +808,6 @@ swiftmailer:
 .. configuration-block::
 
     .. code-block:: yaml
-       :linenos:
 
         # app/config/config_test.yml
 
@@ -805,16 +816,22 @@ swiftmailer:
             disable_delivery: true
 
     .. code-block:: xml
-       :linenos:
 
         <!-- app/config/config_test.xml -->
-        <container>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:swiftmailer="http://symfony.com/schema/dic/swiftmailer"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services
+                http://symfony.com/schema/dic/services/services-1.0.xsd
+                http://symfony.com/schema/dic/swiftmailer
+                http://symfony.com/schema/dic/swiftmailer/swiftmailer-1.0.xsd">
+
             <!-- ... -->
             <swiftmailer:config disable-delivery="true" />
         </container>
 
     .. code-block:: php
-       :linenos:
 
         // app/config/config_test.php
 
@@ -823,9 +840,8 @@ swiftmailer:
             'disable_delivery' => true,
         ));
 
-
 Można również użyć w całości innego środowiska lub zastąpić domyślny tryb debugowania
-(true) przekazując każde ustawienie jako opcje metody ``createClient()``::
+(``true``) przekazując każde ustawienie jako opcje metody ``createClient()``::
 
 
     $client = static::createClient(array(
@@ -866,63 +882,83 @@ Można również zastąpić nagłówki HTTP odnoszące się do jednego żądania
 Konfiguracja PHPUnit
 ~~~~~~~~~~~~~~~~~~~~
 
-Każda aplikacja ma własną konfigurację PHPUnit, zapisaną w pliku ``phpunit.xml.dist``.
-Można edytować ten plik, zmieniając wartości domyślne lub utworzyć plik ``phpunit.xml``,
+Każda aplikacja ma własną konfigurację PHPUnit, zapisaną w pliku ``app/phpunit.xml.dist``.
+Można edytować ten plik, zmieniając wartości domyślne lub utworzyć plik ``app/phpunit.xml``,
 aby zmienić konfigurację na swoim komputerze.
 
 .. tip::
 
-    Przechowuj plik ``phpunit.xml.dist`` w repozytorium kodu i ignoruj plik ``phpunit.xml``.
+    Przechowuj plik ``app/phpunit.xml.dist`` w repozytorium kodu i ignoruj plik ``app/phpunit.xml``.
 
-Domyślnie, przez polecenie ``phpunit`` uruchamiane są tylko testy przechowywane
-w „standardowym" katalogu pakietów (standardowo testy rozpoczynają się w katalogach
-``src/*/Bundle/Tests lub src/*/Bundle/*Bundle/Tests``), lecz można łatwo dodać więcej
-katalogów. Przykładowo, następująca konfiguracja dodaje testy dla pakietów niezależnych
-twórców:
-
+Domyślnie, poleceniem ``phpunit`` uruchamiane są tylko testy przechowywane
+w standardowych katalogach swoich własnych pakietów:
+``src/*/*Bundle/Tests``, ``src/*/Bundle/*Bundle/Tests``, ``src/*Bundle/Tests``,
+tak jak skonfigurowano to w pliku ``app/phpunit.xml.dist``:
 
 .. code-block:: xml
-   :linenos:
 
-    <!-- hello/phpunit.xml.dist -->
-    <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>../src/*/*Bundle/Tests</directory>
-            <directory>../src/Acme/Bundle/*Bundle/Tests</directory>
-        </testsuite>
-    </testsuites>
-
-
-Aby dołączyć inne katalogi w zasięgu kodu, można również edytować sekcję ``<filter>``:
-
-
-.. code-block:: xml
-   :linenos:
-
-    <!-- ... -->
-    <filter>
-        <whitelist>
-            <directory>../src</directory>
-            <exclude>
-                <directory>../src/*/*Bundle/Resources</directory>
+    <!-- app/phpunit.xml.dist -->
+    <phpunit>
+        <!-- ... -->
+        <testsuites>
+            <testsuite name="Project Test Suite">
                 <directory>../src/*/*Bundle/Tests</directory>
-                <directory>../src/Acme/Bundle/*Bundle/Resources</directory>
-                <directory>../src/Acme/Bundle/*Bundle/Tests</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+                <directory>../src/*/Bundle/*Bundle/Tests</directory>
+                <directory>../src/*Bundle/Tests</directory>
+            </testsuite>
+        </testsuites>
+        <!-- ... -->
+    </phpunit>
+
+Można łatwo dodać więcej katalogów. Na przykład, następująca konfiguracja dodaje
+testy z własnego katalogu ``lib/tests``:
+
+.. code-block:: xml
+
+    <!-- app/phpunit.xml.dist -->
+    <phpunit>
+        <!-- ... -->
+        <testsuites>
+            <testsuite name="Project Test Suite">
+                <!-- ... --->
+                <directory>../lib/tests</directory>
+            </testsuite>
+        </testsuites>
+        <!-- ... --->
+    </phpunit>
+
+W celu dołaczenia innych katalogów do pokrycia kodu (*ang. code coverage*),
+trzeba także edytować sekcje ``<filter>``:
+
+.. code-block:: xml
+
+    <!-- app/phpunit.xml.dist -->
+    <phpunit>
+        <!-- ... -->
+        <filter>
+            <whitelist>
+                <!-- ... -->
+                <directory>../lib</directory>
+                <exclude>
+                    <!-- ... -->
+                    <directory>../lib/tests</directory>
+                </exclude>
+            </whitelist>
+        </filter>
+        <!-- ... --->
+    </phpunit>
 
 
-Dowiedz się więcej
-------------------
+Dalsza lektura
+--------------
 
+* :doc:`rozdział o testach w "Najlepszych praktykach frameworka Symfony </best_practices/tests>`
 * :doc:`/components/dom_crawler`
 * :doc:`/components/css_selector`
 * :doc:`/cookbook/testing/http_authentication`
 * :doc:`/cookbook/testing/insulating_clients`
 * :doc:`/cookbook/testing/profiling`
 * :doc:`/cookbook/testing/bootstrap`
-
 
 .. _`DemoControllerTest`: https://github.com/symfony/symfony-standard/blob/master/src/Acme/DemoBundle/Tests/Controller/DemoControllerTest.php
 .. _`$_SERVER`: http://php.net/manual/en/reserved.variables.server.php
