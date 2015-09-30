@@ -11,7 +11,7 @@ Podręcznik
    installation
    page_creation
    bundles
-   configurations
+   configuration
    controller
    routing
    templating
