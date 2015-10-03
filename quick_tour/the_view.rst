@@ -5,13 +5,8 @@ Widok
 =====
 
 Po przeczytaniu pierwszej części tego poradnika, dobrze jest poświęcić
-<<<<<<< HEAD
 kolejne 10 minut dla Symfony. W drugiej części, nauczysz się
 więcej na temat silnika szablonów Symfony, `Twig`_ - elastycznego,
-=======
-kolejne 10 minut dla Symfony2. W drugiej części, nauczysz się
-więcej na temat silnika szablonów Symfony2, `Twig`_ - elastycznego,
->>>>>>> refs/heads/nowe_rozdz
 szybkiego oraz bezpiecznnego systemem szablonów PHP. Sprawia że szablony
 są bardo czytelne oraz zwięzłe. Czyni je także bardziej przyjaznymi dla
 projektantów stron internetowych.
@@ -19,13 +14,10 @@ projektantów stron internetowych.
 Zapoznanie się z Twig
 ---------------------
 
-<<<<<<< HEAD
 Najlepszym źródłem informacji o tym silniku szablonowania jest oficjalna
 `dokumentacja Twig`_. Niniejszy rozdział daje tylko krótki przegląd najważniejszych
 pojęć.
 
-=======
->>>>>>> refs/heads/nowe_rozdz
 Szablon Twig jest tekstowym plikiem który może generować każdy rodzaj
 treści (HTML, XML, CSV, LaTeX, ...). Elementy szablonu Twig są oddzielana od reszt
 zawartości przy użyciu tych ograniczników:
@@ -60,13 +52,6 @@ przekazane do szablonu:
         </body>
     </html>
 
-<<<<<<< HEAD
-=======
-.. tip::
-
-    Komentarze mogą być dołączone do szablonu poprzez użycie ogranicznika ``{# ... #}``.
-
->>>>>>> refs/heads/nowe_rozdz
 Do renderowania szablonu w Symfony używa się metody ``render`` w kontrolerze
 i przekazuje potrzebne zmienne jako tablicę, wykorzystując opcjonalny drugi argument::
 
@@ -112,13 +97,8 @@ tzw. "dziedziczenie szablonów". Ta funkcjonalność umożliwia zbudowanie bazow
 szablonu "layout", który zawiera wszystkie elementy strony i definiuje "bloki",
 które szablony potomne mogą przesłaniać.
 
-<<<<<<< HEAD
 Szablon ``index.html.twig`` używa znacznika ``extends`` do wskazania, że dziedziczy
 ze wspólnego szblonu ``base.html.twig``:
-=======
-Szablon ``hello.html.twig`` uzywa znacznika ``extends`` do wskazania, że dziedziczy
-ze wspólnego szblonu ``layout.html.twig``:
->>>>>>> refs/heads/nowe_rozdz
 
 .. code-block:: html+jinja
 
@@ -129,19 +109,9 @@ ze wspólnego szblonu ``layout.html.twig``:
         <h1>Welcome to Symfony!</h1>
     {% endblock %}
 
-<<<<<<< HEAD
 Otwórz plik ``app/Resources/views/base.html.twig``, który odpowiada szablonowi
 ``base.html.twig`` i znajdź następujący kod Twig code:
-=======
-Zapis ``AcmeDemoBundle::layout.html.twig`` wygląda znajomo, prawda? Jest to ta sama
-notacja, jaka była zastosowana do regularnego szablonu. Część ``::`` oznacza, że
-element kontrolera jest pusty, tak więc odpowiedni plik znajduje się w katalogu
-pakietu ``Resources/views/``.
 
-Przyjrzyjmy sie uproszczonej wersji ``layout.html.twig``:
->>>>>>> refs/heads/nowe_rozdz
-
-<<<<<<< HEAD
 .. code-block:: html+jinja
 
     {# app/Resources/views/base.html.twig #}
@@ -158,31 +128,11 @@ Przyjrzyjmy sie uproszczonej wersji ``layout.html.twig``:
             {% block javascripts %}{% endblock %}
         </body>
     </html>
-=======
-.. code-block:: jinja
-   :linenos:
-   
-    {# src/Acme/DemoBundle/Resources/views/layout.html.twig #}
-    <div>
-        {% block content %}
-        {% endblock %}
-    </div>
->>>>>>> refs/heads/nowe_rozdz
 
 Znaczniki ``{% block %}`` powiadamiają silnik szablonowania, że szablon potomny
-<<<<<<< HEAD
 może przesłaniać ten fragment szablonu. W naszym przykładzie, szablon ``index.html.twig``
 przesłania blok ``body``, alenie blok ``title``, który będzie wyswietlał domyślną
 treść zdefiniowana w szablonie ``base.html.twig``.
-=======
-może przesłaniać tą porcje szablonu. W naszym przykładzie, szablon ``hello.html.twig``
-przesłania blok ``content``, co oznacza, że tekst "Hello Fabien" jest renderowany
-wewnątrz elementu ``<div>``.
-
-W tym przykładzie, szablon ``hello.html.twig`` zastępuje blok ``content``,
-co oznacza że tekst "Hello Fabien" jest renderowany w środku elementu
-``div.symfony-content``.
->>>>>>> refs/heads/nowe_rozdz
 
 Używanie znaczników, filtrów i funkcji
 --------------------------------------
@@ -212,33 +162,18 @@ Najlepszym sposobem, aby podzielić się fragmentem kodu pomiędzy różnymi
 szablonami jest stworzenie nowego szablonu który może zostać dołączony
 przez inne szablony.
 
-<<<<<<< HEAD
 Proszę sobie wyobrazić, że chcemy wyświetlić reklamy na niektórych stronach
 naszej aplikacji. Najpierw utwórzmy szablon ``banner.html.twig``:
-=======
-Najpierw, utworzymy szablon ``embedded.html.twig``:
->>>>>>> refs/heads/nowe_rozdz
 
 .. code-block:: jinja
-<<<<<<< HEAD
 
     {# app/Resources/views/ads/banner.html.twig #}
     <div id="ad-banner">
         ...
     </div>
-=======
-    :linenos:
-    
-    {# src/Acme/DemoBundle/Resources/views/Demo/embedded.html.twig #}
-    Hello {{ name }}
->>>>>>> refs/heads/nowe_rozdz
 
-<<<<<<< HEAD
 Dla wyświetleniatej reklamy na stronie, dołączymy szablon ``banner.html.twig``
 używając funkcję ``include()``:
-=======
-i zmienimy szablon ``index.html.twig``, tak aby dołączał nasz nowo utworzony szablon:
->>>>>>> refs/heads/nowe_rozdz
 
 .. code-block:: html+jinja
 
@@ -314,53 +249,23 @@ Tworzenie odnośników pomiędzy stronami
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Tworzenie odnośników pomiędzy stronami jest koniecznością w aplikacjach internetowych.
-<<<<<<< HEAD
 Zamiast umieszczania w szablonach sztywnych lokalizatorów URL, można zastosować funkcję
 ``path``, która wie jak wygenerować adres URL na podstawie konfiguracji trasowania.
 W ten sposób wszystkie lokalizatory URL mogą być łatwo aktualizowane tylko przez
 zmianę konfiguracji:
-=======
-Zamiast umieszczania w szablonach sztywnych lokalizatorów URL,
-można zastosować funkcję ``path``, która wie jak wygenerować URL na podstawie
-konfiguracji trasowania. W ten sposób wszystkie lokalizatory URL mogą być łatwo
-aktualizowane tylko przez zmianę konfiguracji:
->>>>>>> refs/heads/nowe_rozdz
 
 .. code-block:: html+jinja
 
     <a href="{{ path('homepage') }}">Return to homepage</a>
 
-<<<<<<< HEAD
 Funkcja ``path`` pobiera jako pierwszy argument nazwę trasy i może opcjonalnie
 przekazywać jako drugi argument tablicę parametrów.
-=======
-Funkcja ``path`` pobiera jako argumenty nazwę trasy i tablicę parametrów.
-Nazwa trasy jest kluczem w którym zdefiniowane są trasy a parametry są wartościami
-zmiennych zdefiniowanych we wzorcu trasy::
-
-    // src/Acme/DemoBundle/Controller/DemoController.php
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
-    /**
-     * @Route("/hello/{name}", name="_demo_hello")
-     * @Template()
-     */
-    public function helloAction($name)
-    {
-        return array('name' => $name);
-    }
->>>>>>> refs/heads/nowe_rozdz
 
 .. tip::
 
     Funkcja ``url`` jest bardzo podobna do funkcji ``path``, ale generuje *bezwzgledne*
     adresy URL, które są bardzo pomocne przy renderowaniu adresów email i plików RSS:
-<<<<<<< HEAD
     ``<a href="{{ url('homepage') }}">Visit our website</a>``.
-=======
-    ``{{ url('_demo_hello', {'name': 'Thomas'}) }}``.
->>>>>>> refs/heads/nowe_rozdz
 
 Dołączanie zasobów: obrazów, skryptów JavaScript i arkuszy stylów
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -377,14 +282,11 @@ oferuje funkcję ``asset`` radzącą sobie łatwo z tym zagadnieniem:
 Głównym zadaniem funkcji ``asset`` jest umożliwienie lepszej przenośności aplikacji.
 Dzięki tej funkcji, możesz przenieść główny katalog aplikacji w dowolne miejsce bez
 konieczności dokonywania zmian w kodzie szablonu.
-<<<<<<< HEAD
 
 Korzystanie z funkcji ``asset`` sprawia, że aplikacja staje się bardziej przenośna.
 Powodem jest to, że można przenieść katalog główny aplikacji gdziekolwiek w ramach
 głównego katalogu serwera internetowego, bez konieczności zmieniania czegokolwiek
 w kodzie szablonów.
-=======
->>>>>>> refs/heads/nowe_rozdz
 
 Podsumowanie
 ------------
@@ -405,7 +307,5 @@ Gotowy na kolejne 10 minut z Symfony?
 
 .. _`Twig`:               http://twig.sensiolabs.org/
 .. _`dokumentacją Twig`: http://twig.sensiolabs.org/documentation
-<<<<<<< HEAD
 .. _`dokumentacja Twig`: http://twig.sensiolabs.org/documentation
-=======
->>>>>>> refs/heads/nowe_rozdz
+

@@ -31,7 +31,7 @@ potrzebę edytowania i tworzenia zadań, to musimy zbudować formularz. Zacznijm
 od utworzenia ogólnej klasy ``Task``, która będzie reprezentować
 i przechowywać dane dla pojedynczego zadania::
 
-    // src/AppBundle/Entity/Task.php
+       // src/AppBundle/Entity/Task.php
     namespace AppBundle\Entity;
 
     class Task
@@ -43,11 +43,7 @@ i przechowywać dane dla pojedynczego zadania::
         {
             return $this->task;
         }
-<<<<<<< HEAD
 
-=======
-        
->>>>>>> refs/heads/nowe_rozdz
         public function setTask($task)
         {
             $this->task = $task;
@@ -63,8 +59,7 @@ i przechowywać dane dla pojedynczego zadania::
             $this->dueDate = $dueDate;
         }
     }
-
-
+    
 Klasa ta, jak dotychczas, nie ma nic wspólnego z Symfony lub jakąkolwiek biblioteką.
 Jest zwykła klasa PHP, która bezpośrednio rozwiązuje problem wewnątrz naszej
 aplikacji (czyli. potrzebę reprezentowania zadania na użytek aplikacji). Pod koniec tego
@@ -93,7 +88,7 @@ wewnątrz akcji::
     {
         public function newAction(Request $request)
         {
-            // utworzenie formularza i wypełnienie go przykładowymi danymi
+            // create a task and give it some dummy data for this example
             $task = new Task();
             $task->setTask('Write a blog post');
             $task->setDueDate(new \DateTime('tomorrow'));
@@ -101,11 +96,7 @@ wewnątrz akcji::
             $form = $this->createFormBuilder($task)
                 ->add('task', 'text')
                 ->add('dueDate', 'date')
-<<<<<<< HEAD
                 ->add('save', 'submit', array('label' => 'Create Task'))
-=======
-                ->add('save', 'submit', array('label' => 'Create Post'))
->>>>>>> refs/heads/nowe_rozdz
                 ->getForm();
 
             return $this->render('default/new.html.twig', array(
@@ -114,7 +105,6 @@ wewnątrz akcji::
         }
     }
     
-
 .. tip::
 
    Przykład ten pokazuje, jak zbudować formularz bezpośrednio w akcji. Później,
@@ -132,11 +122,7 @@ odnoszące się do właściwości ``task`` i ``dueDate`` klasy ``Task``.
 Mamy również do tych pól przypisany "typ" (np. ``text``, ``date``), który (między
 innymi) określa jakie znaczniki formularza HTML są renderowane dla danego pola.
 
-<<<<<<< HEAD
 Na koniec dodamy przycisk zgłaszjący dla przesyłania formularza na serwer.
-=======
-Na koniec dodamy przycisk zglaszjący dla przesyłania formularza na serwer.
->>>>>>> refs/heads/nowe_rozdz
 
 .. versionadded:: 2.3
     W Symfony 2.3 dodano obsługę przycisków zgłaszających (*submit*). Wcześniej
@@ -188,7 +174,6 @@ To jest to! potrzeba tylko trzech linii, aby wyrenderować kompletny formularz:
     Renderuje początkowy znacznik formularza, łącznie z prawidłowym atrybutem
     ``enctype``, gdy stosuje się przesyłanie pliku.
 
-<<<<<<< HEAD
 ``form_widget(form)``
     Renderuje wszystkie pola, w tym sam element pola, etykietę i komunikat błędu
     dla pola.
@@ -204,15 +189,6 @@ To jest to! potrzeba tylko trzech linii, aby wyrenderować kompletny formularz:
     Jest to bardzo proste, ale nieelastyczne (jeszcze). Zwykle, chce się
     renderować każde pole indywidualnie, aby móc kontrolować wygląd formularza.
     Dowiesz się jak to zrobić w rozdziale ":ref:`form-rendering-template`".
-
-=======
-To jest to! Przy drukowaniu ``form(form)`` renderowane jest każde pole w formularzu,
-wraz z etykietą  i komunikatem błędu (jeśli wystąpi błąd). Funkcja ``form`` również
-obejmuje wszystko co jest potrzebne dla znacznika ``form`` HTML. Jest to proste,
-ale mało elastyczne (na razie). Zazwyczaj chce się indywidualnie renderować każde pole
-formularza, tak więc można kontrolować wygląd formularza. Więcej na ten temat w
-rozdziale ":ref:`form-rendering-template`".
->>>>>>> refs/heads/nowe_rozdz
 
 Zanim przejdziemy dalej, zwróć uwagę na to, jak zostało zrenderowane pole wejściowe
 ``task``, mające wartość właściwości ``task`` obiektu ``$task`` (czyli "Write a blog
@@ -246,23 +222,19 @@ użytkownika z formularzem. W naszej akcji dodamy następujacą rzecz::
 
     public function newAction(Request $request)
     {
-        // tylko ustawienie świeżego obiektu $task (usunięcie przykładowych danych)
+        // just setup a fresh $task object (remove the dummy data)
         $task = new Task();
 
         $form = $this->createFormBuilder($task)
             ->add('task', 'text')
             ->add('dueDate', 'date')
-<<<<<<< HEAD
             ->add('save', 'submit', array('label' => 'Create Task'))
-=======
-            ->add('save', 'submit', array('label' => 'Create Post'))
->>>>>>> refs/heads/nowe_rozdz
             ->getForm();
 
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            // wykonanie jakiegoś działania, jak zapis zadania do bazy danych
+            // perform some action, such as saving the task to the database
 
             return $this->redirectToRoute('task_success');
         }
@@ -272,15 +244,9 @@ użytkownika z formularzem. W naszej akcji dodamy następujacą rzecz::
    
 .. versionadded:: 2.3
     W Symfony 2.3 została dodana metoda :method:`Symfony\Component\Form\FormInterface::handleRequest`.
-<<<<<<< HEAD
     Poprzednio ``$request`` był przekazywany do metody ``submit`` - strategia, która jest już
     przestarzała i zostanie usunięta w Symfony 3.0. W celu poznania szczegółów tej metody proszę
-=======
-    Poprzednio ``$request`` było przekazywane do metody ``submit`` - strategia, która jest już
-    zdeprecjonowana i zostanie usunieta w Symfony 3.0. W celu poznania szczegółów tej metody proszę
->>>>>>> refs/heads/nowe_rozdz
     zapoznać się z :ref:`cookbook-form-submit-request`.
-
 
 W tej akcji akceptuje się powszechny wzorzec obsługi formularzy, co ma trzy możliwe tryby:
 
@@ -1066,11 +1032,7 @@ pomocniczych ``form()`` lub ``form_start()``:
     Jeśli metodą formularza nie jest GET lub POST, ale PUT, PATCH lub DELETE, to
     Symfony wstawia ukryte pole z nazwą "_method", które przechowuje nazwę tej
     metody. Taki formularz będzie zgłaszany w zwykłym żądaniu POST, ale router
-<<<<<<< HEAD
     Symfony jest w stanie wykryć parametr "_method" i zinterpretuje żądanie jako
-=======
-    Symfony2 jest w stanie wykryć parametr ``_method`` i zinterpretuje żądanie jako
->>>>>>> refs/heads/nowe_rozdz
     PUT, PATCH lub DELETE. Proszę zapoznać się z artykułem
     ":doc:`/cookbook/routing/method_parameters`" w celu uzyskania więcej informacji.
     

@@ -280,7 +280,7 @@ uwierzytelniania jest zawsze taki sam:
 
 .. tip::
 
-    Nauczysz się później, jak można w Symfony2 zabezpieczać cokolwiek, w tym
+    Nauczysz się później, jak można w Symfony zabezpieczać cokolwiek, w tym
     konkretne kontrolery, obiekty lub nawet metody PHP.
 
 
@@ -830,7 +830,7 @@ Można określić wiele wzorców potrzebnych adresów URL – każdy jest wyraż
 Wyjaśnienie jak działa ``access_control``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Dla przychodzącego żądania Symfony2 sprawdza każdy zapis ``access_control`` aby
+Dla przychodzącego żądania Symfony sprawdza każdy zapis ``access_control`` aby
 znaleźć jeden pasujący do bieżącego żądania. Jak tylko taki wpis zostanie znaleziony,
 to wyszukiwanie zostaje zakończone - oznacza to, że wzięty będzie pod uwagę tylko
 pierwszy dopasowany wpis ``access_control``.
@@ -847,7 +847,7 @@ dopasowanym adresie URL<security-book-access-control-enforcement-options>`:
 1. Opcje dopasowujące
 .....................
 
-Symfony2 tworzy instancję :class:`Symfony\\Component\\HttpFoundation\\RequestMatcher`
+Symfony tworzy instancję :class:`Symfony\\Component\\HttpFoundation\\RequestMatcher`
 dla każdego wpisu access_control, który określa czy dana reguła kontroli dostępu
 powinna być użyta dla danego żądania. Przy dopasowaniu stosowane są następujące opcje
 ``access_control``:
@@ -931,7 +931,7 @@ to ``access_control`` będzie dopasować każdy ``ip``, ``host`` lub ``method``:
 2. Egzekwowanie ograniczeń
 ..........................
 
-Po tym jak Symfony2 określi, który wpis ``access_control`` zostanie użyty
+Po tym jak Symfony określi, który wpis ``access_control`` zostanie użyty
 (jeśli w ogóle), to następnie wymusza ograniczenie dostępu na podstawie opcji
 ``role``, ``allow_if`` i ``requires_channel``:
 
@@ -1102,10 +1102,10 @@ Podczas uwierzytelniania użytkownik przesyła zestaw poświadczeń (zwykle nazw
 użytkownika i hasło). Zadaniem systemu uwierzytelniania jest dopasowanie tych
 poświadczeń do jakiejś puli użytkowników. Skąd więc pochodzi ta lista użytkowników?
 
-W Symfony2 użytkownicy mogą pochodzić z dowolnego źródła: pliku konfiguracyjnego,
+W Symfony użytkownicy mogą pochodzić z dowolnego źródła: pliku konfiguracyjnego,
 tabeli bazy danych, serwisu internetowego i innych miejsc. Wszystko, co dostarcza
 jednego lub więcej użytkowników do systemu uwierzytelniania jest nazywane
-„dostawcą użytkowników" (*ang. User Provider*). Symfony2 ma wbudowanych standardowo
+„dostawcą użytkowników" (*ang. User Provider*). Symfony ma wbudowanych standardowo
 dwóch popularnych dostawców użytkowników: pierwszy ładuje użytkowników z pliku
 konfiguracyjnego, a drugi z tabeli bazy danych.
 
@@ -1679,7 +1679,7 @@ rozpocząć ją używać.
 
 .. note::
 
-    Wszystkie role, by mogły być zarządzane prze Symfony2, **muszą** rozpoczynać
+    Wszystkie role, by mogły być zarządzane prze Symfony, **muszą** rozpoczynać
     się przedrostkiem ``ROLE_``. Jeśli zdefiniuje się własne role stosując
     dedykowana klasę ``Role`` (bardziej zaawansowane), nie trzeba wówczas stosować
     przedrostka ``ROLE_``.
@@ -1995,7 +1995,7 @@ wylogowania znajdziesz w artykule
 Uwierzytelnianie bezstanowe
 ---------------------------
 
-Domyślnie Symfony2 opiera się na pliku cookie (Sesja) w celu utrzymania kontekstu
+Domyślnie Symfony opiera się na pliku cookie (Sesja) w celu utrzymania kontekstu
 bezpieczeństwa użytkownika. Lecz jeśli używa się certyfikatów uwierzytelniania HTTP,
 utrzymywanie tego kontekstu nie jest potrzebne, bo poświadczenia są dostępne od razu
 dla każdego żądania. W tym przypadku, gdy nie trzeba przechowywać czegokolwiek
@@ -2036,7 +2036,7 @@ Symfony 2 nie będzie tworzyć pliku cookie):
 
 .. note::
 
-    Jeśli używa się logowania formularzowego, Symfony2 będzie tworzył plik cookie
+    Jeśli używa się logowania formularzowego, Symfony będzie tworzył plik cookie
     nawet wówczas, gdy ustawi się ``stateless`` na ``true``.
 
 .. index::

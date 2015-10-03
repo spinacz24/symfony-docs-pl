@@ -1,9 +1,8 @@
 * **Opcje konfiguracyjne**
 
-  Czy kiedykolwiek zastanawiałeś się, jakie opcje konfiguracji masz dostępne
-  w postaci plików takich jak ``app/config/config.yml``? W tej części omówione
-  są wszystkie konfiguracje podzielone na klucze (np. ``framework``), które
-  definiują wszystkie możliwe sekcje konfiguracji w Symfony.
+  W tej części omówione są wszystkie konfiguracje pakietów zawartych w dystrybucji
+  Symfony Standard Edition. Konfiguracja pakietów zewnętrznych powinna być omówiona
+  w dokumentacji tych pakietów (i tak jest z reguły).  
 
   * :doc:`framework </reference/configuration/framework>`
   * :doc:`doctrine </reference/configuration/doctrine>`
