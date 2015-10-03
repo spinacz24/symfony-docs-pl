@@ -1014,10 +1014,6 @@ są przekazywane do wyrażenia:
 .. index::
    single: Routing; zaawansowany przykład
    single: Routing; parametr _format
-=======
-   single: Routing; Advanced example
-   single: Routing; _format parameter
->>>>>>> refs/heads/nowe_rozdz
 
 .. _advanced-routing-example:
 
