@@ -172,7 +172,7 @@ Dla przykładu, test może wyglądać tak::
 
     Aby uruchomić testy funkcjonalne, klasa ``WebTestCase`` inicjuje kernel aplikacji.
     W większości przypadków odbywa się to automatycznie. Jednak, gdy kernel jest
-    zlokalizowane w niestandardowym katalogu, to zachodzi konieczność zmiany pliku
+    zlokalizowany w niestandardowym katalogu, to zachodzi konieczność zmiany pliku
     ``phpunit.xml.dist`` przez ustawienie zmiennej środowiskowej ``KERNEL_DIR``
     na katalog kernela aplikacji:
 
@@ -697,7 +697,7 @@ Formularze
 ~~~~~~~~~~
 
 Wybór formularzy dokonuje się przy użyciu metody ``selectButton()``, podobnie jak
-w przypadku odnosnikow::
+w przypadku odnośników::
 
     $buttonCrawlerNode = $crawler->selectButton('submit');
 

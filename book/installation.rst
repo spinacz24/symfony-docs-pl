@@ -34,7 +34,6 @@ Systemy Linux i Mac OS X
 Otwórz konsole poleceń i wykonaj następujące polecenia:
 
 .. code-block:: bash
-<<<<<<< HEAD
 
     $ sudo curl -LsS http://symfony.com/installer -o /usr/local/bin/symfony
     $ sudo chmod a+x /usr/local/bin/symfony
@@ -189,11 +188,6 @@ Jest to spowodowane brakiem uprawnień do niektórych katalogów aplikacji. Jest
 kilka możliwych rozwiązań, w zależności od systemu operacyjnego. Wszystkie są
 omówione w rozdziale :ref:`Ustawienie uprawnień <book-installation-permissions>`.
 
-=======
-   
-   $ php composer.phar create-project symfony/framework-standard-edition /path/to/webroot/Symfony `2.3.*`
-   
->>>>>>> refs/heads/nowe_rozdz
 .. note::
 
     Wewnetrzny serwer internetowy PHP jest dostępny od PHP 5.4. Jeśli używasz
@@ -221,136 +215,7 @@ konfiguracji odwiedź następujacy adres URL:
 
 .. code-block:: text
 
-<<<<<<< HEAD
     http://localhost:8000/config.php
-=======
-    path/to/webroot/ <- your web root directory
-        Symfony/ <- the new directory
-            app/
-                cache/
-                config/
-                logs/
-            src/
-                ...
-            vendor/
-                ...
-            web/
-                app.php
-                ...
-
-Opcja 2 - Pobranie archiwum
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Można również pobrać archiwum dystrybucji Synfony2 Standard Edition. W tym celu
-trzeba pobrać archiwum .tgz albo .zip. Oba są równoważne, więc decyzja zależy tylko
-od Twoich preferencj
-
-Trzeba zdecydować się na pobranie archiwum z lub bez dostawców (*ang. vendors*).
-Jeżeli planujesz używanie bibliotek lub pakietów (*ang. bundles*) niezależnych
-dostawców i zarządzać nimi za pośrednictwem Composera, to przypuszczalnie lepszym
-wyborem będzie pobranie dystrybucji *without vendors*.
-
-Pobierz jedno z archiwów i rozpakuj go gdzieś w katalogu głównym serwera internetowego.
-W systemie uniksowym można użyć w terminalu jedno z poniższych poleceń (zamieniając
-``###`` na rzeczywistą nazwę pliku):
-
-.. code-block:: bash
-
-   # dla pliku .tgz
-   $ tar -zxvf Symfony_Standard_Vendors_2.3.###.tgz
-   
-   # dla pliku .zip
-   $ unzip Symfony_Standard_Vendors_2.3.###.zip
-
-Jeśli pobrałeś archiwum *without vendors*, to koniecznie przeczytaj następny rozdział.
-
-.. note::
-   
-   Można łatwo zastąpić domyślną strukturę katalogów. Przeczytaj artykuł
-   :doc:`/cookbook/configuration/override_dir_structure` w celu uzyskania więcej
-   informacji.
-
-Aktualizacja bibliotek dostawców
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-W tym momencie powinieneś mieć pobrany i zainstalowany w pełni funkcjonalny projekt
-Symfony, z którym możesz rozpocząć tworzenie własnej aplikacji. Projekt Symfony
-zależy od wielu zewnętrznych bibliotek. Są one pobierane do katalogu *vendor/*
-projektu. poprzez bibliotekę `Composer`_, o której była mowa w poprzednim rozdziale.
-
-W zależności o sposobu pobrania Symfony, może być konieczne pobranie bibliotek
-dostawców lub nie (bo znajdowały się w pliku archiwum instalacyjnego). Aktualizacja
-bibliotek dostawców jest zawsze bezpieczna i gwarantuje, że ma się wszystkie potrzebne
-biblioteki.
-
-Instalacja Composer została dokładnie omówiona w rodziale :ref:`poprzednim<composer-installation>`.
-
-Zainstalowanie lub zaktualizowanie bibliotek dostawców można osiągnąć poleceniem (pełna składnia):
-
-.. code-block:: bash
-   
-   $cd /ścieżka/do/katalogu/symfony
-   $ [sudo -u www-data] php composer.phar install
-
-Powyższe polecenie instalujące (lub polecenie skrócone ``$ composer install``)
-musi być uruchomione w katalogu, w którym znajduje się plik *composer.json* - domyślnie
-jest to katalog główny projektu Symfony. Spowoduje ono pobranie lub zaktualizowanie
-wszystkich bibliotek dostawców w katalogu *vendor/*. Instalacja lub aktualizacja
-może się nie powieść, ze względu na brak uprawnień użytkownika dokonujacego instalacji
-(aktualizacji) do zapisu katalogów *app/cache* i *app/logs*. Dlatego wcześniej należy
-odpowiednio skonfigurować aplikację. Jest to omówione nieco dalej, w przypisie
-"Konfiguracja uprawnień". Gdy użytkownkiem serwera jest ``www-data``  a użytkownik
-linii poleceń należy do grupy mającej uprawnienia zapisu do w/w katalogów, to w podanym
-poleceniu trzeba użyć opcji ``sudo -u www-data`` (w Ubuntu i podobnych systemach),
-lub analogicznego.
-
-Jeśli ma się zainstalowane biblioteki dostawców, to można wykonać tylko polecenie
-aktualizujące:
-
-.. code-block:: bash
-   
-   $ [sudo -u www-data] php composer.phar update
-
-.. tip::
-   
-   Po zrealizowaniu polecenia ``php composer.phar install`` lub ``php composer.phar update``,
-   Composer automatycznie wykonuje czyszczenie pamięci podręcznej i instalację zasobów.
-   Zasoby są domyślnie kopiowane do katalogu „web”. Zamiast później przekopiowywać
-   te zasoby, lepiej jest spowodować automatyczne utworzenie dowiązania symbolicznego
-   poprzez wykonanie odpowiedniego wpisu w pliku composer.json z kluczem ``symfony-assets-install``
-   a wartością ``symlink``:
-   
-   .. code-block:: json
-      :linenos:
-      
-      "extra": {
-         "symfony-app-dir": "app",
-         "symfony-web-dir": "web",
-         "symfony-assets-install": "symlink"
-      }
-   
-   Jeżeli zamiast wpisu symlink zastosuje się wpis ``relative`` w wartości klucza
-   ``symfony-assets-install``, to polecenie będzie generowało względne dowiązanie
-   symboliczne.
-
-
-Konfiguracja i ustawienia
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-W tym momencie wszystkie zewnętrzne biblioteki umiejscowione są w katalogu ``vendor/``.
-Masz także wstępnie skonfigurowany projekt w katalogu ``app/`` wg ustawień domyślnych
-oraz przykładowy kod w katalogu ``src/``.
-
-Symfony2 dostarczane jest z wizualnym testerem konfiguracji serwera, aby pomóc w
-sprawdzeniu prawidłowości konfiguracji serwera internetowego i PHP pod kątem działania
-Symfony. Zakładając, że Symfony zostało zainstalowane w katalogu
-/ścieżka/do/katalogu/wwwroot/symfony, użyj w przeglądarce następującego adresu URL,
-aby sprawdzić swoją konfigurację:
-
-.. code-block:: text
-
-    http://localhost/Symfony/web/config.php
->>>>>>> refs/heads/nowe_rozdz
 
 Jeśli są jakieś problemy, rozwiąż je teraz, zanim przejdziesz dalej.
 
