@@ -15,7 +15,7 @@ kontrolerów, szablonów i innych plików obecnych w katalogu ``Resources/``.
 
 Załóżmy na przykład, że instalując pakiet `FOSUserBundle`_ następuje potrzeba
 zastąpienia jego bazowego szablonu ``layout.html.twig`` oraz jego kontrolerów.
-Załóżmy także, że powstanie lokalny pakiet ``AcmeUserBundle``, gdzie będą
+Przyjmijmy także, że powstanie lokalny pakiet ``AcmeUserBundle``, gdzie będą
 trzymywane wszystkie przesłonięte pliki. By rozpocząć, należy zarejestrować
 pakiet ``FOSUserBundle`` jako "rodzica" pakietu ``AcmeUserBundle``::
 
