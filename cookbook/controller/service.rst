@@ -6,7 +6,7 @@ Jak zdefiniować kontroler jako usługę
 
 W podręczniku zostało wyjaśnione, jak można łatwo użyć kontrolera, gdy rozszerza
 on bazową klasę :class:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller`.
-Chociaż działa to dobrze, kontrolery można również określić jako usługi, co w wielu
+Chociaż działa to dobrze, kontrolery można również zdefiniować jako usługi, co w wielu
 przypadkach jest jeszcze lepsze.
 
 .. note::
@@ -90,8 +90,8 @@ w usłudze zdefiniowanej powyżej o identyfikatorze ``app.hello_controller``::
 
     Używając tą składnię nie można usunąć słowa ``Action`` z nazwy metody.
 
-Mozna również dokonać trasowania do usługi przez uzycie tej samej notacji, gdy
-zdefiniowało się wartość trasy jako ``_controller``:
+Można również dokonać trasowania do usługi przez użycie tej samej notacji, ale
+wymaga to zdefiniowania w trasie klucza ``_controller``:
 
 .. configuration-block::
 
@@ -133,15 +133,15 @@ zdefiniowało się wartość trasy jako ``_controller``:
 Alternatywy dla metod bazowego kontrolera
 -----------------------------------------
 
-When using a controller defined as a service, it will most likely not extend
-the base ``Controller`` class. Instead of relying on its shortcut methods,
-you'll interact directly with the services that you need. Fortunately, this is
-usually pretty easy and the base `Controller class source code`_ is a great
-source on how to perform many common tasks.
+Gdy używa się kontroler zdefiniowany jako usługa, to najprawdopodobnie nie rozszerza
+on klasy bazowego kontrolera ``Controller``. Nie można wieć opierać się na jej metodach
+skrótowych i trzeba wchodzić bezpośrednio w interakcję z usługami, jakie są potrzebne.
+Na szczęście jest to dość proste a `kod źródłowy bazowej klasy Controller`_ jest
+dobrym źródłem do stworzenia wielu popularnych zadań.
 
-For example, if you want to render a template instead of creating the ``Response``
-object directly, then your code would look like this if you were extending
-Symfony's base controller::
+Na przykład, jeśli chce się wyrenderować szablon zamiast tworzyć bezpośrednio
+obiekt ``Response``, to gdy rozszerzało się kontroler bazowy Symfony, kod wyglada
+tak::
 
     // src/AppBundle/Controller/HelloController.php
     namespace AppBundle\Controller;
@@ -159,17 +159,16 @@ Symfony's base controller::
         }
     }
 
-If you look at the source code for the ``render`` function in Symfony's
-`base Controller class`_, you'll see that this method actually uses the
-``templating`` service::
+Jeśli spojrzy się na kod źródłowy dla funkcji ``render`` w `klasie bazowej Controller`_,
+to zobaczy sie, że metoda ta rzeczywiście używa usługę ``templating``::
 
     public function render($view, array $parameters = array(), Response $response = null)
     {
         return $this->container->get('templating')->renderResponse($view, $parameters, $response);
     }
 
-In a controller that's defined as a service, you can instead inject the ``templating``
-service and use it directly::
+W kontrolerze zdefiniowanym jako usługa można zamiast tego wstrzyknąć usługę
+``templating`` i wykorzystywać ją bezpośrednio::
 
     // src/AppBundle/Controller/HelloController.php
     namespace AppBundle\Controller;
@@ -195,8 +194,7 @@ service and use it directly::
         }
     }
 
-The service definition also needs modifying to specify the constructor
-argument:
+Definicja usługi wymaga również zmodyfikowania tak, aby określić argument konstruktora:
 
 .. configuration-block::
 
@@ -228,25 +226,24 @@ argument:
             array(new Reference('templating'))
         ));
 
-Rather than fetching the ``templating`` service from the container, you can
-inject *only* the exact service(s) that you need directly into the controller.
+Zamiast ściągać usługę ``templating`` z kontenera, można wstrzykiwać do kontrolera
+dokładnie *tylko* tą usługę, która jest bezpośrednio potrzebna.
 
 .. note::
 
-   This does not mean that you cannot extend these controllers from your own
-   base controller. The move away from the standard base controller is because
-   its helper methods rely on having the container available which is not
-   the case for controllers that are defined as services. It may be a good
-   idea to extract common code into a service that's injected rather than
-   place that code into a base controller that you extend. Both approaches
-   are valid, exactly how you want to organize your reusable code is up to
-   you.
+   Nie oznacza to, że nie można rozszerzyć tych kontrolerów o własny kontroler
+   bazowy. Odejście od standardowego kontrolera bazowego moze być podyktowane tym,
+   że jego metody pomocnicze opierają sie na konieczności posiadania dostępnego
+   kontenera, którego nie ma w przpadku kontrolerów zdefiniowanych jako usługi.
+   Dobrym pomysłem moze być wyekstahowanie wspólnego kodu do usługi, która jest
+   wstrzykiwana, niz umieszczać ten kod w rozszerzanym kontrolerze bazowym.
+   Oba podejscia sa prawidłowe, jeśli zaspakają indywidualną potrzebę programisty
+   na zorganizowanie kodu do wielokrotnego wykorzystania.
 
 Metody bazowego kontrolera i ich zamienniki w usłudze
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This list explains how to replace the convenience methods of the base
-controller:
+Oto lista wyjaśniająca, jak można zamienić konwencjonalne metody kontrolera bazowego:
 
 :method:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller::createForm` (service: ``form.factory``)
     .. code-block:: php
@@ -328,10 +325,10 @@ controller:
 
 .. tip::
 
-    ``getRequest`` has been deprecated. Instead, have an argument to your
-    controller action method called ``Request $request``. The order of the
-    parameters is not important, but the typehint must be provided.
+    Metoda ``getRequest`` została zdeprecjonowana. W zamian ma się argument dla
+    akcji kontrolera o nazwie ``Request $request``. Kolejność parametrów nie jest
+    ważna, ale podpowiedź typu obiektowego musi być stosowana.
 
-.. _`Controller class source code`: https://github.com/symfony/symfony/blob/master/src/Symfony/Bundle/FrameworkBundle/Controller/Controller.php
-.. _`base Controller class`: https://github.com/symfony/symfony/blob/master/src/Symfony/Bundle/FrameworkBundle/Controller/Controller.php
+.. _`kod źródłowy bazowej klasy Controller`: https://github.com/symfony/symfony/blob/master/src/Symfony/Bundle/FrameworkBundle/Controller/Controller.php
+.. _`klasie bazowej Controller`: https://github.com/symfony/symfony/blob/master/src/Symfony/Bundle/FrameworkBundle/Controller/Controller.php
 .. _`dokumentacji FrameworkExtraBundle`: https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/routing.html
