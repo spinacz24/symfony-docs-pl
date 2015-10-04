@@ -121,10 +121,10 @@ Przeanalizujmy bardzo prosty kod kotrolera:
 .. tip::
 
     Trzeba mieć na uwadze, że istnieje pewna rozbieżność w stosowaniu nazwy
-    *kontroler*. W angielskojęzycznej dokumentacjj Symfony (poza poradnikiem
-    "Krótki kurs") słowem *controller* nazywa sie to, co jest metodą
-    (np. ``indexAction``) *klasy kontrolera* (``HelloController``), choć sygnatury
-    klasy i metody sugerują coś innego: metoda, to "akcja" a klasa to "kontroler".
+    *kontroler*. W angielskojęzycznej dokumentacjj Symfony często słowem *controller*
+    nazywa sie to, co jest metodą (np. ``indexAction``) *klasy kontrolera*
+    (``HelloController``), choć sygnatury klasy i metody sugerują coś innego:
+    metoda, to "akcja" a klasa to "kontroler".
     W praktyce i lteraturze OOP zwykło się właśnie używać słowa *akcja* na
     metodę klasy kontrolera, a samą klasę *kontrolerem*. Tak więc czytając tą
     dokumentację proszę zwracać uwagę na kontekst słowa "kontroler".    
