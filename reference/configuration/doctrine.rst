@@ -1,6 +1,6 @@
 .. index::
-   pair: Doctrine; konfiguracja
-
+   single: Doctrine; konfiguracja ORM - informator
+   single: konfiguracja; Doctrine ORM
 
 Konfiguracja Doctrine
 =====================
@@ -268,8 +268,8 @@ Pełna domyślna konfiguracja
             </doctrine:config>
         </container>
 
-Przegląd Konfiguracji
----------------------
+Omówienie konfiguracji
+----------------------
 
 Poniższy przykład konfiguracji pokazuje wszystkie domyślne ustawienia konfiguracji
 rozpoznawane przez ORM:
@@ -301,8 +301,8 @@ lub ``service``.
 Poniższy przykład pokazuje ogólny zarys konfiguracji buforowania:
 
 .. code-block:: yaml
-      
-   doctrine:
+
+    doctrine:
         orm:
             auto_mapping: true
             metadata_cache_driver: apc
@@ -315,7 +315,6 @@ Poniższy przykład pokazuje ogólny zarys konfiguracji buforowania:
                 port: 11211
                 instance_class: Memcache
     
-
 Konfiguracja mapowania
 ~~~~~~~~~~~~~~~~~~~~~~
 
@@ -494,11 +493,13 @@ które jest skonfigurowane pierwsze lub połączenia skonfigurowanego w parametr
 Każde z połączeń jest także dostępne poprzez usługę ``doctrine.dbal.[name]_connection``
 gdzie ``[name]`` jest nazwą połączenia.
 
-Shortened Configuration Syntax
-------------------------------
+.. _DBAL documentation: http://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html
 
-When you are only using one entity manager, all config options available
-can be placed directly under ``doctrine.orm`` config level.
+Składnia skróconej konfiguracji
+-------------------------------
+
+Gdy używa się tylko jednego menadżera encji, wszystkie dostępne opcje konfiguracyjne
+mozna umieścić bezpośrednio na poziomie ``doctrine.orm`` konfiguracji.
 
 .. code-block:: yaml
 
@@ -524,27 +525,26 @@ can be placed directly under ``doctrine.orm`` config level.
             filters:
                 # ...
 
-This shortened version is commonly used in other documentation sections.
-Keep in mind that you can't use both syntaxes at the same time.
+Ta skrócona wersja jest powszechnie stosowana w innych rozdziałach dokumentacji.
+Trzeba pamiętać, że nie można stosować w tym samym czasie obu składni konfiguracyjnych.
 
-Custom Mapping Entities in a Bundle
------------------------------------
+Indywidualne mapowanie encji w pakiecie
+---------------------------------------
 
-Doctrine's ``auto_mapping`` feature loads annotation configuration from
-the ``Entity/`` directory of each bundle *and* looks for other formats (e.g.
-YAML, XML) in the ``Resources/config/doctrine`` directory.
+Funkcjonalność ``auto_mapping`` Doctrine ładuje konfigurację adnotacji z katalogu
+``Entity/`` pakietu i wyszukuje inne formaty (np. YAML, XML) w katalogu
+``Resources/config/doctrine``.
 
-If you store metadata somewhere else in your bundle, you can define your
-own mappings, where you tell Doctrine exactly *where* to look, along with
-some other configurations.
+W przypadku przechowywania metadanych gdzieś w pakiecie, można zdefiniować własne
+mapowania, dokładnie powiadamiając Doctrine gdzie ma wyszukiwać konfigurację tego
+mapowania wraz z innymi konfiguracjami.
 
-If you're using the ``auto_mapping`` configuration, you just need to overwrite
-the configurations you want. In this case it's important that the key of
-the mapping configurations corresponds to the name of the bundle.
+Jeśli używa się konfiguracji ``auto_mapping``, wystarczy przesłonić te konfiguracje,
+tak jak się to potrzebuje. W takim przypadku ważne jest, aby klucz konfiguracji
+mapowania odpowiadał nazwie pakietu.
 
-For example, suppose you decide to store your ``XML`` configuration for
-``AppBundle`` entities in the ``@AppBundle/SomeResources/config/doctrine``
-directory instead:
+Dla przykłady przyjmijmy, że zdecydowaliśmy się przechowywać konfigurację ``XML``
+dla encji pakietu ``AppBundle`` w katalogu ``@AppBundle/SomeResources/config/doctrine``:
 
 .. configuration-block::
 
@@ -585,14 +585,14 @@ directory instead:
             ),
         ));
 
-Mapping Entities Outside of a Bundle
-------------------------------------
+Mapowanie encji poza pakietem
+-----------------------------
 
-You can also create new mappings, for example outside of the Symfony folder.
+Mozna również utworzyć nowe mapowania poza folderem Symfony.
 
-For example, the following looks for entity classes in the ``App\Entity``
-namespace in the ``src/Entity`` directory and gives them an ``App`` alias
-(so you can say things like ``App:Post``):
+Na przyklad, poniższa konfiguracja wyszukuje klas encji w przestrzeni nazewniczej
+``App\Entity`` w katalogu ``src/Entity`` i nadaje alias ``App`` (tak, aby można
+było odwoływać sie do takich rzeczy jak ``App:Post``):
 
 .. configuration-block::
 
@@ -647,38 +647,34 @@ namespace in the ``src/Entity`` directory and gives them an ``App`` alias
             ),
         ));
 
-Detecting a Mapping Configuration Format
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Wykrywanie formatu konfiguracji mapowania
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If the ``type`` on the bundle configuration isn't set, the DoctrineBundle
-will try to detect the correct mapping configuration format for the bundle.
+Gdy opcja ``type`` konfiguracji pakietu nie jest ustawiona, DoctrineBundle
+będzie próbował wykryć właściwy fomat konfiguracji mapowania dla danego pakietu.
 
-DoctrineBundle will look for files matching ``*.orm.[FORMAT]`` (e.g.
-``Post.orm.yml``) in the configured ``dir`` of your mapping (if you're mapping
-a bundle, then ``dir`` is relative to the bundle's directory).
+DoctrineBundle będzie wyszukiwał pliki z nazwą pasującą do ``*.orm.[FORMAT]``
+(np. ``Post.orm.yml``) w katalogu skonfigurowanym w opcji ``dir`` mapowania
+(jeśli mapowany jest pakiet, to ``dir`` jest odnoszony do katalogu pakietu).
 
-The bundle looks for (in this order) XML, YAML and PHP files.
-Using the ``auto_mapping`` feature, every bundle can have only one
-configuration format. The bundle will stop as soon as it locates one.
+Pakiet DoctrineBundle wyszukuje pliki XML, YAML i PHP (w tej właśnie kolejności).
+Korzystając z funkcjonalności ``auto_mapping`` każdy pakiet może mieć tylko jeden
+format konfiguracyji. Pakiet zostanie zatrzymany, gdy tylko znajdzie plik konfiguracyjny.
 
-If it wasn't possible to determine a configuration format for a bundle,
-the DoctrineBundle will check if there is an ``Entity`` folder in the bundle's
-root directory. If the folder exist, Doctrine will fall back to using an
-annotation driver.
+Jeśli nie będzie możliwe określenie formatu konfiguracji dla pakietu,
+DoctrineBundle sprawdza czy istnieje folder ``Entity`` w katalogu głównym pakietu.
+Gdy taki folder istnieje, Doctrine awaryjnie uzyje sterownika adnotacji.
 
-Default Value of Dir
-~~~~~~~~~~~~~~~~~~~~
+Domyślna wartość ``dir``
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-If ``dir`` is not specified, then its default value depends on which configuration
-driver is being used. For drivers that rely on the PHP files (annotation,
-staticphp) it will be ``[Bundle]/Entity``. For drivers that are using
-configuration files (XML, YAML, ...) it will be
-``[Bundle]/Resources/config/doctrine``.
+W przypadku nie określenia wartości ``dir``, domyślna wartość zależy od tego, czy
+skonfigurowany został do zastosowania sterownik. Dla sterowników, które opierają
+się na plikach PHP (adnotacje, 'staticphp') bedzi to wartość ``[Bundle]/Entity``.
+Dla sterowników, które wykorzystują pliki konfiguracyjne (XML, YAML, ...) będzie
+to wartość ``[Bundle]/Resources/config/doctrine``.
 
-If the ``dir`` configuration is set and the ``is_bundle`` configuration
-is ``true``, the DoctrineBundle will prefix the ``dir`` configuration with
-the path of the bundle.
+Gdy jest ustawiona opcja ``dir`` a opcja ``is_bundle`` ma wartość ``true``,
+DoctrineBundle będzie dodawał do wartości ``dir`` przedrostek ze ścieżką pakietu.
 
-
-.. _DBAL documentation: http://www.doctrine-project.org/docs/dbal/2.0/en
 .. _`DQL User Defined Functions`: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/cookbook/dql-user-defined-functions.html
