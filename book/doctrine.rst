@@ -226,8 +226,8 @@ klasa PHP.
 
 .. tip::
 
-    Gdy się już pozna koncepcje stojące za Doctrine ie bedzie problemu z samodzielnym
-    tworzeniem encji:
+    Gdy się już pozna koncepcje stojące za Doctrine nie powinno być problemu
+    z samodzielnym tworzeniem encji:
     
     .. code-block:: bash
 
@@ -451,8 +451,8 @@ w informacji odwzorowania Doctrine) lub w całej przestrzeni nazw:
     że potrzebna jest interakcja z obiektem PHP.
 
 .. index::
-      single: Doctrne; tworzenie schematu
-      single: Doctrne; tworzenie tabel bazy danych
+      single: Doctrine; tworzenie schematu
+      single: Doctrine; tworzenie tabel bazy danych
 
 .. _book-doctrine-creating-the-database-tables-schema:
 
@@ -602,7 +602,7 @@ produktu na podstawie jego wartości ``id``::
     
 Gdy przesyła się zapytanie dotyczące określonego typu obiektu, zawsze używa się czegoś,
 co nazywa się "repozytorium". Można myśleć o repozytorium jak o klasie PHP, której
-jedynym zadaniem jest pomoc w pobieraniu encji pewnych klas. Można uzyskać dostęp do
+jedynym zadaniem jest pomoc w pobieraniu encji okreśłonych klas. Można uzyskać dostęp do
 obiektu repozytorium dla klasy encji poprzez::
 
     $repository = $this->getDoctrine()
@@ -768,7 +768,7 @@ wyniku trzeba uzyć ``getOneOrNullResult()``::
 .. index::
       budowniczy zapytań
       single: Doctrine; QueryBuilder
-      single: Doctrine; builder zapytań
+      single: Doctrine; budowniczy zapytań
        
 
 Stosowanie budowniczego zapytań Doctrine
@@ -1107,7 +1107,7 @@ tablicy ``category`` i kolumnie ``product.category_id`` oraz nowym kluczu zewnę
 
     Zadanie to powinno być wykonywane tylko w czasie programowania. W celu
     poznania bardziej solidnej metody systematycznego aktualizowania produkcyjnej
-    bazy danych, przeczytaj artykuł `migrations`_.
+    bazy danych, przeczytaj artykuł o `migracjach`_.
 
 Zapisywanie powiązanych encji
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

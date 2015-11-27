@@ -656,7 +656,7 @@ Szablon ``recentList`` jest bardzo prosty:
 .. note::
 
     Proszę zauważyć, że w tym przykładzie adres URL jest zakodowany sztywno
-    (tj. ``/article/*slug*``). Jest to zła praktyka. W następnym rozdziale poznamy
+    (tj. ``/article/{slug}``). Jest to zła praktyka. W następnym rozdziale poznamy
     jak to wykonać prawidłowo.
 
 Dla dołączenia kontrolera, trzeba się do niego odwołać używając standardowej składni
@@ -1578,7 +1578,7 @@ Zabezpieczenie zmiennych w PHP
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 W szablonach PHP zabezpieczenie zmiennych nie jest automatyczne. Oznacza to, że
-jeśli trzeba zastosować zabezpieczenie zmiennych, to trzeba to uczynić samemu.
+jeśli zachodzi potrzeba zabezpieczenia zmiennych, to trzeba to uczynić samemu.
 Aby zastosować zabezpieczenie zmiennej należy użyć specjalnej metody widoku
 ``escape()``:
 
