@@ -1,18 +1,23 @@
+.. index::
+   single: bezpieczeństwo; logowanie formularzowe
+   single: bezpieczeństwo; formularz logowania
+   formularz logowania
 
-Jak zbudować tradycyjny formularz logowania
-===========================================
+
+Jak zbudować tradycyjne logowanie formularzowe
+==============================================
 
 .. tip::
 
-    Jeśli potrzebuje się formularzalogowania i przechowywania użytkowników
+    Jeśli potrzebuje się logowania formularzowego i przechowywania użytkowników
     w jakiejś bazie danych, należy rozważyć użycie pakietu `FOSUserBundle`_,
-    który pomaga zbudować własny obiekt ``User`` i daje wiele tras oraz
+    który pomaga zbudować własny obiekt ``User`` i udostęþnia wiele tras oraz
     kontrolerów dla popularnych zadań, takich jak logowanie, rejestrowanie
-    i procedura zapomnienia hasła.
+    i procedura resetowania hasła.
 
-W tym artkule będziemy budować tradycyjny formularz logowania. Oczywiście, gdy
+W tym artkule będziemy budować tradycyjne logowanie formularzowe. Oczywiście, gdy
 użytkownik się loguje, można ładować swoich użytkowników skądkolwiek, w tym z bazy
-danych. Szczegóły można znaleźć w rozdziale :ref:`security-user-providers`.
+danych. Szczegóły sa omówione w w rozdziale :ref:`security-user-providers`.
 
 Zakładamy tutaj, że że Czytelnik przeczytał już rozdział   
 :doc:`Bezpieczeństwo </book/security>` podręcznika Symfony i ma na swoim komputerze

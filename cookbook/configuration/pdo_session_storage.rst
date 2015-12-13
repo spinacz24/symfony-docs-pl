@@ -1,5 +1,5 @@
 .. index::
-   single: Session; Database Storage
+   single: sesja; przechowywana w bazie danych
 
 Jak korzystać z PdoSessionStorage do przechowywania danych sesji w bazie danych
 ===============================================================================
