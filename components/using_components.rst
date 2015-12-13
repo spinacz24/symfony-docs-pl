@@ -1,6 +1,6 @@
 .. index::
-   single: Components; Installation
-   single: Components; Usage
+   single: komponenty; instalacja
+   single: komponenty; stosowanie
 
 .. _how-to-install-and-use-the-symfony2-components:
 
