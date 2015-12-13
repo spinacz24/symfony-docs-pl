@@ -62,7 +62,7 @@ i przechowywać dane dla pojedynczego zadania::
     
 Klasa ta, jak dotychczas, nie ma nic wspólnego z Symfony lub jakąkolwiek biblioteką.
 Jest zwykła klasa PHP, która bezpośrednio rozwiązuje problem wewnątrz naszej
-aplikacji (czyli. potrzebę reprezentowania zadania na użytek aplikacji). Pod koniec tego
+aplikacji (czyli potrzebę reprezentowania zadania na użytek aplikacji). Pod koniec tego
 rozdziału będziemy w stanie zgłaszać dane do obiektu ``Task`` (poprzez formularz HTML),
 weryfikować swoje dane i utrwalać je w bazie danych.
 
