@@ -140,7 +140,7 @@ do utworzenia bazy danych:
     Jedyną możliwością rozwiązania tego problemu jest skonfigurowanie tych wartości
     na poziomie serwera.
 
-    Ustawienie domyślne UTF8 dla MySQL jest tak proste, jak dodanie kilku linii
+    Ustawienie domyślne UTF8 dla MySQL sprowdza się do dodanie kilku linii
     do pliku konfiguracyjnego serwera (przeważnie ``my.cnf``):
 
     .. code-block:: ini
