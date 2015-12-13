@@ -5,8 +5,8 @@
 Jak zaimplementować prosty formularz rejestracyjny
 ==================================================
 
-Niektóre formularze maja dodatkowe pola, których wartość nie musi być przechowywana
-w bazie danych. Na przykład, mozna utworzyć formularz rejestracyjny z jakimiś
+Niektóre formularze mają dodatkowe pola, których wartość nie musi być przechowywana
+w bazie danych. Na przykład, można utworzyć formularz rejestracyjny z jakimiś
 dodatkowymi polami (takimi jak pole wyboru "zaakceptowanie Regulaminu") i osadzić
 w nim formularz, który rzeczywiście przechowuje informacje o koncie.
 
