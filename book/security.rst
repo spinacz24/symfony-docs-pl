@@ -679,7 +679,7 @@ Proces autoryzacji ma dwa aspekty:
 
     Oprócz ról (np. ``ROLE_ADMIN``), do ochrony zasobów można wykorzystywać
     inne atrybuty (ciągi znakowe) (np. ``EDIT``) oraz używać wyborców lub systemu
-    ACL Symfony. Moze to być przydatne, jeśli potrzeba sprawdzić, czy użytkownik A
+    ACL Symfony. Może to być przydatne, jeśli potrzeba sprawdzić, czy użytkownik A
     może edytować ("EDIT") jakiś obiekt B (np. Product z id 5).
     Zobacz :ref:`security-secure-objects`.
 
@@ -1053,15 +1053,15 @@ edytowania *wszystkich* komentarzy.
 
 Można to zrobić na dwa sposoby:
 
-* :doc:`Używając tzw. wyborców (ang. voters) </cookbook/security/voters>` umożliwia
+* :doc:`Używanie tzw. wyborców (ang. voters) </cookbook/security/voters>` umożliwia
   napisanie własnej logiki biznesowej (np. użytkownik może edytować wpis, ponieważ
-  jest twórcą) do ustalenia dostępu. Przypuszczalnie wybierzesz ten sposób, wystarczająca
-  elastyczny, aby rozwązać powyższą sytuację.
+  jest autorem) do ustalenia dostępu. Przypuszczalnie wybierzesz ten sposób,
+  wystarczająco elastyczny, aby rozwązać powyższą sytuację.
 
 * :doc:`Listy ACL </cookbook/security/acl>` pozwalaja utworzyć strukturę danych
-  w bazie danych, gdzie pozna przypisać *każdemu* użytkownikowi *dowolny* dostęp
+  w bazie danych, gdzie można przypisać *każdemu* użytkownikowi *dowolny* dostęp
   (np. EDIT, VIEW) do *dowolnego* obiektu w aplikacji. Używaj tego, jeśli potrzebujesz,
-  aby mógł przydzialać indywidualny dostęp w całej aplikacji poprzez jakiś interfejs
+  aby można było przydzialać indywidualny dostęp w całej aplikacji poprzez jakiś interfejs
   administracyjny.
 
 W obu przypadkach, nadal można przydzialać prawa dostępu, tak jak omówiono to
