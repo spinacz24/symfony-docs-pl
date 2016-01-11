@@ -11,7 +11,7 @@ Istotą bogatych aplikacji internetowych jest to, że są one dynamiczne. Bez wz
 na to, jak skuteczna jest aplikacja, każde żądanie będzie zawsze powodować dodatkowy
 narzut w obciążeniu serwera niż serwowanie statycznego pliku.
 
-Dla większości aplikacji internetowych, to jest norma. Symfony2 jest błyskawiczne
+Dla większości aplikacji internetowych, to jest norma. Symfony jest błyskawiczne
 i każde żądanie obsługiwane jest szybko, bez zbędnego obciążenia serwera,  chyba
 że robi się w aplikacji "podnoszenie ciężarów".
 
@@ -26,41 +26,41 @@ Najbardziej efektywnym sposobem na poprawę wydajności aplikacji jest buforowan
 całego wyjścia strony i ominięcie całkowite kodu aplikacji przy każdym kolejnym
 żądaniu. Oczywiście nie jest to zawsze możliwe dla bardziej dynamicznych witryn
 ale czy na pewno? W tym rozdziale zobaczysz jak działa system
-buforowania Symfony2 i dlaczego jest to najlepsze z możliwych rozwiązań.
+buforowania Symfony i dlaczego jest to najlepsze z możliwych rozwiązań.
 
-Pamięć podręczna Symfony2 jest inna ponieważ opiera się prostocie i mocy pamięci
+Pamięć podręczna Symfony jest inna ponieważ opiera się prostocie i mocy pamięci
 podręcznej HTTP, tak jak to określono w :term:`specyfikacji HTTP<specyfikacja HTTP>`.
-Symfony2 implementuje ten standard, ustalający podstawową komunikację w internecie,
+Symfony implementuje ten standard, ustalający podstawową komunikację w internecie,
 zamiast wymyślać własną metodologię buforowania. Kiedy zrozumiesz podstawy walidacji
 HTTP i modele wygasania buforowania, będziesz gotowy do opanowania systemu buforowania
-Symfony2.
+Symfony.
 
-W celu wyjaśnienia systemu buforowania Symfony2, temat jest podzielony na cztery etapy:
+W celu wyjaśnienia systemu buforowania Symfony, temat jest podzielony na cztery etapy:
 
-#. :ref:`Pamięć podręczna bram bramy<gateway-caches>` lub odwrotne proxy
+#. :ref:`Pamięć podręczna bramy<gateway-caches>` lub *odwrotne proxy*
    (*ang. reverse proxy*), jest niezależną warstwą, która znajduje się na przed
    aplikacją. Pamięć podręczna bramy buforuje odpowiedzi, w miarę ich zwracania przez
    aplikację i odpowiada na żądania buforowanymi odpowiedziami, zanim dotrą do
-   aplikacji. Symfony2 zapewnia własne odwrotnego proxy, ale można zastosować
+   aplikacji. Symfony zapewnia własne odwrotnego proxy, ale można zastosować
    każdego inne rozwiązanie tego typu.
 
 #. Nagłówki :ref:`pamięci podręcznej HTTP<http-cache-introduction>` są wykorzystywane
    do komunikacji z bramą buforującą i innymi buforami znajdującymi się pomiędzy
-   aplikacją a klientem. Symfony2 zapewnia sensowne ustawienia domyślne i zaawansowany
+   aplikacją a klientem. Symfony zapewnia sensowne ustawienia domyślne i zaawansowany
    interfejs dla interakcji z nagłówkami pamięci podręcznej.
 
-#. :ref:`Wygasanie i walidacja<http-expiration-validation>` HTTP są dwoma modelami
-   używanymi w celu określenia czy buforowana zawartość jest świeża (może być użyta
-   z pamięci podręcznej) lub nieaktualna (powinna być zregenerowana przez aplikację).
+#. :ref:`Wygasanie i walidacja HTTP <http-expiration-validation>`, to dwa modele
+   używane w celu określenia czy buforowana zawartość jest świeża (może być użyta
+   z pamięcią podręczną) czy też nieaktualna (powinna być zregenerowana przez aplikację).
 
 #. :ref:`Edge Side Includes <edge-side-includes>` (ESI) umożliwia aby bufor HTTP
    był używany niezależnie do buforowania fragmentów stron (nawet fragmentów
    zagnieżdżonych). Przy zastosowaniu ESI można nawet buforować całe strony na
    60 minut, ale wbudowany pasek boczny tylko przez 5 minut.
 
-Ponieważ pamięć podręczna HTTP nie jest unikalna dla Symfony, to istnieje już wiele
-artykułów na ten temat. Jeśli jesteś nowicjuszem w buforowaniu HTTP, to bardzo polecana
-jest lektura artykułu Ryana Tomayko `Things Caches Do`_ is. Innym dogłębnym źródłem
+Ponieważ tematyka pamięci podręczna HTTP nie jest specyficzna Symfony, więc istnieje
+wiele artykułów na ten temat. Jeśli jesteś nowicjuszem w tym temacie, to bardzo polecana
+jest lektura artykułu Ryana Tomayko `Things Caches Do`_. Innym dogłębnym źródłem
 wiedzy jest `Cache Tutorial`_ Marka Nottinghama.
 
 .. index::
@@ -88,22 +88,22 @@ ignorując całkowicie aplikację.
 
 Ten typ pamięci podręcznej jest nazywany **pamięcią bramy HTTP**
  (*ang. HTTP gateway cache*) i istnieje wiele rozwiązań tego typu, takich jak
- `Varnish`_, `Squid w trybie odwrotnego proxy`_, czy odwrotne proxy Symfony2.
+ `Varnish`_, `Squid w trybie odwrotnego proxy`_, czy odwrotne proxy Symfony.
 
 .. index::
-   single: pamięć podręczna; typy
+   single: pamięć podręczna; rodzaje
 
-Typy pamięci podręcznej
-~~~~~~~~~~~~~~~~~~~~~~~
+Rodzaje pamięci podręcznej
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Pamięć podręczna bramy, to nie jedyny typ pamięci podręcznej. Faktycznie nagłówki
-HTTP, które są wysyłane przez aplikację są wykorzystywane i interpretowane przez
+HTTP, które są wysyłane przez aplikację, są wykorzystywane i interpretowane przez
 trzy różne typy pamięci podręcznej:
 
 * **Pamięć podręczna przeglądarki** (*ang. browser cache*): każda przeglądarka posiada
   własną lokalną pamięć podręczną, która jest głównie wykorzystywana do obsługi
-  "wstecznego" przeglądania stron lub buforowania obrazów i innych aktywów. Pamięć
-  podręczna przeglądarki jest pamięcią prywatną, buforującą zasoby  nie udostępniane
+  "wstecznego" przeglądania stron lub buforowania obrazów i innych zasobów. Pamięć
+  podręczna przeglądarki jest pamięcią *prywatną*, buforującą zasoby  nie udostępniane
   komu innemu, niż lokalny użytkownik;
 
 * **Pamięć podręczna serwera pośredniczącego, lub pamięć podręczna serwera proxy**
@@ -120,7 +120,7 @@ trzy różne typy pamięci podręcznej:
 
 .. tip::
 
-    Pamięć podręczna bramy jest też nazywana odwrotnym proxy (*ang. reverse proxy*)
+    Pamięć podręczna bramy jest też nazywana odwrotnym proxy (*ang. reverse proxy*),
     pamięcią podręczną zastępczą (*ang. surrogate cache*) lub nawet akceleratorem
     HTTP (*ang. HTTP accelerator*). W niniejszym podręczniku będziemy używać
     zamiennie nazw: *pamięć podręczna bramy* lub *odwrotne proxy*. 
@@ -137,17 +137,18 @@ kontrolą, ale działają zgodnie z ustawieniem pamięci podręcznej HTTP znajdu
 się w nagłówku odpowiedzi.
 
 .. index::
-   single: pamięć podręczna; odwrotne proxy Symfony2
+   single: pamięć podręczna; odwrotne proxy Symfony
 
-.. _`symfony-gateway-cache`:
+.. _symfony-gateway-cache:
+.. _symfony2-reverse-proxy:
 
-Odwrotne proxy Symfony2
-~~~~~~~~~~~~~~~~~~~~~~~
+Odwrotne proxy Symfony
+~~~~~~~~~~~~~~~~~~~~~~
 
-Symfony2 dostarczane jest z odwrotnym proxy (pamięcią podręczną bramy) napisanym w PHP.
+Symfony dostarczane jest z odwrotnym proxy (pamięcią podręczną bramy) napisanym w PHP.
 Po włączeniu tej funkcjonalności buforowalne odpowiedzi z aplikacji
 będą od razu buforowane. Zainstalowanie odwrotnego proxy jest również proste.
-Każda nowa aplikacja Symfony2 dostarczana jest ze wstępnie skonfigurowanym jądrem
+Każda nowa aplikacja Symfony dostarczana jest ze wstępnie skonfigurowanym jądrem
 buforowania (``AppCache``), które opakowuje domyślny (``AppKernel``). Jądro buforowania,
 to odwrotne proxy.
 
@@ -163,24 +164,31 @@ jądro buforowania::
 
     $kernel = new AppKernel('prod', false);
     $kernel->loadClassCache();
-    // opakowanie domyślnego AppKernel w AppCache
+    // wrap the default AppKernel with the AppCache one
     $kernel = new AppCache($kernel);
+
     $request = Request::createFromGlobals();
+
     $response = $kernel->handle($request);
     $response->send();
+
     $kernel->terminate($request, $response);
 
 Jądro buforowania będzie działać natychmiast jako odwrotne proxy – będzie buforować
 odpowiedzi z aplikacji i zwracać je klientowi.
 
-Teraz, gdy używa się już "proxy", potrzeba skonfiguraować ``127.0.0.1`` w konfiguracji
-``trusted_proxies`` (zobacz :ref:`<reference-framework-trusted-proxies>`). Bez tego,
-adres IP klienta i innych rzeczy nie będzie działać prawidłowo.
+.. caution::
+
+    Jeśli wykorzystujesz opcję
+    :ref:`framework.http_method_override <configuration-framework-http_method_override>`
+    do odczytu metody HTTP z parametru ``_method``, to zapoznaj się zz stroną,
+    określona w powyższym odnośniku, w celu uzyskania informacji o tym, co trzeba
+    zrobić.
 
 .. tip::
 
-    Jądro buforowania ma specjalną metodę ``getLog()``, która zwraca łańcuch
-    reprezentujący, to co zdarzyło się w warstwie buforowania. W środowisku
+    W jądrze buforowania zawarta jest specjalna metoda ``getLog()``, która zwraca
+    łańcuch reprezentujący, to co zdarzyło się w warstwie buforowania. W środowisku
     programistycznym można wykorzystać ją do debugowania i walidacji strategii
     buforowania::
 
@@ -221,13 +229,13 @@ Oto lista głównych opcji:
   (domyślnie: ``0``) nadpisuje jawne ustawienie nagłówków ``Cache-Control`` lub ``Expires``;
 
 * ``private_headers``: ustawienie nagłówków odpowiedzi, które wyzwalają "prywatne"
-  zachowanie ``Cache-Control``w odpowiedziach jawnie nie precyzujących czy odpowiedź
+  zachowanie ``Cache-Control``w odpowiedziach jawnie nie informujacych, czy odpowiedź
   jest ``public`` czy też ``private`` poprzez dyrektywę ``Cache-Control`` (domyślnie:
   ``Authorization`` i ``Cookie``);
 
 * ``allow_reload``: określa, czy klient może wymuszać ponowne ładowanie pamięci
   podręcznej przez dołączenie  w odpowiedzi "nie buforowej" dyrektywy ``Cache-Control``.
-  Aby osiągnąć zgodności z RFC 2616, nalezy ustawić tą opcje na ``true``
+  W celu osiągnięcia zgodności z RFC 2616, należy ustawić tą opcje na ``true``
   (domyślnie: ``false``);
 
 * ``allow_revalidate``: określa, czy klient może wymusić odświeżenie danych 
@@ -246,29 +254,29 @@ Oto lista głównych opcji:
   ``60``). Ustawienie to nadpisywane jest przez opcję ``stale-if-error`` rozszerzenia
   HTTP ``Cache-Control`` (zobacz RFC 5861).
 
-Jeśli ``debug`` jest ustawione na ``true``, Symfony2 automatycznie dodaje do odpowiedzi
+Jeśli ``debug`` jest ustawione na ``true``, Symfony automatycznie dodaje do odpowiedzi
 nagłówek ``X-Symfony-Cache``, który zawiera użyteczne informacje o odsłonach pamięci
 podręcznej i niebezpieczeństwach.
 
 .. sidebar:: Zmiana jednego odwrotnego proxy na inne
 
-    Odwrotne proxy Symfony2 jest doskonałym narzędziem do wykorzystania przy tworzeniu
+    Odwrotne proxy Symfony jest doskonałym narzędziem do wykorzystania przy tworzeniu
     witryny internetowej lub podczas jej wdrażania na współdzielonym hoście, gdzie
-    nie można zainstalować niczego innego niż kod PHP. Lecz co jest napisane w PHP,
+    nie można zainstalować niczego innego niż kod PHP. Jednak, co jest napisane w PHP,
     to nie może być takie szybkie jak proxy napisane w C. Dlatego zaleca się użycie
     serwerów Varnish lub Squid na swoim serwerze produkcyjnym, jeśli jest to możliwe.
     Dobrą wiadomością jest to, że przejście z jednego serwera proxy na inny jest
     łatwe i przejrzyste, jako że nie jest konieczna zmiana kodu aplikacji.
-    Zacznij najpierw z odwrotnym proxy Symfony2 i później, jak wzrośnie ruch na
+    Zacznij najpierw z odwrotnym proxy Symfony i później, jak wzrośnie ruch na
     witrynie, to zamień odwrotne proxy na Varnish.
 
-    Więcej informacji o użyciu Varnish z Symfony2 znajdziesz w artykule
-    :doc:`Jak uzywać Varnish </cookbook/cache/varnish>`.
+    Więcej informacji o użyciu Varnish z Symfony znajdziesz w artykule
+    :doc:`Jak używać Varnish? </cookbook/cache/varnish>`.
 
 .. note::
 
-    Wydajność odwrotnego proxy Symfony2 jest niezależne od złożoności aplikacji.
-    Dzieje się tak, bo jadro aplikacji jest uruchamiane tylko wówczas, gdy żądanie
+    Wydajność odwrotnego proxy Symfony jest niezależna od złożoności aplikacji.
+    Dzieje się tak, bo jądro aplikacji jest uruchamiane tylko wówczas, gdy żądanie
     musi być do niego skierowane.
 
 .. index::
@@ -279,7 +287,7 @@ podręcznej i niebezpieczeństwach.
 Wstęp do buforowania HTTP
 -------------------------
 
-Aby skorzystać z dostępnej warstw pamięci podręcznej, aplikacja musi być informowana,
+W celu skorzystania z dostępnej warstwypamięci podręcznej, aplikacja musi być informowana,
 które odpowiedzi są buforowalne oraz z zasadami, które regulują, kiedy (jak) pamięć
 podręczna powinna się zdezaktualizować. Odbywa się to poprzez ustawienie w odpowiedzi
 nagłówków buforowania HTTP.
@@ -331,17 +339,23 @@ Symfony dostarcza abstracji nagłówka ``Cache-Control`` w celu ułatwienia jego
 
     $response = new Response();
 
-    // zaznaczenie odpowiedzi jako publicznej lub prywatnej
+    // mark the response as either public or private
     $response->setPublic();
     $response->setPrivate();
 
-    // ustawienie max age jako prywatje lub współdzielonej 
+    // set the private or shared max age
     $response->setMaxAge(600);
     $response->setSharedMaxAge(600);
 
-    // ustawienie własnej dyrektywy Cache-Control
+    // set a custom Cache-Control directive
     $response->headers->addCacheControlDirective('must-revalidate', true);
 
+.. tip::
+
+    Jeśli musi się ustawić nagłówki buforowania dla różnych akcji kontrolerów,
+    warto jest zapoznać sie z pakietem FOSHttpCacheBundle_. Zapewnia on sposób na
+    zdefiniowanie nagłówków buforowania w oparciu o wzorzec URL i inne właściwości
+    żądania.
 
 .. _public_vs_private_respnses:
 
@@ -350,9 +364,9 @@ Odpowiedzi publiczne vs prywatne
 
 Zarówno pamięć podręczna bramy jak i pamięć serwera pośredniczącego są uważane za
 pamięci "współdzielone", ponieważ zawartość buforowana jest udostępniana więcej niż
-jednemu użytkownikowi. Jeśli odpowiedzi specyficzna dla jednego użytkownika byłyby
+jednemu użytkownikowi. Jeśli odpowiedzi specyficzne dla jednego użytkownika byłyby
 kiedyś błędnie zapisane we współdzielonej pamięci, to  mogłyby być później zwrócone
-innym użytkownikom. Wyobraź sobie, ze informacja o Twoim koncie jest buforowana
+innym użytkownikom. Wyobraźmy sobie, ze informacja o Twoim koncie jest buforowana
 i później przesyłana każdemu użytkownikowi, który by zażądał tej informacji. Zgroza!
 
 Dlatego każda odpowiedź jest ustawiana jako publiczna albo prywatna, co umożliwia
@@ -365,7 +379,7 @@ obsłużenie takiej sytuacji:
   dla pojedynczego użytkownika  i nie mogą być buforowane w pamięci współdzielonej.
 
 Symfony konserwatywnie traktuje w sposób domyślny każdą odpowiedź jako prywatną.
-Aby skorzystać z wielodostępnych buforów (jak odwrotne proxy Symfony2), odpowiedź
+Aby skorzystać z wielodostępnych buforów (jak odwrotne proxy Symfony), odpowiedź
 musi jawnie zostać określona jako publiczna.
 
 .. index::
@@ -389,16 +403,18 @@ datę buforowania itp.). Ma to dwie bardzo pozytywne konsekwencje:
   blogu). Buforowanie ich uniemożliwiłoby niektórym żądaniom dotarcie do aplikacji
   i zmianę jej stanu.
 
+.. _http-cache-defaults:
+
 Zasady buforowania i wartości domyślne
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 HTTP 1.1 umożliwia domyślnie buforowanie wszystkiego, chyba że istnieje nagłówek
-``Cache-Control``. W praktyce, większość buforów nie robi nic, gdy żądania mają
-pliki cookie, nagłówek autoryzacyjny, używają metod niezaliczanymi do bezpiecznych
-(tj. PUT, POST, DELETE) lub gdy odpowiedzi mają kod statusu przekierowania.
+``Cache-Control``. W praktyce, gdy żądania mają pliki cookie, nagłówek autoryzacyjny,
+używają metod niezaliczanymi do bezpiecznych (tj. PUT, POST, DELETE) lub gdy
+odpowiedzi mają kod statusu przekierowania, większość buforów nie robi nic,
 
-Symfony2 automatycznie ustawia sensowny i konserwatywny nagłówek ``Cache-Control``,
-gdy żaden nie jest ustawiony przez programistę, wg następujących zasad:
+Gdy żaden nagłówek nie jest ustawiony przez programistę, Symfony automatycznie
+ustawia sensowny i konserwatywny nagłówek ``Cache-Control``, wg następujących zasad:
 
 * Jeśli nie jest określony żaden nagłówek buforowania (``Cache-Control``, ``Expires``,
   ``Etag`` lub ``Last-Modified``), ustawiany jest nagłówek ``Cache-Control``
@@ -408,7 +424,7 @@ gdy żaden nie jest ustawiony przez programistę, wg następujących zasad:
   buforowania), to jego wartość jest ustawiana na ``private, must-revalidate``;
 
 * Lecz jeśli jest ustawiona co najmniej jedna dyrektywa ``Cache-Control`` i nie
-  zostały jawnie dodane dyrektywy 'public' lub ``private``, to Symfony2 doda
+  zostały jawnie dodane dyrektywy 'public' lub ``private``, to Symfony doda
   automatycznie dyrektywę ``private`` (z wyjątkiem, gdy ustawione jest ``s-maxage``).
 
 
@@ -416,9 +432,10 @@ gdy żaden nie jest ustawiony przez programistę, wg następujących zasad:
    single: pamięć podręczna; wygasanie HTTP
 
 .. _http-expiration-validation:
+.. _http-expiration-and-validation:
 
-Wygasanie i walidacja HTTP
---------------------------
+Wygasanie HTTP, walidacja i unieważnianie
+-----------------------------------------
 
 Specyfikacja HTTP definiuje dwa modele buforowania:
 
@@ -426,7 +443,7 @@ Specyfikacja HTTP definiuje dwa modele buforowania:
   (*ang. fresh*) przez dołączenie nagłówka ``Cache-Control`` i ewentualnie ``Expires``.
   Pamięci rozumiejące wygasanie nie będą wykonywać ponownie takiego samego żądania
   dopóki buforowana wersja zasobu nie przekroczy czas wygasania i stanie się
-  "przestarzała" (*ang. stale);
+  "przestarzała" (*ang. stale*);
 
 * Gdy strony są naprawdę dynamiczne (czyli często następują zmiany w reprezentacji),
   to często niezbędny jest `model walidacyjny`_ . W tym modelu odpowiedź jest buforowana,
@@ -453,18 +470,17 @@ odpowiedzi.
     związane jest z buforowaniem HTTP można znaleźć w dwóch dedykowanych częściach
     (`P4 - Conditional Requests`_ i `P6 - Caching: Browser and intermediary caches`_).
 
-    Gorąco zachęcamy Ciebie, jako programistę aplikacji internetowych, do zapoznania
-    się z tym dokumentem specyfikacji. Jego przejrzystość i kompleksowość informacji,
+    Gorąco zachęcamy do do zapoznania się z tym dokumentem specyfikacji. Jego
+    przejrzystość i kompleksowość informacji,
     nawet dziesięć lat po stworzeniu, są imponujące. Nie zniechęcaj się jego
     wyglądem – zawarta tam treść jest znacznie piękniejsza niż okładka.
 
-
 Wygasanie
 ~~~~~~~~~
-Model wygasania jest bardziej wydajny i prostszy z dwóch, poprzednio przedstawionych,
-modeli buforowania i powinien być stosowany w miarę możliwości. Gdy odpowiedź jest
-buforowana z wygasaniem, pamięć będzie przechowywać odpowiedź i zwraca ją bezpośrednio
-bez przekazywania żądania do aplikacji do momentu jego wygaśnięcia.
+Model wygasania jest bardziej wydajny i prostszy niż *model walidacyjny*
+i powinien być stosowany w miarę możliwości. Gdy odpowiedź jest
+buforowana z *wygasaniem*, pamięć będzie przechowywać odpowiedź i zwracać ją
+bezpośrednio bez przekazywania żądania do aplikacji do momentu jego wygaśnięcia.
 
 Model wygasania może zastosować używając jednego z dwóch nagłówków HTTP, niemal
 identycznych: ``Expires`` lub ``Cache-Control``.
@@ -474,25 +490,18 @@ identycznych: ``Expires`` lub ``Cache-Control``.
    single: pamięć podręczna; nagłówek Expires
    single: nagłówki HTTP; Expires
 
-Wygasanie - nagłówek ``Expires``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Wygasanie z nagłówkiem ``Expires``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Zgodnie ze specyfikacją HTTP, "pole nagłówka ``Expires`` podaje datę/czas po którym
-odpowiedź jest uważana za przestarzała". Nagłówek ``Expires`` może zostać ustawiony
+odpowiedź jest uważana za przestarzałą". Nagłówek ``Expires`` może zostać ustawiony
 poprzez metodę ``setExpires()`` obiektu ``Response``. Wymaga to jako argumentu
 instancji ``DateTime``::
 
-    use Symfony\Component\HttpFoundation\Request;
+    $date = new DateTime();
+    $date->modify('+600 seconds');
 
-    public function indexAction(Request $request)
-    {
-        $response = $this->render('MyBundle:Main:index.html.twig');
-        $response->setETag(md5($response->getContent()));
-        $response->setPublic(); // make sure the response is public/cacheable
-        $response->isNotModified($request);
-
-        return $response;
-    }
+    $response->setExpires($date);
 
 W rezultacie nagłówek HTTP bedzie wyglądać tak:
 
@@ -508,7 +517,7 @@ W rezultacie nagłówek HTTP bedzie wyglądać tak:
 Należy zaznaczyć, że w wersjach HTTP przed wersją 1.1 oryginalny serwer nie był
 zobowiązany do wysyłania nagłówka ``Date``. W efekcie pamięć podręczna (np. przeglądarki)
 musiała polegać na swoim zegarze wewnętrznym przy ocenie nagłówka ``Expires`` wykonując
-przeliczenie czasu życia podatne na przesunięcie czasowe. Innym ograniczeniem nagłówka
+przeliczenie czasu życia z uwzględnieniem przesunięcia czasowego. Innym ograniczeniem nagłówka
 ``Expires`` jest ustalenie specyfikacji stanowiące, że "serwery HTTP/1.1 nie powinny
 wysyłać dat ``Expires`` przekraczających roczny okres."
 
@@ -516,11 +525,11 @@ wysyłać dat ``Expires`` przekraczających roczny okres."
    single: pamięć podręczna; nagłówek Cache-Control
    single: nagłówki HTTP; Cache-Control
 
-Wygasanie - nagłówek ``Cache-Control``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Wygasanie z nagłówkiem ``Cache-Control``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Ze względu na ograniczenia nagłówka ``Expires``, w większości przepadków powinno
-się zastosować zamiast niego nagłówek ``Cache-Control``. Przypomnijmy, że nagłówek
+się stosować, zamiast niego, nagłówek ``Cache-Control``. Przypomnijmy, że nagłówek
 ``Cache-Control`` jest używany do określenia wielu różnych dyrektyw buforowania.
 Dla wygasania istnieją  dwie dyrektywy: ``max-age`` i ``s-maxage``. Pierwsza z nich
 jest używana przez wszystkie rodzaje pamięci, natomiast druga jest brana pod uwagę
@@ -576,8 +585,8 @@ zastosować w modelu walidacyjnym: ``ETag`` i ``Last-Modified``.
    single: pamięć podręczna; nagłówek Etag
    single: nagłówki HTTP; Etag
 
-Walidacja - nagłówek ``ETag``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Walidacja z nagłówkiem ``ETag``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Nagłówek ``ETag`` jest nagłówkiem łańcuchowym (nazywanym "entity-tag"), który
 jednoznacznie identyfikuje  reprezentację zasobu docelowego. Jest on całkowicie
@@ -591,14 +600,22 @@ musi być unikalny dla poszczególnych reprezentacji tego samego zasobu.
 Aby zobaczyć prostą implementacje generującą nagłówek ETag jako md5 zawartości
 zasobu, wykonajmy to::
 
-    public function indexAction()
-    {
-        $response = $this->render('MyBundle:Main:index.html.twig');
-        $response->setETag(md5($response->getContent()));
-        $response->setPublic(); // make sure the response is public/cacheable
-        $response->isNotModified($this->getRequest());
+    // src/AppBundle/Controller/DefaultController.php
+    namespace AppBundle\Controller;
 
-        return $response;
+    use Symfony\Component\HttpFoundation\Request;
+
+    class DefaultController extends Controller
+    {
+        public function homepageAction(Request $request)
+        {
+            $response = $this->render('static/homepage.html.twig');
+            $response->setETag(md5($response->getContent()));
+            $response->setPublic(); // make sure the response is public/cacheable
+            $response->isNotModified($request);
+
+            return $response;
+        }
     }
 
 Metoda :method:`Symfony\\Component\\HttpFoundation\\Response::isNotModified`
@@ -622,15 +639,15 @@ bez nadmiernego wysiłku.
 
 .. tip::
 
-    Symfony2 obsługuje również słabe nagłówki Etag, gdy przekaże się wartość ``true``
+    Symfony obsługuje również słabe nagłówki Etag, gdy przekaże się wartość ``true``
     jako drugi argument metody :method:`Symfony\\Component\\HttpFoundation\\Response::setETag`.
 
 .. index::
    single: pamięć podręczna; nagłówek Last-Modified
    single: nagłówki HTTP; Last-Modified
 
-Walidacja - nagłówek ``Last-Modified``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Walidacja z nagłówkiem ``Last-Modified``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Nagłówek ``Last-Modified`` jest drugą forma walidacji. Zgodnie ze specyfikacją HTTP:
 "Pole nagłówka ``Last-Modified`` wskazuje datę i czas po jakim oryginalny serwer
@@ -642,28 +659,38 @@ Na przykład, można wykorzystać dla wszystkich obiektów datę ostatniej modyf
 niezbędną do obliczenia daty ważności reprezentacji zasobu jako wartość nagłówka
 ``Last-Modified``::
 
+    // src/AppBundle/Controller/ArticleController.php
+    namespace AppBundle\Controller;
+
+    // ...
+    use Symfony\Component\HttpFoundation\Response;
     use Symfony\Component\HttpFoundation\Request;
+    use AppBundle\Entity\Article;
 
-    public function showAction($articleSlug, Request $request)
+    class ArticleController extends Controller
     {
-        // ...
+        public function showAction(Article $article, Request $request)
+        {
+            $author = $article->getAuthor();
 
-        $articleDate = new \DateTime($article->getUpdatedAt());
-        $authorDate = new \DateTime($author->getUpdatedAt());
+            $articleDate = new \DateTime($article->getUpdatedAt());
+            $authorDate = new \DateTime($author->getUpdatedAt());
 
-        $date = $authorDate > $articleDate ? $authorDate : $articleDate;
+            $date = $authorDate > $articleDate ? $authorDate : $articleDate;
 
-        $response->setLastModified($date);
-        // Set response as public. Otherwise it will be private by default.
-        $response->setPublic();
+            $response = new Response();
+            $response->setLastModified($date);
+            // Set response as public. Otherwise it will be private by default.
+            $response->setPublic();
 
-        if ($response->isNotModified($request)) {
+            if ($response->isNotModified($request)) {
+                return $response;
+            }
+
+            // ... do more work to populate the response with the full content
+
             return $response;
         }
-
-        // ... do more work to populate the response with the full content
-
-        return $response;
     }
 
 Metoda :method:`Symfony\\Component\\HttpFoundation\\Response::isNotModified`
@@ -691,45 +718,51 @@ Mówiąc inaczej, im mniej się zmusza aplikację do zwracania odpowiedzi 304, t
 Metoda ``Response::isNotModified()`` wykonuje to dokładnie, przez udostępnienie
 prostego i wydajnego wzorca::
 
+    // src/AppBundle/Controller/ArticleController.php
+    namespace AppBundle\Controller;
+
+    // ...
     use Symfony\Component\HttpFoundation\Response;
     use Symfony\Component\HttpFoundation\Request;
 
-    public function showAction($articleSlug, Request $request)
+    class ArticleController extends Controller
     {
-        // Get the minimum information to compute
-        // the ETag or the Last-Modified value
-        // (based on the Request, data is retrieved from
-        // a database or a key-value store for instance)
-        $article = ...;
+        public function showAction($articleSlug, Request $request)
+        {
+            // Get the minimum information to compute
+            // the ETag or the Last-Modified value
+            // (based on the Request, data is retrieved from
+            // a database or a key-value store for instance)
+            $article = ...;
 
-        // create a Response with an ETag and/or a Last-Modified header
-        $response = new Response();
-        $response->setETag($article->computeETag());
-        $response->setLastModified($article->getPublishedAt());
+            // create a Response with an ETag and/or a Last-Modified header
+            $response = new Response();
+            $response->setETag($article->computeETag());
+            $response->setLastModified($article->getPublishedAt());
 
-        // Set response as public. Otherwise it will be private by default.
-        $response->setPublic();
+            // Set response as public. Otherwise it will be private by default.
+            $response->setPublic();
 
-        // Check that the Response is not modified for the given Request
-        if ($response->isNotModified($request)) {
-            // return the 304 Response immediately
-            return $response;
+            // Check that the Response is not modified for the given Request
+            if ($response->isNotModified($request)) {
+                // return the 304 Response immediately
+                return $response;
+            }
+
+            // do more work here - like retrieving more data
+            $comments = ...;
+
+            // or render a template with the $response you've already started
+            return $this->render('article/show.html.twig', array(
+                'article' => $article,
+                'comments' => $comments
+            ), $response);
         }
-
-        // do more work here - like retrieving more data
-        $comments = ...;
-
-        // or render a template with the $response you've already started
-        return $this->render(
-            'MyBundle:MyController:article.html.twig',
-            array('article' => $article, 'comments' => $comments),
-            $response
-        );
     }
 
 Gdy ``Response`` nie jest zmodyfikowane, to metoda ``isNotModified()`` autoamtycznie
 ustawia kod statusu odpowiedzi na ``304``, usuwając treść i jakieś nagłówki, które
-nie muszą być obecne w odpowiedzi ``304`` (zobacz
+nie muszą obecne znajdować się w odpowiedzi ``304`` (zobacz
 :method:`Symfony\\Component\\HttpFoundation\\Response::setNotModified`).
 
 .. index::
@@ -745,11 +778,11 @@ jako klucza buforu. Jeśli dwie osoby żądają tego samego adresu URI buforowan
 zasobu, druga osoba otrzyma wersję buforowaną.
 
 Czasem to nie wystarcza i różne wersje tego samego identyfikatora URI muszą zostać
-buforowane na podstawie jednej lub większej ilości wartości nagłówkowych żądania.
-Na przykład, jeśli kompresuje się strony, gdy klient ją obsługuje, każdy podany
+buforowane na podstawie jednej lub większej ilości wartości nagłówków żądania.
+Na przykład, jeśli kompresuje się strony, gdy klient to obsługuje, każdy podany
 identyfikator URI ma dwie reprezentacje: jedna dla klienta obsługujacego kompresję
-i drugą gdy tak nie jest. Oznaczenie jest realizowane przez wartość nagłówka żądania
-``Accept-Encoding``.
+i drugą gdy tak nie jest. Określenie to jest realizowane przez wartość nagłówka 
+``Accept-Encoding`` żądania.
 
 W takim przypadku potrzeba bufora do przechowywania zarówno wersji odpowiedzi
 skompresowanej jak i nieskompresowanej dla określonego identyfikatora URI i zwracania
@@ -771,10 +804,10 @@ zasobu:
 Obiekt ``Response`` oferuje przejrzysty interfejs dla zarządania nagłówkiem
 ``Vary``::
 
-    // ustawienie jednego nagłówka Vary
+    // set one vary header
     $response->setVary('Accept-Encoding');
 
-    // ustawienie wielu nagłówków Vary
+    // set multiple vary headers
     $response->setVary(array('Accept-Encoding', 'User-Agent'));
 
 Metoda ``setVary()`` pobiera nazwę nagłówka lub tablicę nazw nagłówków od których
@@ -822,6 +855,115 @@ pojedynczą metodę :method:`Symfony\\Component\\HttpFoundation\\Response::setCa
         // 'private'    => true,
     ));
 
+.. index::
+   single: pamięć podręczna; unieważnianie
+
+.. _http-cache-invalidation:
+
+Unieważnianie pamięci podręcznej
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   
+   "Są tylko dwie trudne rzeczy w informatyce: unieważnianie pamięci podręcznej
+   i nazywanie rzeczy". -- Phil Karlton    
+
+Gdy zasób jest buforowany przez pamięć podręczną bramy, nie będzie ona już przepytywać
+aplikacji o treść zasobu. Zapewnia to szybkie odpowiadanie i zmniejsza obciążenie
+aplikacji. Jednak, istnieje ryzyko dostarczania klientowi nieaktualnej treści.
+Sposobem na rozwiązanie tego problemu jest użycie długich okresów buforowania,
+ale z aktywnym powiadamianiem pamięci podręcznej bramy, gdy treść ulegnie zmianie.
+Odwrotne proxy zazwyczaj zapewnia kanał do takich powiadomień, zwykle poprzez
+specjalne żądania HTTP.   
+   
+.. caution::
+
+    Unieważnianie pamięci podręcznej jest bardzo zaawansowanym rozwiązaniem,
+    więc trzeba go unikać, gdy jest to tylko możliwe. Jeśli nie uda się zweryfikować
+    czegoś, będą serwowane z pamięci podręcznej przestarzałe dane, przez potencjalnie
+    długi czas. Zamiast tego, trzeba stosować buforowanie krótkoterminowe lub wykorzystywać
+    model walidacyjny i dostosować kontrolery do wykonywania wydajnych weryfikacji,
+    tak jak wyjaśniono to w rozdzial :ref:`optimizing-cache-validation`.
+    
+    Ponieważ unieważnianie jest zagadnieniem specyficznym dla każdego rodzaju odwrotnego
+    proxy, to jeśli nie chce się stosować unieważniania, można
+    przełączać się pomiędzy odwrotnymi proxy, bez zmieniania czegokolwiek w kodzie
+    aplikacji.
+    
+Czasami jednak, trzeba osiągnąć dodatkową wydajność, jaką można uzyskać podczas
+jawnego unieważaniania pamięci podręcznej. Przy unieważnianiu, aplikacja wymaga
+wykrywania zmian treści i powiadamiania pamięci podręcznej, aby usunęła adresy
+URL dla zmienionych zasobów.
+
+.. tip::
+
+    Jeśli chcesz korzystać z unieważniania pamięci podręczne, zwróć uwagę na
+    pakiet `FOSHttpCacheBundle`_. Zapewnia on usługi pomagające we wdrożeniu
+    różnych rozwiązań pamięci podręcznej oraz dokumentuje konfigurację dla kilku
+    rodzajów podręcznych pamięci proxy.
+
+Jeśli z jednym adresem URL związany jest konkretny buforowany zasób, to dobrym
+rozwiązaniem jest model ``PURGE``.
+Można wysyłać do podręcznej pamięci serwera proxy żadanie z metodą HTTP ``PURGE``
+(stosowanie słowa "PURGE" jest konwencją, technicznie może to być dowolny ciąg
+znakowy), zamiast ``GET`` i wykonać kod wykrywający tą pamięć podręczną oraz
+usuwajacy dane z pamięci podręcznej.
+
+Oto jak można skonfigurować odwrotne proxy do obsługimetody HTTP ``PURGE``::
+
+    // app/AppCache.php
+
+    use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache;
+    use Symfony\Component\HttpFoundation\Request;
+    use Symfony\Component\HttpFoundation\Response;
+    // ...
+
+    class AppCache extends HttpCache
+    {
+        protected function invalidate(Request $request, $catch = false)
+        {
+            if ('PURGE' !== $request->getMethod()) {
+                return parent::invalidate($request, $catch);
+            }
+
+            if ('127.0.0.1' !== $request->getClientIp()) {
+                return new Response(
+                    'Invalid HTTP method',
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            $response = new Response();
+            if ($this->getStore()->purge($request->getUri())) {
+                $response->setStatusCode(200, 'Purged');
+            } else {
+                $response->setStatusCode(200, 'Not found');
+            }
+
+            return $response;
+        }
+    }
+
+.. caution::
+
+    Trzeba koniecznie zabezpieczyć się przed możliwością samowolnego użycia metody
+    HTTP ``PURGE``, aby nie dopuścić do użycia jej przez przypadkowe osoby
+    i niekontrolowanym usuwaniem danych z pamięci podręcznej.
+
+**Czyszczenie** (*ang. purge*) instruuje pamięć podręczną, aby zrzuciła zasób we
+*wszystkich swoich wariantach* (zgodnie z nagłówkiem ``Vary``, który opisano powyżej).
+Alternatywą dla czyszczenia jest **odświeżanie** (*ang. refreshing*) treści.
+Odświeżanie oznacza, że pamięć podręczna serwera proxy jest instruowana, aby anulować
+swoją lokalną pamięć podręczną i pobrać treść ponownie. W ten sposób, nowa treść
+jest zawsze dostępna w pamięci podręcznej. Wadą odświeżania jest to, że warianty
+nie są unieważniane.
+
+W wielu aplikacjach, część jakiejś treści jest używana na różnych stronach z różnymi
+adresami URL. W takich przypadkach stosuje się bardziej elastyczne rozwiązania:
+
+* **Zakazywanie odpowiedzi** (*ang. banning*) unieważnia odpowiedzi zgodne
+  z wyrażeniami regularnymi URL lub innymi kryteriami;
+* **Tagowanie pamięci podręcznej** (*ang. cache tagging*) pozwala dodac znacznik
+  do każdej treści uzytej w odpowiedzi, tak aby można było unieważnić wszystkie
+  adresy URL zawierajace określona treść.
 
 .. index::
 
@@ -836,14 +978,14 @@ Wykorzystywanie Edge Side Includes
 Pamięci podręczne bramy są świetnym sposobem na ulepszenie swojej aplikacji.
 Lecz mają pewne
 ograniczenie: mogą tylko buforować całe strony. Jeśli ma się bardziej dynamiczne
-strony lub strona ma więcej dynamicznych części, to pech. Na szczęście Symfony2
+strony lub strona ma więcej dynamicznych części, to pech. Na szczęście Symfony
 oferuje rozwiązanie dla takich przypadków, oparte na technice nazywanej `ESI`_,
 lub Edge Side Includes. Specyfikację tej techniki napisana została prawie 10
 lat temu przez Akamai. Technika ta umożliwia, aby określone części strony miały
 inną strategię buforowania niż cała strona.
 
 Opisane w specyfikacji ESI znaczniki można umieścić na stronie w celu komunikacji
-z pamięcią podręczną bramy. W Symfony2 wykorzystany jest tylko jeden znacznik,
+z pamięcią podręczną bramy. W Symfony wykorzystany jest tylko jeden znacznik,
 ``include``, ponieważ jest to jedyny przydatny znacznik poza kontekstem Akamai:
 
 .. code-block:: html
@@ -863,9 +1005,9 @@ z pamięcią podręczną bramy. W Symfony2 wykorzystany jest tylko jeden znaczni
 
 .. note::
 
-    Proszę zwrócić uwagę, że każdy znacznik ESI ma w pełni kwalifikowany lokalizator URL.
+    Proszę zwrócić uwagę, że każdy znacznik ESI ma w pełni kwalifikowany adres URL.
     Znacznik ESI reprezentuje fragment strony, który można pobrać poprzez określony
-    URL.
+    adres URL.
 
 Podczas obsługi żądania, pamięć podręczna bramy pobiera całą stronę ze swojego bufora
 lub żąda jej z zaplecza aplikacji. Jeśli odpowiedź zawiera jeden lub więcej znaczników
@@ -877,10 +1019,12 @@ klienta.
 
 Wszystko to działa w sposób przejrzysty na poziomie pamięci podręcznej bramy (czyli
 poza aplikacją). Jak zobaczysz, gdy zdecydujesz się skorzystać ze znaczników ESI,
-Symfony2 sprawia, że przetwarzanie tych znaczników nie wymaga wysiłku.
+Symfony sprawia, że przetwarzanie tych znaczników nie wymaga wysiłku.
 
-Używanie ESI w Symfony2
-~~~~~~~~~~~~~~~~~~~~~~~
+.. _using-esi-in-symfony2:
+
+Używanie ESI w Symfony
+~~~~~~~~~~~~~~~~~~~~~~
 
 Najpierw trzeba włączyć obsługę ESI w konfiguracji aplikacji:
 
@@ -898,18 +1042,28 @@ Najpierw trzeba włączyć obsługę ESI w konfiguracji aplikacji:
        :linenos:
 
         <!-- app/config/config.xml -->
-        <framework:config ...>
-            <!-- ... -->
-            <framework:esi enabled="true" />
-        </framework:config>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <container xmlns="http://symfony.com/schema/dic/symfony"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:framework="http://symfony.com/schema/dic/symfony"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services
+                http://symfony.com/schema/dic/services/services-1.0.xsd
+                http://symfony.com/schema/dic/symfony
+                http://symfony.com/schema/dic/symfony/symfony-1.0.xsd">
+
+            <framework:config>
+                <!-- ... -->
+                <framework:esi enabled="true" />
+            </framework:config>
+        </container>
 
     .. code-block:: php
        :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
-            // ...,
-            'esi'    => array('enabled' => true),
+            // ...
+            'esi' => array('enabled' => true),
         ));
 
 Załóżmy teraz, że mamy względnie statyczną stronę, z wyjątkiem bloku aktualności
@@ -917,15 +1071,20 @@ Załóżmy teraz, że mamy względnie statyczną stronę, z wyjątkiem bloku akt
 aktualności niezależnie od reszty strony.
 
 .. code-block:: php
-   :linenos:
 
-    public function indexAction()
+    // src/AppBundle/Controller/DefaultController.php
+
+    // ...
+    class DefaultController extends Controller
     {
-        $response = $this->render('MyBundle:MyController:index.html.twig');
-        // set the shared max age - which also marks the response as public
-        $response->setSharedMaxAge(600);
+        public function aboutAction()
+        {
+            $response = $this->render('static/about.html.twig');
+            // set the shared max age - which also marks the response as public
+            $response->setSharedMaxAge(600);
 
-        return $response;
+            return $response;
+        }
     }
 
 W tym przykładzie, bufor pełnej strony ma 10 minutowy czas życia. Następnie
@@ -933,7 +1092,7 @@ dołączany jest w szablonie blok wiadomości, osadzając akcję. Realizowane je
 przez helper ``render`` (zobacz :ref:`templating-embedding-controller` w celu
 poznania szczegółów).
 
-Ponieważ osadzana zawartość pochodzi z innej strony (lub kontrolera), Symfony2
+Ponieważ osadzana zawartość pochodzi z innej strony (lub kontrolera), Symfony
 stosuje standardowy helper ``render`` do skonfigurowania znaczników ESI:
 
 .. configuration-block::
@@ -941,64 +1100,96 @@ stosuje standardowy helper ``render`` do skonfigurowania znaczników ESI:
     .. code-block:: jinja
        :linenos:
 
-        {# można również uzyć odniesienia do kontrolera #}
-        {{ render_esi(controller('...:news', { 'max': 5 })) }}
+        {# app/Resources/views/static/about.html.twig #}
+
+        {# you can use a controller reference #}
+        {{ render_esi(controller('AppBundle:News:latest', { 'maxPerPage': 5 })) }}
 
         {# ... or a URL #}
-        {{ render_esi(url('latest_news', { 'max': 5 })) }}
+        {{ render_esi(url('latest_news', { 'maxPerPage': 5 })) }}
 
     .. code-block:: html+php
        :linenos:
 
-        <?php echo $view['actions']->render(
-            new ControllerReference('...:news', array('max' => 5)),
-            array('strategy' => 'esi'))
-        ?>
+        <!-- app/Resources/views/static/about.html.php -->
 
+        // you can use a controller reference
+        use Symfony\Component\HttpKernel\Controller\ControllerReference;
         <?php echo $view['actions']->render(
-            $view['router']->generate('latest_news', array('max' => 5), true),
+            new ControllerReference(
+                'AppBundle:News:latest',
+                array('maxPerPage' => 5)
+            ),
+            array('strategy' => 'esi')
+        ) ?>
+
+        // ... or a URL
+        use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+        <?php echo $view['actions']->render(
+            $view['router']->generate(
+                'latest_news',
+                array('maxPerPage' => 5),
+                UrlGeneratorInterface::ABSOLUTE_URL
+            ),
             array('strategy' => 'esi'),
         ) ?>
 
 Wykorzystując renderowanie ``esi`` (poprzez funkcję ``render_esi`` Twiga) powiadamia
-się Symfony2, że ta akcja powinna zostać zrenderowana jako znacznik ESI. Można zadać
+się Symfony, że ta akcja powinna zostać zrenderowana jako znacznik ESI. Można zadać
 pytanie, dlaczego użyliśmy helpera zamiast po prostu napisać sobie  znacznik ESI.
 To dlatego, że używając helpera sprawiamy, że applikacja będzie działać nawet
 w przypadku, gdy nie jest zainstalowana pamięć podręczna bramy.
 
+.. tip::
+
+    Jak zbaczymy później, dostępna jest zmienna ``maxPerPage``, którą można przekazać
+    jako argument akcji kontrolera (tj. ``$maxPerPage``). Zmienne przekazywane
+    poprzez ``render_esi`` stanowią również część klucza buforowania, tak więc
+    ma się unikalne pamięci podręczne dla każdej kombinacji zmiennych i wartości.
+
 Podczas używania domyślnej funkcji ``render`` (lub ustawienia renderowania na
-``inline``), Symfony2 scala dołączone fragmenty z całą stroną przed jej wysłaniem
+``inline``), Symfony scala dołączone fragmenty z całą stroną przed jej wysłaniem
 do klienta. Lecz jeśli używa się renderowania ``esi`` (tj. wywołania ``render_esi``)
-i jeśli Symfony2 wykryje, że jest to kierowane do pamięci podręcznej bramy, która
+i jeśli Symfony wykryje, że jest to kierowane do pamięci podręcznej bramy, która
 obsługuje ESI, to generuje znacznik ``include`` ESI. Lecz jeśłi nie jest to pamięć
-podręczna bramy lub pamięć taka nie obsługuje ESI, Symfony2 połączy tylko załączone
+podręczna bramy lub pamięć taka nie obsługuje ESI, Symfony połączy tylko załączone
 fragmenty treści ze stroną tak jak robi to wtedy, gdy używa ``render``.
 
 .. note::
 
-    Symfony2 wykrywa czy pamięć podręczna bramy wykrywa obsługę ESI z inną
+    Symfony wykrywa czy pamięć podręczna bramy wykrywa obsługę ESI z inną
     specyfikacją Akamai i to jest jest obsługiwana "z pudełka" przez odwrotne proxy
-    Symfony2.
+    Symfony.
 
 Osadzone akcje mogą teraz określać własne zasady buforowania, całkowicie niezależnie
 od strony właściwej.
 
 .. code-block:: php
    :linenos:
+   
+    // src/AppBundle/Controller/NewsController.php
+    namespace AppBundle\Controller;
 
-    public function newsAction($max)
+    // ...
+    class NewsController extends Controller
     {
-        // ...
+        public function latestAction($maxPerPage)
+        {
+            // ...
+            $response->setSharedMaxAge(60);
 
-        $response->setSharedMaxAge(60);
+            return $response;
+        }
     }
 
 W ESI pełna strona będzie ważna przez 600 sekund, ale buforowany komponent wiadomości
 tylko przez 60 sekund.
 
+.. _book-http_cache-fragments:
+
 Podczas stosowania odniesienia do kontrolera znacznik ESI powinien odwoływać się do
 osadzonej akcji jak do dostępnego URL, tak więc pamięć podręczna może pobierać
-wskazaną treść niezależnie od reszty strony. Symfony2 dba o wygenerowanie unikatowego
+wskazaną treść niezależnie od reszty strony. Symfony dba o wygenerowanie unikatowego
 URL dla każdego odniesienia do kontrolera i jest w stanie wyznaczyć każdy taki
 adres właściwie, dzięki komponentowi 
 :class:`Symfony\\Component\\HttpKernel\\EventListener\\FragmentListener`,
@@ -1016,11 +1207,22 @@ który musi być włączony w konfiguracji:
 
     .. code-block:: xml
        :linenos:
-
+   
         <!-- app/config/config.xml -->
-        <framework:config>
-            <framework:fragments path="/_fragment" />
-        </framework:config>
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:doctrine="http://symfony.com/schema/dic/framework"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services
+                http://symfony.com/schema/dic/services/services-1.0.xsd
+                http://symfony.com/schema/dic/symfony
+                http://symfony.com/schema/dic/symfony/symfony-1.0.xsd">
+
+            <!-- ... -->
+            <framework:config>
+                <framework:fragments path="/_fragment" />
+            </framework:config>
+        </container>
 
     .. code-block:: php
        :linenos:
@@ -1062,74 +1264,13 @@ Helper ``render_esi`` obsługuje dwie użyteczne opcje:
 
 .. _http-cache-invalidation:
 
-Unieważnianie pamieci podręcznej
---------------------------------
-
-      "Są tylko dwie trudne rzeczy w informatyce: unieważnianie pamięci podręcznej
-      i nazywanie rzeczy". -- Phil Karlton    
-
-Nigdy nie potrzeba unieważniać danych w pamięci podręcznej, bo unieważnianie jest
-już uwzględnione w modelach buforowania HTTP. Jeśli używa się walidacji, to niczego
-tu nie trzeba unieważniać z definicji, a jeśli używa się wygasania i trzeba unieważnić
-zasób, to oznacza, że ustawiono zbyt odległą datę wygaśnięcia.
-
-.. note::
-
-    Ponieważ unieważnianie jest tematem specyficznym dla każdego typu odwrotnego
-    proxy, to jeśli nie chcesz sobie zaprzątać głowy unieważnianiem, to możesz
-    przełączyć się pomiędzy odwrotnymi proxy, bez zmieniania czegokolwiek w kodzie
-    aplikacji.
-
-Właściwie wszystkie odwrotne proxy zapewniają sposób opróżnienia danych z pamięci
-podręcznej, ale należy unikać tego jak to tylko możliwe. Najbardziej standardowym
-sposobem oczyszczenia pamięci podręcznej dla określonego URL jest dostarczenie
-do niej żądania ze specjalną metodą HTTP, ``PURGE``.
-
-Oto jak można skonfigurować odwrotne proxy Symfony2 aby obsługiwało metodę HTTP
-``PURGE``::
-
-    // app/AppCache.php
-
-    // ...
-    use Symfony\Bundle\FrameworkBundle\HttpCache\HttpCache;
-    use Symfony\Component\HttpFoundation\Request;
-    use Symfony\Component\HttpFoundation\Response;
-
-    class AppCache extends HttpCache
-    {
-        protected function invalidate(Request $request, $catch = false)
-        {
-            if ('PURGE' !== $request->getMethod()) {
-                return parent::invalidate($request, $catch);
-            }
-
-            $response = new Response();
-            if ($this->getStore()->purge($request->getUri())) {
-                $response->setStatusCode(Response::HTTP_OK, 'Purged');
-            } else {
-                $response->setStatusCode(Response::HTTP_NOT_FOUND, 'Not purged');
-            }
-
-            return $response;
-        }
-    }
-    
-.. versionadded:: 2.4
-    Obsługa stałych kodu statusu HTTP została dodana w Symfony 2.4.    
-
-.. caution::
-
-    Trzeba koniecznie zabezpieczyć użycie metody HTTP ``PURGE``przed swobodnym
-    użyciem, aby nie dopuścić do użycia jej przez przypadkowe osoby i niekontrolowanego
-    usuwania danych z pamięci podręcznej.
-
 Podsumowanie
 ------------
 
-Symfony2 zostało zaprojektowane tak, aby przestrzegać zasad specyfikacji HTTP.
-Buforowanie nie jest wyjątkiem. Opanowanie systemu buforowania Symfony2 oznacza
+Symfony zostało zaprojektowane tak, aby przestrzegać zasad specyfikacji HTTP.
+Buforowanie nie jest wyjątkiem. Opanowanie systemu buforowania Symfony oznacza
 zapoznanie się z modelami buforowania HTTP i efektywnym ich wykorzystaniem.
-Oznacza to z kolei, że zamiast poprzestać swoją edukację na dokumentacji Symfony2
+Oznacza to z kolei, że zamiast poprzestać swoją edukację na dokumentacji Symfony
 i przykładach kodu, powinieneś jeszcze zaczerpnąć dodatkowej wiedzy o buforowaniu
 HTTP i pamięci podręcznej bramy, takiej chociażby jak Varnish.
 
