@@ -1,4 +1,4 @@
-... highlight:: php
+.. highlight:: php
    :linenothreshold: 2
 
 Przegląd
