@@ -2,8 +2,8 @@
    single: wiadomości email; w trakcie programowania
 
 
-Jak pracować z pocztą elektroniczną podczas programoania
-========================================================
+Jak pracować z pocztą elektroniczną podczas programowania
+=========================================================
 
 Kiedy tworzysz aplikację wysyłającą wiadomości email, raczej nie będziesz chciał
 ich wysyłać do rzeczywistych odbiorców w czasie prac programistycznych.
@@ -27,12 +27,14 @@ oraz ``dev``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config_test.yml
         swiftmailer:
             disable_delivery:  true
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config_test.xml -->
 
@@ -45,6 +47,7 @@ oraz ``dev``:
             disable-delivery="true" />
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config_test.php
         $container->loadFromExtension('swiftmailer', array(
@@ -64,12 +67,14 @@ Robi się to ustawiając odpowiednio opcje ``delivery_address``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config_dev.yml
         swiftmailer:
             delivery_address:  dev@example.com
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config_dev.xml -->
 
@@ -82,6 +87,7 @@ Robi się to ustawiając odpowiednio opcje ``delivery_address``:
             delivery-address="dev@example.com" />
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config_dev.php
         $container->loadFromExtension('swiftmailer', array(
@@ -91,6 +97,7 @@ Robi się to ustawiając odpowiednio opcje ``delivery_address``:
 Wyobrażmy sobie teraz, że wysyła się wiadomość na adres ``recipient@example.com``:
 
 .. code-block:: php
+   :linenos:
 
     public function indexAction($name)
     {
@@ -131,6 +138,7 @@ opcję ``delivery_whitelist``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos: 
 
         # app/config/config_dev.yml
         swiftmailer:
@@ -145,6 +153,7 @@ opcję ``delivery_whitelist``:
                - "/^admin@mydomain.com$/"
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config_dev.xml -->
 
@@ -160,7 +169,8 @@ opcję ``delivery_whitelist``:
             <swiftmailer:delivery-whitelist-pattern>/^admin@mydomain.com$/</swiftmailer:delivery-whitelist-pattern>
         </swiftmailer:config>
 
-    .. code-block:: php
+    .. code-block:: php 
+       :linenos:
 
         // app/config/config_dev.php
         $container->loadFromExtension('swiftmailer', array(
@@ -200,12 +210,14 @@ otworzenie raportu ze szczegółowymi informacjami o wysłanych wiadomościach.
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config_dev.yml
         web_profiler:
             intercept_redirects: true
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config_dev.xml -->
 
@@ -220,6 +232,7 @@ otworzenie raportu ze szczegółowymi informacjami o wysłanych wiadomościach.
         />
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config_dev.php
         $container->loadFromExtension('web_profiler', array(

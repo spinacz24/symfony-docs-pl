@@ -13,6 +13,7 @@ znajduje się domyślnie w katalogu ``app/config/`` i nosi nazwę ``config.yml``
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         imports:
@@ -32,6 +33,7 @@ znajduje się domyślnie w katalogu ``app/config/`` i nosi nazwę ``config.yml``
         # ...
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -63,6 +65,7 @@ znajduje się domyślnie w katalogu ``app/config/`` i nosi nazwę ``config.yml``
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $this->import('parameters.yml');
@@ -221,6 +224,7 @@ Przyjrzyjmy się plikowi konfiguracyjnemu dla środowiska ``dev``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config_dev.yml
         imports:
@@ -233,6 +237,7 @@ Przyjrzyjmy się plikowi konfiguracyjnemu dla środowiska ``dev``:
         # ...
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config_dev.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -257,6 +262,7 @@ Przyjrzyjmy się plikowi konfiguracyjnemu dla środowiska ``dev``:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config_dev.php
         $loader->import('config.php');

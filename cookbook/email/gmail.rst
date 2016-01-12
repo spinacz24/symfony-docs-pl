@@ -21,6 +21,7 @@ na ``gmail`` i ustawić ``username`` i ``password`` zgodnie z poświadczeniem Go
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config_dev.yml
         swiftmailer:
@@ -29,6 +30,7 @@ na ``gmail`` i ustawić ``username`` i ``password`` zgodnie z poświadczeniem Go
             password:  your_gmail_password
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config_dev.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -49,6 +51,7 @@ na ``gmail`` i ustawić ``username`` i ``password`` zgodnie z poświadczeniem Go
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config_dev.php
         $container->loadFromExtension('swiftmailer', array(
@@ -65,6 +68,7 @@ Gotowe!
     pliku ``parameters.yml``:
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/parameters.yml
         parameters:

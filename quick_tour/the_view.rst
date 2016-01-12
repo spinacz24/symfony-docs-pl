@@ -101,6 +101,7 @@ Szablon ``index.html.twig`` używa znacznika ``extends`` do wskazania, że dzied
 ze wspólnego szblonu ``base.html.twig``:
 
 .. code-block:: html+jinja
+   :linenos:
 
     {# app/Resources/views/default/index.html.twig #}
     {% extends 'base.html.twig' %}
@@ -113,6 +114,7 @@ Otwórz plik ``app/Resources/views/base.html.twig``, który odpowiada szablonowi
 ``base.html.twig`` i znajdź następujący kod Twig code:
 
 .. code-block:: html+jinja
+   :linenos:
 
     {# app/Resources/views/base.html.twig #}
     <!DOCTYPE html>
@@ -166,6 +168,7 @@ Proszę sobie wyobrazić, że chcemy wyświetlić reklamy na niektórych stronac
 naszej aplikacji. Najpierw utwórzmy szablon ``banner.html.twig``:
 
 .. code-block:: jinja
+   :linenos:
 
     {# app/Resources/views/ads/banner.html.twig #}
     <div id="ad-banner">
@@ -176,6 +179,7 @@ Dla wyświetleniatej reklamy na stronie, dołączymy szablon ``banner.html.twig`
 używając funkcję ``include()``:
 
 .. code-block:: html+jinja
+   :linenos:
 
     {# app/Resources/views/default/index.html.twig #}
     {% extends 'base.html.twig' %}

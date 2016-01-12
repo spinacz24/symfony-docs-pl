@@ -104,6 +104,7 @@ Prosty kontroler
 Przeanalizujmy bardzo prosty kod kotrolera: 
 
 .. code-block:: php
+   :linenos:
 
     // src/AppBundle/Controller/HelloController.php
     namespace AppBundle\Controller;
@@ -120,12 +121,11 @@ Przeanalizujmy bardzo prosty kod kotrolera:
     
 .. tip::
 
-    Trzeba mieć na uwadze, że istnieje pewna rozbieżność w stosowaniu nazwy
-    *kontroler*. W angielskojęzycznej dokumentacjj Symfony często słowem *controller*
-    nazywa sie to, co jest metodą (np. ``indexAction``) *klasy kontrolera*
-    (``HelloController``), choć sygnatury klasy i metody sugerują coś innego:
-    metoda, to "akcja" a klasa to "kontroler".
-    W praktyce i lteraturze OOP zwykło się właśnie używać słowa *akcja* na
+    Trzeba mieć na uwadze, że w angielskojęzycznej dokumentacjj Symfony istnieje
+    pewna rozbieżność w stosowaniu nazwy *kontroler* i raz słowem *controller*
+    nazywa sie to, co jest metodą (np. ``indexAction``) klasy kontrolera
+    a innym razem *klasę kontrolera* (np. ``HelloController``).
+    W praktyce i lteraturze OOP zwykło się używać słowa *akcja* na
     metodę klasy kontrolera, a samą klasę *kontrolerem*. Tak więc czytając tą
     dokumentację proszę zwracać uwagę na kontekst słowa "kontroler".    
 
@@ -160,6 +160,7 @@ trzeba utworzyć trasę (*ang. route*) odwzorowującą wzorzec ścieżki URL na 
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/HelloController.php
         namespace AppBundle\Controller;
@@ -179,6 +180,7 @@ trzeba utworzyć trasę (*ang. route*) odwzorowującą wzorzec ścieżki URL na 
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         hello:
@@ -187,6 +189,7 @@ trzeba utworzyć trasę (*ang. route*) odwzorowującą wzorzec ścieżki URL na 
             defaults:  { _controller: AppBundle:Hello:index }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -202,6 +205,7 @@ trzeba utworzyć trasę (*ang. route*) odwzorowującą wzorzec ścieżki URL na 
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\Route;
@@ -271,6 +275,7 @@ Rozpatrzmy bardziej interesujacy przyklad:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/HelloController.php
         // ...
@@ -289,6 +294,7 @@ Rozpatrzmy bardziej interesujacy przyklad:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         hello:
@@ -296,6 +302,7 @@ Rozpatrzmy bardziej interesujacy przyklad:
             defaults:  { _controller: AppBundle:Hello:index }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -310,6 +317,7 @@ Rozpatrzmy bardziej interesujacy przyklad:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\Route;
@@ -687,6 +695,7 @@ komunikatu ``notice``:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {% for flashMessage in app.session.flashbag.get('notice') %}
             <div class="flash-notice">
@@ -695,6 +704,7 @@ komunikatu ``notice``:
         {% endfor %}
 
     .. code-block:: html+php
+       :linenos:
 
         <?php foreach ($view['session']->getFlash('notice') as $message): ?>
             <div class="flash-notice">

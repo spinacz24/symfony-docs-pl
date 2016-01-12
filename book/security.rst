@@ -44,6 +44,7 @@ Domyślna konfiguracja wygląda tak:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -60,6 +61,7 @@ Domyślna konfiguracja wygląda tak:
                     anonymous: ~
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -85,6 +87,7 @@ Domyślna konfiguracja wygląda tak:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -153,6 +156,7 @@ W celu jego aktywowania, dodajmy do węzła ``firewall`` klucz ``http_basic``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -165,6 +169,7 @@ W celu jego aktywowania, dodajmy do węzła ``firewall`` klucz ``http_basic``:
                     http_basic: ~
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -185,6 +190,7 @@ W celu jego aktywowania, dodajmy do węzła ``firewall`` klucz ``http_basic``:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -225,6 +231,7 @@ który wymaga uwierzytelnienia użytkownika dla tego adresu URL:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -239,6 +246,7 @@ który wymaga uwierzytelnienia użytkownika dla tego adresu URL:
                 - { path: ^/admin, roles: ROLE_ADMIN }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -261,6 +269,7 @@ który wymaga uwierzytelnienia użytkownika dla tego adresu URL:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -325,6 +334,7 @@ sztywnego ładowania informacji o użytkownikach bezpośrednio z pliku konfigura
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -341,6 +351,7 @@ sztywnego ładowania informacji o użytkownikach bezpośrednio z pliku konfigura
             # ...
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -362,6 +373,7 @@ sztywnego ładowania informacji o użytkownikach bezpośrednio z pliku konfigura
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -414,6 +426,7 @@ Musimy więc dodać do konfiguracji klucz ``encoders``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -424,6 +437,7 @@ Musimy więc dodać do konfiguracji klucz ``encoders``:
             # ...
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -443,6 +457,7 @@ Musimy więc dodać do konfiguracji klucz ``encoders``:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -499,7 +514,8 @@ Najlepszym algorytmem jest ``bcrypt``:
 .. configuration-block::
 
     .. code-block:: yaml
-
+       :linenos:
+    
         # app/config/security.yml
         security:
             # ...
@@ -510,6 +526,7 @@ Najlepszym algorytmem jest ``bcrypt``:
                     cost: 12
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -531,6 +548,7 @@ Najlepszym algorytmem jest ``bcrypt``:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -554,6 +572,7 @@ które daje coś takiego:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -571,6 +590,7 @@ które daje coś takiego:
                                 roles: 'ROLE_ADMIN'
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -593,6 +613,7 @@ które daje coś takiego:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -747,6 +768,7 @@ roli ``ROLE_ADMIN`` dla takiej ścieżki:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -762,6 +784,7 @@ roli ``ROLE_ADMIN`` dla takiej ścieżki:
                 - { path: ^/admin, roles: ROLE_ADMIN }
 
     .. code-block:: xml
+       :linenos: 
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -784,6 +807,7 @@ roli ``ROLE_ADMIN`` dla takiej ścieżki:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -812,6 +836,7 @@ przeszukiwał je od początku do końca i zatrzma się, jak tylko znajdzie wpis
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -822,6 +847,7 @@ przeszukiwał je od początku do końca i zatrzma się, jak tylko znajdzie wpis
                 - { path: ^/admin, roles: ROLE_ADMIN }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -840,6 +866,7 @@ przeszukiwał je od początku do końca i zatrzma się, jak tylko znajdzie wpis
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -939,12 +966,14 @@ rolę, trzeba użyć wbudowanej funkcji pomocniczej:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {% if is_granted('ROLE_ADMIN') %}
             <a href="...">Delete</a>
         {% endif %}
 
     .. code-block:: html+php
+       :linenos: 
 
         <?php if ($view['security']->isGranted('ROLE_ADMIN')): ?>
             <a href="...">Delete</a>
@@ -1023,6 +1052,7 @@ Można te używać wyrażenia wewnątrz szablonów:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {% if is_granted(expression(
             '"ROLE_ADMIN" in roles or (user and user.isSuperAdmin())'
@@ -1031,6 +1061,7 @@ Można te używać wyrażenia wewnątrz szablonów:
         {% endif %}
 
     .. code-block:: html+php
+       :linenos:
 
         <?php if ($view['security']->isGranted(new Expression(
             '"ROLE_ADMIN" in roles or (user and user.isSuperAdmin())'
@@ -1142,12 +1173,14 @@ W szablonie Twig obiekt ten może być dostępny poprzez klucz :ref:`app.user <r
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
             <p>Username: {{ app.user.username }}</p>
         {% endif %}
 
     .. code-block:: html+php
+       :linenos:
 
         <?php if ($view['security']->isGranted('IS_AUTHENTICATED_FULLY')): ?>
             <p>Username: <?php echo $app->getUser()->getUsername() ?></p>
@@ -1168,6 +1201,7 @@ parametr ``logout``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -1181,6 +1215,7 @@ parametr ``logout``:
                         target: /
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -1201,6 +1236,7 @@ parametr ``logout``:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -1219,12 +1255,14 @@ Następnie musi się utworzyć trasę dla tej ścieżki URL (ale nie akję):
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         logout:
             path: /logout
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1237,6 +1275,7 @@ Następnie musi się utworzyć trasę dla tej ścieżki URL (ale nie akję):
         </routes>
 
     ..  code-block:: php
+        :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -1313,6 +1352,7 @@ rół, tworząc hierarchie ról:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -1323,6 +1363,7 @@ rół, tworząc hierarchie ról:
                 ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -1341,6 +1382,7 @@ rół, tworząc hierarchie ról:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -1372,6 +1414,7 @@ między żądaniami, można aktywować uwierzytelnianie bezstanowe (co oznacza, 
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -1383,6 +1426,7 @@ między żądaniami, można aktywować uwierzytelnianie bezstanowe (co oznacza, 
                     stateless:  true
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -1402,6 +1446,7 @@ między żądaniami, można aktywować uwierzytelnianie bezstanowe (co oznacza, 
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -1452,7 +1497,7 @@ w przypadku indywidualnych wymagań, takich jak własna strategia uwierzytelnian
 tematyka bezpieczeństwa jest skomplikowana!).
 
 Na szczęście, istnieje
-:doc:`działt Receptariusza poświecony bezpieczeństwu </cookbook/security/index>`,
+:doc:`dział Receptariusza poświecony bezpieczeństwu </cookbook/security/index>`,
 gdzie można znaleźć artykuły poruszające zagadnienia nie omówione przez nas.
 Można też skorzystać z rozdziału :doc:`Informator bezpieczeństwa </reference/configuration/security>`.
 

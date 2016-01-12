@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
    wiadomości email, poczta elektroniczna
 
@@ -32,6 +35,7 @@ W standardowej instalacji Symfony jest już zawarta pewna konfiguracja
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         swiftmailer:
@@ -41,6 +45,7 @@ W standardowej instalacji Symfony jest już zawarta pewna konfiguracja
             password:  "%mailer_password%"
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
 
@@ -56,6 +61,7 @@ W standardowej instalacji Symfony jest już zawarta pewna konfiguracja
             password="%mailer_password%" />
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('swiftmailer', array(
@@ -129,6 +135,7 @@ jest umieszczane w szablonie i renderowane przez metodę ``renderView()``. Szabl
 ``registration.html.twig`` może wyglądać podobnie do tego:
 
 .. code-block:: html+jinja
+   :linenos:
 
     {# app/Resources/views/Emails/registration.html.twig #}
     <h3>You did it! You registered!</h3>

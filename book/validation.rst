@@ -52,6 +52,7 @@ trzeba dodać następujący kod:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Entity/Author.php
 
@@ -67,6 +68,7 @@ trzeba dodać następujący kod:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/validation.yml
         AppBundle\Entity\Author:
@@ -75,6 +77,7 @@ trzeba dodać następujący kod:
                     - NotBlank: ~
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/validation.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -90,6 +93,7 @@ trzeba dodać następujący kod:
         </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
         // src/AppBundle/Entity/Author.php
 
@@ -192,6 +196,7 @@ Jeśli zachodzi taka potrzeba, to można w szablonie wyprowadzić listę błęd�
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# app/Resources/views/author/validation.html.twig #}
         <h3>The author has the following errors</h3>
@@ -202,6 +207,7 @@ Jeśli zachodzi taka potrzeba, to można w szablonie wyprowadzić listę błęd�
         </ul>
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- app/Resources/views/author/validation.html.php -->
         <h3>The author has the following errors</h3>
@@ -278,12 +284,14 @@ adnotacji, to należy określić to w ograniczeniach:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
             validation: { enable_annotations: true }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -299,6 +307,7 @@ adnotacji, to należy określić to w ograniczeniach:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -354,6 +363,7 @@ mają kilka dostępnych opcji konfiguracji. Załóżmy, że klasa ``Author`` ma 
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Entity/Author.php
 
@@ -374,6 +384,7 @@ mają kilka dostępnych opcji konfiguracji. Załóżmy, że klasa ``Author`` ma 
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/validation.yml
         AppBundle\Entity\Author:
@@ -383,6 +394,7 @@ mają kilka dostępnych opcji konfiguracji. Załóżmy, że klasa ``Author`` ma 
                 # ...
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/validation.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -407,6 +419,7 @@ mają kilka dostępnych opcji konfiguracji. Załóżmy, że klasa ``Author`` ma 
         </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
         // src/AppBundle/Entity/Author.php
 
@@ -442,6 +455,7 @@ w ten sposób.
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Entity/Author.php
 
@@ -459,6 +473,7 @@ w ten sposób.
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/validation.yml
         AppBundle\Entity\Author:
@@ -468,6 +483,7 @@ w ten sposób.
                 # ...
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/validation.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -489,6 +505,7 @@ w ten sposób.
         </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
         // src/AppBundle/Entity/Author.php
 
@@ -555,6 +572,7 @@ klasy ``Author``, której wartość powinna mieć co najmniej 3 znaki.
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // AppBundle/Entity/Author.php
 
@@ -571,6 +589,7 @@ klasy ``Author``, której wartość powinna mieć co najmniej 3 znaki.
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/validation.yml
         AppBundle\Entity\Author:
@@ -581,6 +600,7 @@ klasy ``Author``, której wartość powinna mieć co najmniej 3 znaki.
                         min: 3
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/validation.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -599,6 +619,7 @@ klasy ``Author``, której wartość powinna mieć co najmniej 3 znaki.
         </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
         // src/AppBundle/Entity/Author.php
 
@@ -641,6 +662,7 @@ i następnie zrobić załóżenie, że metoda ta musi zwrócić ``true``:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Entity/Author.php
 
@@ -659,6 +681,7 @@ i następnie zrobić załóżenie, że metoda ta musi zwrócić ``true``:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/validation.yml
         AppBundle\Entity\Author:
@@ -667,6 +690,7 @@ i następnie zrobić załóżenie, że metoda ta musi zwrócić ``true``:
                     - "True": { message: "The password cannot match your first name" }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/validation.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -684,6 +708,7 @@ i następnie zrobić załóżenie, że metoda ta musi zwrócić ``true``:
         </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
         // src/AppBundle/Entity/Author.php
 
@@ -742,6 +767,7 @@ rejestracji użytkownika jak i podczas aktualizowania jego informacji kontaktowy
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Entity/User.php
         namespace AppBundle\Entity;
@@ -769,6 +795,7 @@ rejestracji użytkownika jak i podczas aktualizowania jego informacji kontaktowy
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/validation.yml
         AppBundle\Entity\User:
@@ -783,6 +810,7 @@ rejestracji użytkownika jak i podczas aktualizowania jego informacji kontaktowy
                         min: 2
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/validation.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -825,6 +853,7 @@ rejestracji użytkownika jak i podczas aktualizowania jego informacji kontaktowy
         </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
         // src/AppBundle/Entity/User.php
         namespace AppBundle\Entity;
@@ -924,6 +953,7 @@ uniknięcia wielu komunikatów o błędach).
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Entity/User.php
         namespace AppBundle\Entity;
@@ -956,6 +986,7 @@ uniknięcia wielu komunikatów o błędach).
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/validation.yml
         AppBundle\Entity\User:
@@ -974,6 +1005,7 @@ uniknięcia wielu komunikatów o błędach).
                     - NotBlank: ~
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/validation.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1007,6 +1039,7 @@ uniknięcia wielu komunikatów o błędach).
         </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
         // src/AppBundle/Entity/User.php
         namespace AppBundle\Entity;
@@ -1060,6 +1093,7 @@ i nowe ograniczenie o nazwie``Premium``:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Entity/User.php
         namespace AppBundle\Entity;
@@ -1085,6 +1119,7 @@ i nowe ograniczenie o nazwie``Premium``:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/validation.yml
         AppBundle\Entity\User:
@@ -1097,6 +1132,7 @@ i nowe ograniczenie o nazwie``Premium``:
                         groups: [Premium]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/validation.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1125,6 +1161,7 @@ i nowe ograniczenie o nazwie``Premium``:
         </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
         // src/AppBundle/Entity/User.php
         namespace AppBundle\Entity;
@@ -1184,6 +1221,7 @@ sekwencję grup do zastosowania w walidacji:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Entity/User.php
         namespace AppBundle\Entity;
@@ -1199,12 +1237,14 @@ sekwencję grup do zastosowania w walidacji:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/validation.yml
         AppBundle\Entity\User:
             group_sequence_provider: true
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/validation.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1220,6 +1260,7 @@ sekwencję grup do zastosowania w walidacji:
         </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
         // src/AppBundle/Entity/User.php
         namespace AppBundle\Entity;

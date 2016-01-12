@@ -268,6 +268,7 @@ Dlatego szablon ``default/index.html.twig``, to to samo co
 temu kodowi:
 
 .. code-block:: html+jinja
+   :linenos:
 
     {# app/Resources/views/default/index.html.twig #}
     {% extends 'base.html.twig' %}

@@ -73,12 +73,14 @@ w konfiguracji:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
             translator: { fallbacks: [en] }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -98,6 +100,7 @@ w konfiguracji:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -607,12 +610,14 @@ definiując klucz ``default_locale`` w opcji ``framework``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
             default_locale: en
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -628,6 +633,7 @@ definiując klucz ``default_locale`` w opcji ``framework``:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -822,6 +828,7 @@ w AppBundle:
 .. configuration-block::
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/AppBundle/Resources/translations/messages.fr.xlf -->
         <?xml version="1.0"?>
@@ -838,11 +845,13 @@ w AppBundle:
 
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/AcmeDemoBundle/Resources/translations/messages.fr.yml
         Symfony is great: J'aime Symfony
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/AcmeDemoBundle/Resources/translations/messages.fr.php
         return array(
@@ -855,6 +864,7 @@ a dla ustawienia ``en``:
 .. configuration-block::
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/AppBundle/Resources/translations/messages.en.xlf -->
         <?xml version="1.0"?>
@@ -870,11 +880,13 @@ a dla ustawienia ``en``:
         </xliff>
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/AppBundle/Resources/translations/messages.en.yml
         Symfony is great: Symfony is great
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/AppBundle/Resources/translations/messages.en.php
         return array(

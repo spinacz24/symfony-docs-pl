@@ -7,6 +7,7 @@ TwigBundle - Konfiguracja
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         twig:
             exception_controller:  twig.controller.exception:showAction
@@ -53,6 +54,7 @@ TwigBundle - Konfiguracja
                 "%kernel.root_dir%/../vendor/acme/foo-bar/templates": foo_bar
 
     .. code-block:: xml
+       :linenos:
 
         <container xmlns="http://symfony.com/schema/dic/services"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -82,6 +84,7 @@ TwigBundle - Konfiguracja
         </container>
 
     .. code-block:: php
+       :linenos:
 
         $container->loadFromExtension('twig', array(
             'form_themes' => array(

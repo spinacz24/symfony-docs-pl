@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
    testowanie poczty elektronicznej
    single: wiadomości email; testowanie
