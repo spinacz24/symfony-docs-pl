@@ -35,7 +35,8 @@ Dla przykładu zastosujmy następujące wpisy ``access_control``::
 .. configuration-block::
 
     .. code-block:: yaml
-
+       :linenos:
+       
         # app/config/security.yml
         security:
             # ...
@@ -46,6 +47,7 @@ Dla przykładu zastosujmy następujące wpisy ``access_control``::
                 - { path: ^/admin, roles: ROLE_USER }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -65,6 +67,7 @@ Dla przykładu zastosujmy następujące wpisy ``access_control``::
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -160,7 +163,7 @@ Po tym jak Symfony określi, który wpis ``access_control`` zostanie użyty
 Zabezpieczanie przez IP
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-W pewnych sytuacjach moze zachodzić potrzeba sformułowania wpisu ``access_control``,
+W pewnych sytuacjach może zachodzić potrzeba sformułowania wpisu ``access_control``,
 który dopasowuje żądania przychodzące tylko z jakiegość adresu IP lub zakresu
 takich adresów. Można to wykorzystać, na przykład, do ograniczenia dostępu do
 adresów pasujących do jakiegoś wzorca URL, z wyjatkiem żądań przychodzących
@@ -168,7 +171,7 @@ z zaufanego serwera wewnetrznego.
 
 .. caution::
 
-    Jak mozna przeczytać w wyjaśnieniu ponizeszego przykładu, opcja ``ips``
+    Jak można przeczytać w wyjaśnieniu poniżeszego przykładu, opcja ``ips``
     nie ogranicza się do konkretnego adresu IP. Zastosowanie klucza ``ips``
     oznacza, że ten wpis ``access_control`` będzie tylko dopasowywał tylko ten
     adres IP i udzielał użytkownikom nadal dostępu z innych adresów IP wyszczególnionych
@@ -180,6 +183,7 @@ aby dostępne były tylko żądania z lokalnego serwera:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -190,6 +194,7 @@ aby dostępne były tylko żądania z lokalnego serwera:
                 - { path: ^/internal, roles: ROLE_NO_ACCESS }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -211,6 +216,7 @@ aby dostępne były tylko żądania z lokalnego serwera:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -266,6 +272,7 @@ Po dopasowaniu wpisu ``access_control``, mozna odmówić dostępu stosując kluc
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -276,6 +283,7 @@ Po dopasowaniu wpisu ``access_control``, mozna odmówić dostępu stosując kluc
                     allow_if: "'127.0.0.1' == request.getClientIp() or has_role('ROLE_ADMIN')"
 
     .. code-block:: xml
+       :linenos:
 
             <access-control>
                 <rule path="^/_internal/secure"
@@ -283,6 +291,7 @@ Po dopasowaniu wpisu ``access_control``, mozna odmówić dostępu stosując kluc
             </access-control>
 
     .. code-block:: php
+       :linenos:
 
             'access_control' => array(
                 array(
@@ -320,6 +329,7 @@ to uzytkownik zostanie przekierowany do ``https``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -328,6 +338,7 @@ to uzytkownik zostanie przekierowany do ``https``:
                 - { path: ^/cart/checkout, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -344,6 +355,7 @@ to uzytkownik zostanie przekierowany do ``https``:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(

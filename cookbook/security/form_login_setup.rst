@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
    single: bezpieczeństwo; logowanie formularzowe
    single: bezpieczeństwo; formularz logowania
@@ -28,6 +31,7 @@ Najpierw, udostępnijmy logowanie formularzowe w zaporze:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -42,6 +46,7 @@ Najpierw, udostępnijmy logowanie formularzowe w zaporze:
                         check_path: /login_check
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -61,6 +66,7 @@ Najpierw, udostępnijmy logowanie formularzowe w zaporze:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -102,6 +108,7 @@ w kluczy ``form_login`` konfiguracji (``/login`` i ``/login_check``):
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/SecurityController.php
 
@@ -129,6 +136,7 @@ w kluczy ``form_login`` konfiguracji (``/login`` i ``/login_check``):
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         login_route:
@@ -141,6 +149,7 @@ w kluczy ``form_login`` konfiguracji (``/login`` i ``/login_check``):
             # as it's handled by the Security system
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -159,6 +168,7 @@ w kluczy ``form_login`` konfiguracji (``/login`` i ``/login_check``):
         </routes>
 
     ..  code-block:: php
+        :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -220,6 +230,7 @@ Na koniec utwórzmy szablon:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# app/Resources/views/security/login.html.twig #}
         {# ... you will probably extends your base template, like base.html.twig #}
@@ -245,6 +256,7 @@ Na koniec utwórzmy szablon:
         </form>
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- src/Acme/SecurityBundle/Resources/views/Security/login.html.php -->
         <?php if ($error): ?>
@@ -351,6 +363,7 @@ pętlę przekierowań:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
 
@@ -359,6 +372,7 @@ pętlę przekierowań:
             - { path: ^/, roles: ROLE_ADMIN }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -375,6 +389,7 @@ pętlę przekierowań:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
 
@@ -389,6 +404,7 @@ uwierzytelniania, rozwiązuje problem:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
 
@@ -398,6 +414,7 @@ uwierzytelniania, rozwiązuje problem:
             - { path: ^/, roles: ROLE_ADMIN }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -415,6 +432,7 @@ uwierzytelniania, rozwiązuje problem:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
 
@@ -430,6 +448,7 @@ trzeba utworzyć specjalną zaporę umożliwiającą dostęp anonimowy do strony
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
 
@@ -444,6 +463,7 @@ trzeba utworzyć specjalną zaporę umożliwiającą dostęp anonimowy do strony
                 form_login: ~
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -466,6 +486,7 @@ trzeba utworzyć specjalną zaporę umożliwiającą dostęp anonimowy do strony
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
 

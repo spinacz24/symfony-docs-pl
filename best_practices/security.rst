@@ -10,7 +10,7 @@ Uwierzytelnianie i zapory (czyli uzyskiwanie poświadczeń użytkownika)
 
 Można skonfigurować Symfony do uwierzytelniania użytkowników różnymi metodami
 oraz ładowania informacji o użytkownikach z różnych źródeł. Jest to skomplikowany
-temat, ale :doc:`rozdział "Bezpieczeństwo" receptariusza </cookbook/security/index>`
+temat, ale rozdział :doc:`"Bezpieczeństwo"</cookbook/security/index>` w Receptariuszu
 ma wiele informacji z tego zakresu.
 
 Uwierzytelnianie jest skonfigurowane w pliku ``security.yml``,
@@ -19,17 +19,17 @@ przede wszystkim w kluczu ``firewalls``.
 .. best-practice::
 
     Dopóki nie ma się dwóch różnych systemów uwierzytelniania i dwóch różnych
-    zestawów użytkowników (np. logowanie formularzowe na stronie głownej a
-    system tkenowy tylko dla swojego API), zaleca się posiadanie tylko *jedną*
-    skonfigurowaną zaporę z włączonym kluczem ``anonymous``.
+    zestawów użytkowników (np. logowanie formularzowe na stronie głównej a
+    system tokenowy tylko dla swojego API), zaleca się posiadanie tylko *jednej*
+    skonfigurowanej zapory z włączonym kluczem ``anonymous``.
 
 Większość aplikacji ma tylko jeden system uwierzytelniania i tylko jeden zestaw
 użytkowników.
 Dlatego też wystarczy mieć tylko *jedną* skonfigurowaną zaporę. Oczywiście są
-wyjątki, zwłaszcza jeśli ma się odzielne sekcje web i API na swojej witrynie.
+wyjątki, zwłaszcza jeśli ma się oddzielne sekcje web i API na swojej witrynie.
 Jednak chodzi o to, aby zbyt nie komplikować sobie życia.
 
-Dodatkowo, należy w ramach zapory użyć klucza ``anonymous``. Jeśli jest potrzeba,
+Dodatkowo, należy w ramach zapory użyć klucza ``anonymous``. Jeśli jest potrzeba
 wymagania od użytkowników logowania się w różnych sekcjach witryny (albo prawie
 we *wszystkich* sekcjach), trzeba skonfigurować klucz ``access_control``.
 
@@ -39,13 +39,14 @@ we *wszystkich* sekcjach), trzeba skonfigurować klucz ``access_control``.
 
 Zalecamy kodowanie haseł użytkownika przy użyciu kodera ``bcrypt``,
 zamiast tradycyjnego kodera mieszającego SHA-512. Główne zalety ``bcrypt``, to
-włączenie wartości *soli* w celu ochrony wachlarzem ataków tabelowych i jego adaptacyjny
-charakter, czyniący go odporniejszym na ataki siłowego wyszukiwania hasła.
+włączenie wartości *soli* w celu ochrony przed wachlarzem ataków tabelowych i jego
+adaptacyjny charakter, czyniący go odporniejszym na ataki siłowego wyszukiwania hasła.
 
 Mając to na uwadze, prezentujemy poniżej konfigurację uwierzytelniania dla aplikacji,
 która wykorzystuje logowanie formularzowe do załadowania użytkowników z bazy danych:
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/security.yml
     security:
@@ -110,13 +111,14 @@ Adnotacja @Security
 -------------------
 
 Do kontroli dostępu na bazie akcji kontrolera, użyj w miarę możliwości adnotacji
-``@Security``. Jest ona łatwa do odczytania i umieszczana konsekwntnie nad
+``@Security``. Jest ona łatwa do odczytania i umieszczana konsekwentnie nad
 zabezpieczaną akcją.
 
 W naszej aplikacji, do tworzenia nowych wpisów potrzebna jest rola ``ROLE_ADMIN``.
 Zastosowania ``@Security``, wygląda tak:
 
 .. code-block:: php
+   :linenos:
 
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -137,11 +139,12 @@ Wykorzystywanie wyrażeń dla złożonych ograniczeń dostępu
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Jeśli logika zabeczeń jest trochę bardziej złożona, można użyć `wyrażenia`_
-wewnatrz adnotacji ``@Security``. W poniższym przykładzie, użytkownik może tylko
+wewnątrz adnotacji ``@Security``. W poniższym przykładzie, użytkownik może tylko
 mieć dostęp do kontrolera, jeśli adres email jest zgodny z wartością zwracana przez
 metodę ``getAuthorEmail`` na obiekcie ``Post``:
 
 .. code-block:: php
+   :linenos:
 
     use AppBundle\Entity\Post;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -166,15 +169,17 @@ który ma być tylko widoczny dla autorów. Niestety, teraz trzeba powtórzyć t
 kod wyrażenia, stosując składnię Twig:
 
 .. code-block:: html+jinja
+   :linenos:
 
     {% if app.user and app.user.email == post.authorEmail %}
         <a href=""> ... </a>
     {% endif %}
 
-Najprostrzym roziązaniem jest, jeśli logika jest dość prosta, dodanie nowej metody
+Najprostrzym rozwiązaniem jest, jeśli logika jest dość prosta, dodanie nowej metody
 do encji ``Post``, która sprawdza czy dany użytkownik jest autorem:
 
 .. code-block:: php
+   :linenos:
 
     // src/AppBundle/Entity/Post.php
     // ...
@@ -194,10 +199,11 @@ do encji ``Post``, która sprawdza czy dany użytkownik jest autorem:
         }
     }
 
-Teraz można wykorzystać wielokrotnie ta metodę, zarówno w szablonie, jak i wyrażeniu
+Teraz można wykorzystać wielokrotnie tą metodę, zarówno w szablonie, jak i w wyrażeniu
 zabezpieczającym:
 
 .. code-block:: php
+   :linenos:
 
     use AppBundle\Entity\Post;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -212,6 +218,7 @@ zabezpieczającym:
     }
 
 .. code-block:: html+jinja
+   :linenos:
 
     {% if post.isAuthor(app.user) %}
         <a href=""> ... </a>
@@ -228,7 +235,7 @@ zabezpieczającym:
 Sprawdzanie uprawnień bez adnotacji @Security
 ---------------------------------------------
 
-Powyższy przyklad z wykorzystaniem adnotacji ``@Security`` dziala tylko dlatego,
+Powyższy przykład z wykorzystaniem adnotacji ``@Security`` dziala tylko dlatego,
 że użyliśmy :ref:`ParamConverter <best-practices-paramconverter>`, który podaje
 wyrażenie z regułą dostępu do zmiennej ``post``. Jeśli nie chcesz z tego korzystać,
 lub masz bardziej zaawansowany przypadek, możesz zawsze wykonać indywidualny kod
@@ -334,7 +341,7 @@ Do włączenia wyborcy w aplikacji, trzeba zdefiniować nową usługę:
             tags:
                - { name: security.voter }
 
-Teraz, mozna wykorzystywać wyborcę w adnotacji ``@Security``:
+Teraz, można wykorzystywać wyborcę w adnotacji ``@Security``:
 
 .. code-block:: php
 
@@ -347,7 +354,7 @@ Teraz, mozna wykorzystywać wyborcę w adnotacji ``@Security``:
         // ...
     }
 
-Mozna to również użyć bezpośrednio w usłudze ``security.authorization_checker``
+Można to również użyć bezpośrednio w usłudze ``security.authorization_checker``
 lub przez jeszcze łatwiejszy skrót w akcji kontrolera:
 
 .. code-block:: php

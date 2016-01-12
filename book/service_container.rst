@@ -163,6 +163,7 @@ Parametry czynią zdefiniowane usługi lepiej zorganizowanymi i bardziej elastyc
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         parameters:
@@ -174,6 +175,7 @@ Parametry czynią zdefiniowane usługi lepiej zorganizowanymi i bardziej elastyc
                 arguments:    ["%my_mailer.transport%"]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -194,6 +196,7 @@ Parametry czynią zdefiniowane usługi lepiej zorganizowanymi i bardziej elastyc
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         use Symfony\Component\DependencyInjection\Definition;
@@ -219,6 +222,7 @@ one użyte w definicji usługi.
     tylko znaczenie w formacie YAML):
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/parameters.yml
         parameters:
@@ -302,6 +306,7 @@ kontenera wewnątrz ``AcmeHelloBundle``. Jeśli jeszcze nie istnieją katalogi
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/HelloBundle/Resources/config/services.yml
         parameters:
@@ -313,6 +318,7 @@ kontenera wewnątrz ``AcmeHelloBundle``. Jeśli jeszcze nie istnieją katalogi
                 arguments:    ["%my_mailer.transport%"]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/HelloBundle/Resources/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -333,6 +339,7 @@ kontenera wewnątrz ``AcmeHelloBundle``. Jeśli jeszcze nie istnieją katalogi
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/HelloBundle/Resources/config/services.php
         use Symfony\Component\DependencyInjection\Definition;
@@ -351,12 +358,14 @@ zasobu używając klucza ``imports`` w konfiguracji aplikacji.
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         imports:
             - { resource: "@AcmeHelloBundle/Resources/config/services.yml" }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -371,6 +380,7 @@ zasobu używając klucza ``imports`` w konfiguracji aplikacji.
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $loader->import('@AcmeHelloBundle/Resources/config/services.php');
@@ -423,6 +433,7 @@ wewnątrz ``FrameworkBundle``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
@@ -433,6 +444,7 @@ wewnątrz ``FrameworkBundle``:
             # ...
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -453,6 +465,7 @@ wewnątrz ``FrameworkBundle``:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -562,6 +575,7 @@ rozwiązanie:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/HelloBundle/Resources/config/services.yml
         services:
@@ -573,6 +587,7 @@ rozwiązanie:
                 arguments: ["@my_mailer"]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/HelloBundle/Resources/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -593,6 +608,7 @@ rozwiązanie:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/HelloBundle/Resources/config/services.php
         use Symfony\Component\DependencyInjection\Definition;
@@ -639,6 +655,7 @@ wyrażenia:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         services:
@@ -647,6 +664,7 @@ wyrażenia:
                 arguments:    ["@=service('mailer_configuration').getMailerMethod()"]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -664,6 +682,7 @@ wyrażenia:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         use Symfony\Component\DependencyInjection\Definition;
@@ -690,6 +709,7 @@ poprzez zmienną ``container``. Oto inny przykład:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         services:
             my_mailer:
@@ -697,6 +717,7 @@ poprzez zmienną ``container``. Oto inny przykład:
                 arguments: ["@=container.hasParameter('some_param') ? parameter('some_param') : 'default_value'"]
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services"
@@ -713,6 +734,7 @@ poprzez zmienną ``container``. Oto inny przykład:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         use Symfony\Component\DependencyInjection\Definition;
         use Symfony\Component\ExpressionLanguage\Expression;
@@ -767,6 +789,7 @@ Wstrzykiwanie zależności przez metodę setera wymaga zmiany składni:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/HelloBundle/Resources/config/services.yml
         services:
@@ -779,6 +802,7 @@ Wstrzykiwanie zależności przez metodę setera wymaga zmiany składni:
                     - [setMailer, ["@my_mailer"]]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/HelloBundle/Resources/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -801,6 +825,7 @@ Wstrzykiwanie zależności przez metodę setera wymaga zmiany składni:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/HelloBundle/Resources/config/services.php
         use Symfony\Component\DependencyInjection\Definition;
@@ -863,6 +888,7 @@ inna usługa:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/HelloBundle/Resources/config/services.yml
         services:
@@ -871,6 +897,7 @@ inna usługa:
                 arguments: ["@request_stack"]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/HelloBundle/Resources/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -889,6 +916,7 @@ inna usługa:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/HelloBundle/Resources/config/services.php
         use Symfony\Component\DependencyInjection\Definition;
@@ -933,6 +961,7 @@ opcjonalną. Kontener wstrzyknie ją, jeśli istnieje, jeśli nie, to nic się n
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/HelloBundle/Resources/config/services.yml
         services:
@@ -941,6 +970,7 @@ opcjonalną. Kontener wstrzyknie ją, jeśli istnieje, jeśli nie, to nic się n
                 arguments: ["@?my_mailer"]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/HelloBundle/Resources/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -961,6 +991,7 @@ opcjonalną. Kontener wstrzyknie ją, jeśli istnieje, jeśli nie, to nic się n
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/HelloBundle/Resources/config/services.php
         use Symfony\Component\DependencyInjection\Definition;
@@ -1050,6 +1081,7 @@ Konfiguracja kontenera usług jest łatwa:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # src/Acme/HelloBundle/Resources/config/services.yml
         services:
@@ -1058,6 +1090,7 @@ Konfiguracja kontenera usług jest łatwa:
                 arguments: ["@mailer", "@templating"]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/HelloBundle/Resources/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1073,6 +1106,7 @@ Konfiguracja kontenera usług jest łatwa:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/HelloBundle/Resources/config/services.php
         $container->setDefinition('newsletter_manager', new Definition(
@@ -1110,6 +1144,7 @@ użyta w określonym celu. Weźmy następujący przykład:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/services.yml
         services:
@@ -1120,6 +1155,7 @@ użyta w określonym celu. Weźmy następujący przykład:
                     -  { name: twig.extension }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1138,6 +1174,7 @@ użyta w określonym celu. Weźmy następujący przykład:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/services.php
         use Symfony\Component\DependencyInjection\Definition;

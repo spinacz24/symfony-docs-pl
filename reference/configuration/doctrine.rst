@@ -11,6 +11,7 @@ Pełna domyślna konfiguracja
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         doctrine:
             dbal:
@@ -180,6 +181,7 @@ Pełna domyślna konfiguracja
                                 enabled:              false
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services"
@@ -275,6 +277,7 @@ Poniższy przykład konfiguracji pokazuje wszystkie domyślne ustawienia konfigu
 rozpoznawane przez ORM:
 
 .. code-block:: yaml
+   :linenos:
    
     doctrine:
         orm:
@@ -301,6 +304,7 @@ lub ``service``.
 Poniższy przykład pokazuje ogólny zarys konfiguracji buforowania:
 
 .. code-block:: yaml
+   :linenos:
 
     doctrine:
         orm:
@@ -385,6 +389,7 @@ opcje konfiguracyjne:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         doctrine:
             dbal:
@@ -416,6 +421,7 @@ opcje konfiguracyjne:
                 keep_slave:           false
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services"
@@ -468,6 +474,7 @@ Jeżeli w pliku YAML chce się skonfigurować wiele połączeń, należy je umie
 kluczu ``connections`` i nadać im unikalna nazwę:
 
 .. code-block:: yaml
+   :linenos:
 
     doctrine:
         dbal:
@@ -502,6 +509,7 @@ Gdy używa się tylko jednego menadżera encji, wszystkie dostępne opcje konfig
 mozna umieścić bezpośrednio na poziomie ``doctrine.orm`` konfiguracji.
 
 .. code-block:: yaml
+   :linenos:
 
     doctrine:
         orm:
@@ -549,6 +557,7 @@ dla encji pakietu ``AppBundle`` w katalogu ``@AppBundle/SomeResources/config/doc
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         doctrine:
             # ...
@@ -562,6 +571,7 @@ dla encji pakietu ``AppBundle`` w katalogu ``@AppBundle/SomeResources/config/doc
                         dir: SomeResources/config/doctrine
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" charset="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services"
@@ -575,6 +585,7 @@ dla encji pakietu ``AppBundle`` w katalogu ``@AppBundle/SomeResources/config/doc
         </container>
 
     .. code-block:: php
+       :linenos:
 
         $container->loadFromExtension('doctrine', array(
             'orm' => array(
@@ -597,6 +608,7 @@ było odwoływać sie do takich rzeczy jak ``App:Post``):
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         doctrine:
                 # ...
@@ -612,6 +624,7 @@ było odwoływać sie do takich rzeczy jak ``App:Post``):
                             alias: App
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" charset="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services"
@@ -631,6 +644,7 @@ było odwoływać sie do takich rzeczy jak ``App:Post``):
         </container>
 
     .. code-block:: php
+       :linenos:
 
         $container->loadFromExtension('doctrine', array(
             'orm' => array(

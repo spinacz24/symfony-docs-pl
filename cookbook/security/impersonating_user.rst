@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
     single: bezpieczeństwo; podszywanie sie pod użytkownika
 
@@ -13,6 +16,7 @@ detektora (*ang. listener*) zapory ``switch_user``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -24,6 +28,7 @@ detektora (*ang. listener*) zapory ``switch_user``:
                     switch_user: true
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -43,7 +48,8 @@ detektora (*ang. listener*) zapory ``switch_user``:
             </config>
         </srv:container>
 
-    .. code-block:: php
+    .. code-block:: php 
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -79,12 +85,14 @@ wyświetlania odnośnika do opuszczenia podszywania się:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
             <a href="{{ path('homepage', {'_switch_user': '_exit'}) }}">Exit impersonation</a>
         {% endif %}
 
     .. code-block:: html+php
+       :linenos:
 
         <?php if ($view['security']->isGranted('ROLE_PREVIOUS_ADMIN')): ?>
             <a
@@ -124,6 +132,7 @@ nazwę parametru zapytania  w ustawieniu ``parameter``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -135,6 +144,7 @@ nazwę parametru zapytania  w ustawieniu ``parameter``:
                     switch_user: { role: ROLE_ADMIN, parameter: _want_to_be_this_user }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -154,6 +164,7 @@ nazwę parametru zapytania  w ustawieniu ``parameter``:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -186,6 +197,7 @@ Poniższy przykładowy kod pokazuje, jak można zmieniać lepkie ustawienia naro
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/services.yml
         services:
@@ -195,6 +207,7 @@ Poniższy przykładowy kod pokazuje, jak można zmieniać lepkie ustawienia naro
                     - { name: kernel.event_listener, event: security.switch_user, method: onSwitchUser }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -216,6 +229,7 @@ Poniższy przykładowy kod pokazuje, jak można zmieniać lepkie ustawienia naro
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/services.php
         $container
@@ -228,6 +242,7 @@ Poniższy przykładowy kod pokazuje, jak można zmieniać lepkie ustawienia naro
     Implementacja detektora zakłada, że encja ``User`` ma metodę ``getLocale()``.
 
 .. code-block:: php
+   :linenos:
 
         // src/AppBundle/EventListener/SwitchUserListener.pnp
         namespace AppBundle\EventListener;

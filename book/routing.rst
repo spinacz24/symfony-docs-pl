@@ -40,6 +40,7 @@ jest prosta:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/BlogController.php
         namespace AppBundle\Controller;
@@ -59,6 +60,7 @@ jest prosta:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         blog_show:
@@ -66,6 +68,7 @@ jest prosta:
             defaults:  { _controller: AppBundle:Blog:show }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -80,6 +83,7 @@ jest prosta:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -210,6 +214,7 @@ oraz z tablicy ``defaults`` przechowującej wartości domyślne:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/MainController.php
 
@@ -226,6 +231,7 @@ oraz z tablicy ``defaults`` przechowującej wartości domyślne:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         _welcome:
@@ -233,6 +239,7 @@ oraz z tablicy ``defaults`` przechowującej wartości domyślne:
             defaults:  { _controller: AppBundle:Main:homepage }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -248,6 +255,7 @@ oraz z tablicy ``defaults`` przechowującej wartości domyślne:
         </routes>
 
     ..  code-block:: php
+        :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -278,6 +286,7 @@ Do określenia wielu tras można wykorzystać jedno lub więcej
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/BlogController.php
 
@@ -294,6 +303,7 @@ Do określenia wielu tras można wykorzystać jedno lub więcej
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         blog_show:
@@ -301,6 +311,7 @@ Do określenia wielu tras można wykorzystać jedno lub więcej
             defaults:  { _controller: AppBundle:Blog:show }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -315,6 +326,7 @@ Do określenia wielu tras można wykorzystać jedno lub więcej
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -349,6 +361,7 @@ wpisów na blogu wymyślonej aplikacji blogowej:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/BlogController.php
 
@@ -367,6 +380,7 @@ wpisów na blogu wymyślonej aplikacji blogowej:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         blog:
@@ -374,6 +388,7 @@ wpisów na blogu wymyślonej aplikacji blogowej:
             defaults:  { _controller: AppBundle:Blog:index }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -388,6 +403,7 @@ wpisów na blogu wymyślonej aplikacji blogowej:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -409,6 +425,7 @@ parameter ``{page}``:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/BlogController.php
 
@@ -423,6 +440,7 @@ parameter ``{page}``:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         blog:
@@ -430,6 +448,7 @@ parameter ``{page}``:
             defaults:  { _controller: AppBundle:Blog:index }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -444,6 +463,7 @@ parameter ``{page}``:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -470,6 +490,7 @@ zapis:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/BlogController.php
 
@@ -484,6 +505,7 @@ zapis:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         blog:
@@ -491,6 +513,7 @@ zapis:
             defaults:  { _controller: AppBundle:Blog:index, page: 1 }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -506,6 +529,7 @@ zapis:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -557,6 +581,7 @@ Spójrzmy na utworzone przez nas wcześniej trasy:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/BlogController.php
 
@@ -581,6 +606,7 @@ Spójrzmy na utworzone przez nas wcześniej trasy:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         blog:
@@ -592,6 +618,7 @@ Spójrzmy na utworzone przez nas wcześniej trasy:
             defaults:  { _controller: AppBundle:Blog:show }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -611,6 +638,7 @@ Spójrzmy na utworzone przez nas wcześniej trasy:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -651,6 +679,7 @@ wymagań może łatwo zostać dodane dla każdego parametru. Na przykład:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/BlogController.php
 
@@ -667,6 +696,7 @@ wymagań może łatwo zostać dodane dla każdego parametru. Na przykład:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         blog:
@@ -676,6 +706,7 @@ wymagań może łatwo zostać dodane dla każdego parametru. Na przykład:
                 page:  \d+
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -692,6 +723,7 @@ wymagań może łatwo zostać dodane dla każdego parametru. Na przykład:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -738,6 +770,7 @@ strona główna aplikacji jest dostępna w dwóch różnych językach, zależnie
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/MainController.php
 
@@ -755,6 +788,7 @@ strona główna aplikacji jest dostępna w dwóch różnych językach, zależnie
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         homepage:
@@ -764,6 +798,7 @@ strona główna aplikacji jest dostępna w dwóch różnych językach, zależnie
                 _locale:  en|fr
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -780,6 +815,7 @@ strona główna aplikacji jest dostępna w dwóch różnych językach, zależnie
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -822,6 +858,7 @@ Można to osiągnąć poprzez następującą konfigurację trasowania:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/MainController.php
         namespace AppBundle\Controller;
@@ -851,6 +888,7 @@ Można to osiągnąć poprzez następującą konfigurację trasowania:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         news:
@@ -864,6 +902,7 @@ Można to osiągnąć poprzez następującą konfigurację trasowania:
             methods:  [GET, POST]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -882,6 +921,7 @@ Można to osiągnąć poprzez następującą konfigurację trasowania:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -936,6 +976,7 @@ przy zastosowaniu *wyrażeń warunkowych*:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         contact:
             path:     /contact
@@ -943,6 +984,7 @@ przy zastosowaniu *wyrażeń warunkowych*:
             condition: "context.getMethod() in ['GET', 'HEAD'] and request.headers.get('User-Agent') matches '/firefox/i'"
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" encoding="UTF-8" ?>
         <routes xmlns="http://symfony.com/schema/routing"
@@ -957,6 +999,7 @@ przy zastosowaniu *wyrażeń warunkowych*:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
@@ -1026,6 +1069,7 @@ trasowania:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/ArticleController.php
 
@@ -1049,6 +1093,7 @@ trasowania:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         article_show:
@@ -1060,6 +1105,7 @@ trasowania:
               year:     \d+
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1081,6 +1127,7 @@ trasowania:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -1261,6 +1308,7 @@ tego pliku:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         app:
@@ -1268,6 +1316,7 @@ tego pliku:
             type:     annotation # required to enable the Annotation reader for this resource
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1281,6 +1330,7 @@ tego pliku:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -1312,12 +1362,14 @@ w tym katalogu i wstawione do trasowania.
     .. configuration-block::
 
         .. code-block:: yaml
+           :linenos:
 
             # app/config/routing.yml
             app:
                 resource: "@AcmeOtherBundle/Resources/config/routing.yml"
 
         .. code-block:: xml
+           :linenos:
 
             <!-- app/config/routing.xml -->
             <?xml version="1.0" encoding="UTF-8" ?>
@@ -1330,6 +1382,7 @@ w tym katalogu i wstawione do trasowania.
             </routes>
 
         .. code-block:: php
+           :linenos:
 
             // app/config/routing.php
             use Symfony\Component\Routing\RouteCollection;
@@ -1351,6 +1404,7 @@ Na przykład załóżmy, że chcemy popzedzić wszystkie trasy w AppBundle z ``/
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         app:
@@ -1359,6 +1413,7 @@ Na przykład załóżmy, że chcemy popzedzić wszystkie trasy w AppBundle z ``/
             prefix:   /site
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1374,6 +1429,7 @@ Na przykład załóżmy, że chcemy popzedzić wszystkie trasy w AppBundle z ``/
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -1525,6 +1581,7 @@ W kolejnym rozdziale poznasz jak generować ścieżki URL w szablonach.
     `FOSJsRoutingBundle`_, można to zrobić dokładnie tak:
 
     .. code-block:: javascript
+       :linenos:
 
        var url = Routing.generate(
             'blog_show',
@@ -1562,12 +1619,14 @@ stosując pomocnicze funkcje szablonów:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         <a href="{{ path('blog_show', {'slug': 'my-blog-post'}) }}">
           Read this blog post.
         </a>
 
     .. code-block:: html+php
+       :linenos:
 
         <a href="<?php echo $view['router']->generate('blog_show', array(
             'slug' => 'my-blog-post',
@@ -1596,12 +1655,14 @@ W PHP trzeba przekazać ``true`` do  ``generate()``:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         <a href="{{ url('blog_show', {'slug': 'my-blog-post'}) }}">
           Read this blog post.
         </a>
 
     .. code-block:: html+php
+       :linenos:
 
         <a href="<?php echo $view['router']->generate('blog_show', array(
             'slug' => 'my-blog-post',

@@ -34,6 +34,7 @@ Szablon jest plikiem tekstowym mogącym wygenerować dowolny format tekstowy
 PHP* - plik tekstowy parsowany przez PHP, który zawiera mieszankę tekstu i kodu PHP:
 
 .. code-block:: html+php
+   :linenos:
 
     <!DOCTYPE html>
     <html>
@@ -62,6 +63,7 @@ o nazwie `Twig`_. Twig pozwala pisać zwięzłe, czytelne szablony na kilka spos
 które są bardziej przyjazne dla projektantów stron i są bardziej wydajne niż szablony PHP:
 
 .. code-block:: html+jinja
+   :linenos:
 
     <!DOCTYPE html>
     <html>
@@ -200,6 +202,7 @@ Po pierwsze, zbuduj podstawowy plik układu strony:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# app/Resources/views/base.html.twig #}
         <!DOCTYPE html>
@@ -225,6 +228,7 @@ Po pierwsze, zbuduj podstawowy plik układu strony:
         </html>
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- app/Resources/views/base.html.php -->
         <!DOCTYPE html>
@@ -269,6 +273,7 @@ Szablon potomny może wyglądać tak:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# app/Resources/views/blog/index.html.twig #}
         {% extends 'base.html.twig' %}
@@ -283,6 +288,7 @@ Szablon potomny może wyglądać tak:
         {% endblock %}
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- app/Resources/views/blog/index.html.php -->
         <?php $view->extend('base.html.php') ?>
@@ -311,6 +317,7 @@ przez bloki z szablonu potomnego. W zależności od wartości ``blog_entries`` w
 może wyglądać następująco:
 
 .. code-block:: html
+   :linenos:
 
     <!DOCTYPE html>
     <html>
@@ -635,6 +642,7 @@ Szablon ``recentList`` jest bardzo prosty:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# app/Resources/views/article/recent_list.html.twig #}
         {% for article in articles %}
@@ -644,6 +652,7 @@ Szablon ``recentList`` jest bardzo prosty:
         {% endfor %}
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- app/Resources/views/article/recent_list.html.php -->
         <?php foreach ($articles as $article): ?>
@@ -665,6 +674,7 @@ Dla dołączenia kontrolera, trzeba się do niego odwołać używając standardo
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# app/Resources/views/base.html.twig #}
 
@@ -677,6 +687,7 @@ Dla dołączenia kontrolera, trzeba się do niego odwołać używając standardo
         </div>
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- app/Resources/views/base.html.php -->
 
@@ -712,11 +723,13 @@ do konfigurowania znaczników ``hinclude.js``:
 .. configuration-block::
 
     .. code-block:: jinja
+       :linenos:
 
         {{ render_hinclude(controller('...')) }}
         {{ render_hinclude(url('...')) }}
 
     .. code-block:: php
+       :linenos:
 
         <?php echo $view['actions']->render(
             new ControllerReference('...'),
@@ -779,6 +792,7 @@ JavaScript) można ustawić w konfiguracji aplikacji:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
@@ -787,6 +801,7 @@ JavaScript) można ustawić w konfiguracji aplikacji:
                 hinclude_default_template: hinclude.html.twig
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -803,6 +818,7 @@ JavaScript) można ustawić w konfiguracji aplikacji:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -822,12 +838,14 @@ wszystkie zdefiniowane globalne szablony):
 .. configuration-block::
 
     .. code-block:: jinja
+       :linenos:
 
         {{ render_hinclude(controller('...'),  {
             'default': 'default/content.html.twig'
         }) }}
 
     .. code-block:: php
+       :linenos:
 
         <?php echo $view['actions']->render(
             new ControllerReference('...'),
@@ -842,10 +860,11 @@ albo można również określić łańcuch tekstowy do wyświetlenia jako domyś
 .. configuration-block::
 
     .. code-block:: jinja
-
+       
         {{ render_hinclude(controller('...'), {'default': 'Loading...'}) }}
 
     .. code-block:: php
+       :linenos:
 
         <?php echo $view['actions']->render(
             new ControllerReference('...'),
@@ -878,6 +897,7 @@ konfigurację trasowania:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         _welcome:
@@ -885,6 +905,7 @@ konfigurację trasowania:
             defaults: { _controller: AppBundle:Welcome:index }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.yml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -899,6 +920,7 @@ konfigurację trasowania:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\Route;
@@ -931,6 +953,7 @@ z bardziej skomplikowaną trasą:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         article_show:
@@ -938,6 +961,7 @@ z bardziej skomplikowaną trasą:
             defaults: { _controller: AppBundle:Article:show }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -952,6 +976,7 @@ z bardziej skomplikowaną trasą:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/routing.php
         use Symfony\Component\Routing\Route;
@@ -971,6 +996,7 @@ jak i wartość parametru ``{slug}``. Używając tej trasy, przeróbmy szablon
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# app/Resources/views/article/recent_list.html.twig #}
         {% for article in articles %}
@@ -980,6 +1006,7 @@ jak i wartość parametru ``{slug}``. Używając tej trasy, przeróbmy szablon
         {% endfor %}
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- app/Resources/views/Article/recent_list.html.php -->
         <?php foreach ($articles in $article): ?>
@@ -1010,6 +1037,7 @@ jak i wartość parametru ``{slug}``. Używając tej trasy, przeróbmy szablon
     the ``generate()`` method:
 
     .. code-block:: html+php
+       :linenos:
 
         <a href="<?php echo $view['router']->generate(
             '_welcome',
@@ -1072,6 +1100,7 @@ Jeśli chce się ustawić wersję dla określonego aktywa, można ustawić czwar
         <img src="{{ asset('images/logo.png', version='3.0') }}" alt="Symfony!" />
 
     .. code-block:: html+php
+       :linenos: 
 
         <img src="<?php echo $view['assets']->getUrl(
             'images/logo.png',
@@ -1094,6 +1123,7 @@ argument (lub argument ``absolute``) na ``true``:
         <img src="{{ asset('images/logo.png', absolute=true) }}" alt="Symfony!" />
 
     .. code-block:: html+php
+       :linenos:
 
         <img src="<?php echo $view['assets']->getUrl(
             'images/logo.png',
@@ -1134,6 +1164,7 @@ potrzebne w całej witrynie:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# app/Resources/views/base.html.twig #}
         <html>
@@ -1154,6 +1185,7 @@ potrzebne w całej witrynie:
         </html>
 
     .. code-block:: php
+       :linenos:
 
         // app/Resources/views/base.html.php
         <html>
@@ -1181,6 +1213,7 @@ Wewnątrz szablonu strony kontaktowej trzeba zrobić co następuje:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# app/Resources/views/contact/contact.html.twig #}
         {% extends 'base.html.twig' %}
@@ -1194,6 +1227,7 @@ Wewnątrz szablonu strony kontaktowej trzeba zrobić co następuje:
         {# ... #}
 
     .. code-block:: php
+       :linenos:
 
         // app/Resources/views/contact/contact.html.twig
         <?php $view->extend('base.html.php') ?>
@@ -1262,6 +1296,7 @@ dającej automatyczny dostęp do określonych zmiennych:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         <p>Username: {{ app.user.username }}</p>
         {% if app.debug %}
@@ -1270,6 +1305,7 @@ dającej automatyczny dostęp do określonych zmiennych:
         {% endif %}
 
     .. code-block:: html+php
+       :linenos:
 
         <p>Username: <?php echo $app->getUser()->getUsername() ?></p>
         <?php if ($app->getDebug()): ?>
@@ -1319,6 +1355,7 @@ aplikacji:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
@@ -1326,6 +1363,7 @@ aplikacji:
             templating: { engines: ['twig'] }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1344,6 +1382,7 @@ aplikacji:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -1464,6 +1503,7 @@ Ta metoda działa doskonale z trzema różnymi typami szablonów, które właśn
   elementy specyficzne dla blogu:
 
   .. code-block:: html+jinja
+     :linenos:
 
       {# app/Resources/views/blog/layout.html.twig #}
       {% extends 'base.html.twig' %}
@@ -1479,6 +1519,7 @@ Ta metoda działa doskonale z trzema różnymi typami szablonów, które właśn
   ``AppBundle:Blog:index.html.twig`` i zawierać będzie wykaz aktualnych wpisów blogu:
 
   .. code-block:: html+jinja
+     :linenos:
 
       {# app/Resources/views/blog/index.html.twig #}
       {% extends 'blog/layout.html.twig' %}
@@ -1634,6 +1675,7 @@ na przykład wewnątrz kontrolera::
 Ten sam mechanizm może zostać uzyty w szablonach Twig dzięki funkcji ``dump``:
 
 .. code-block:: html+jinja
+   :linenos:
 
     {# app/Resources/views/article/recent_list.html.twig #}
     {{ dump(articles) }}
@@ -1704,12 +1746,14 @@ z parametrem asocjacyjnym:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         <a href="{{ path('article_show', {'id': 123, '_format': 'pdf'}) }}">
             PDF Version
         </a>
 
     .. code-block:: html+php
+       :linenos:
 
         <a href="<?php echo $view['router']->generate('article_show', array(
             'id' => 123,

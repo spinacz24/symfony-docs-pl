@@ -52,6 +52,7 @@ trasę ``default_security_target``, trzeba użyć następującej konfiguracji:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -64,6 +65,7 @@ trasę ``default_security_target``, trzeba użyć następującej konfiguracji:
                         default_target_path: default_security_target
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -83,6 +85,7 @@ trasę ``default_security_target``, trzeba użyć następującej konfiguracji:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -113,6 +116,7 @@ opcji ``always_use_default_target_path`` na ``true``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -125,6 +129,7 @@ opcji ``always_use_default_target_path`` na ``true``:
                         always_use_default_target_path: true
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -145,6 +150,7 @@ opcji ``always_use_default_target_path`` na ``true``:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -173,6 +179,7 @@ to ``false``):
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -186,6 +193,7 @@ to ``false``):
                         use_referer: true
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -206,6 +214,7 @@ to ``false``):
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -233,6 +242,7 @@ kod:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# src/Acme/SecurityBundle/Resources/views/Security/login.html.twig #}
         {% if error %}
@@ -252,6 +262,7 @@ kod:
         </form>
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- src/Acme/SecurityBundle/Resources/views/Security/login.html.php -->
         <?php if ($error): ?>
@@ -278,6 +289,7 @@ opcję ``target_path_parameter`` na inną wartość.
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -290,6 +302,7 @@ opcję ``target_path_parameter`` na inną wartość.
                         target_path_parameter: redirect_url
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -310,6 +323,7 @@ opcję ``target_path_parameter`` na inną wartość.
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -337,6 +351,7 @@ Można ustawić to na inną trasę (np. ``login_failure``) w następujacy sposó
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -350,6 +365,7 @@ Można ustawić to na inną trasę (np. ``login_failure``) w następujacy sposó
                         failure_path: login_failure
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -370,6 +386,7 @@ Można ustawić to na inną trasę (np. ``login_failure``) w następujacy sposó
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(

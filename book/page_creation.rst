@@ -171,6 +171,7 @@ Poprawmy trasę tak, aby miała na końcu wieloznaczną część ``{wildcard}``:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Controller/LuckyController.php
         // ...
@@ -189,6 +190,7 @@ Poprawmy trasę tak, aby miała na końcu wieloznaczną część ``{wildcard}``:
         }        
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/routing.yml
         lucky_number:
@@ -196,6 +198,7 @@ Poprawmy trasę tak, aby miała na końcu wieloznaczną część ``{wildcard}``:
             defaults: { _controller: AppBundle:Lucky:number }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/Acme/DemoBundle/Resources/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -210,6 +213,7 @@ Poprawmy trasę tak, aby miała na końcu wieloznaczną część ``{wildcard}``:
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         // src/Acme/DemoBundle/Resources/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
@@ -385,6 +389,7 @@ tam plik ``number.html.twig`` z zawartością:
 .. configuration-block::
 
     .. code-block:: jinja
+       :linenos:
 
         {# app/Resources/views/lucky/number.html.twig #}
         {% extends 'base.html.twig' %}
@@ -394,6 +399,7 @@ tam plik ``number.html.twig`` z zawartością:
         {% endblock %}
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- app/Resources/views/lucky/number.html.php -->
         <?php $view->extend('base.html.php') ?>
@@ -484,6 +490,7 @@ konfiguracyjnym pakietów jest ``app/config/config.yml``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         # ...
@@ -501,6 +508,7 @@ konfiguracyjnym pakietów jest ``app/config/config.yml``:
         # ...
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -529,6 +537,7 @@ konfiguracyjnym pakietów jest ``app/config/config.yml``:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         // ...
