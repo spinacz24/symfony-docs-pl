@@ -30,6 +30,7 @@ podając wartości ``username`` i ``password``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         swiftmailer:
@@ -41,6 +42,7 @@ podając wartości ``username`` i ``password``:
             password:   AWS_SECRET_KEY  # to be created in the SES console
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -64,6 +66,7 @@ podając wartości ``username`` i ``password``:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('swiftmailer', array(
@@ -89,6 +92,7 @@ Jak sie to zrobi, można zacząć wysyłanie wiadomości email przez chmurę!
     produkcyjnym.
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/parameters.yml
         parameters:

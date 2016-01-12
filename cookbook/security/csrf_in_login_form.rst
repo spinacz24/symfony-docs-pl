@@ -25,6 +25,7 @@ był dostawca domyślny, dostępny w komponencie Security:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -38,6 +39,7 @@ był dostawca domyślny, dostępny w komponencie Security:
                         csrf_provider: security.csrf.token_manager
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -58,6 +60,7 @@ był dostawca domyślny, dostępny w komponencie Security:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -90,6 +93,7 @@ formularza logowania:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# src/Acme/SecurityBundle/Resources/views/Security/login.html.twig #}
 
@@ -105,6 +109,7 @@ formularza logowania:
         </form>
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- src/Acme/SecurityBundle/Resources/views/Security/login.html.php -->
 
@@ -130,6 +135,7 @@ Teraz, formularz logowania jest już zabezpieczony przed atakami CSRF.
     .. configuration-block::
 
         .. code-block:: yaml
+           :linenos:
 
             # app/config/security.yml
             security:
@@ -144,6 +150,7 @@ Teraz, formularz logowania jest już zabezpieczony przed atakami CSRF.
                             intention: a_private_string
 
         .. code-block:: xml
+           :linenos:
 
             <!-- app/config/security.xml -->
             <?xml version="1.0" encoding="UTF-8" ?>
@@ -166,6 +173,7 @@ Teraz, formularz logowania jest już zabezpieczony przed atakami CSRF.
             </srv:container>
 
         .. code-block:: php
+           :linenos:
 
             // app/config/security.php
             $container->loadFromExtension('security', array(

@@ -15,6 +15,7 @@ celu sekcję ``remember_me`` zapory:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -33,6 +34,7 @@ celu sekcję ``remember_me`` zapory:
                         #always_remember_me: true
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="utf-8" ?>
@@ -61,6 +63,7 @@ celu sekcję ``remember_me`` zapory:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -147,6 +150,7 @@ będzie automatycznie logowany. Tak więc, formularz logowania może wyglądać 
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# app/Resources/views/security/login.html.twig #}
         {% if error %}
@@ -167,6 +171,7 @@ będzie automatycznie logowany. Tak więc, formularz logowania może wyglądać 
         </form>
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- app/Resources/views/security/login.html.php -->
         <?php if ($error): ?>
@@ -251,6 +256,7 @@ W poniższym przykładzie, akcja jest dozwolona, tylko jeśłi użytkownik ma ro
 ``IS_AUTHENTICATED_FULLY``.
 
 .. code-block:: php
+   :linenos:
 
     // ...
     use Symfony\Component\Security\Core\Exception\AccessDeniedException
@@ -267,6 +273,7 @@ Jeśłi aplikacja jest oparta na Symfony Standard Edition, można również zabe
 akcję za pomocą adnotacji:
 
 .. code-block:: php
+   :linenos:
 
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 

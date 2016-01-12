@@ -20,6 +20,7 @@ Każda część zostanie wyjaśniona w następnym rozdziale.
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -247,6 +248,10 @@ Każda część zostanie wyjaśniona w następnym rozdziale.
                 ROLE_SUPERADMIN: [ROLE_ADMIN]
 
 
+.. index::
+   single: bezpieczeństwo; konfiguracja logowania formularzowego
+   single: logowanie formularzowe; konfiguracja
+
 .. _reference-security-firewall-form-login:
 
 Konfiguracja logowania formularzowego
@@ -331,6 +336,11 @@ Przekierowanie po zalogowaniu
 * ``target_path_parameter`` (typ: ``string``, domyślnie: ``_target_path``)
 * ``use_referer`` (typ: ``Boolean``, domyślnie: ``false``)
 
+
+.. index::
+   single: bezpieczeństwo; koder PBKDF2
+   single: koder PBKDF2; konfiguracja
+
 .. _reference-security-pbkdf2:
 
 Stosowanie kodera PBKDF2: bezpieczeństwo i szybkość
@@ -347,6 +357,13 @@ i świadomie.
 
 Dobra konfiguracja wymaga użycia około 1000 iteracji i sha512 dla algorytmu mieszania.
 
+
+.. index::
+   single: bezpieczeństwo; koder BCrypt
+   single: koder BCrypt; konfiguracja
+
+.. _reference-security-pbkdf2:
+
 .. _reference-security-bcrypt:
 
 Stosowanie kodera BCrypt
@@ -360,7 +377,8 @@ Stosowanie kodera BCrypt
 .. configuration-block::
 
     .. code-block:: yaml
-
+       :linenos:
+       
         # app/config/security.yml
         security:
             # ...
@@ -371,6 +389,7 @@ Stosowanie kodera BCrypt
                     cost:      15
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <config>
@@ -383,6 +402,7 @@ Stosowanie kodera BCrypt
         </config>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -417,6 +437,10 @@ przechowywanie samego zakodowanego hasła.
     Wszystkie zakodowane hasła mają długość ``60`` znaków, więc należy zabezpieczyć
     dla nich dostateczną ilość miejsca.
 
+.. index::
+   single: bezpieczeństwo; zapory
+   single: zapora; konfiguracja
+
 .. _reference-security-firewall-context:
 
 Kontekst zapory
@@ -436,6 +460,7 @@ zapory, to "kontekst" będzie w rzeczywistości współdzielony:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -450,6 +475,7 @@ zapory, to "kontekst" będzie w rzeczywistości współdzielony:
                     context: my_context
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <security:config>
@@ -462,6 +488,7 @@ zapory, to "kontekst" będzie w rzeczywistości współdzielony:
         </security:config>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -477,6 +504,10 @@ zapory, to "kontekst" będzie w rzeczywistości współdzielony:
             ),
         ));
 
+.. index::
+   HTTP-Digest
+   single: uwierzytelnianie; HTTP-Digest
+   single: bezpieczeństwo; uwierzytelnianie HTTP-Gigest
 
 Uwierzytelnianie HTTP-Digest
 ----------------------------
@@ -487,6 +518,7 @@ potrzeba dostarczyć dziedzinę (*ang. realm*)  i klucz:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -497,6 +529,7 @@ potrzeba dostarczyć dziedzinę (*ang. realm*)  i klucz:
                         realm: "secure-api"
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <security:config>
@@ -506,6 +539,7 @@ potrzeba dostarczyć dziedzinę (*ang. realm*)  i klucz:
         </security:config>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(

@@ -147,6 +147,7 @@ formularza:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# app/Resources/views/default/new.html.twig #}
         {{ form_start(form) }}
@@ -154,6 +155,7 @@ formularza:
         {{ form_end(form) }}
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- app/Resources/views/default/new.html.php -->
         <?php echo $view['form']->start($form) ?>
@@ -343,6 +345,7 @@ być puste i musiało by być prawidłowym obiektem ``DateTime``.
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // AppBundle/Entity/Task.php
         use Symfony\Component\Validator\Constraints as Assert;
@@ -362,6 +365,7 @@ być puste i musiało by być prawidłowym obiektem ``DateTime``.
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # AppBundle/Resources/config/validation.yml
         AppBundle\Entity\Task:
@@ -373,6 +377,7 @@ być puste i musiało by być prawidłowym obiektem ``DateTime``.
                     - Type: \DateTime
 
     .. code-block:: xml
+       :linenos:
 
         <!-- AppBundle/Resources/config/validation.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -393,6 +398,7 @@ być puste i musiało by być prawidłowym obiektem ``DateTime``.
         </constraint-mapping>
 
     .. code-block:: php
+       :linenos:
 
         // AppBundle/Entity/Task.php
         use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -796,6 +802,7 @@ formularza:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# app/Resources/views/default/new.html.twig #}
         {{ form_start(form) }}
@@ -806,6 +813,7 @@ formularza:
         {{ form_end(form) }}
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- app/Resources/views/default/newAction.html.php -->
         <?php echo $view['form']->start($form) ?>
@@ -860,6 +868,7 @@ poniższej prezentowanego kodu są takie same, jak dla funkcji ``form_row``:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {{ form_start(form) }}
             {{ form_errors(form) }}
@@ -883,6 +892,7 @@ poniższej prezentowanego kodu są takie same, jak dla funkcji ``form_row``:
         {{ form_end(form) }}
 
     .. code-block:: html+php
+       :linenos:
 
         <?php echo $view['form']->start($form) ?>
 
@@ -1171,6 +1181,7 @@ jest naprawdę łatwa w użyciu.
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/services.yml
         services:
@@ -1180,6 +1191,7 @@ jest naprawdę łatwa w użyciu.
                     - { name: form.type, alias: task }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1195,6 +1207,7 @@ jest naprawdę łatwa w użyciu.
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // src/AppBundle/Resources/config/services.php
         $container
@@ -1390,6 +1403,7 @@ pól ``Task``:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# ... #}
 
@@ -1401,6 +1415,7 @@ pól ``Task``:
         {# ... #}
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- ... -->
 
@@ -1460,6 +1475,7 @@ nowy plik szablonowy, który zawierać będzie nowy znacznik:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# app/Resources/views/form/fields.html.twig #}
         {%- block form_row -%}
@@ -1471,6 +1487,7 @@ nowy plik szablonowy, który zawierać będzie nowy znacznik:
         {% endblock form_row %}
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- app/Resources/views/form/form_row.html.php -->
         <div class="form_row">
@@ -1488,6 +1505,7 @@ części szablonu:
 .. configuration-block::
 
     .. code-block:: html+jinja
+       :linenos:
 
         {# app/Resources/views/default/new.html.twig #}
         {% form_theme form 'form/fields.html.twig' %}
@@ -1498,6 +1516,7 @@ części szablonu:
         {# ... render the form #}
 
     .. code-block:: html+php
+       :linenos:
 
         <!-- app/Resources/views/default/new.html.php -->
         <?php $view['form']->setTheme($form, array('form')) ?>
@@ -1629,6 +1648,7 @@ aplikacji:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         twig:
@@ -1637,6 +1657,7 @@ aplikacji:
             # ...
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1653,6 +1674,7 @@ aplikacji:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('twig', array(
@@ -1710,6 +1732,7 @@ plik konfiguracyjny aplikacji:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
@@ -1720,6 +1743,7 @@ plik konfiguracyjny aplikacji:
         # ...
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1740,6 +1764,7 @@ plik konfiguracyjny aplikacji:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(

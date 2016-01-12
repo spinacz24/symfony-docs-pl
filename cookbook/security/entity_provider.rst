@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
    single: bezpieczeństwo; dostawca użytkowników
    single: bezpieczeństwo; dostawca z encji
@@ -43,6 +46,7 @@ Dla celów tego artykułu przyjmijmy, ze mamy już encję ``User`` wewnatrz paki
 ``email`` i ``isActive``:
 
 .. code-block:: php
+   :linenos:
 
     // src/AppBundle/Entity/User.php
     namespace AppBundle\Entity;
@@ -204,6 +208,7 @@ do nazwy użytkownika i sprawdzać hasło (o haśle więcej za moment):
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -230,6 +235,7 @@ do nazwy użytkownika i sprawdzać hasło (o haśle więcej za moment):
             # ...
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -259,6 +265,7 @@ do nazwy użytkownika i sprawdzać hasło (o haśle więcej za moment):
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(
@@ -505,6 +512,7 @@ w ``security.yml``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -516,6 +524,7 @@ w ``security.yml``:
                         class: AppBundle:User
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -535,6 +544,7 @@ w ``security.yml``:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
         $container->loadFromExtension('security', array(

@@ -1,8 +1,8 @@
 Bezpieczeństwo
 ==============
 
-Uwierzytelnianie(identyfikacja i logowanie użytkownika)
--------------------------------------------------------
+Uwierzytelnianie (identyfikacja i logowanie użytkownika)
+--------------------------------------------------------
 
 .. toctree::
     :maxdepth: 2

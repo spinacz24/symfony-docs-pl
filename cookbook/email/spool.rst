@@ -28,6 +28,7 @@ pamięci trzeba ustawić następującą konfigurację:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         swiftmailer:
@@ -35,6 +36,7 @@ pamięci trzeba ustawić następującą konfigurację:
             spool: { type: memory }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
 
@@ -49,6 +51,7 @@ pamięci trzeba ustawić następującą konfigurację:
         </swiftmailer:config>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('swiftmailer', array(
@@ -65,6 +68,7 @@ konfigurację:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         swiftmailer:
@@ -74,6 +78,7 @@ konfigurację:
                 path: /path/to/spool
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
 
@@ -90,6 +95,7 @@ konfigurację:
         </swiftmailer:config>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('swiftmailer', array(

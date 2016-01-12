@@ -265,6 +265,7 @@ Jeśli są jakieś problemy, rozwiąż je teraz, zanim przejdziesz dalej.
     go jako ``HTTPDUSER``:
     
     .. code-block:: bash
+       :linenos:
 
         $ HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
         $ sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs

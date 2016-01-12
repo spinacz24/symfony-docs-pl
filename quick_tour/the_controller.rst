@@ -85,6 +85,7 @@ Utwórzmy nowy szablon ``app/Resources/views/default/hello.html.twig`` z następ
 zawartością:
 
 .. code-block:: html+jinja
+   :linenos:
 
     {# app/Resources/views/default/hello.html.twig #}
     {% extends 'base.html.twig' %}
@@ -134,6 +135,7 @@ dla każdego obsługiwanego formatu wyjścia. W naszym przypadku trzeba utworzy�
 nowy szablon ``hello.xml.twig``:
 
 .. code-block:: xml+php
+   :linenos:
 
     <!-- app/Resources/views/default/hello.xml.twig -->
     <hello>
@@ -286,6 +288,7 @@ W szablonie, można także uzyskać dostęp do obiektu ``Request`` poprzez
 zmienną ``app.request``, automatycznie dostarczaną przez Symfony:
 
 .. code-block:: html+jinja
+   :linenos:
 
     {{ app.request.query.get('page') }}
 
@@ -334,6 +337,7 @@ przed przekierowaniem użytkownika na inną stronę::
 Następnie mozna wyświetlić ten komunikat w szabloni, tak jak tu:
 
 .. code-block:: html+jinja
+   :linenos:
 
     {% for flashMessage in app.session.flashbag.get('notice') %}
         <div class="flash-notice">

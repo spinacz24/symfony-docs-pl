@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
    single: komponenty; instalacja
    single: komponenty; stosowanie

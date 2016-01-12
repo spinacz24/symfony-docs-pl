@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
    pair: konfiguracja; Framework
 
@@ -184,12 +187,14 @@ Szczegóły można znaleźć w :doc:`/cookbook/request/load_balancer_reverse_pro
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
             trusted_proxies:  [192.0.0.1, 10.0.0.0/8]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -203,6 +208,7 @@ Szczegóły można znaleźć w :doc:`/cookbook/request/load_balancer_reverse_pro
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -236,12 +242,14 @@ jeśli uzywa się edytora PHPstorm na platformie Mac OS, trzeba zrobić coś tak
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
             ide: "phpstorm://open?file=%%f&line=%%l"
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -255,6 +263,7 @@ jeśli uzywa się edytora PHPstorm na platformie Mac OS, trzeba zrobić coś tak
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -329,12 +338,14 @@ odpowiedź 500.
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
             trusted_hosts:  ['example.com', 'example.org']
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -352,6 +363,7 @@ odpowiedź 500.
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -456,12 +468,14 @@ Ustawiajac tą opcje na ``true`` włącza sie obsługe ESI:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
             esi: true
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -477,6 +491,7 @@ Ustawiajac tą opcje na ``true`` włącza sie obsługe ESI:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -820,6 +835,7 @@ z pliku ``php.ini``:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
@@ -827,6 +843,7 @@ z pliku ``php.ini``:
                 save_path: ~
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -842,6 +859,7 @@ z pliku ``php.ini``:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -871,7 +889,7 @@ For example, suppose you have the following:
 .. configuration-block::
 
     .. code-block:: html+jinja
-
+       
         <img src="{{ asset('images/logo.png') }}" alt="Symfony!" />
 
     .. code-block:: php
@@ -884,6 +902,7 @@ Now, activate the ``assets_version`` option:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
@@ -891,6 +910,7 @@ Now, activate the ``assets_version`` option:
             templating: { engines: ['twig'], assets_version: v2 }
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -907,6 +927,7 @@ Now, activate the ``assets_version`` option:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -1005,6 +1026,7 @@ Assume you have custom global form themes in
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
@@ -1014,6 +1036,7 @@ Assume you have custom global form themes in
                         - 'WebsiteBundle:Form'
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1039,6 +1062,7 @@ Assume you have custom global form themes in
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -1075,6 +1099,7 @@ an asset's path:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
@@ -1088,6 +1113,7 @@ an asset's path:
                 #     http: "//cdn.example.com/"
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1106,6 +1132,7 @@ an asset's path:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -1132,6 +1159,7 @@ collection):
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
@@ -1143,6 +1171,7 @@ collection):
                 # assets_base_urls: "//cdn.example.com/"
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1159,6 +1188,7 @@ collection):
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -1215,6 +1245,7 @@ You can group assets into packages, to specify different base URLs for them:
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         framework:
@@ -1225,6 +1256,7 @@ You can group assets into packages, to specify different base URLs for them:
                         base_urls: 'http://static_cdn.example.com/avatars'
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1248,6 +1280,7 @@ You can group assets into packages, to specify different base URLs for them:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         $container->loadFromExtension('framework', array(
@@ -1513,6 +1546,7 @@ Pełna domyślna konfiguracja
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         framework:
             secret:               ~

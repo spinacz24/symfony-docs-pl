@@ -64,6 +64,7 @@ bazą danych. Zgodnie z konwencją informacja ta zapisywana jest w pliku
     .. configuration-block::
 
         .. code-block:: yaml
+           :linenos:
 
             # app/config/config.yml
             doctrine:
@@ -75,6 +76,7 @@ bazą danych. Zgodnie z konwencją informacja ta zapisywana jest w pliku
                     password: "%database_password%"
 
         .. code-block:: xml
+           :linenos:
 
             <!-- app/config/config.xml -->
             <?xml version="1.0" encoding="UTF-8" ?>
@@ -97,6 +99,7 @@ bazą danych. Zgodnie z konwencją informacja ta zapisywana jest w pliku
             </container>
 
         .. code-block:: php
+           :linenos:
 
             // app/config/config.php
             $configuration->loadFromExtension('doctrine', array(
@@ -132,7 +135,7 @@ do utworzenia bazy danych:
     poleceń w czasie programowania:
 
     .. code-block:: bash
-
+       
         $ php app/console doctrine:database:drop --force
         $ php app/console doctrine:database:create
 
@@ -144,7 +147,7 @@ do utworzenia bazy danych:
     do pliku konfiguracyjnego serwera (przeważnie ``my.cnf``):
 
     .. code-block:: ini
-
+       
         [mysqld]
         # W versji 5.5.3 wprowadzono zestawa "utf8mb4", który jest zalecany
         collation-server     = utf8mb4_general_ci # Replaces utf8_general_ci
@@ -162,6 +165,7 @@ do utworzenia bazy danych:
     .. configuration-block::
 
         .. code-block:: yaml
+           :linenos:
 
             # app/config/config.yml
             doctrine:
@@ -171,6 +175,7 @@ do utworzenia bazy danych:
                     charset: UTF8
 
         .. code-block:: xml
+           :linenos:
 
             <!-- app/config/config.xml -->
             <?xml version="1.0" encoding="UTF-8" ?>
@@ -191,6 +196,7 @@ do utworzenia bazy danych:
             </container>
 
         .. code-block:: php
+           :linenos:
 
             // app/config/config.php
             $container->loadFromExtension('doctrine', array(
@@ -257,6 +263,7 @@ w klasie ``Product`` poprzez adnotacje:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Entity/Product.php
         namespace AppBundle\Entity;
@@ -293,6 +300,7 @@ w klasie ``Product`` poprzez adnotacje:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/doctrine/Product.orm.yml
         AppBundle\Entity\Product:
@@ -313,6 +321,7 @@ w klasie ``Product`` poprzez adnotacje:
                     type: text
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/doctrine/Product.orm.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -816,6 +825,7 @@ Dla wykonania tego, należy dodać nazwę klasy repozytorium do definicji odwzor
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Entity/Product.php
         namespace AppBundle\Entity;
@@ -831,6 +841,7 @@ Dla wykonania tego, należy dodać nazwę klasy repozytorium do definicji odwzor
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/doctrine/Product.orm.yml
         AppBundle\Entity\Product:
@@ -839,6 +850,7 @@ Dla wykonania tego, należy dodać nazwę klasy repozytorium do definicji odwzor
             # ...
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/doctrine/Product.orm.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -867,6 +879,7 @@ repozytorium. Metoda ta będzie przepytywać wszystkie encje ``Product`` w kolej
 alfabetycznej.
 
 .. code-block:: php
+   :linenos:
 
     // src/AppBundle/Entity/ProductRepository.php
     namespace AppBundle\Entity;
@@ -932,6 +945,7 @@ właściwości ``products`` w klasie ``Category``:
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Entity/Category.php
 
@@ -954,6 +968,7 @@ właściwości ``products`` w klasie ``Category``:
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/doctrine/Category.orm.yml
         AppBundle\Entity\Category:
@@ -967,6 +982,7 @@ właściwości ``products`` w klasie ``Category``:
             # of the entity
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/doctrine/Category.orm.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1017,6 +1033,7 @@ Następnie, ponieważ każda klasa ``Product`` odnosi się dokładnie do jednego
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Entity/Product.php
 
@@ -1033,6 +1050,7 @@ Następnie, ponieważ każda klasa ``Product`` odnosi się dokładnie do jednego
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/doctrine/Product.orm.yml
         AppBundle\Entity\Product:
@@ -1047,6 +1065,7 @@ Następnie, ponieważ każda klasa ``Product`` odnosi się dokładnie do jednego
                         referencedColumnName: id
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/doctrine/Product.orm.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
@@ -1335,6 +1354,7 @@ kolumnę datową na bieżącą datę, ale tylko wtedy, gdy encja jest pierwszy r
 .. configuration-block::
 
     .. code-block:: php-annotations
+       :linenos:
 
         // src/AppBundle/Entity/Product.php
 
@@ -1347,6 +1367,7 @@ kolumnę datową na bieżącą datę, ale tylko wtedy, gdy encja jest pierwszy r
         }
 
     .. code-block:: yaml
+       :linenos:
 
         # src/AppBundle/Resources/config/doctrine/Product.orm.yml
         AppBundle\Entity\Product:
@@ -1356,6 +1377,7 @@ kolumnę datową na bieżącą datę, ale tylko wtedy, gdy encja jest pierwszy r
                 prePersist: [setCreatedAtValue]
 
     .. code-block:: xml
+       :linenos:
 
         <!-- src/AppBundle/Resources/config/doctrine/Product.orm.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>

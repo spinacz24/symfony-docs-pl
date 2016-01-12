@@ -149,6 +149,7 @@ Każdy pakiet może być dostosowywany poprzez pliki konfiguracyjne w języku YA
 XML, czy też PHP. Wystarczy popatrzeć na domyślną konfigurację Symfony:
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/config.yml
     imports:
@@ -196,6 +197,7 @@ odpowiedniego pliku konfiguracyjnego. Dla przykładu, środowisko ``dev`` wczytu
 modyfikuje go w celu dodania narzędzi do debugowania:
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/config_dev.yml
     imports:
