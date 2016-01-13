@@ -2,7 +2,7 @@
    :linenothreshold: 2
 
 .. index::
-    single: bezpieczeństwo; podszywanie sie pod użytkownika
+    single: bezpieczeństwo; podszywanie się
 
 Jak podszywać się po użytkownika
 ================================

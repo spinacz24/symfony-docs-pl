@@ -339,7 +339,7 @@ Przekierowanie po zalogowaniu
 
 .. index::
    single: bezpieczeństwo; koder PBKDF2
-   single: koder PBKDF2; konfiguracja
+   single: algorytm kodowania hasła; PBKDF2; konfiguracja 
 
 .. _reference-security-pbkdf2:
 
@@ -360,7 +360,7 @@ Dobra konfiguracja wymaga użycia około 1000 iteracji i sha512 dla algorytmu mi
 
 .. index::
    single: bezpieczeństwo; koder BCrypt
-   single: koder BCrypt; konfiguracja
+   single: algorytm kodowania hasła; BCrypt; konfiguracja
 
 .. _reference-security-pbkdf2:
 
@@ -507,7 +507,7 @@ zapory, to "kontekst" będzie w rzeczywistości współdzielony:
 .. index::
    HTTP-Digest
    single: uwierzytelnianie; HTTP-Digest
-   single: bezpieczeństwo; uwierzytelnianie HTTP-Gigest
+   single: bezpieczeństwo; uwierzytelnianie HTTP-Digest
 
 Uwierzytelnianie HTTP-Digest
 ----------------------------
