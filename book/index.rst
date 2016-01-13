@@ -25,6 +25,5 @@ Podręcznik
    translation
    service_container
    performance
-   internals
-   stable_api
+   
 
