@@ -416,6 +416,10 @@ to można skonfigurować, że poszczególni dostawcy używają zapory pod własn
     Przeczytaj :doc:`/cookbook/security/multiple_user_providers` w celu zapoznania
     się ze szczegółami konfigurowania wielu dostawców.
 
+.. index::
+   single: bezpieczeństwo; szyfrowanie hasła
+   single: szyfrowanie hasła; zwykły tekst
+
 Wypróbuj teraz zalogować użytkownika ``admin`` stosując hasło ``kitten``. Zobaczysz
 komunikat o błędzie::
 
@@ -491,6 +495,9 @@ Ponieważ dostęp do stron administracyjnych wymaga roli ``ROLE_ADMIN``, to po z
 się jako ``ryan``, otrzymasz odmowę dostępu. Zagadnienie to zostanie omówione
 później (:ref:`security-authorization-access-control`).
 
+.. index::
+   single: bezpieczeństwo; dostawca z encji
+
 .. _book-security-user-entity:
 
 Ładowanie użytkowników z bazy danych
@@ -499,6 +506,11 @@ później (:ref:`security-authorization-access-control`).
 Ładowanie informacji o użytkownikach z wykorzystaniem Doctrine ORM jest proste.
 Proszę przeczytać artykuł :doc:`/cookbook/security/entity_provider` szczegółowo
 omawiający to zagadnienie.
+
+
+.. index::
+   single: bezpieczeństwo; szyfrowanie hasła
+   single: szyfrowanie hasła; algorytm BCrypt
 
 .. _book-security-encoding-user-password:
 .. _c-encoding-the-users-password:

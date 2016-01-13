@@ -1,5 +1,5 @@
 .. index::
-   single: bezpieczeństwo; "zapamietaj mmnie"
+   single: bezpieczeństwo; "zapamietaj mnie"
    single: zapora; remeber_me
    
 Jak dodać funkcjonalność logowania "Zapamietaj mnie"

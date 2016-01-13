@@ -52,7 +52,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'symfony-docs-pl'
-copyright = '2013-2015, Symfony Community'
+copyright = u'2013-2016, Społeczność Symfony'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -282,7 +282,7 @@ texinfo_documents = [
 epub_title = 'symfony-docs-pl'
 epub_author = u'Społeczność Symfony'
 epub_publisher = u'Społeczność Symfony'
-epub_copyright = u'2013-2015, Społeczność Symfony'
+epub_copyright = u'2013-2016, Społeczność Symfony'
 
 # The language of the text. It defaults to the language option
 # or en if the language is not set.
