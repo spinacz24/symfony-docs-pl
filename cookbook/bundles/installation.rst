@@ -1,8 +1,8 @@
 .. index::
    single: pakiet; instalacja
 
-Jak zainstalować pakiety zewnetrzne ?
-=====================================
+Jak zainstalować pakiety zewnętrzne
+===================================
 
 Większość pakietów zapewnia swoje instrukcje obsługi. Jednakże, podstawowe
 etapy instalacji pakietów są niemalże identyczne:
