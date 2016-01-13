@@ -7,7 +7,7 @@
 Wydajność
 =========
 
-Symfony2 jest szybkie zaraz po uruchomieniu. Oczywiście jeśli potrzebuje się
+Symfony jest szybkie zaraz po uruchomieniu. Oczywiście jeśli potrzebuje się
 jeszcze lepszej wydajności, jest kilka sposobów na przyśpieszenie Symfony. W tym
 rozdziale prezentujemy kilka sposobów do przyśpieszenie aplikacji opartych na Symfony.
 Mają one bardzo duże możliwości i są szeroko stosowane.
@@ -25,7 +25,7 @@ potrzeby ciągłego kompilowywania tego samego kodu. Dostępnych jest kilka
 `akceleratorów kodu bajtowego`_ dla PHP o otwartym kodzie. Najczęściej stosowanym
 jest prawdopodobnie `APC`_, ale również bardzo popularnym jest `eAccelerator`_. 
 
-Korzystanie z pamięci podręcznej tego typu naprawdę nie ma wad i Symfony2 zostało
+Korzystanie z pamięci podręcznej tego typu naprawdę nie ma wad i Symfony zostało
 zaprojektowane tak aby radzić sobie bardzo dobrze w tych warunkach.
 
 Dalsze Optymalizacje
@@ -51,7 +51,7 @@ linię ``apc.stat=0``
 Mapa klas z użyciem programu Composer
 -------------------------------------
 
-Domyślnie Symfony2 SE używa autoloadera programu Composer w pliku `autoload.php`_.
+Domyślnie Symfony SE używa autoloadera programu Composer w pliku `autoload.php`_.
 Ten autoloader jest łatwy w użyciu, jako że automatycznie odnajduje nowe klasy,
 które zostały umieszczone w zarejestrowanych katalogach.
 
@@ -111,17 +111,17 @@ Więcej szczegółów w :doc:`/components/class_loader/cache_class_loader`.
 Pliki rozruchowe
 ----------------
 
-Aby zapewnić optymalną elastyczność i możliwość ponownego użycia kodu, Symfony2
+Aby zapewnić optymalną elastyczność i możliwość ponownego użycia kodu, Symfony
 posiada sporą różnorodność klas oraz komponentów zewnętrznych. Ale ładowanie
 tych wszystkich klas z osobnych plików przy każdym wywołaniu (request) może
-dawać narzut czasowy. Aby zminimalizować ten narzut, Symfony2 Standard Edition 
+dawać narzut czasowy. Aby zminimalizować ten narzut, Symfony Standard Edition 
 udostępnia skrypt do wygenerowania pliku rozruchowego `bootstrap`_, który zawiera
 definicję wielu klas w jednym miejscu.
 Poprzez ładowanie tego pliku (który posiada kopię wielu klas z jądra), Symfony nie 
 musi więcej ładować źródła plików zawierających te klasy. To trochę zredukuje 
 operacje dyskowe IO.
 
-Jeśli używa się Symfony2 Standard Edition, w takim przypadku zapewne używa się już
+Jeśli używa się Symfony Standard Edition, w takim przypadku zapewne używa się już
 pliku rozruchowego. Aby to sprawdzić czy w kontrolerze wejścia
 (zwykle ``app.php``) istnieje następująca linia::
 
@@ -130,12 +130,12 @@ pliku rozruchowego. Aby to sprawdzić czy w kontrolerze wejścia
 Trzeba mieć na uwadze, że używanie pliku rozruchowego posiada dwie wady:
 
 * plik musi zostać wygenerowany ponownie gdy zmieni się jakiś plik źródłowy
-  (np. kiedy robi się aktualizację kodu Symfony2 lub też bibliotek dostawców);
+  (np. kiedy robi się aktualizację kodu Symfony lub też bibliotek dostawców);
 
 * podczas debugowania, trzeba ustawić punkty przerwania (break points) wewnątrz
   pliku rozruchowego.
 
-Jeśli używasz Symfony2 Standard Edition, plik rozruchowy jest automatycznie 
+Jeśli używasz Symfony Standard Edition, plik rozruchowy jest automatycznie 
 przebudowywany po aktualizacji bibliotek dostawców po użyciu polecenia 
 ``php bin/vendors install``.
 
