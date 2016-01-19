@@ -1,3 +1,6 @@
+.. index::
+   double: konfiguracja; najlepsze praktyki
+
 Konfiguracja
 ============
 
@@ -19,6 +22,7 @@ Domyślny plik ``parameters.yml`` zgodny jest z naszym zaleceniem i definiuje op
 odnoszace sie do infrastruktury bazy danych i serwera pocztowego:
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/parameters.yml
     parameters:
@@ -100,6 +104,7 @@ Symfony dołączaja opcje taka jak pokazano niżej, które mogłyby być wykorzy
 do kontrolowania ilości wpisów do wyświetlania na stronie początkowej bloga:
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/config.yml
     parameters:
@@ -111,6 +116,7 @@ Zalecamy definiowanie takich wartości w aplikacji jako stałych.
 Można, na przykład, zdefiniowac stałą ``NUM_ITEMS`` w encji ``Post``:
 
 .. code-block:: php
+   :linenos:
 
     // src/AppBundle/Entity/Post.php
     namespace AppBundle\Entity;
@@ -139,6 +145,7 @@ Takze encje i repozytoria Doctrine moga teraz uzyskać łatwo dostęp do tych wa
 podczas gdy nie mogą uzyskać dostpu do parametrów kontenera:
 
 .. code-block:: php
+   :linenos:
 
     namespace AppBundle\Repository;
 

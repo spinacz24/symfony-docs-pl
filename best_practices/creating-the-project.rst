@@ -1,3 +1,6 @@
+.. index::
+   double: tworzenie projektu; najlepsze praktyki
+
 Tworzenie projektu
 ==================
 

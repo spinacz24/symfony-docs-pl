@@ -1,3 +1,6 @@
+.. index::
+   double: kontrolery; najlepsze praktyki
+
 Kontrolery
 ==========
 
@@ -41,6 +44,7 @@ W celu załadowania w kontrolerach definicji trasowania w postaci adnotacji, trz
 dodać nastęþująca konfigurację w głównym pliku konfiguracyjnym:
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/routing.yml
     app:
@@ -74,7 +78,7 @@ Konfiguracja szablonu
 
 .. tip::
 
-    Nie uzywaj adnotacji ``@Template()`` do konfigurowania szablonu stosowanego
+    Nie używaj adnotacji ``@Template()`` do konfigurowania szablonu stosowanego
     w kontrolerze.
 
 Adnotacja ``@Template`` jest pozyteczna, ale równocześnie angażuje trochę magii.
@@ -93,6 +97,7 @@ Biorąc to wszystko po uwagę, przedstawmy przykładowy kod kontrolera dla stron
 początkowej aplikacji:
 
 .. code-block:: php
+   :linenos:
 
     namespace AppBundle\Controller;
 
@@ -133,6 +138,7 @@ argument do kontrolera.
 Na przykład:
 
 .. code-block:: php
+   :linenos:
 
     use AppBundle\Entity\Post;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -165,6 +171,7 @@ jeszcze bardziej złożoną logikę, najprościej jest wypytać encję ręcznie.
 W naszej aplikacji mamy taka sytuacje w ``CommentController``:
 
 .. code-block:: php
+   :linenos:
 
     /**
      * @Route("/comment/{postSlug}/new", name = "comment_new")
@@ -185,6 +192,7 @@ W naszej aplikacji mamy taka sytuacje w ``CommentController``:
 Można również użyć konfiguracji ``@ParamConverter``, która jest bardzo elastyczna:
 
 .. code-block:: php
+   :linenos:
 
     use AppBundle\Entity\Post;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
