@@ -242,6 +242,7 @@ lub masz bardziej zaawansowany przypadek, możesz zawsze wykonać indywidualny k
 autoryzacyjny w PHP:
 
 .. code-block:: php
+   :linenos:
 
     /**
      * @Route("/{id}/edit", name="admin_post_edit")
@@ -288,6 +289,7 @@ Po pierwsze trzeba utworzyć klasę wyborcy. W poniższym przykładzie pokazano
 wyborcę. który implementuje tą sama logikę ``getAuthorEmail``, jaką użyto poprzednio:
 
 .. code-block:: php
+   :linenos:
 
     namespace AppBundle\Security;
 
@@ -331,6 +333,7 @@ wyborcę. który implementuje tą sama logikę ``getAuthorEmail``, jaką użyto 
 Do włączenia wyborcy w aplikacji, trzeba zdefiniować nową usługę:
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/services.yml
     services:
@@ -344,6 +347,7 @@ Do włączenia wyborcy w aplikacji, trzeba zdefiniować nową usługę:
 Teraz, można wykorzystywać wyborcę w adnotacji ``@Security``:
 
 .. code-block:: php
+   :linenos:
 
     /**
      * @Route("/{id}/edit", name="admin_post_edit")
@@ -358,6 +362,7 @@ Można to również użyć bezpośrednio w usłudze ``security.authorization_che
 lub przez jeszcze łatwiejszy skrót w akcji kontrolera:
 
 .. code-block:: php
+   :linenos:
 
     /**
      * @Route("/{id}/edit", name="admin_post_edit")

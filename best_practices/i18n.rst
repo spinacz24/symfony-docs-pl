@@ -1,0 +1,102 @@
+.. index::
+   double: i18n; najlepsze praktyki
+
+Umiędzynarodowienie
+===================
+
+Umiędzynarodowienie (*ang. internationalization, i18n*) i ustawienie narodowe
+(*ang. locale, localization*) dostosowują aplikacje i ich zawartość do specyfiki
+regionu lub języka użytkowników. W Symfony jest to funkcjonalność "opt-in",
+która wymaga ustawienia przed jej użyciem. W celu wykonania tego, trzeba odkomentować
+opcję konfiguracyjną ``translator`` i ustawić identyfikator narodowy (*ang. locale*):
+
+.. code-block:: yaml
+   :linenos:
+
+    # app/config/config.yml
+    framework:
+        # ...
+        translator: { fallbacks: ['%locale%'] }
+
+    # app/config/parameters.yml
+    parameters:
+        # ...
+        locale:     en
+
+Format źródłowego pliku tłumaczeń
+---------------------------------
+
+Komponent Translation obsługuje wiele róznych formatów translacyjnych:
+PHP, Qt, ``.po``, ``.mo``, JSON, CSV, INI itd.
+
+.. best-practice::
+
+    Używaj formatu XLIFF dla swoich plikow translacyjnych.
+
+Spośród wszystkich dostępnych formatów translacyjnych, tylko XLIFF i gettext mają
+szerokie wsparcie w postaci narzędzi uzywanych przez zawodowych tłumaczy. Ponadto,
+format XLIFF oparty jest na formacie XML, co umożliwia łatwe pisanie i odczyt pliku.
+
+W Symfony 2.6 dodano obsługę notatek wewnatrz plików XLIFF, czyniąc je bardziej
+łatwymi w obsłudze przez tłumaczy. Dobre tłumaczenia oparte są o konekst
+a notatki XLIFF pozwalają na określenie kontestu.
+
+.. tip::
+
+    Pakiet `JMSTranslationBundle`_, oparty na licencji Apache, zapewnia interfejs
+    internetowy dla podglądu i edycji plików translacyjnych. Posiada również
+    zaawansowane ekstraktory, które mogą odczytywać projekt i automatycznie
+    aktualizować pliki XLIFF.
+
+Lokalizacja źródłowych plików translacyjnych
+--------------------------------------------
+
+.. best-practice::
+
+    Przechowuj pliki tłumaczeń w katalogu ``app/Resources/translations/``.
+
+Zwykle, programiści Symfony tworzą pliki tłumaczeń w katalogu 
+``Resources/translations/`` każdego pakietu.
+
+Jednak katalog ``app/Resources/`` jest uważany za globalną lokalizację dla zasobów
+aplikacji. Przechowywania tłumaczeń w ``app/Resources/translations/`` centralizuje 
+tłumaczenia i nadaje im pierwszeństwo w hierarchii tłumaczeń, pozwalając przesłaniać
+tłumaczenia zlokalizowane w pakietach.
+
+Klucze translacyjne
+-------------------
+
+.. best-practice::
+
+    Dla tłumaczeń zawsze używaj kluczy a nie łańcuchów treści.
+
+Stosowanie kluczy upraszcza zarządzanie plikami tłumaczeń, ponieważ można zmieniać
+oryginalne treści bez konieczności aktualizowania wszystkich plików tłumaczeń.
+
+Klucze należy zawsze opisywać ich *zastosowaniem* a *nie ich lokalizacją*. Na
+przykład, jeśli formularz ma pole z etykietą "Username", to dobrym kluczem będzie
+``label.username``, nie ``edit_form.label.username``.
+
+Przykład pliku tlumaczeń
+------------------------
+
+Stosując wszystkie poprzednio omówione praktyki, przykładowy plik tłumaczeń
+dla języka angielskiego English może mieć taką treść:
+
+.. code-block:: xml
+   :linenos:
+
+    <!-- app/Resources/translations/messages.en.xlf -->
+    <?xml version="1.0"?>
+    <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+        <file source-language="en" target-language="en" datatype="plaintext" original="file.ext">
+            <body>
+                <trans-unit id="1">
+                    <source>title.post_list</source>
+                    <target>Post List</target>
+                </trans-unit>
+            </body>
+        </file>
+    </xliff>
+
+.. _`JMSTranslationBundle`: https://github.com/schmittjoh/JMSTranslationBundle

@@ -311,6 +311,8 @@ ta zawiera jakiś tekst lub czy odpowiedź nie jest dokumentem XML lub HTML::
 .. index::
    single: testy; klient
 
+.. _book_testing_client:
+
 Praca z klientem testowania
 ---------------------------
 

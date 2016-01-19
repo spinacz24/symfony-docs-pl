@@ -1,3 +1,6 @@
+.. index::
+   double: logika biznesowa; najlepsze praktyki
+
 Organizowanie logiki biznesowej
 ===============================
 
@@ -64,6 +67,7 @@ Utwórzmy nową klasę ``Slugger`` wewnatrz ``src/AppBundle/Utils/`` i dodajmy n
 metodę ``slugify()``:
 
 .. code-block:: php
+   :linenos:
 
     // src/AppBundle/Utils/Slugger.php
     namespace AppBundle\Utils;
@@ -81,6 +85,7 @@ metodę ``slugify()``:
 Następnie, zdefiniujmy nową usługę dla tej klasy.
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/services.yml
     services:
@@ -102,6 +107,7 @@ Teraz można wykorzystać własna usługę slugger w dowolnej klasie kontrolera,
 takiej jak ``AdminController``:
 
 .. code-block:: php
+   :linenos:
 
     public function createAction(Request $request)
     {
@@ -138,6 +144,7 @@ Można zauważyć, że poprzednia definicja usługi nie konfiguruje przestrzeni
 nazewniczej klasy jako parametr:
 
 .. code-block:: yaml
+   :linenos:
 
     # app/config/services.yml
 
@@ -208,6 +215,7 @@ Adnotacje są jak dotąd najbardziej wygodnym i błyskotliwym sposobem konfiguro
 i odszukiwania informacji odwzorowania:
 
 .. code-block:: php
+   :linenos:
 
     namespace AppBundle\Entity;
 
@@ -290,6 +298,7 @@ Następnie trzeba włączyć pakiet w ``AppKernel.php``, ale tylko dla środowis
 i ``test``:
 
 .. code-block:: php
+   :linenos:
 
     use Symfony\Component\HttpKernel\Kernel;
 

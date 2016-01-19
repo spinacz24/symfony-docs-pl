@@ -1,6 +1,5 @@
 .. index::
-   single: najlepsze prakyki
-   single: Symfony; najlepsze praktyki
+   single: najlepsze praktyki
 
 Najlepsze praktyki dla frameworka Symfony
 =========================================
