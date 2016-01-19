@@ -14,13 +14,14 @@ Słownik
       posiadają nazwy kończące się słowem ``Action``.
    
    aktywa
+   aktywa sieciowe
       (*ang. assets*)
       
-      Aktywa w Symfony, to załadowane zasoby (pliki CSS, JavaScript, obrazy itd.),
-      skrypty generowane z treści plików i skrypty tworzone "w locie".
-      Zasób po załadowaniu jest aktywem - przetwarzane są aktywa, a nie zasoby.
-      Podobnie jest w ekonomii - aktywa, to aktywowane (aktywne) zasoby.
-      
+      Aktywa w Symfony, to pliki (CSS, JavaScript, obrazy itd.), skrypty generowane
+      z treści plików i skrypty tworzone "w locie", składające się na część frontową
+      aplikacji. W tym znaczeniu "aktywa" są też nazywane
+      :term:`zasobami aplikacji <zasób>`.
+            
    dystrybucja
       (*ang. distribution*)
       
@@ -38,7 +39,7 @@ Słownik
       (*ang. application*)
       
       Pojecie *aplikacji* jest używane w tej dokumentacji w dwóch kontekstach.
-      Pierwszy, to tradycyjne znaczenie `aplikacji internetowej`_.
+      Pierwszy, to tradycyjne znaczenie `aplikacji sieciowej`_.
       Drugi, to katalog zawierający *konfigurację* dla danego zestawu
       *pakietów*.
 
@@ -142,12 +143,23 @@ Słownik
       zawiera kilka akcji. Zobacz :doc:`Rozdział o Kontrolerze </book/controller>`.
 
    zasób
-      (*ang. asset*)
+      (*ang. resource*)
       
-      *Zasób* jest komponentem aplikacji internetowej, bedącym plikiem takim jak
-      CSS, JavaScript, obraz czy wideo. Zasoby mogą być umiejscowione bezpośrednio
-      w katalogu projektu ``web``, lub publikowane do katalogu ``web``
-      z :term:`pakietu <pakiet>` przez wykonanie polecenia konsoli ``assets:install``.
+      *Zasób* ma dwojakie znaczenie. *Zasoby aplikacji* (*zasoby programu*) są
+      komponentem aplikacji sieciowej, będącymi plikiem takim jak
+      CSS, JavaScript, obraz czy wideo. Zasoby takie mogą być w Symfony
+      umiejscowione bezpośrednio w katalogu projektu ``web``, lub publikowane
+      do katalogu ``web`` z :term:`pakietu <pakiet>` przez wykonanie polecenia
+      konsoli ``assets:install``. Użyte w palikacji zasoby aplikacji są nazywane
+      w Symfony (i innych systemach) :term:`aktywami sieciowymi` lub w skrócie
+      :term:`aktywami <aktywa>`.
+      
+      W drugim znaczniu, chodzi o *zasoby sieciowe*, czyli rzeczywiste i wirtualne
+      zasoby informacyjne Internetu, z których każdy ma ściśle określony adres
+      `URI`_.
+      
+      .. _`zasoby programu`: https://pl.wikipedia.org/wiki/Zasoby_programu
+      .. _`URI`: https://pl.wikipedia.org/wiki/Uniform_Resource_Identifier   
 
    kernel
       (*ang. kernel*)
@@ -176,7 +188,7 @@ Słownik
 .. _`architekturze zorientowanej na usługi`: http://pl.wikipedia.org/wiki/Architektura_zorientowana_na_us%C5%82ugi
 .. _`HTTP`: http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol
 .. _`HTTP 1.1 RFC`: http://www.w3.org/Protocols/rfc2616/rfc2616.html
-.. _`aplikacji internetowej`: http://pl.wikipedia.org/wiki/Aplikacja_(informatyka)
+.. _`aplikacji sieciowej`: http://pl.wikipedia.org/wiki/Aplikacja_(informatyka)
 .. _`YAML`: http://pl.wikipedia.org/wiki/YAML
 
 .. rubric:: Przypisy

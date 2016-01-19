@@ -4,8 +4,8 @@
 .. index::
     single: bezpieczeństwo; podszywanie się
 
-Jak podszywać się po użytkownika
-================================
+Jak podszywać się pod użytkownika
+=================================
 
 Czasami zachodzi potrzeba przełączenia się z jednego użytkownika na innego,
 bez konieczności wylogowywania się i ponownego logowania (na przykład podczas
