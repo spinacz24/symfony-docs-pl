@@ -69,11 +69,11 @@ bazą danych. Zgodnie z konwencją informacja ta zapisywana jest w pliku
             # app/config/config.yml
             doctrine:
                 dbal:
-                    driver:   "%database_driver%"
-                    host:     "%database_host%"
-                    dbname:   "%database_name%"
-                    user:     "%database_user%"
-                    password: "%database_password%"
+                    driver:   '%database_driver%'
+                    host:     '%database_host%'
+                    dbname:   '%database_name%'
+                    user:     '%database_user%'
+                    password: '%database_password%'
 
         .. code-block:: xml
            :linenos:
@@ -171,7 +171,7 @@ do utworzenia bazy danych:
             doctrine:
                 dbal:
                     driver: pdo_sqlite
-                    path: "%kernel.root_dir%/sqlite.db"
+                    path: '%kernel.root_dir%/sqlite.db'
                     charset: UTF8
 
         .. code-block:: xml
@@ -552,11 +552,11 @@ Spójrzmy na powyższy kod bardziej szczegółowo:
   odpowiedzialny za obsługę procesu utrwalania i pobierania obiektów z formularza
   do bazy danych;
 
-* **linia 16** Metoda ``persist()`` powiadamia Doctrine aby "zarządzała" obiektem
+* **linia 17** Metoda ``persist()`` powiadamia Doctrine aby "zarządzała" obiektem
   ``$product``. W rzeczywistości to nie powoduje wprowadzenia zapytania do bazy danych
   (na razie);
 
-* **linia 17** Gdy wywoływana jest metoda ``flush()``, Doctrine przeszukuje wszystkie
+* **linia 18** Gdy wywoływana jest metoda ``flush()``, Doctrine przeszukuje wszystkie
   zarządzane obiekty, by sprawdzić, czy muszą one zostać utrwalone w bazie danych.
   W naszym przykładzie obiekt ``$product`` nie został jeszcze utrwalony, tak więc
   menadżer encji wykona zapytanie ``INSERT`` i utworzony zostanie wiersz w tabeli
@@ -780,8 +780,8 @@ wyniku trzeba uzyć ``getOneOrNullResult()``::
       single: Doctrine; budowniczy zapytań
        
 
-Stosowanie budowniczego zapytań Doctrine
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Odpytywanie obiektów prz uzyciu Query Builder Doctrine
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Zamiast pisać łańcuch DQL, można użyć pomocny obiekt o nazwie ``QueryBuilder``
 do zbudowania łańcucha zapytania. Jest to przydatne, gdy rzeczywiste zapytanie
@@ -978,9 +978,7 @@ właściwości ``products`` w klasie ``Category``:
                 products:
                     targetEntity: Product
                     mappedBy: category
-            # don't forget to init the collection in the __construct() method
-            # of the entity
-
+            # Nie zapomnij zainicjować kolekcję w metodzie __construct() encji
     .. code-block:: xml
        :linenos:
 
@@ -999,8 +997,8 @@ właściwości ``products`` w klasie ``Category``:
                     mapped-by="category" />
 
                 <!--
-                    don't forget to init the collection in
-                    the __construct() method of the entity
+                    Nie zapomnij zainicjować kolekcję w metodzie
+                    __construct() encji
                 -->
             </entity>
         </doctrine-mapping>
@@ -1124,7 +1122,7 @@ tablicy ``category`` i kolumnie ``product.category_id`` oraz nowym kluczu zewnę
 
 .. note::
 
-    Zadanie to powinno być wykonywane tylko w czasie programowania. W celu
+    Polecenie to powinno być wykonywane tylko w czasie programowania. W celu
     poznania bardziej solidnej metody systematycznego aktualizowania produkcyjnej
     bazy danych, przeczytaj artykuł o `migracjach`_.
 
@@ -1472,7 +1470,6 @@ Więcej informacji o Doctrine mozna znaleźć w rozdziale *Doctrine*
 .. _`Property Mapping`: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/basic-mapping.html#property-mapping
 .. _`Lifecycle Events`: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/events.html#lifecycle-events
 .. _`Reserved SQL keywords`: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/basic-mapping.html#quoting-reserved-words
-.. _`Persistent classes`: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/basic-mapping.html#persistent-classes
 .. _`Creating Classes for the Database`: http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/basic-mapping.html#creating-classes-for-the-database
 .. _`DoctrineMongoDBBundle`: https://symfony.com/doc/current/bundles/DoctrineMongoDBBundle/index.html
 .. _`migracji`: https://symfony.com/doc/current/bundles/DoctrineMigrationsBundle/index.html

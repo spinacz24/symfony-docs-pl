@@ -22,8 +22,9 @@ Jednym z najlepszych (i najłatwiejszych) sposobów zwiększenia wydajności jes
 użycie **akceleratorów skompilowanego kodu bajtowego**, czyli pamięci podręcznej
 przechowującej kod bajtowy. Ideą buforowania `kodu bajtowego`_  jest wyeliminowanie
 potrzeby ciągłego kompilowywania tego samego kodu. Dostępnych jest kilka
-`akceleratorów kodu bajtowego`_ dla PHP o otwartym kodzie. Najczęściej stosowanym
-jest prawdopodobnie `APC`_, ale również bardzo popularnym jest `eAccelerator`_. 
+`akceleratorów kodu bajtowego`_ dla PHP o otwartym kodzie.
+W PHP 5.5 wbudowany został `OPcache`_. W starszych wersjach, powszechnie używany
+był akcelerator kodu bajtowego `APC`_
 
 Korzystanie z pamięci podręcznej tego typu naprawdę nie ma wad i Symfony zostało
 zaprojektowane tak aby radzić sobie bardzo dobrze w tych warunkach.
@@ -151,5 +152,5 @@ zmian. Oczywiście jeśli ta funkcjonalność jest wyłączona w akceleratorze k
 .. _`autoload.php`: https://github.com/symfony/symfony-standard/blob/master/app/autoload.php
 .. _`bootstrap`: https://github.com/sensio/SensioDistributionBundle/blob/master/Resources/bin/build_bootstrap.php
 .. _`kodu bajtowego`: http://pl.wikipedia.org/wiki/Kod_bajtowy
-.. _`akceleratorów kodu bajtowego`: http://en.wikipedia.org/wiki/List_of_PHP_accelerators
-.. _`eAccelerator`: http://pl.wikipedia.org/wiki/EAccelerator
+.. _`akceleratorów kodu bajtowego`: https://en.wikipedia.org/wiki/List_of_PHP_accelerators
+.. _`OPcache`: http://php.net/manual/en/book.opcache.php
