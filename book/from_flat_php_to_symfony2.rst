@@ -32,10 +32,9 @@ utrwalona w bazie danych. Kod napisany w zwykłym PHP jest szybki, lecz pogmatwa
 
     <?php
     // index.php
-    $link = mysql_connect('localhost', 'myuser', 'mypassword');
-    mysql_select_db('blog_db', $link);
+    $link = new PDO("mysql:host=localhost;dbname=blog_db", 'myuser', 'mypassword');
 
-    $result = mysql_query('SELECT id, title FROM post', $link);
+    $result = $link->query('SELECT id, title FROM post');
     ?>
 
     <!DOCTYPE html>
@@ -46,19 +45,19 @@ utrwalona w bazie danych. Kod napisany w zwykłym PHP jest szybki, lecz pogmatwa
         <body>
             <h1>List of Posts</h1>
             <ul>
-                <?php while ($row = mysql_fetch_assoc($result)): ?>
+                <?php while ($row = $result->fetch(PDO::FETCH_ASSOC)): ?>
                 <li>
                     <a href="/show.php?id=<?php echo $row['id'] ?>">
                         <?php echo $row['title'] ?>
                     </a>
                 </li>
-                <?php endwhile; ?>
+                <?php endwhile ?>
             </ul>
         </body>
     </html>
 
     <?php
-    mysql_close($link);
+    $link = null;
     ?>
 
 Jest to szybkie w napisaniu i szybkie w wykonaniu, ale co będzie, gdy aplikacja
@@ -93,21 +92,19 @@ wykonującego „prezentację”:
 .. code-block:: html+php
    :linenos:
 
-    <?php
     // index.php
-    $link = mysql_connect('localhost', 'myuser', 'mypassword');
-    mysql_select_db('blog_db', $link);
+    $link = new PDO("mysql:host=localhost;dbname=blog_db", 'myuser', 'mypassword');
 
-    $result = mysql_query('SELECT id, title FROM post', $link);
+    $result = $link->query('SELECT id, title FROM post');
 
     $posts = array();
-    while ($row = mysql_fetch_assoc($result)) {
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         $posts[] = $row;
     }
 
-    mysql_close($link);
+    $link = null;
 
-    // dołączenie kodu HTML warstwy prezentacji  
+    // include the HTML presentation code
     require 'templates/list.php';
 
 Kod HTML jest teraz przechowywany w odrębnym pliku (``templates/list.php``), który
@@ -157,28 +154,27 @@ przeniesione do pliku o nazwie ``model.php``:
 .. code-block:: html+php
    :linenos:
 
-    <?php
     // model.php
     function open_database_connection()
     {
-        $link = mysql_connect('localhost', 'myuser', 'mypassword');
-        mysql_select_db('blog_db', $link);
+        $link = new PDO("mysql:host=localhost;dbname=blog_db", 'myuser', 'mypassword');
 
         return $link;
     }
 
     function close_database_connection($link)
     {
-        mysql_close($link);
+        $link = null;
     }
 
     function get_all_posts()
     {
         $link = open_database_connection();
 
-        $result = mysql_query('SELECT id, title FROM post', $link);
+        $result = $link->query('SELECT id, title FROM post');
+
         $posts = array();
-        while ($row = mysql_fetch_assoc($result)) {
+        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             $posts[] = $row;
         }
         close_database_connection($link);
@@ -194,13 +190,9 @@ przeniesione do pliku o nazwie ``model.php``:
    powinna znajdować się w modelu (a nie w kontrolerze). W przeciwieństwie do tego
    przykładu, tylko część modelu (lub nic) faktycznie dotyczy dostępu do bazy danych.
 
-Kontroler (``index.php``) jest teraz bardzo prosty:
-
-.. code-block:: html+php
-   :linenos:
-
-    <?php
-    require_once 'model.php';
+Kontroler (``index.php``) jest teraz bardzo prosty::
+   
+   require_once 'model.php';
 
     $posts = get_all_posts();
 
@@ -278,23 +270,17 @@ pojedynczy wpis blogu na podstawie parametru id::
     function get_post_by_id($id)
     {
         $link = open_database_connection();
-
         $id = intval($id);
-        $query = 'SELECT date, title, body FROM post WHERE id = '.$id;
-        $result = mysql_query($query);
-        $row = mysql_fetch_assoc($result);
+        $result = $link->query('SELECT created_at, title, body FROM post WHERE id = '.$id);
+        $row = $result->fetch(PDO::FETCH_ASSOC);
 
         close_database_connection($link);
 
         return $row;
     }
 
-Następnie utworzymy nowy plik ``show.php`` - kontroler dla nowej strony:
+Następnie utworzymy nowy plik ``show.php`` - kontroler dla nowej strony::
 
-.. code-block:: html+php
-   :linenos:
-
-    <?php
     require_once 'model.php';
 
     $post = get_post_by_id($_GET['id']);
@@ -312,7 +298,7 @@ pojedynczy wpis blogu:
     <?php ob_start() ?>
         <h1><?php echo $post['title'] ?></h1>
 
-        <div class="date"><?php echo $post['date'] ?></div>
+        <div class="date"><?php echo $post['created_at'] ?></div>
         <div class="body">
             <?php echo $post['body'] ?>
         </div>
@@ -334,6 +320,8 @@ dodatkowy plik lub wykonać inne zadanie globalne (np. wymusić zabezpieczenie)?
 W obecnym stanie, taki kod będzie musiał być dodany do każdego pliku kontrolera.
 Jeżeli zapomni się coś dodać w jakimś pliku, to powstanie następny problem, miejmy
 nadzieję, że nie dotyczy to bezpieczeństwa ...
+
+.. _book-from_flat_php-front-controller:
 
 Lekarstwem "kontroler wejścia"
 ------------------------------
@@ -372,12 +360,8 @@ Mamy zamiar zrobić duży krok w rozbudowie aplikacji. Przy pomocy jednego pliku
 będziemy obsługiwać wszystkie żądania, centralizując takie rzeczy jak obsługa
 bezpieczeństwa, ładowanie i konfigurację trasowanie. Plik ``index.php`` musi teraz
 być wystarczająco inteligentny, aby wygenerowac stronę wpisów bloga lub stronę
-wpisu kierując się adresem URI:
+wpisu kierując się adresem URI::
 
-.. code-block:: html+php
-   :linenos:
-
-    <?php
     // index.php
 
     // load and initialize any global libraries
@@ -385,10 +369,10 @@ wpisu kierując się adresem URI:
     require_once 'controllers.php';
 
     // route the request internally
-    $uri = $_SERVER['REQUEST_URI'];
-    if ('/index.php' == $uri) {
+    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    if ('/index.php' === $uri) {
         list_action();
-    } elseif ('/index.php/show' == $uri && isset($_GET['id'])) {
+    } elseif ('/index.php/show' === $uri && isset($_GET['id'])) {
         show_action($_GET['id']);
     } else {
         header('Status: 404 Not Found');
@@ -396,10 +380,7 @@ wpisu kierując się adresem URI:
     }
 
 W celach organizacyjnych oba kontrolery (dawniej ``index.php`` i ``show.php``)
-są teraz funkcjami PHP i zostały przeniesione do odrębnego pliku ``controllers.php``:
-
-.. code-block:: php
-   :linenos:
+są teraz funkcjami PHP i zostały przeniesione do odrębnego pliku ``controllers.php``::
 
     function list_action()
     {
@@ -455,11 +436,7 @@ zawartością:
 
     {
         "require": {
-<<<<<<< HEAD
-"symfony/symfony": "2.5.*"
-==========================
-            "symfony/symfony": "2.3.*"
->>>>>>> refs/heads/nowe_rozdz
+            "symfony/symfony": "2.8.*"
         },
         "autoload": {
             "files": ["model.php","controllers.php"]
@@ -483,12 +460,8 @@ klasy :class:`Symfony\\Component\\HttpFoundation\\Request` jak i
 :class:`Symfony\\Component\\HttpFoundation\\Response`.
 Klasy te są obiektowo zorientowaną reprezentacją surowego żądania HTTP, które ma
 być przetworzone, oraz odpowiedzi, która ma być zwrócona. Wykorzystajmy te obiekty
-do poprawienia naszego blogu:
+do poprawienia naszego blogu::
 
-.. code-block:: html+php
-   :linenos:
-
-    <?php
     // index.php
     require_once 'vendor/autoload.php';
 
@@ -498,13 +471,13 @@ do poprawienia naszego blogu:
     $request = Request::createFromGlobals();
 
     $uri = $request->getPathInfo();
-    if ('/' == $uri) {
+    if ('/' === $uri) {
         $response = list_action();
-    } elseif ('/show' == $uri && $request->query->has('id')) {
+    } elseif ('/show' === $uri && $request->query->has('id')) {
         $response = show_action($request->query->get('id'));
     } else {
         $html = '<html><body><h1>Page Not Found</h1></body></html>';
-        $response = new Response($html, 404);
+        $response = new Response($html, Response::HTTP_NOT_FOUND);
     }
 
     // echo the headers and send the response
@@ -512,10 +485,7 @@ do poprawienia naszego blogu:
     
 Kontrolery są teraz odpowiedzialne za zwrócenie obiektu ``Response``.
 Aby to ułatwić, można dodać nową funkcję ``render_template()``, która nawiasem
-mówiąc, działa trochę jak silnik szablonowania Symfony:
-
-.. code-block:: php
-   :linenos:
+mówiąc, działa trochę jak silnik szablonowania Symfony::
 
     // controllers.php
     use Symfony\Component\HttpFoundation\Response;
@@ -573,8 +543,8 @@ Zamiast ponownie rozwiązywać już rozwiązane problemy, możesz pozwolić aby 
 zajęło się tymi problemami. Oto przykładowa aplikacja, tym razem zbudowana w całości
 w Symfony::
 
-    // src/Acme/BlogBundle/Controller/BlogController.php
-    namespace Acme\BlogBundle\Controller;
+    // src/AppBundle/Controller/BlogController.php
+    namespace AppBundle\Controller;
 
     use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -582,46 +552,40 @@ w Symfony::
     {
         public function listAction()
         {
-            $posts = $this->get('doctrine')->getManager()
-                ->createQuery('SELECT p FROM AcmeBlogBundle:Post p')
+            $posts = $this->get('doctrine')
+                ->getManager()
+                ->createQuery('SELECT p FROM AppBundle:Post p')
                 ->execute();
 
-            return $this->render(
-                'AcmeBlogBundle:Blog:list.html.php',
-                array('posts' => $posts)
-            );
+            return $this->render('Blog/list.html.php', array('posts' => $posts));
         }
 
         public function showAction($id)
         {
             $post = $this->get('doctrine')
                 ->getManager()
-                ->getRepository('AcmeBlogBundle:Post')
-                ->find($id)
-            ;
+                ->getRepository('AppBundle:Post')
+                ->find($id);
 
             if (!$post) {
                 // cause the 404 page not found to be displayed
                 throw $this->createNotFoundException();
             }
 
-            return $this->render(
-                'AcmeBlogBundle:Blog:show.html.php',
-                array('post' => $post)
-            );
+            return $this->render('Blog/show.html.php', array('post' => $post));
         }
     }
 
 Oba kontrolery są nadal lekkie. Każdy wykorzystuje bibliotekę :doc:`doctrine`
 do pobierania obiektów z bazy danych oraz komponent ``Templating`` do wygenerowania
 szablonu i zwracania obiektu Response. Szablon wykazu wpisów na blogu jest teraz
-nieco prostszy:
+nieco prostszy::
 
 .. code-block:: html+php
    :linenos:
 
-    <!-- src/Acme/BlogBundle/Resources/views/Blog/list.html.php -->
-    <?php $view->extend('::layout.html.php') ?>
+    <!-- app/Resources/views/Blog/list.html.php -->
+    <?php $view->extend('layout.html.php') ?>
 
     <?php $view['slots']->set('title', 'List of Posts') ?>
 
@@ -629,14 +593,14 @@ nieco prostszy:
     <ul>
         <?php foreach ($posts as $post): ?>
         <li>
-            <a href="<?php echo $view['router']->generate(
+            <a href="<?php echo $view['router']->path(
                 'blog_show',
                 array('id' => $post->getId())
             ) ?>">
                 <?php echo $post->getTitle() ?>
             </a>
         </li>
-        <?php endforeach; ?>
+        <?php endforeach ?>
     </ul>
 
 Układ jest niemal identyczny:
@@ -745,7 +709,7 @@ czytaniu. Oznacza to też, że nasza przykładowa aplikacja może zawierać jesz
 mniej kodu. Dla przykładu przekształćmy szablon wykazu wpisów bloga na szablon
 napisany w Twigu:
 
-.. code-block:: html+jinja
+.. code-block:: html+twig
    :linenos:
 
     {# src/Acme/BlogBundle/Resources/views/Blog/list.html.twig #}
@@ -768,7 +732,7 @@ napisany w Twigu:
 
 Odpowiedni szablon ``layout.html.twig`` jest równie prosty:
 
-.. code-block:: html+jinja
+.. code-block:: html+twig
    :linenos:
 
     {# app/Resources/views/layout.html.twig #}
@@ -794,8 +758,8 @@ Dowiedz się więcej w Receptariuszu
 
 .. _`Doctrine`: http://www.doctrine-project.org
 .. _`pobierz Composer`: http://getcomposer.org/download/
-.. _`Routing`: https://github.com/symfony/Routing
-.. _`Templating`: https://github.com/symfony/Templating
+.. _`Routing`: https://github.com/symfony/routing
+.. _`Templating`: https://github.com/symfony/templating
 .. _`KnpBundles.com`: http://knpbundles.com/
 .. _`Twig`: http://twig.sensiolabs.org
 .. _`Varnish`: https://www.varnish-cache.org/

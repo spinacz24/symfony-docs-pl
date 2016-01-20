@@ -43,7 +43,6 @@ URL ze ścieżką ``/lucky/number``::
     // src/AppBundle/Controller/LuckyController.php
     namespace AppBundle\Controller;
 
-    use Symfony\Bundle\FrameworkBundle\Controller\Controller;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
     use Symfony\Component\HttpFoundation\Response;
 
@@ -200,7 +199,7 @@ Poprawmy trasę tak, aby miała na końcu wieloznaczną część ``{wildcard}``:
     .. code-block:: xml
        :linenos:
 
-        <!-- src/Acme/DemoBundle/Resources/config/routing.xml -->
+        <!-- app/config/routing.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
         <routes xmlns="http://symfony.com/schema/routing"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -215,7 +214,7 @@ Poprawmy trasę tak, aby miała na końcu wieloznaczną część ``{wildcard}``:
     .. code-block:: php
        :linenos:
 
-        // src/Acme/DemoBundle/Resources/config/routing.php
+        // app/config/routing.php
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
 
@@ -388,7 +387,7 @@ tam plik ``number.html.twig`` z zawartością:
 
 .. configuration-block::
 
-    .. code-block:: jinja
+    .. code-block:: twig
        :linenos:
 
         {# app/Resources/views/lucky/number.html.twig #}
@@ -496,14 +495,14 @@ konfiguracyjnym pakietów jest ``app/config/config.yml``:
         # ...
 
         framework:
-            secret: "%secret%"
+            secret: '%secret%'
             router:
-                resource: "%kernel.root_dir%/config/routing.yml"
+                resource: '%kernel.root_dir%/config/routing.yml'
             # ...
 
         twig:
-            debug:            "%kernel.debug%"
-            strict_variables: "%kernel.debug%"
+            debug:            '%kernel.debug%'
+            strict_variables: '%kernel.debug%'
 
         # ...
 

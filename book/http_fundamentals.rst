@@ -152,8 +152,8 @@ Podobnie jak żądanie, odpowiedź HTTP zawiera porcję dodatkowej informacji na
 jest ``Content-Type``. Samo ciało odpowiedzi może zostać zwrócone w wielu różnych
 formatach, takich jak HTML, XML lub JSON a nagłówek ``Content-Type`` wykorzystuje
 internetowe typy mediów, takie jak ``text/html``, aby poinformować klienta, jaki
-format jest zwracany w odpowiedzi. Listę popularnych typów mediów można znaleźć w
-artykule `List of common media types`_ na stronach Wikipedii.
+format jest zwracany w odpowiedzi. Proszę zapoznać sie z
+`listą popurarnych typów  mediów`_ na IANA.
 
 Używa się wiele nagłówków, niektóre z nich są bardzo użyteczne. Na przykład,
 niektóre nagłówki mogą być używane do tworzenia wydajnego systemu buforowania.
@@ -587,11 +587,8 @@ Dla bardziej zaawansowanych użytkowników praktycznie nie ma ograniczeń.
 .. _`HTTP 1.1 RFC`: http://www.w3.org/Protocols/rfc2616/rfc2616.html
 .. _`HTTP Bis`: http://datatracker.ietf.org/wg/httpbis/
 .. _`Live HTTP Headers`: https://addons.mozilla.org/en-US/firefox/addon/live-http-headers/
-.. _`List of HTTP status codes`: http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-.. _`List of HTTP header fields`: http://en.wikipedia.org/wiki/List_of_HTTP_header_fields
-.. _`List of common media types`: http://en.wikipedia.org/wiki/Internet_media_type#List_of_common_media_types
-.. _`Form`: https://github.com/symfony/Form
-.. _`Validator`: https://github.com/symfony/Validator
-.. _`Security`: https://github.com/symfony/Security
-.. _`Translation`: https://github.com/symfony/Translation
+.. _`List of HTTP status codes`: https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+.. _`List of HTTP header fields`: https://en.wikipedia.org/wiki/List_of_HTTP_header_fields
+.. _``listą popurarnych typów  mediów``: https://www.iana.org/assignments/media-types/media-types.xhtml
+.. _`Validator`: https://github.com/symfony/validator
 .. _`Swift Mailer`: http://swiftmailer.org/

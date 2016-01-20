@@ -35,7 +35,7 @@ Otwórz konsole poleceń i wykonaj następujące polecenia:
 
 .. code-block:: bash
 
-    $ sudo curl -LsS http://symfony.com/installer -o /usr/local/bin/symfony
+    $ sudo curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
     $ sudo chmod a+x /usr/local/bin/symfony
 
 Utworzy to w systemie globalne polecenie ``symfony``.
@@ -47,7 +47,7 @@ Otwórz konsole poleceń i wykonaj następujące polecenie:
 
 .. code-block:: bash
 
-    c:\> php -r "readfile('http://symfony.com/installer');" > symfony
+    c:\> php -r "readfile('https://symfony.com/installer');" > symfony
 
 Następnie przenieś pobrany plik ``symfony`` do katalogu swojego projektu i wykonaj
 te polecenia:
@@ -56,6 +56,8 @@ te polecenia:
 
     c:\> move symfony c:\projects
     c:\projects\> php symfony
+
+.. _installation-creating-the-app:
 
 Tworzenie aplikacji Symfony
 ---------------------------
@@ -81,9 +83,15 @@ wymagania.
 
 .. tip::
 
-    Ze wzgledów bezpieczeństwa, wszystkie wersje Symfony sa podpisane cyfrowo
-    zanim trafia do dystrybucji. Jeśli chcesz zweryfikować integralność jakiejś
-    wersji Symfony, wykonaj kroki `opisane w tym wpisie`_.
+    Ze wzgledów bezpieczeństwa, wszystkie wersje Symfony są podpisane cyfrowo
+    zanim trafią do dystrybucji. Jeśli chcesz zweryfikować integralność jakiejś
+    wersji Symfony, wykonaj kroki `wyjaśniono w tym wpisie`_.
+
+.. note::
+
+    Jeśli nie działa instalator lub jeśli nie wyprowadza żadnych komunikatów,
+    upewnij się, że zainstalowane zostało `rozszerzenie Phar`_ oraz że jest ono
+    włączone.
 
 Oparcie projektu o określoną wersję Symfony
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -93,30 +101,26 @@ Symfony, trzeba użyć opcjonalny, drugi argument polecenia ``symfony new``:
 
 .. code-block:: bash
 
-    # use the most recent version in any Symfony branch
-    $ symfony new my_project_name 2.3
-    $ symfony new my_project_name 2.5
+    # użycie najbardziej aktualnych wersji w kazdej gałęzi Symfony
     $ symfony new my_project_name 2.6
+    $ symfony new my_project_name 2.8
 
-    # use a specific Symfony version
-    $ symfony new my_project_name 2.3.26
-    $ symfony new my_project_name 2.6.5
+    # użycie określonych wersji Symfony
+    $ symfony new my_project_name 2.7.3
+    $ symfony new my_project_name 2.8.1
 
-    # use the most recent LTS (Long Term Support) version
-    $ symfony new my_project_name lts
+    # użycie wersji beta lub RC (przydatne dla testowania nowych wersji Symfony)
+    $ symfony new my_project 2.8.0-BETA1
+    $ symfony new my_project 2.7.0-RC1
 
 Jeśli chce się, aby projekt oparty był o najnowszą :ref:`wersję LTS Symfony <releases-lts>`,
 trzeba przekazać ``lts`` jako drugi argument polecenia ``symfony new``:
 
 .. code-block:: bash
 
-    # Linux, Mac OS X
     $ symfony new my_project_name lts
 
-    # Windows
-    c:\projects\> php symfony new my_project_name lts
-
-Prosze przeczytać :doc:`Symfony Release process </contributing/community/releases>`
+Proszę przeczytać :doc:`Symfony Release process </contributing/community/releases>`
 w celu zr9ozumienia, dlaczego istnieje kilka wersji Symfony i która z nich jest
 dla Ciebie najodpowiedniejsza.
 
@@ -154,7 +158,7 @@ drugi argument w poleceniu ``create-project``:
 
 .. code-block:: bash
 
-    $ composer create-project symfony/framework-standard-edition my_project_name "2.3.*"
+    $ composer create-project symfony/framework-standard-edition my_project_name "2.8.*"
 
 .. tip::
 
@@ -176,7 +180,7 @@ serwer internetowy:
     $ php app/console server:run
 
 Następnie trzeba otworzyć przeglądarkę i odwiedzić adres
-``http://localhost:8000/app/example``,
+``http://localhost:8000/``,
 co powinno skutkować wyświetleniem strony powitalnej Symfony:
 
 .. image:: /images/quick_tour/welcome.png
@@ -251,7 +255,7 @@ Jeśli są jakieś problemy, rozwiąż je teraz, zanim przejdziesz dalej.
         $ rm -rf app/cache/*
         $ rm -rf app/logs/*
 
-        $ HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+        $ HTTPDUSER=`ps axo user,comm | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
         $ sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
         $ sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
 
@@ -267,7 +271,7 @@ Jeśli są jakieś problemy, rozwiąż je teraz, zanim przejdziesz dalej.
     .. code-block:: bash
        :linenos:
 
-        $ HTTPDUSER=`ps aux | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
+        $ HTTPDUSER=`ps axo user,comm | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
         $ sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
         $ sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
 
@@ -414,15 +418,11 @@ Jeśli dopiero poznajesz Symfony, przeczytaj artykuł ":doc:`page_creation`", gd
 dowiesz się, jak tworzyć strony, zmienic konfigurację i wszystko co potrzeba dla
 nowe aplikacji.
 
-Należy też zapoznac się z :doc:`Cookbook </cookbook/index>`, która to część zawiera
+Należy też zapoznać się z :doc:`Cookbook </cookbook/index>`, która to część zawiera
 szeroki wybór artykułów na temat rozwiązywania konkretnych problemów z Symfony.
 
-.. note::
 
-    Jeśli chcesz usunąć przykładowy kod z dystrybucji, zapoznaj się z artykułem
-    ":doc:`/cookbook/bundles/remove`"
-
-.. _`explained in this post`: http://fabien.potencier.org/article/73/signing-project-releases
+.. _`wyjaśniono w tym wpisie`: http://fabien.potencier.org/article/73/signing-project-releases
 .. _`Composer`: https://getcomposer.org/
 .. _`Composer download page`: https://getcomposer.org/download/
 .. _`Apache`: http://httpd.apache.org/docs/current/mod/core.html#documentroot
@@ -433,4 +433,4 @@ szeroki wybór artykułów na temat rozwiązywania konkretnych problemów z Symf
 .. _`Symfony REST Edition`: https://github.com/gimler/symfony-rest-edition
 .. _`FOSRestBundle`: https://github.com/FriendsOfSymfony/FOSRestBundle
 .. _`Git`: http://git-scm.com/
-
+.. _`rozszerzenie Phar`: http://php.net/manual/en/intro.phar.php

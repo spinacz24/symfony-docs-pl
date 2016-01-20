@@ -177,7 +177,7 @@ konfiguracyjnego aplikacji:
         # app/config/config.yml
         framework:
             # ...
-            router:        { resource: "%kernel.root_dir%/config/routing.yml" }
+            router:        { resource: '%kernel.root_dir%/config/routing.yml' }
 
     .. code-block:: xml
        :linenos:
@@ -850,9 +850,9 @@ Dodawanie wymagania dotyczącego metody HTTP
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Oprócz ścieżki URL, można również dopasować metodę przychodzącego żądania
-(tj. GET, HEAD, POST, PUT, DELETE). Załóżmy, że mamy formularz kontaktowy
-z dwoma akcjami - jedną do wyświetlania formularza (dla żądania GET),
-a drugą do przetwarzania formularza, gdy zostanie on zgłoszony (z metodą POST).
+(tj. GET, HEAD, POST, PUT, DELETE).
+Załóżmy, że tworzymy API dla bloga i mamy dwie trasy: jedną do wyswietlania wpisu
+(dla żądania GET lub HEAD) oraz drugą dla aktualizowania wpisu (w żądaniu PUT).
 Można to osiągnąć poprzez następującą konfigurację trasowania:
 
 .. configuration-block::
@@ -866,24 +866,24 @@ Można to osiągnąć poprzez następującą konfigurację trasowania:
         use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
         // ...
 
-        class MainController extends Controller
+        class BlogApiController extends Controller
         {
             /**
-             * @Route("/news")
-             * @Method("GET")
+             * @Route("/api/posts/{id}")
+             * @Method({"GET","HEAD"})
              */
-            public function newsAction()
+            public function showAction($id)
             {
-                // ... display your news
+                // ... return a JSON response with the post
             }
 
             /**
-             * @Route("/contact")
-             * @Method({"GET", "POST"})
+             * @Route("/api/posts/{id}")
+             * @Method("PUT")
              */
-            public function contactFormAction()
+            public function editAction($id)
             {
-                // ... display and process a contact form
+                // ... edit a post
             }
         }
 
@@ -891,15 +891,15 @@ Można to osiągnąć poprzez następującą konfigurację trasowania:
        :linenos:
 
         # app/config/routing.yml
-        news:
-            path:     /news
-            defaults: { _controller: AppBundle:Main:news }
-            methods:  [GET]
+        api_post_show:
+            path:     /api/posts/{id}
+            defaults: { _controller: AppBundle:BlogApi:show }
+            methods:  [GET, HEAD]
 
-        contact_form:
-            path:     /contact
-            defaults: { _controller: AppBundle:Main:contactForm }
-            methods:  [GET, POST]
+        api_post_edit:
+            path:     /api/posts/{id}
+            defaults: { _controller: AppBundle:BlogApi:edit }
+            methods:  [PUT]
 
     .. code-block:: xml
        :linenos:
@@ -911,12 +911,12 @@ Można to osiągnąć poprzez następującą konfigurację trasowania:
             xsi:schemaLocation="http://symfony.com/schema/routing
                 http://symfony.com/schema/routing/routing-1.0.xsd">
 
-            <route id="news" path="/news" methods="GET">
-                <default key="_controller">AppBundle:Main:news</default>
+            <route id="api_post_show" path="/api/posts/{id}" methods="GET|HEAD">
+                <default key="_controller">AppBundle:BlogApi:show</default>
             </route>
 
-            <route id="contact_form" path="/contact" methods="GET|POST">
-                <default key="_controller">AppBundle:Main:contactForm</default>
+            <route id="api_post_edit" path="/api/posts/{id}" methods="PUT">
+                <default key="_controller">AppBundle:BlogApi:edit</default>
             </route>
         </routes>
 
@@ -928,20 +928,20 @@ Można to osiągnąć poprzez następującą konfigurację trasowania:
         use Symfony\Component\Routing\Route;
 
         $collection = new RouteCollection();
-        $collection->add('news', new Route('/news', array(
-            '_controller' => 'AppBundle:Main:contact',
-        ), array(), array(), '', array(), array('GET')));
+        $collection->add('api_post_show', new Route('/api/posts/{id}', array(
+            '_controller' => 'AppBundle:BlogApi:show',
+        ), array(), array(), '', array(), array('GET', 'HEAD')));
 
-        $collection->add('contact_form', new Route('/contact', array(
-            '_controller' => 'AppBundle:Main:contactForm',
-        ), array(), array(), '', array(), array('GET', 'POST')));
+        $collection->add('api_post_edit', new Route('/api/posts/{id}', array(
+            '_controller' => 'AppBundle:BlogApi:edit',
+        ), array(), array(), '', array(), array('PUT')));
 
         return $collection;
 
-Pomimo faktu, iż te dwie trasy mają identyczne ścieżki (``/contact``), pierwsza
-z nich będzie pasować tylko do żądań GET, a druga tylko do żądań POST. Oznacza to,
-że można wyświetlać i zgłosić formularz poprzez ten sam adres URL, jednocześnie
-wykorzystując do tego oddzielne akcje dla tych dwóch różnych działań.
+Pomimo faktu, iż te dwie trasy mają identyczne ścieżki (``/api/posts/{id}``),
+pierwsza z nich będzie pasować tylko do żądań GET lub HEAD, a druga tylko do żądań
+PUT. Oznacza to, że można wyświetlać i edytować wpis poprzez ten sam adres URL,
+jednocześnie wykorzystując do tego oddzielne akcje dla tych dwóch różnych działań.
 
 .. note::
     Jeśli nie zostanie podane wymaganie dla `methods``, trasa będzie pasować do
@@ -1163,22 +1163,27 @@ ukośnika. Ścieżki URL pasujące do tej trasy mogą wyglądać np. tak:
 
     Powyższy przykład pokazuje również specjalny parametr trasowania ``_format``.
     Przy zastosowaniu tego parametru dopasowaną wartością może być "format żądania"
-    obiektu Request. Ostatecznie format żądania służy do takich rzeczy jak ustawienie
+    obiektu Request.
+    
+    Ostatecznie format żądania służy do takich rzeczy jak ustawienie
     nagłówka ``Content-Type`` odpowiedzi (np. żądany format json tłumaczony jest na
-    ``Content-Type application/json``). W akcji do renderowania może być
-    również stosowany inny szablon dla każdej wartości ``_format``.
+    ``Content-Type application/json``). Do renderowania może być
+    również stosowany w akcji inny szablon dla każdej wartości ``_format``.
     Parametr ``_format`` jest bardzo skutecznym sposobem na renderowanie tej samej
     treści w różnych formatach.
+    
+    W wersjach Symfony wcześniejszych niż 3.0, mozliwe jest zastępowanie formatu
+    żądania przez dodanie parametru zapytania o nazwie ``_format`` (na przykład:
+    ``/foo/bar?_format=json``). Stosowanie tego rozwiązania jest nie tylko złą
+    praktyką, ale również utrudni aktualizacje kodu aplikacji do Symfony 3.
 
 .. note::
    
    Czasami można chcieć, aby niektóre części tras były konfigurowalne globalnie.
-   Symfony 2.1 umożliwia zrobienie tego przez wykorzystanie parametrów poziomu
+   Symfony umożliwia zrobienie tego przez wykorzystanie parametrów poziomu
    kontenera usług. Więcej na ten temat można sie dowiedzieć w artykule
    ":doc:`Jak stosować parametry kontenera usług w trasowaniu</cookbook/routing/service_container_parameters>`".
    
-   
-
 Specjalne parametry trasowania
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1312,7 +1317,7 @@ tego pliku:
 
         # app/config/routing.yml
         app:
-            resource: "@AppBundle/Controller/"
+            resource: '@AppBundle/Controller/'
             type:     annotation # required to enable the Annotation reader for this resource
 
     .. code-block:: xml
@@ -1366,7 +1371,7 @@ w tym katalogu i wstawione do trasowania.
 
             # app/config/routing.yml
             app:
-                resource: "@AcmeOtherBundle/Resources/config/routing.yml"
+                resource: '@AcmeOtherBundle/Resources/config/routing.yml'
 
         .. code-block:: xml
            :linenos:
@@ -1408,7 +1413,7 @@ Na przykład załóżmy, że chcemy popzedzić wszystkie trasy w AppBundle z ``/
 
         # app/config/routing.yml
         app:
-            resource: "@AppBundle/Controller/"
+            resource: '@AppBundle/Controller/'
             type:     annotation
             prefix:   /site
 
@@ -1466,10 +1471,6 @@ Polecenie należy wykonać głównym katalogu projektu, tak jak poniżej:
 .. code-block:: bash
 
     $ php app/console debug:router
-
-.. versionadded:: 2.6
-    W wersjach wcześniejszych od Symfony 2.6 polecenie to było wywoływane
-    wyrażeniem ``router:debug``.
 
 Polecenie to wyświetli na ekranie listę wszystkich skonfigurowanych
 tras aplikacji:
@@ -1550,28 +1551,16 @@ Z tej informacji można wygenerować łatwo każdą ścieżkę URL::
 
 .. note::
 
-    W kontrolerach, które rozszerzają bazową klasę kontrolera Symfony
-    :class:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller`,
-    można wykorzystać metodę
-    :method:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller::generateUrl`,
-    która wywołuje metodę usługi trasy
-    :method:`Symfony\\Component\\Routing\\Router::generate`::
+    Metoda ``generateUrl()`` zdefiniowana w bazowej klasie
+    :class:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller`
+    jest po prostu skrótem do kodu::
       
-      use Symfony\Component\DependencyInjection\ContainerAware;
-
-        class MainController extends ContainerAware
-        {
-            public function showAction($slug)
-            {
-                // ...
-
-                $url = $this->container->get('router')->generate(
-                    'blog_show',
-                    array('slug' => 'my-blog-post')
-                );
-            }
-        }
-
+      $url = $this->container->get('router')->generate(
+            'blog_show',
+            array('slug' => 'my-blog-post')
+        );
+    
+    
 W kolejnym rozdziale poznasz jak generować ścieżki URL w szablonach.
 
 .. tip::
@@ -1618,7 +1607,7 @@ stosując pomocnicze funkcje szablonów:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         <a href="{{ path('blog_show', {'slug': 'my-blog-post'}) }}">
@@ -1628,11 +1617,16 @@ stosując pomocnicze funkcje szablonów:
     .. code-block:: html+php
        :linenos:
 
-        <a href="<?php echo $view['router']->generate('blog_show', array(
+        <a href="<?php echo $view['router']->path('blog_show', array(
             'slug' => 'my-blog-post',
         )) ?>">
             Read this blog post.
         </a>
+        
+.. versionadded:: 2.8
+    W Symfony 2.8 została wprowadzona szablonowa funkcja pomocnicza PHP ``path()``.
+    Wcześniej trzeba było stosować metodę pomocniczą ``generate()``.
+
 
 
 .. index::
@@ -1645,7 +1639,9 @@ Domyślnie mechanizm trasowania generuje względne ścieżki URL (np. ``/blog``)
 Dla wygenerowania bezwzględnych ścieżek URL, trzeba przekazać ``true`` jako trzeci
 argument metody ``generate()``::
    
-   $this->generateUrl('blog_show', array('slug' => 'my-blog-post'), true);
+   use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+    $this->generateUrl('blog_show', array('slug' => 'my-blog-post'), UrlGeneratorInterface::ABSOLUTE_URL);
     // http://www.example.com/blog/my-blog-post
 
 Wewnątrz szablonu, w Twig, zamiast funkcji ``path()`` (generujacej wzgledną
@@ -1654,7 +1650,7 @@ W PHP trzeba przekazać ``true`` do  ``generate()``:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         <a href="{{ url('blog_show', {'slug': 'my-blog-post'}) }}">
@@ -1664,11 +1660,17 @@ W PHP trzeba przekazać ``true`` do  ``generate()``:
     .. code-block:: html+php
        :linenos:
 
-        <a href="<?php echo $view['router']->generate('blog_show', array(
+        <a href="<?php echo $view['router']->url('blog_show', array(
             'slug' => 'my-blog-post',
-        ), true) ?>">
+        )) ?>">
             Read this blog post.
         </a>
+
+.. versionadded:: 2.8
+    W Symfony 2.8. wprowadzono szablonową funkcje pomocniczą PHP The ``url()``.
+    Wczesniej trzeba było stosować w 
+    ``Symfony\Component\Routing\Generator\UrlGeneratorInterface::ABSOLUTE_URL``
+    metodę pomocniczą ``generate()``, przekazywaną jako trzeci argument.
 
 
 .. note::
