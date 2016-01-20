@@ -639,7 +639,7 @@ bez nadmiernego wysiłku.
 
 .. tip::
 
-    Symfony obsługuje również słabe nagłówki Etag, gdy przekaże się wartość ``true``
+    Symfony obsługuje również słabe nagłówki ETag, gdy przekaże się wartość ``true``
     jako drugi argument metody :method:`Symfony\\Component\\HttpFoundation\\Response::setETag`.
 
 .. index::
@@ -1097,7 +1097,7 @@ stosuje standardowy helper ``render`` do skonfigurowania znaczników ESI:
 
 .. configuration-block::
 
-    .. code-block:: jinja
+    .. code-block:: twig
        :linenos:
 
         {# app/Resources/views/static/about.html.twig #}
@@ -1113,23 +1113,22 @@ stosuje standardowy helper ``render`` do skonfigurowania znaczników ESI:
 
         <!-- app/Resources/views/static/about.html.php -->
 
-        // you can use a controller reference
-        use Symfony\Component\HttpKernel\Controller\ControllerReference;
+        <!-- you can use a controller reference -->
         <?php echo $view['actions']->render(
-            new ControllerReference(
+            new \Symfony\Component\HttpKernel\Controller\ControllerReference(
                 'AppBundle:News:latest',
                 array('maxPerPage' => 5)
             ),
             array('strategy' => 'esi')
         ) ?>
 
-        // ... or a URL
-        use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+        <!-- ... or a URL -->
         <?php echo $view['actions']->render(
-            $view['router']->generate(
+            // The url() method was introduced in Symfony 2.8. Prior to 2.8,
+            // you had to use generate($name, $parameters, UrlGeneratorInterface::ABSOLUTE_URL)
+            $view['router']->url(
                 'latest_news',
                 array('maxPerPage' => 5),
-                UrlGeneratorInterface::ABSOLUTE_URL
             ),
             array('strategy' => 'esi'),
         ) ?>
@@ -1279,7 +1278,7 @@ Dalasza lektura
 
 * :doc:`/cookbook/cache/varnish`
 
-.. _`Things Caches Do`: http://tomayko.com/writings/things-caches-do
+.. _`Things Caches Do`: http://2ndscale.com/writings/things-caches-do
 .. _`Cache Tutorial`: http://www.mnot.net/cache_docs/
 .. _`Varnish`: https://www.varnish-cache.org/
 .. _`Squid w trybie odwrotnego proxy`: http://wiki.squid-cache.org/SquidFaq/ReverseProxy

@@ -79,7 +79,7 @@ jest prostym obiektem PHP, który zarządza konkretyzacją usług (czyli obiekta
 Na przykład załóżmy, że mamy prosta klasę PHP, która dostarcza wiadomości e-mail.
 Bez kontenera usług, trzeba ręcznie utworzyć obiekt, gdy jest to potrzebne::
 
-    use Acme\HelloBundle\Mailer;
+    use AppBundle\Mailer;
 
     $mailer = new Mailer('sendmail');
     $mailer->send('ryan@foobar.net', ...);
@@ -102,7 +102,7 @@ Lepszym rozwiązaniem jest spowodowanie, aby kontener usług sam utworzył obiek
 ``Mailer``. W tym celu trzeba "nauczyć" kontener jak tworzyć usługę ``Mailer``.
 Wykonuje się to w pliku konfiguracyjnym, który może mieć format YAML, XML lub PHP:
 
-.. include:: includes/_service_container_my_mailer.rst.inc
+.. include:: includes/_service_container_app.mailer.rst.inc
 
 .. note::
 
@@ -112,7 +112,7 @@ Wykonuje się to w pliku konfiguracyjnym, który może mieć format YAML, XML lu
     która ładuje plik konfiguracyjny właściwy dla danego środowiska (np.
     ``config_dev.yml`` dla środowiska ``dev`` lub ``config_prod.yml`` dla ``prod``).
 
-Instancja obiektu ``Acme\HelloBundle\Mailer`` jest teraz dostępna przez kontener
+Instancja klasy ``AppBundle\Mailer`` jest teraz dostępna przez kontener
 usług. Kontener jest dostępny w każdym zwykłym kontrolerze Symfony, w którym
 można uzyskać dostęp do usług kontenera poprzez skrótową metodę ``get()``::
 
@@ -123,12 +123,12 @@ można uzyskać dostęp do usług kontenera poprzez skrótową metodę ``get()``
         public function sendEmailAction()
         {
             // ...
-            $mailer = $this->get('my_mailer');
+            $mailer = $this->get('app.mailer');
             $mailer->send('ryan@foobar.net', ...);
         }
     }
 
-Kiedy odpytuje się usługę ``my_mailer`` z kontenera, kontener konstruuje obiekt
+Kiedy odpytuje się usługę ``app.mailer`` z kontenera, kontener konstruuje obiekt
 i go zwraca. To kolejna ważna zaleta kontenera usług. Mianowicie, usługa nie jest
 nigdy wykonywana, dopóki nie jest potrzebna. Jeśli zdefiniowało się usługę lecz
 nigdy nie użyto jej w żądaniu, to usługa ta nie nigdy nie będzie stworzona.
@@ -139,14 +139,14 @@ Usługi które nie są używane, nie są konstruowane.
 Usługa ``Mailer`` jest tworzona tylko raz i ta sama instancja jest zwracana za
 każdą prośbą o usługę, co stanowi dodatkowa zaletę. Jest to prawie zawsze zachowanie,
 jakie się potrzebuje (jest większa elastyczność i możliwości), ale jak to jest
-wyjaśnione w artykule ":doc:`/cookbook/service_container/scopes`", można skonfigurować
+wyjaśnione w artykule ":doc:`/cookbook/service_container/sshared`", można skonfigurować
 usługę, która ma wiele instancji.
 
 .. note::
 
     W tym przykładzie kontroler rozszerza bazową klasę Controller, która sama daje
     dostęp do kontenera usług. Można następnie użyć metodę ``get``, aby zlokalizować
-    i pobrać usługę ``my_mailer`` z kontenera usług. Można również zdefiniować
+    i pobrać usługę ``app.mailer`` z kontenera usług. Można również zdefiniować
     :doc:`kontrolery jako usługi </cookbook/controller/service>`.
     Jest to trochę bardziej zaawansowane i nie jest konieczne, ale pozwala wstrzyknąć
     do kontrolera tylko niezbędne usługi.
@@ -165,19 +165,20 @@ Parametry czynią zdefiniowane usługi lepiej zorganizowanymi i bardziej elastyc
     .. code-block:: yaml
        :linenos:
 
-        # app/config/config.yml
+        # app/config/services.yml
         parameters:
-            my_mailer.transport:  sendmail
+            app.mailer.transport:  sendmail
 
         services:
-            my_mailer:
-                class:        Acme\HelloBundle\Mailer
-                arguments:    ["%my_mailer.transport%"]
+            app.mailer:
+                class:        AppBundle\Mailer
+                arguments:    ['%app.mailer.transport%']
+        
 
     .. code-block:: xml
        :linenos:
 
-        <!-- app/config/config.xml -->
+        <!-- app/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -185,12 +186,12 @@ Parametry czynią zdefiniowane usługi lepiej zorganizowanymi i bardziej elastyc
                 http://symfony.com/schema/dic/services/services-1.0.xsd">
 
             <parameters>
-                <parameter key="my_mailer.transport">sendmail</parameter>
+                <parameter key="app.mailer.transport">sendmail</parameter>
             </parameters>
 
             <services>
-                <service id="my_mailer" class="Acme\HelloBundle\Mailer">
-                    <argument>%my_mailer.transport%</argument>
+                <service id="app.mailer" class="AppBundle\Mailer">
+                    <argument>%app.mailer.transport%</argument>
                 </service>
             </services>
         </container>
@@ -198,18 +199,18 @@ Parametry czynią zdefiniowane usługi lepiej zorganizowanymi i bardziej elastyc
     .. code-block:: php
        :linenos:
 
-        // app/config/config.php
+        // app/config/services.php
         use Symfony\Component\DependencyInjection\Definition;
 
-        $container->setParameter('my_mailer.transport', 'sendmail');
+        $container->setParameter('app.mailer.transport', 'sendmail');
 
-        $container->setDefinition('my_mailer', new Definition(
-            'Acme\HelloBundle\Mailer',
-            array('%my_mailer.transport%')
+        $container->setDefinition('app.mailer', new Definition(
+            'AppBundle\Mailer',
+            array('%app.mailer.transport%')
         ));
 
 Końcowy wynik jest taki sam jak poprzednio - różnicą jest tylko to, jak zdefiniowano
-tą usługę. Przez otocznie łańcuchów ``my_mailer.class`` i ``my_mailer.transport``
+tą usługę. Przez zamknięcie łańcucha ``app.mailer.transport``
 znakiem procenta (``%``), kontener wie, aby szukać parametrów z tymi nazwami.
 Gdy budowany jest kontener, to wyszukiwana jest wartość każdego parametru i zostają
 one użyte w definicji usługi.
@@ -226,8 +227,8 @@ one użyte w definicji usługi.
 
         # app/config/parameters.yml
         parameters:
-            # This will be parsed as string "@securepass"
-            mailer_password: "@@securepass"
+            # This will be parsed as string '@securepass'
+            mailer_password: '@@securepass'
 
 .. note::
 
@@ -286,20 +287,20 @@ z pakietów osób trzecich, jest wytłumaczona
 :ref:`dalej <service-container-extension-configuration>`.
 
 .. index::
-   single: kontener usług; *imports*
+   single: kontener usług; dyrektywa *imports*
 
 .. _service-container-imports-directive:
 
 Importowanie konfiguracji z wykorzystaniem dyrektywy ``imports``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Dotychczas umieszczaliśmy definicję kontenera usługi ``my_mailer`` bezpośrednio
+Dotychczas umieszczaliśmy definicję kontenera usługi ``app.mailer`` bezpośrednio
 w pliku konfiguracyjnym aplikacji (np. ``app/config/config.yml``). Oczywiście,
 ponieważ sama klasa ``Mailer`` umieszczona jest wewnątrz pakietu ``AcmeHelloBundle``,
-to wydaje się być bardziej sensownym umieszczenie definicji kontenera  ``my_mailer``
+to wydaje się być bardziej sensownym umieszczenie definicji kontenera  ``app.mailer``
 wewnątrz pakietu.
 
-Najpierw przeniesiemy definicję kontenera ``my_mailer`` do nowego pliku zasobu
+Najpierw przeniesiemy definicję kontenera ``app.mailer`` do nowego pliku zasobu
 kontenera wewnątrz ``AcmeHelloBundle``. Jeśli jeszcze nie istnieją katalogi
 ``Resources`` lub ``Resources/config``, to trzeba je utworzyć.
 
@@ -310,12 +311,13 @@ kontenera wewnątrz ``AcmeHelloBundle``. Jeśli jeszcze nie istnieją katalogi
 
         # src/Acme/HelloBundle/Resources/config/services.yml
         parameters:
-            my_mailer.transport:  sendmail
+            app.mailer.transport:  sendmail
 
         services:
-            my_mailer:
-                class:        Acme\HelloBundle\Mailer
-                arguments:    ["%my_mailer.transport%"]
+            app.mailer:
+                class:        AppBundle\Mailer
+                arguments:    ['%app.mailer.transport%']
+            
 
     .. code-block:: xml
        :linenos:
@@ -328,12 +330,12 @@ kontenera wewnątrz ``AcmeHelloBundle``. Jeśli jeszcze nie istnieją katalogi
                 http://symfony.com/schema/dic/services/services-1.0.xsd">
 
             <parameters>
-                <parameter key="my_mailer.transport">sendmail</parameter>
+                <parameter key="app.mailer.transport">sendmail</parameter>
             </parameters>
 
             <services>
-                <service id="my_mailer" class="Acme\HelloBundle\Mailer">
-                    <argument>%my_mailer.transport%</argument>
+                <service id="app.mailer" class="AppBundle\Mailer">
+                    <argument>%app.mailer.transport%</argument>
                 </service>
             </services>
         </container>
@@ -344,11 +346,11 @@ kontenera wewnątrz ``AcmeHelloBundle``. Jeśli jeszcze nie istnieją katalogi
         // src/Acme/HelloBundle/Resources/config/services.php
         use Symfony\Component\DependencyInjection\Definition;
 
-        $container->setParameter('my_mailer.transport', 'sendmail');
+        $container->setParameter('app.mailer.transport', 'sendmail');
 
-        $container->setDefinition('my_mailer', new Definition(
-            'Acme\HelloBundle\Mailer',
-            array('%my_mailer.transport%')
+        $container->setDefinition('app.mailer', new Definition(
+            'AppBundle\Mailer',
+            array('%app.mailer.transport%')
         ));
 
 Definicja sama w sobie się nie zmieniła, jedynie jej lokalizacja. Oczywiście kontener
@@ -362,7 +364,7 @@ zasobu używając klucza ``imports`` w konfiguracji aplikacji.
 
         # app/config/config.yml
         imports:
-            - { resource: "@AcmeHelloBundle/Resources/config/services.yml" }
+            - { resource: '@AcmeHelloBundle/Resources/config/services.yml' }
 
     .. code-block:: xml
        :linenos:
@@ -440,7 +442,7 @@ wewnątrz ``FrameworkBundle``:
             secret:          xxxxxxxxxx
             form:            true
             csrf_protection: true
-            router:        { resource: "%kernel.root_dir%/config/routing.yml" }
+            router:        { resource: '%kernel.root_dir%/config/routing.yml' }
             # ...
 
     .. code-block:: xml
@@ -523,21 +525,21 @@ to warto przeczytać ":doc:`/cookbook/bundles/extension`".
 Usługi referencyjne (wstrzykiwane)
 ----------------------------------
 
-Jak dotychczas oryginalna usługa ``my_mailer`` była prosta. Pobierała tylko jeden
+Jak dotychczas oryginalna usługa ``app.mailer`` była prosta. Pobierała tylko jeden
 argument w swoim konstruktorze, który był łatwo konfigurowalny. Jak zaraz zobaczymy,
 prawdziwa moc kontenera ujawnia się, gdy trzeba stworzyć usługę, która zależy od jednej
 lub wielu innych usług w kontenerze.
 
 Dla przykładu załóżmy, że mamy nową usługę ``NewsletterManager``, która pomaga
 zarządzać przygotowaniem i dostarczaniem wiadomości e-mail dla kolekcji adresów.
-Oczywiście usługa ``my_mailer`` jest już naprawdę dobra w wysyłaniu wiadomości
+Oczywiście usługa ``app.mailer`` jest już naprawdę dobra w wysyłaniu wiadomości
 e-mail, więc zastosujemy ją wewnątrz ``NewsletterManager`` w celu obsługi faktycznie
 dostarczanych wiadomości. Ta przykładowa klasa może wyglądać tak::
 
-    // src/Acme/HelloBundle/Newsletter/NewsletterManager.php
-    namespace Acme\HelloBundle\Newsletter;
+    // src/AppBundle/Newsletter/NewsletterManager.php
+    namespace AppBundle\Newsletter;
 
-    use Acme\HelloBundle\Mailer;
+    use AppBundle\Mailer;
 
     class NewsletterManager
     {
@@ -554,13 +556,13 @@ dostarczanych wiadomości. Ta przykładowa klasa może wyglądać tak::
 Bez użycia kontenera usług, można utworzyć dość łatwo nowy obiekt ``NewsletterManager``
 wewnątrz kontrolera::
 
-    use Acme\HelloBundle\Newsletter\NewsletterManager;
+    use AppBundle\Newsletter\NewsletterManager;
 
     // ...
 
     public function sendNewsletterAction()
     {
-        $mailer = $this->get('my_mailer');
+        $mailer = $this->get('app.mailer');
         $newsletter = new NewsletterManager($mailer);
         // ...
     }
@@ -577,19 +579,19 @@ rozwiązanie:
     .. code-block:: yaml
        :linenos:
 
-        # src/Acme/HelloBundle/Resources/config/services.yml
+        # app/config/services.yml
         services:
-            my_mailer:
+            app.mailer:
                 # ...
 
-            newsletter_manager:
-                class:     Acme\HelloBundle\Newsletter\NewsletterManager
-                arguments: ["@my_mailer"]
+            app.newsletter_manager:
+                class:     AppBundle\Newsletter\NewsletterManager
+                arguments: ['@app.mailer']
 
     .. code-block:: xml
        :linenos:
 
-        <!-- src/Acme/HelloBundle/Resources/config/services.xml -->
+        <!-- app/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -597,12 +599,12 @@ rozwiązanie:
                 http://symfony.com/schema/dic/services/services-1.0.xsd">
 
             <services>
-                <service id="my_mailer">
+                <service id="app.mailer">
                 <!-- ... -->
                 </service>
 
-                <service id="newsletter_manager" class="Acme\HelloBundle\Newsletter\NewsletterManager">
-                    <argument type="service" id="my_mailer"/>
+                <service id="app.newsletter_manager" class="AppBundle\Newsletter\NewsletterManager">
+                    <argument type="service" id="app.mailer"/>
                 </service>
             </services>
         </container>
@@ -610,26 +612,26 @@ rozwiązanie:
     .. code-block:: php
        :linenos:
 
-        // src/Acme/HelloBundle/Resources/config/services.php
+        // app/config/services.php
         use Symfony\Component\DependencyInjection\Definition;
         use Symfony\Component\DependencyInjection\Reference;
 
-        $container->setDefinition('my_mailer', ...);
+        $container->setDefinition('app.mailer', ...);
 
-        $container->setDefinition('newsletter_manager', new Definition(
-            'Acme\HelloBundle\Newsletter\NewsletterManager',
-            array(new Reference('my_mailer'))
+        $container->setDefinition('app.newsletter_manager', new Definition(
+            'AppBundle\Newsletter\NewsletterManager',
+            array(new Reference('app.mailer'))
         ));
 
-W formacie YAML, specjalna składnia ``@my_mailer`` informuje kontener, aby
-szukał usługi o nazwie ``my_mailer`` i przekazał ten obiekt do konstruktora klasy
-``NewsletterManager``. W tym przypadku jednak określona usługa ``my_mailer`` musi
+W formacie YAML, specjalna składnia ``@app.mailer`` informuje kontener, aby
+szukał usługi o nazwie ``app.mailer`` i przekazał ten obiekt do konstruktora klasy
+``NewsletterManager``. W tym przypadku jednak określona usługa ``app.mailer`` musi
 istnieć. Jeśli nie, to zrzucony zostanie wyjątek. Można oznaczyć zależność jako
 opcjonalną – zostanie to omówione w następnym rozdziale.
 
 Korzystanie z referencji jest bardzo mocnym narzedziem, które umożliwia
 tworzenie niezależnych klas usług z dobrze zdefiniowanymi zależnościami. W tym
-przykładzie usługa ``newsletter_manager`` potrzebuje usługi ``my_mailer`` w celu
+przykładzie usługa ``newsletter_manager`` potrzebuje usługi ``app.mailer`` w celu
 funkcjonowania. Po określeniu tej zależności w kontenerze usług, kontener zajmie
 się całym działaniem instancji obiektów.
 
@@ -644,9 +646,9 @@ usługi bardziej specyficznych wartości.
 Na przykład, że mamy zewnętrzną usługę (nnie pokazana tutaj), o nazwie ``mailer_configuration``,
 która ma metodę ``getMailerMethod()``, która będzie zwracać łańcuch tekstowy,
 powiedzmy ``sendmail``,  bazujący na jakiejś konfiguracji. Pamiętamy, że pierwszym
-argumentem dla usługi ``my_mailer`` jest prosty łańcuch tekstowy ``sendmail``:
+argumentem dla usługi ``app.mailer`` jest prosty łańcuch tekstowy ``sendmail``:
 
-.. include:: includes/_service_container_my_mailer.rst.inc
+.. include:: includes/_service_container_app.mailer.rst.inc
 
 Lecz czy zamiast sztywnego kodu, mozemy pobrać tą wartość z metody ``getMailerMethod()``
 nowej usługi ``mailer_configuration`` service? Jednym ze sposobów jest użycie
@@ -659,8 +661,8 @@ wyrażenia:
 
         # app/config/config.yml
         services:
-            my_mailer:
-                class:        Acme\HelloBundle\Mailer
+            app.mailer:
+                class:        AppBundle\Mailer
                 arguments:    ["@=service('mailer_configuration').getMailerMethod()"]
 
     .. code-block:: xml
@@ -675,7 +677,7 @@ wyrażenia:
             >
 
             <services>
-                <service id="my_mailer" class="Acme\HelloBundle\Mailer">
+                <service id="app.mailer" class="AppBundle\Mailer">
                     <argument type="expression">service('mailer_configuration').getMailerMethod()</argument>
                 </service>
             </services>
@@ -688,8 +690,8 @@ wyrażenia:
         use Symfony\Component\DependencyInjection\Definition;
         use Symfony\Component\ExpressionLanguage\Expression;
 
-        $container->setDefinition('my_mailer', new Definition(
-            'Acme\HelloBundle\Mailer',
+        $container->setDefinition('app.mailer', new Definition(
+            'AppBundle\Mailer',
             array(new Expression('service("mailer_configuration").getMailerMethod()'))
         ));
 
@@ -712,8 +714,8 @@ poprzez zmienną ``container``. Oto inny przykład:
        :linenos:
 
         services:
-            my_mailer:
-                class:     Acme\HelloBundle\Mailer
+            app.mailer:
+                class:     AppBundle\Mailer
                 arguments: ["@=container.hasParameter('some_param') ? parameter('some_param') : 'default_value'"]
 
     .. code-block:: xml
@@ -727,7 +729,7 @@ poprzez zmienną ``container``. Oto inny przykład:
             >
 
             <services>
-                <service id="my_mailer" class="Acme\HelloBundle\Mailer">
+                <service id="app.mailer" class="AppBundle\Mailer">
                     <argument type="expression">container.hasParameter('some_param') ? parameter('some_param') : 'default_value'</argument>
                 </service>
             </services>
@@ -739,8 +741,8 @@ poprzez zmienną ``container``. Oto inny przykład:
         use Symfony\Component\DependencyInjection\Definition;
         use Symfony\Component\ExpressionLanguage\Expression;
 
-        $container->setDefinition('my_mailer', new Definition(
-            'Acme\HelloBundle\Mailer',
+        $container->setDefinition('app.mailer', new Definition(
+            'AppBundle\Mailer',
             array(new Expression(
                 "container.hasParameter('some_param') ? parameter('some_param') : 'default_value'"
             ))
@@ -765,9 +767,9 @@ ustawia w obiekcie prywatne lub chronione właściwości - jej nazwa rozpoczyna 
 Oznacza to wstrzykiwanie przy użyciu wywołania metody a nie przez konstruktor.
 Klasa może wyglądać następująco::
 
-    namespace Acme\HelloBundle\Newsletter;
+    namespace AppBundle\Newsletter;
 
-    use Acme\HelloBundle\Mailer;
+    use AppBundle\Mailer;
 
     class NewsletterManager
     {
@@ -791,20 +793,20 @@ Wstrzykiwanie zależności przez metodę setera wymaga zmiany składni:
     .. code-block:: yaml
        :linenos:
 
-        # src/Acme/HelloBundle/Resources/config/services.yml
+        # app/config/services.yml
         services:
-            my_mailer:
+            app.mailer:
                 # ...
 
-            newsletter_manager:
-                class:     Acme\HelloBundle\Newsletter\NewsletterManager
+            app.newsletter_manager:
+                class:     AppBundle\Newsletter\NewsletterManager
                 calls:
-                    - [setMailer, ["@my_mailer"]]
+                    - [setMailer, ['@app.mailer']]
 
     .. code-block:: xml
        :linenos:
 
-        <!-- src/Acme/HelloBundle/Resources/config/services.xml -->
+        <!-- app/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -812,13 +814,13 @@ Wstrzykiwanie zależności przez metodę setera wymaga zmiany składni:
                 http://symfony.com/schema/dic/services/services-1.0.xsd">
 
             <services>
-                <service id="my_mailer">
+                <service id="app.mailer">
                 <!-- ... -->
                 </service>
 
-                <service id="newsletter_manager" class="Acme\HelloBundle\Newsletter\NewsletterManager">
+                <service id="app.newsletter_manager" class="AppBundle\Newsletter\NewsletterManager">
                     <call method="setMailer">
-                        <argument type="service" id="my_mailer" />
+                        <argument type="service" id="app.mailer" />
                     </call>
                 </service>
             </services>
@@ -827,16 +829,16 @@ Wstrzykiwanie zależności przez metodę setera wymaga zmiany składni:
     .. code-block:: php
        :linenos:
 
-        // src/Acme/HelloBundle/Resources/config/services.php
+        // app/config/services.php
         use Symfony\Component\DependencyInjection\Definition;
         use Symfony\Component\DependencyInjection\Reference;
 
-        $container->setDefinition('my_mailer', ...);
+        $container->setDefinition('app.mailer', ...);
 
-        $container->setDefinition('newsletter_manager', new Definition(
-            'Acme\HelloBundle\Newsletter\NewsletterManager'
+        $container->setDefinition('app.newsletter_manager', new Definition(
+            'AppBundle\Newsletter\NewsletterManager'
         ))->addMethodCall('setMailer', array(
-            new Reference('my_mailer'),
+            new Reference('app.mailer'),
         ));
 
 .. note::
@@ -860,7 +862,7 @@ wstrzykiwać usługę ``request_stack`` i uzyskiwać dostęp do obiektu ``Reques
 wywołując metodę
 :method:`Symfony\\Component\\HttpFoundation\\RequestStack::getCurrentRequest`::
 
-    namespace Acme\HelloBundle\Newsletter;
+    namespace AppBundle\Newsletter;
 
     use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -893,7 +895,7 @@ inna usługa:
         # src/Acme/HelloBundle/Resources/config/services.yml
         services:
             newsletter_manager:
-                class:     Acme\HelloBundle\Newsletter\NewsletterManager
+                class:     AppBundle\Newsletter\NewsletterManager
                 arguments: ["@request_stack"]
 
     .. code-block:: xml
@@ -908,7 +910,7 @@ inna usługa:
             <services>
                 <service
                     id="newsletter_manager"
-                    class="Acme\HelloBundle\Newsletter\NewsletterManager"
+                    class="AppBundle\Newsletter\NewsletterManager"
                 >
                     <argument type="service" id="request_stack"/>
                 </service>
@@ -924,7 +926,7 @@ inna usługa:
 
         // ...
         $container->setDefinition('newsletter_manager', new Definition(
-            'Acme\HelloBundle\Newsletter\NewsletterManager',
+            'AppBundle\Newsletter\NewsletterManager',
             array(new Reference('request_stack'))
         ));
 
@@ -954,7 +956,7 @@ Uczynienie referencji opcjonalnymi
 
 Czasami jedna z usług może mieć zależności opcjonalne, co oznacza, że zależność
 nie jest wymagana dla prawidłowego działania usługi. W powyższym przykładzie usługa
-``my_mailer`` musi istnieć, w przeciwnym razie zostanie zrzucony wyjątek. Przez
+``app.mailer`` musi istnieć, w przeciwnym razie zostanie zrzucony wyjątek. Przez
 zmodyfikowanie definicji usługi ``newsletter_manager`` można uczynić tą referencję
 opcjonalną. Kontener wstrzyknie ją, jeśli istnieje, jeśli nie, to nic się nie stanie:
 
@@ -963,16 +965,16 @@ opcjonalną. Kontener wstrzyknie ją, jeśli istnieje, jeśli nie, to nic się n
     .. code-block:: yaml
        :linenos:
 
-        # src/Acme/HelloBundle/Resources/config/services.yml
+        # app/config/services.yml
         services:
-            newsletter_manager:
-                class:     Acme\HelloBundle\Newsletter\NewsletterManager
-                arguments: ["@?my_mailer"]
+            app.newsletter_manager:
+                class:     AppBundle\Newsletter\NewsletterManager
+                arguments: ['@?app.mailer']
 
     .. code-block:: xml
        :linenos:
 
-        <!-- src/Acme/HelloBundle/Resources/config/services.xml -->
+        <!-- app/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -980,31 +982,32 @@ opcjonalną. Kontener wstrzyknie ją, jeśli istnieje, jeśli nie, to nic się n
                 http://symfony.com/schema/dic/services/services-1.0.xsd">
 
             <services>
-                <service id="my_mailer">
+                <service id="app.mailer">
                 <!-- ... -->
                 </service>
 
-                <service id="newsletter_manager" class="Acme\HelloBundle\Newsletter\NewsletterManager">
-                    <argument type="service" id="my_mailer" on-invalid="ignore" />
+                <service id="app.newsletter_manager" class="AppBundle\Newsletter\NewsletterManager">
+                    <argument type="service" id="app.mailer" on-invalid="ignore" />
                 </service>
             </services>
         </container>
+        
 
     .. code-block:: php
        :linenos:
 
-        // src/Acme/HelloBundle/Resources/config/services.php
+        // app/config/services.php
         use Symfony\Component\DependencyInjection\Definition;
         use Symfony\Component\DependencyInjection\Reference;
         use Symfony\Component\DependencyInjection\ContainerInterface;
 
-        $container->setDefinition('my_mailer', ...);
+        $container->setDefinition('app.mailer', ...);
 
-        $container->setDefinition('newsletter_manager', new Definition(
-            'Acme\HelloBundle\Newsletter\NewsletterManager',
+        $container->setDefinition('app.newsletter_manager', new Definition(
+            'AppBundle\Newsletter\NewsletterManager',
             array(
                 new Reference(
-                    'my_mailer',
+                    'app.mailer',
                     ContainerInterface::IGNORE_ON_INVALID_REFERENCE
                 )
             )
@@ -1052,10 +1055,11 @@ dostępu do informacji w żądaniu (``request``).
 Można pójść o krok dalej, korzystając z tych usług wewnątrz innych usług, które
 zostały utworzone dla aplikacji. Zacznijmy od modyfikacji ``NewsletterManager``
 w celu wykorzystania rzeczywistej usługi Symfony ``mailer`` (zamiast pozornej
-usługi ``my_mailer``). Przekażemy również do ``NewsletterManager`` usługę silnika
+usługi ``app.mailer``). Przekażemy również do ``NewsletterManager`` usługę silnika
 szablonowania, tak aby można było generować treść wiadomości e-mail poprzez szablon::
 
-    namespace Acme\HelloBundle\Newsletter;
+    // src/AppBundle/Newsletter/NewsletterManager.php
+    namespace AppBundle\Newsletter;
 
     use Symfony\Component\Templating\EngineInterface;
 
@@ -1083,23 +1087,23 @@ Konfiguracja kontenera usług jest łatwa:
     .. code-block:: yaml
        :linenos:
 
-        # src/Acme/HelloBundle/Resources/config/services.yml
+        # app/config/services.yml
         services:
-            newsletter_manager:
-                class:     Acme\HelloBundle\Newsletter\NewsletterManager
-                arguments: ["@mailer", "@templating"]
+            app.newsletter_manager:
+                class:     AppBundle\Newsletter\NewsletterManager
+                arguments: ['@mailer', '@templating']
 
     .. code-block:: xml
        :linenos:
 
-        <!-- src/Acme/HelloBundle/Resources/config/services.xml -->
+        <!-- app/config/services.xml -->
         <?xml version="1.0" encoding="UTF-8" ?>
         <container xmlns="http://symfony.com/schema/dic/services"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://symfony.com/schema/dic/services
                 http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-            <service id="newsletter_manager" class="Acme\HelloBundle\Newsletter\NewsletterManager">
+            <service id="app.newsletter_manager" class="AppBundle\Newsletter\NewsletterManager">
                 <argument type="service" id="mailer"/>
                 <argument type="service" id="templating"/>
             </service>
@@ -1108,16 +1112,16 @@ Konfiguracja kontenera usług jest łatwa:
     .. code-block:: php
        :linenos:
 
-        // src/Acme/HelloBundle/Resources/config/services.php
-        $container->setDefinition('newsletter_manager', new Definition(
-            'Acme\HelloBundle\Newsletter\NewsletterManager',
+        // app/config/services.php
+        $container->setDefinition('app.newsletter_manager', new Definition(
+            'AppBundle\Newsletter\NewsletterManager',
             array(
                 new Reference('mailer'),
                 new Reference('templating'),
             )
         ));
 
-Usługa ``newsletter_manager`` ma teraz dostęp do usług rdzennych ``mailer``
+Usługa ``app.newsletter_manager`` ma teraz dostęp do usług rdzennych ``mailer``
 i ``templating``. Jest to powszechny sposób tworzenia usług specyficznych dla
 aplikacji, które wykorzystują możliwości różnych usług frameworka.
 
@@ -1149,7 +1153,7 @@ użyta w określonym celu. Weźmy następujący przykład:
         # app/config/services.yml
         services:
             foo.twig.extension:
-                class: Acme\HelloBundle\Extension\FooExtension
+                class: AppBundle\Extension\FooExtension
                 public: false
                 tags:
                     -  { name: twig.extension }
@@ -1164,13 +1168,15 @@ użyta w określonym celu. Weźmy następujący przykład:
             xsi:schemaLocation="http://symfony.com/schema/dic/services
                 http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-            <service
-                id="foo.twig.extension"
-                class="Acme\HelloBundle\Extension\FooExtension"
-                public="false">
+            <services>
+                <service
+                    id="foo.twig.extension"
+                    class="AppBundle\Extension\FooExtension"
+                    public="false">
 
-                <tag name="twig.extension" />
-            </service>
+                    <tag name="twig.extension" />
+                </service>
+            </services>
         </container>
 
     .. code-block:: php
@@ -1179,7 +1185,7 @@ użyta w określonym celu. Weźmy następujący przykład:
         // app/config/services.php
         use Symfony\Component\DependencyInjection\Definition;
 
-        $definition = new Definition('Acme\HelloBundle\Extension\FooExtension');
+        $definition = new Definition('AppBundle\Extension\FooExtension');
         $definition->setPublic(false);
         $definition->addTag('twig.extension');
         $container->setDefinition('foo.twig.extension', $definition);
@@ -1215,9 +1221,6 @@ polecenie:
 
     $ php app/console debug:container
 
-.. versionadded:: 2.6
-    Przed wersją Symfony 2.6, polecenie do miało nazwę ``container:debug``.
-
 Domyślnie pokazywane są tylko publiczne usługi, ale można też wyświetlić usługi
 prywatne:
 
@@ -1239,7 +1242,7 @@ identyfikator:
 
 .. code-block:: bash
 
-    $ php app/console debug:container my_mailer
+    $ php app/console debug:container app.mailer
 
 Czytaj więcej
 -------------
@@ -1255,4 +1258,4 @@ Czytaj więcej
 * :doc:`/cookbook/service_container/compiler_passes`
 * :doc:`/components/dependency_injection/advanced`
 
-.. _`architekturą zorientowana na usługi`: http://pl.wikipedia.org/wiki/Architektura_zorientowana_na_us%C5%82ugi
+.. _`architekturą zorientowana na usługi`: https://pl.wikipedia.org/wiki/Architektura_zorientowana_na_us%C5%82ugi
