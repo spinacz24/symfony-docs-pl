@@ -469,11 +469,6 @@ Jeśli chce się przekierować użytkownika do innej strony, należy użyć meto
         // return $this->redirect($this->generateUrl('homepage'), 301);
     }
 
-.. versionadded:: 2.6
-    Metod ``redirectToRoute()`` została dodana w Symfony 2.6. Poprzednio w tym celu
-    używało się razem ``redirect()`` i ``generateUrl()``, co jest jeszcze obsługiwane 
-    (zobacz powyższy przykład).
-
 Jeśli chce się wykonać przekierowanie zewnętrzne, wystarczy użyć ``redirect()``
 i przekazać to w adresie URL::
    
@@ -569,11 +564,6 @@ Aby wyświetlić listę wszstkich dostępnych usług, nalezy użyć polecenia ko
 .. code-block:: bash
 
     $ php app/console debug:container
-
-.. versionadded:: 2.6
-    W wersjach wcześniejszych niż Symfony 2.6 polecenie to wywoływane było
-    wyrażeniem ``container:debug``.
-    
 
 Więcej informacji można znaleźć w rozdziale :doc:`service_container`.
 
@@ -845,6 +835,27 @@ Podobnie jak w przypadku tworzenia akcji dla trasy, kolejność argumentów
 (np. ``name``) do nazw argumentów metody (np. ``$name``). Jeśli zmieni się kolejność
 argumentów, Symfony wciąż będzie w stanie przekazywać właściwą wartości do każdej
 zmiennej.
+
+.. _checking-the-validity-of-a-csrf-token:
+
+Sprawdzanie tokenu CSRF
+-----------------------
+
+Czasami zachodzi potrzeba zastosowania ochrony CSRF w akcji, nie chce się użyć
+w komponencie Symfony Form. Jeśli na przykład, robi się akcję DELETE, można
+wykorzystać metodę :method:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller::isCsrfTokenValid`
+do sprawdzenia tokenu CSRF::
+
+    if ($this->isCsrfTokenValid('token_id', $submittedToken)) {
+        // ... do something, like deleting an object
+    }
+
+    // isCsrfTokenValid() is equivalent to:
+    // $this->get('security.csrf.token_manager')->isTokenValid()
+    //     new \Symfony\Component\Security\Csrf\CsrfToken\CsrfToken('token_id', $token)
+    // );
+
+
 
 
 Wnioski końcowe
