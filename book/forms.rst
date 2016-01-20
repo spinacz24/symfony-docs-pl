@@ -83,20 +83,25 @@ wewnątrz akcji::
     use AppBundle\Entity\Task;
     use Symfony\Bundle\FrameworkBundle\Controller\Controller;
     use Symfony\Component\HttpFoundation\Request;
+    use Symfony\Component\Form\Extension\Core\Type\TextType;
+    use Symfony\Component\Form\Extension\Core\Type\DateType;
+    use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
     class DefaultController extends Controller
     {
         public function newAction(Request $request)
         {
-            // create a task and give it some dummy data for this example
+            // tworzymy zadanie i nadajemy mu jakieś dane testowe dla tego przykladu
             $task = new Task();
             $task->setTask('Write a blog post');
             $task->setDueDate(new \DateTime('tomorrow'));
 
             $form = $this->createFormBuilder($task)
-                ->add('task', 'text')
-                ->add('dueDate', 'date')
-                ->add('save', 'submit', array('label' => 'Create Task'))
+                ->add('task', TextType::class)
+                // Jeśłi uzwasz PHP 5.3 lub 5.4 musisz użyć
+                // ->add('task', 'Symfony\Component\Form\Extension\Core\Type\TextType')
+                ->add('dueDate', DateType::class)
+                ->add('save', SubmitType::class, array('label' => 'Create Task'))
                 ->getForm();
 
             return $this->render('default/new.html.twig', array(
@@ -119,8 +124,17 @@ rzeczywistego budowania formularzy.
 
 W tym przykładzie dodaliśmy do formularza dwa pola, ``task`` i ``dueDate``,
 odnoszące się do właściwości ``task`` i ``dueDate`` klasy ``Task``.
-Mamy również do tych pól przypisany "typ" (np. ``text``, ``date``), który (między
-innymi) określa jakie znaczniki formularza HTML są renderowane dla danego pola.
+Musi się także przypisać każdy "typ" (np. ``TextType`` i ``DateType``),
+reprezentowany prez jego w pełni kwalifikowana nazwę klasy. Między innymi, określa
+to, czy dla każdego pola są renderowane znaczniki HTML formularza.
+
+.. versionadded:: 2.8
+    Do oznaczenia typu formularza w PHP 5.5+ lub
+    w ``Symfony\Component\Form\Extension\Core\Type\TextType`, musi się używać
+    w pełni kwalifikowanej nazwy klasy, takiej jak ``TextType::class``.
+    Przed Symfony 2.8, mozna było użyć alias dla kazdego typu, taki jak ``text``
+    lub ``date``. Stara skladnia aliasu bedzie nadal działać do Symfony 3.0.
+    Wiecej informacji znajduje sie w pliku `2.8 UPGRADE Log`_.
 
 Na koniec dodamy przycisk zgłaszjący dla przesyłania formularza na serwer.
 
@@ -228,21 +242,31 @@ użytkownika z formularzem. W naszej akcji dodamy następujacą rzecz::
         $task = new Task();
 
         $form = $this->createFormBuilder($task)
-            ->add('task', 'text')
-            ->add('dueDate', 'date')
-            ->add('save', 'submit', array('label' => 'Create Task'))
+            ->add('task', TextType::class)
+            ->add('dueDate', DateType::class)
+            ->add('save', SubmitType::class, array('label' => 'Create Task'))
             ->getForm();
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
-            // perform some action, such as saving the task to the database
+        if ($form->isSubmitted() && $form->isValid()) {
+            // ... perform some action, such as saving the task to the database
 
             return $this->redirectToRoute('task_success');
         }
 
-        // ...
+        return $this->render('default/new.html.twig', array(
+            'form' => $form->createView(),
+        ));
     }
+
+.. caution::
+
+    Należy pamiętać, że metoda ``createView()`` powinna być wywoływana przed tym,
+    jak wywołana jest ``handleRequest``. W przeciwnym razie, zmiany dokonane w
+    zdarzeniach ``*_SUBMIT`` nie beda zastosowane do widoku (takie jak błędy
+    walidacyjne).
+
    
 .. versionadded:: 2.3
     W Symfony 2.3 została dodana metoda :method:`Symfony\Component\Form\FormInterface::handleRequest`.
@@ -302,10 +326,10 @@ w akcji. Dodajmy do naszego formularza drugi przycisk z etykietą
 "Zapisz i dodaj"::
 
     $form = $this->createFormBuilder($task)
-        ->add('task', 'text')
-        ->add('dueDate', 'date')
-        ->add('save', 'submit', array('label' => 'Create Post'))
-        ->add('saveAndAdd', 'submit', array('label' => 'Save and Add'))
+        ->add('task', TextType::class)
+        ->add('dueDate', DateType::class)
+        ->add('save', SubmitType::class, array('label' => 'Create Task'))
+        ->add('saveAndAdd', SubmitType::class, array('label' => 'Save and Add'))
         ->getForm();
 
 W akcji zastosujemy metodę przycisku
@@ -606,8 +630,8 @@ w rozdziale podrecznika :ref:`"Grupy walidacyjne" <book-validation-validation-gr
 .. index::
    single: formularze; grupy walidacyjne
 
-Grupy walidacyjne oparte na interaktywnym przycisku
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Grupy walidacyjne oparte na kliknietym przycisku
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. versionadded:: 2.3
     W Symfony 2.3 została dodana obsługa przycisków.
@@ -622,8 +646,8 @@ Najpierw potrzebujemy dodać do formularza dwa przyciski::
 
     $form = $this->createFormBuilder($task)
         // ...
-        ->add('nextStep', 'submit')
-        ->add('previousStep', 'submit')
+        ->add('nextStep', SubmitType::class)
+        ->add('previousStep', SubmitType::class)
         ->getForm();
 
 Następnie skonfigurujemy przycisk powrotu do poprzedniego kroku aby uruchamiał
@@ -632,7 +656,7 @@ wyłączona, tak więc ustawiamy opcję ``validation_groups`` na ``false``::
 
     $form = $this->createFormBuilder($task)
         // ...
-        ->add('previousStep', 'submit', array(
+         ->add('previousStep', SubmitType::class, array(
             'validation_groups' => false,
         ))
         ->getForm();
@@ -667,11 +691,11 @@ Opcje typu pola
 
 Każdy typ pole ma kilka opcji, jakie mogą zostać użyte do skonfigurowania pola.
 Na przykład, pole ``thedueDate`` jest obecnie renderowane jako 3 pola wyboru.
-Jednak :doc:`pola daty</reference/forms/types/date>` mogą zostać skonfigurowane,
+Jednak :doc:`DateType </reference/forms/types/date>` może zostać skonfigurowane,
 tak aby były renderowane jako pojedyncze pola tekstowe (gdzie użytkownik wpisuje
 datę jako ciąg znaków)::
 
-    ->add('dueDate', 'date', array('widget' => 'single_text'))
+    ->add('dueDate', DateType::class, array('widget' => 'single_text'))
 
 .. image:: /images/book/form-simple2.png
     :align: center
@@ -703,7 +727,7 @@ w dokumentacji każdego typu pola.
     Etykietę dla pola formularza można ustawić opcją ``label``, którą można
     zastosować do każdego pola::
 
-        ->add('dueDate', 'date', array(
+        ->add('dueDate', DateType::class, array(
             'widget' => 'single_text',
             'label'  => 'Due Date',
         ))
@@ -723,8 +747,8 @@ Odgadywany typ pola
 Teraz, gdy zostały dodane metadane walidacyjne do klasy ``Task``, Symfony wie już
 trochę o swoich polach. Jeśli zezwoli się, to Symfony może "odgadywać" typ pola
 i ustawiać odgadnięty typ. W tym przykładzie Symfony może odgadywać typ pola z
-zasad walidacyjnych, takich że zarówno pole ``task`` jest zwykłym polem tekstowym,
-jak i pole ``dueDate`` jest polem datowym::
+zasad walidacyjnych, takich że zarówno pole ``task`` jest zwykłym polem ``TextType``,
+jak i pole ``dueDate`` jest polem ``DateType``::
 
     public function newAction()
     {
@@ -733,7 +757,7 @@ jak i pole ``dueDate`` jest polem datowym::
         $form = $this->createFormBuilder($task)
             ->add('task')
             ->add('dueDate', null, array('widget' => 'single_text'))
-            ->add('save', 'submit')
+            ->add('save', SubmitType::class)
             ->getForm();
     }
 
@@ -1000,8 +1024,9 @@ formularz w kontrolerze, to można użyć metod ``setAction()`` i ``setMethod()`
     $form = $this->createFormBuilder($task)
         ->setAction($this->generateUrl('target_route'))
         ->setMethod('GET')
-        ->add('task', 'text')
-        ->add('dueDate', 'date')
+        ->add('task', TextType::class)
+        ->add('dueDate', DateType::class)
+        ->add('save', SubmitType::class)
         ->getForm();
 
 .. note::
@@ -1014,7 +1039,10 @@ przekształcić kod tworzący formularz na oddzielne klasy. W przypadku używani
 zewnętrznej klasy formularza, można przekazać akcję i metodę jako
 opcję formularza::
 
-    $form = $this->createForm(new TaskType(), $task, array(
+    use AppBundle\Form\Type\TaskType;
+    // ...
+
+    $form = $this->createForm(TaskType::class, $task, array(
         'action' => $this->generateUrl('target_route'),
         'method' => 'GET',
     ));
@@ -1033,7 +1061,9 @@ pomocniczych ``form()`` lub ``form_start()``:
 
         <!-- app/Resources/views/default/newAction.html.php -->
         <?php echo $view['form']->start($form, array(
-            'action' => $view['router']->generate('target_route'),
+            // The path() method was introduced in Symfony 2.8. Prior to 2.8,
+            // you had to use generate().
+            'action' => $view['router']->path('target_route'),
             'method' => 'GET',
         )) ?>
 
@@ -1065,6 +1095,7 @@ Utwórzmy nową klasę, która będzie miejscem logiki dla zbudowania formularza
 
     use Symfony\Component\Form\AbstractType;
     use Symfony\Component\Form\FormBuilderInterface;
+    use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
     class TaskType extends AbstractType
     {
@@ -1073,38 +1104,21 @@ Utwórzmy nową klasę, która będzie miejscem logiki dla zbudowania formularza
             $builder
                 ->add('task')
                 ->add('dueDate', null, array('widget' => 'single_text'))
-                ->add('save', 'submit')
+                ->add('save', SubmitType::class)
             ;
         }
-
-        public function getName()
-        {
-            return 'task';
-        }
     }
-
-.. caution::
-
-    Metoda ``getName()`` zwraca identyfikator "type" tego formularza. Takie
-    identyfikatory muszą być unikalne w aplikacji. Jeśli nie chce zastąpić
-    wbudowanego typu, zastosowane identyfikatory powinny różnić się od domyślnego
-    typu Symfony i od każdego typu zdefiniowanego w obcych pakietach zainstalowanych
-    w aplikacji. Przemyśl poprzedzanie swoich typów przedrostkiem ``app_``, co
-    pozwoli na uniknięcie konfliktu nazewniczego.
-
 
 Nowa klasa zawiera wszystkie wskazówki potrzebne do utworzenia formularza naszego
 zadania, co można wykorzystać do szybkiego zbudowania obiektu formularza w akcji::
 
     // src/AppBundle/Controller/DefaultController.php
-
-    // add this new use statement at the top of the class
     use AppBundle\Form\Type\TaskType;
 
     public function newAction()
     {
         $task = ...;
-        $form = $this->createForm(new TaskType(), $task);
+        $form = $this->createForm(TaskType::class, $task);
 
         // ...
     }
@@ -1151,7 +1165,7 @@ sposób na tworzenie formularzy, ale wybór zależy tylko od Ciebie.
             $builder
                 ->add('task')
                 ->add('dueDate', null, array('mapped' => false))
-                ->add('save', 'submit')
+                ->add('save', SubmitType::class)
             ;
         }
 
@@ -1169,27 +1183,62 @@ sposób na tworzenie formularzy, ale wybór zależy tylko od Ciebie.
 Definiowanie formularzy jako usługi
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Definiowanie typu formularza jako usługi jest dobrą praktyką i sprawia, że aplikacja
-jest naprawdę łatwa w użyciu.
+Typ formularza może mieć pewne zewnętrzne zależności. Można zdefiniować własny
+typ formularza jako usługę i wstrzyknąć do niego wszystkie potrzebne zależności.
 
 .. note::
 
     Usługi i kontener usług zostanę omówione
-    :doc:`dalej w tej książce </book/service_container>` i rzecz stanie się
-    bardziej zrozumiała po przeczytaniu tego rozdziału.
+    :doc:`dalszym rozdziale </book/service_container>` i rzecz stanie się
+    bardziej zrozumiała po jego przeczytaniu.
+
+Przyjmijmy, że chcemy w swoim typie formularza użyć usługę zdefiniowaną jako
+``app.my_service``. Utwórzmy konstruktor dla naszego typu formularza, w celu
+uzyskania usługi::
+
+    // src/AppBundle/Form/Type/TaskType.php
+    namespace AppBundle\Form\Type;
+
+    use App\Utility\MyService;
+    use Symfony\Component\Form\AbstractType;
+    use Symfony\Component\Form\FormBuilderInterface;
+    use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+
+    class TaskType extends AbstractType
+    {
+        private $myService;
+
+        public function __construct(MyService $myService)
+        {
+            $this->myService = $myService;
+        }
+
+        public function buildForm(FormBuilderInterface $builder, array $options)
+        {
+            // You can now use myService.
+            $builder
+                ->add('task')
+                ->add('dueDate', null, array('widget' => 'single_text'))
+                ->add('save', SubmitType::class)
+            ;
+        }
+    }
+
+Następnie zdefiniujmy typ formularza jako usługę.
 
 .. configuration-block::
 
     .. code-block:: yaml
        :linenos:
-
-        # src/AppBundle/Resources/config/services.yml
+       
+       # src/AppBundle/Resources/config/services.yml
         services:
             app.form.type.task:
                 class: AppBundle\Form\Type\TaskType
+                arguments: ["@app.my_service"]
                 tags:
-                    - { name: form.type, alias: task }
-
+                    - { name: form.type } 
+         
     .. code-block:: xml
        :linenos:
 
@@ -1201,7 +1250,8 @@ jest naprawdę łatwa w użyciu.
 
             <services>
                 <service id="app.form.type.task" class="AppBundle\Form\Type\TaskType">
-                    <tag name="form.type" alias="task" />
+                    <tag name="form.type" />
+                    <argument type="service" id="app.my_service"></argument>
                 </service>
             </services>
         </container>
@@ -1210,45 +1260,13 @@ jest naprawdę łatwa w użyciu.
        :linenos:
 
         // src/AppBundle/Resources/config/services.php
-        $container
-            ->register(
-                'app.form.type.task',
-                'AppBundle\Form\Type\TaskType'
-            )
-            ->addTag('form.type', array(
-                'alias' => 'task',
-            ))
-        ;
+        use Symfony\Component\DependencyInjection\Reference;
 
-Gotowe! Teraz można korzystać z typu formularza bezpośrednio w kontrolerze::
+        $container->register('app.form.type.task', 'AppBundle\Form\Type\TaskType')
+            ->addArgument(new Reference('app.my_service'))
+            ->addTag('form.type')
 
-    // src/AppBundle/Controller/DefaultController.php
-    // ...
-
-    public function newAction()
-    {
-        $task = ...;
-        $form = $this->createForm('task', $task);
-
-        // ...
-    }
-
-lub nawet stosować ten typ formularza wewnątrz innego formularza::
-
-    // src/AppBundle/Form/Type/ListType.php
-    // ...
-
-    class ListType extends AbstractType
-    {
-        public function buildForm(FormBuilderInterface $builder, array $options)
-        {
-            // ...
-
-            $builder->add('someTask', 'task');
-        }
-    }
-
-Więcej informacji w :ref:`form-cookbook-form-field-service`.
+Proszę przeczytać :ref:`form-cookbook-form-field-service` w celu uzyskania więcej informacji.
 
 .. index::
    pair: formularze; Doctrine
@@ -1372,11 +1390,6 @@ użytkownika::
                 'data_class' => 'AppBundle\Entity\Category',
             ));
         }
-
-        public function getName()
-        {
-            return 'category';
-        }
     }
 
 Ostatecznym celem jest umożliwienie, aby kategorie zadań mogły być modyfikowane
@@ -1387,12 +1400,13 @@ wewnątrz formularza zadania. W tym celu dodamy pole ``category`` do obiektu
    :linenos:   
       
     use Symfony\Component\Form\FormBuilderInterface;
+    use AppBundle\Form\Type\CategoryType;
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // ...
 
-        $builder->add('category', new CategoryType());
+        $builder->add('category', CategoryType::class);
     }
 
 Pola z ``CategoryType`` mogą teraz być renderowane obok pól z ``TaskType``.
@@ -1442,7 +1456,7 @@ przez użycie typu pola ``collection``.
 
 Więcej informacji można uzyskać w artykule
 ":doc:`Jak osadzoć kolekcję fotmularzy </cookbook/form/form_collections>` oraz
-w :doc:`referencjach typu pola collection </reference/forms/types/collection>`.
+w referencjach :doc:`CollectionType </reference/forms/types/collection>`.
 
 .. index::
    single: formularze; dekorowanie
@@ -1808,6 +1822,12 @@ Pole ``_token`` jest ukrytym polem i zostanie automatycznie wygenerowane, jeśli
 dołączy się w szablonie funkcję ``form_end()``. Funkcja ta zapewnia, że na wyjściu
 znajdują się wszystkie nie renderowane pola.
 
+.. caution::
+
+    Ponieważ token jest przechowywany w sesji a sesja jest rozpoczynana
+    automatycznie jak tylko formularz zostanie wygenerowany, to jest on od razu
+    chroniony przed atakami CSRF.
+
 Token CSRF może zostać dopasowany w konfiguracji formularza. Przykładowo::
 
     use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -1871,10 +1891,10 @@ danych. Jest to w rzeczywistości bardzo proste::
     {
         $defaultData = array('message' => 'Type your message here');
         $form = $this->createFormBuilder($defaultData)
-            ->add('name', 'text')
-            ->add('email', 'email')
-            ->add('message', 'textarea')
-            ->add('send', 'submit')
+            ->add('name', TextType::class)
+            ->add('email', EmailType::class)
+            ->add('message', TextareaType::class)
+            ->add('send', SubmitType::class)
             ->getForm();
 
         $form->handleRequest($request);
@@ -1936,12 +1956,13 @@ ale oto krótki przykład:
 
     use Symfony\Component\Validator\Constraints\Length;
     use Symfony\Component\Validator\Constraints\NotBlank;
+    use Symfony\Component\Form\Extension\Core\Type\TextType;
 
     $builder
-       ->add('firstName', 'text', array(
+       ->add('firstName', TextType::class, array(
            'constraints' => new Length(array('min' => 3)),
        ))
-       ->add('lastName', 'text', array(
+       ->add('lastName', TextType::class, array(
            'constraints' => array(
                new NotBlank(),
                new Length(array('min' => 3)),
@@ -1982,7 +2003,7 @@ Dalsza lektura
 --------------
 
 * :doc:`/cookbook/doctrine/file_uploads`
-* :doc:`File Field Reference </reference/forms/types/file>`
+* :doc:`FileType Reference </reference/forms/types/file>`
 * :doc:`Creating Custom Field Types </cookbook/form/create_custom_field_type>`
 * :doc:`/cookbook/form/form_customization`
 * :doc:`/cookbook/form/dynamic_form_modification`
@@ -1997,3 +2018,4 @@ Dalsza lektura
 .. _`form_div_layout.html.twig`: https://github.com/symfony/symfony/blob/2.2/src/Symfony/Bridge/Twig/Resources/views/Form/form_div_layout.html.twig
 .. _`Cross-site request forgery`: http://en.wikipedia.org/wiki/Cross-site_request_forgery
 .. _`zobacz na GitHub`: https://github.com/symfony/symfony/tree/2.2/src/Symfony/Bundle/FrameworkBundle/Resources/views/Form
+.. _`2.8 UPGRADE Log`: https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
