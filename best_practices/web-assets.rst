@@ -1,8 +1,8 @@
 .. index::
    double: aktywa; najlepsze praktyki
 
-Aktywa siweciowe
-================
+Aktywa sieciowe
+===============
 
 :term:`Aktywa sieciowe <aktywa>`, to takie rzeczy jak skrypty CSS i JavaScript,
 pliki obrazów itd., które tworzą część frontową witryny i sprawiają, że wygląda
@@ -39,6 +39,8 @@ znacznie prostsze:
 
 Stosowanie aktywów
 ------------------
+
+.. include:: /cookbook/assetic/_standard_edition_warning.inc
 
 Obecnie już unika się już tworzenia statycznych plików CSS i JavaScript oraz
 ręcznego dołączania tych plików do szablonów. Zamiast tego najczęściej, stosuje

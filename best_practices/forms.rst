@@ -37,10 +37,10 @@ w ich własnych klasach PHP::
         {
             $builder
                 ->add('title')
-                ->add('summary', 'textarea')
-                ->add('content', 'textarea')
-                ->add('authorEmail', 'email')
-                ->add('publishedAt', 'datetime')
+                ->add('summary', TextareaType::class)
+                ->add('content', TextareaType::class)
+                ->add('authorEmail', EmailType::class)
+                ->add('publishedAt', DateTimeType::class)
             ;
         }
 
@@ -50,11 +50,6 @@ w ich własnych klasach PHP::
                 'data_class' => 'AppBundle\Entity\Post'
             ));
         }
-
-        public function getName()
-        {
-            return 'post';
-        }
     }
 
 .. best-practice::
@@ -63,8 +58,8 @@ w ich własnych klasach PHP::
     chyba że, używasz innych klas formularzowych, jak na przykład transformery
     danych.
 
-W celu użycia klasy trzeba zastosować metodę ``createForm`` oraz stworzyć instancję
-nowej klasy::
+W celu użycia klasy, trzeba zastosować metodę ``createForm`` i przekazać w pełni
+kwalifikowaną nazwę klasy::
 
     // ...
     use AppBundle\Form\PostType;
@@ -73,7 +68,7 @@ nowej klasy::
     public function newAction(Request $request)
     {
         $post = new Post();
-        $form = $this->createForm(new PostType(), $post);
+        $form = $this->createForm(PostType::class, $post);
 
         // ...
     }
@@ -86,7 +81,7 @@ Można również
 Nie jest to jednak zalecane, chyba że planuje się wielokrotne wykorzystywanie
 nowego typu form w wielu miejscach aplikacji lub chce się osadzać go w innym
 formularzu bezpośrednio albo za pomocą
-:doc:`typu collection </reference/forms/types/collection>`.
+:doc:`CollectionType </reference/forms/types/collection>`.
 
 Dla większości formularzy, które są uzywane do edycji lub tworzenia czegoś,
 rejestrowanie formularza jako usługi jest nadmiernym obciążeniem i powoduje,
@@ -115,7 +110,7 @@ się zakres stosowania takiego formularza:
         {
             $builder
                 // ...
-                ->add('save', 'submit', array('label' => 'Create Post'))
+               ->add('save', SubmitType::class, array('label' => 'Create Post'))
             ;
         }
 
@@ -130,6 +125,7 @@ zła. Zamiast tego, niektórzy programiści konfoguruja przyciski formularza w k
 
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+    use Symfony\Component\Form\Extension\Core\Type\SubmitType;
     use AppBundle\Entity\Post;
     use AppBundle\Form\PostType;
 
@@ -140,8 +136,8 @@ zła. Zamiast tego, niektórzy programiści konfoguruja przyciski formularza w k
         public function newAction(Request $request)
         {
             $post = new Post();
-            $form = $this->createForm(new PostType(), $post);
-            $form->add('submit', 'submit', array(
+            $form = $this->createForm(PostType::class, $post);
+            $form->add('submit', SubmitType::class, array(
                 'label' => 'Create',
                 'attr'  => array('class' => 'btn btn-default pull-right')
             ));
@@ -227,27 +223,8 @@ oddzielna akcję ``createAction``, która tylko przetwarza zgłoszony formularz.
 Obydwie akcje będą niemal identyczne. Prościej jest więc zastosować tylko ``newAction``
 do obsługi wszystkiego.
 
-Po drugie, dla jasnosci, zalecamy stosowanie ``$form->isSubmitted()`` w wyrażeniu
+Po drugie, dla jasności, zalecamy stosowanie ``$form->isSubmitted()`` w wyrażeniu
 ``if``. Nie jest to technicznie konieczne, ponieważ ``isValid()`` najpierw wywołuje
 ``isSubmitted()``. Jednak bez tego, przepływ przetwarzania nie czyta się dobrze,
 wyglądając tak, jakby formularza był zawsze przetwarzany (nawet przy żądaniu GET).
 
-Własne typy pól formularza
---------------------------
-
-.. best-practice::
-
-    Dodawaj przedrostek ``app_`` do nazwy niestandardowych typów pól formularza,
-    aby uniknąć kolizji nazewniczej.
-
-Własne typy pól formularza dziedziczą z klasy ``AbstractType``, która definiuje
-metodę ``getName()`` używaną do konfiguracji nazwy tego typu formularza. Nazwy
-te muszą być unikalne w aplikacji.
-
-Jeśli własny typ formularza używa tej samej nazwy co wszystkie wbudowany typ
-formularzowy Symfony, to go zastąpi. To samo dzieje się, gdy nazwa własnego typu
-formularza pasuje do typu zdefiniowanego w pakiecie zewnętrznym, zainstalowanym
-w aplikacji.
-
-Dodając przedrostek ``app_`` do nazwy wlasnego typu pola formularza unika się
-kolizji nazewniczej, która może prowadzić do poważnych błędów debugowania.
