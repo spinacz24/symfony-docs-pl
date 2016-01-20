@@ -24,14 +24,14 @@ znajduje się domyślnie w katalogu ``app/config/`` i nosi nazwę ``config.yml``
             - { resource: security.yml }
 
         framework:
-            secret:          "%secret%"
-            router:          { resource: "%kernel.root_dir%/config/routing.yml" }
+            secret:          '%secret%'
+            router:          { resource: '%kernel.root_dir%/config/routing.yml' }
             # ...
 
         # Twig Configuration
         twig:
-            debug:            "%kernel.debug%"
-            strict_variables: "%kernel.debug%"
+            debug:            '%kernel.debug%'
+            strict_variables: '%kernel.debug%'
 
         # ...
 
@@ -234,7 +234,7 @@ Przyjrzyjmy się plikowi konfiguracyjnemu dla środowiska ``dev``:
             - { resource: config.yml }
 
         framework:
-            router:   { resource: "%kernel.root_dir%/config/routing_dev.yml" }
+            router:   { resource: '%kernel.root_dir%/config/routing_dev.yml' }
             profiler: { only_exceptions: false }
 
         # ...

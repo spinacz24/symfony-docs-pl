@@ -578,8 +578,14 @@ Najlepszym algorytmem jest ``bcrypt``:
 .. include:: /cookbook/security/_ircmaxwell_password-compat.rst.inc
 
 Oczywiście, trzeba teraz zakodować istniejące hasła tym algorytmem.
-Dla sztywno kodowanych użytkowników można wykorzytać `narzędzie online`_,
-które daje coś takiego:
+Przy sztywno kodowanych użytkownikach, począwszy od wersji 2.7 wykorzystywać
+wbudowane polecenie:
+
+.. code-block:: bash
+
+    $ php app/console security:encode-password
+    
+Daje to coś takiego:    
 
 .. configuration-block::
 
@@ -929,15 +935,6 @@ Można łatwo zablokować dostęp do akcji kontrolera::
         // ...
     }
 
-.. versionadded:: 2.6
-    Metoda ``denyAccessUnlessGranted()`` została wprowadzona w Symfony 2.6. Poprzednio
-    (i jeszcze nadal), można sprawdzać dostęp bezpośrednio i zrzucać ``AccessDeniedException``,
-    tak jak pokazano to w powyższym przykładzie).
-
-.. versionadded:: 2.6
-    Usługa ``security.authorization_checker`` została wprowadzona w Symfony 2.6. Wcześnie
-    trzeba było uzywać metody ``isGranted()`` usługi ``security.context``.
-
 W obu przypadkach zrzucany jest specjalny wyjątek
 :class:`Symfony\\Component\\Security\\Core\\Exception\\AccessDeniedException`,
 co w efekcie wywołuje wewnątrz Symfony odpowiedź 403 HTTP.
@@ -973,11 +970,11 @@ Kontrola dostępu w szablonach
 .............................
 
 Jeśli chce się sprawdzić w szablonie, czy bieżący użytkownik posiada określoną
-rolę, trzeba użyć wbudowanej funkcji pomocniczej:
+rolę, trzeba użyć wbudowanej funkcji pomocniczej ``is_granted()``:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {% if is_granted('ROLE_ADMIN') %}
@@ -991,20 +988,17 @@ rolę, trzeba użyć wbudowanej funkcji pomocniczej:
             <a href="...">Delete</a>
         <?php endif ?>
 
-Jeśli używa się tej funkcji i nie jest się za zaporą, to zostanie zrzucony wyjątek.
-Tak więc, zawsze dobrym pomysłem jest, aby mieć główna zaporę, która obejmuje wszystkie
-ścieżki URL (tak jak pokazano to wcześniej w tym rozdziale).
+.. note::
 
-.. caution::
+    W wersjach Symfony wcześniejszych niż 2.8, trzeba było stosować funkcję
+    ``is_granted()`` na stronie, która nie znajdowała się za zaporą, powodując
+    wyjątek. Dlatego potrzeba również sprawdzać najpierw istnienie użytkownika:
 
-    Trzeba być bardzo ostrożnym z używaniem tej funkcji w bazowym ukladzie strony
-    lub na stronach błędów! Z powodu kilku wewnętrznych szczegółów Symfony, trzeba
-    unikać załamywanie się stron błędów w środowisku ``prod``, opakowując wywołania
-    w tych szablonach w kod sprawdzający dla ``app.user``:
-
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
         {% if app.user and is_granted('ROLE_ADMIN') %}
+
+    Począwszy od Symfony 2.8, sprawdzanie ``app.user and ...`` nie jest już potrzebne.
 
 Zabezpieczenie innych usług
 ...........................
@@ -1116,10 +1110,6 @@ w poprzednich rozdziałach.
 Pobieranie obiektu użytkownika
 ------------------------------
 
-.. versionadded:: 2.6
-     Usługa ``security.token_storage`` została wprowadzona w Symfony 2.6. Wcześniej
-     trzeba było uzywac metody ``getToken()`` usługi ``security.context``.
-
 Po uwierzytelnieniu użytkownika jest dostępny związany z nim obiekt ``User`` poprzez
 usługę ``security.token_storage``. Od wnętrza akcji kontrolera wygląda to podobnie
 do tego::
@@ -1177,14 +1167,14 @@ jest zalogowany i używaj do tego metody ``isGranted``
 
     }
 
-Pobieranie uzytkownika w szablonie
+Pobieranie użytkownika w szablonie
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 W szablonie Twig obiekt ten może być dostępny poprzez klucz :ref:`app.user <reference-twig-global-app>`:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -1333,9 +1323,6 @@ zawsze określone w następujący sposób::
 
     $user->setPassword($encoded);
 
-.. versionadded:: 2.6
-    Usługa ``security.password_encoder`` została wprowadzona w Symfony 2.6.
-
 Do wykonywania tego kodu niezbędne jest posiadanie odpowieniego kodera dla klasy
 użytkownika (np. ``AppBundle\Entity\User`` )  skonfigurowanego w kluczu ``encoders``
 w ``app/config/security.yml``.
@@ -1476,8 +1463,8 @@ między żądaniami, można aktywować uwierzytelnianie bezstanowe (co oznacza, 
 
 .. _book-security-checking-vulnerabilities:
 
-Sparawdzanie znanych luk bezpieczeństwa z zależnościach
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Sprawdzanie znanych luk bezpieczeństwa z zależnościach
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Podczas używania wielu zależności w projekcie Symfony, kilka z nich może zawierać
 luki bezpieczeństwa. Dlatego Symfony zawiera polecenie o nazwie ``security:check``,
@@ -1496,8 +1483,17 @@ przez organizację FriendsOfPHP.
 .. tip::
 
     Polecenie ``security:check`` kończy się nie zerowym kodem wyjścia, jeśli
-    jakakolwiek z zależności ma luke bezpieczeństwa. Dlatego łatwo to polecenie
+    jaka kolwiek z zależności ma lukę bezpieczeństwa. Dlatego łatwo to polecenie
     zintegrować z procesem kompilacji.
+
+.. note::
+
+    Przed włączeniem polecenia ``security:check``, proszę sie upewnic, że jest
+    zainstalowany pakiet `SensioDistributionBundle`_
+
+    .. code-block:: bash
+
+        $ composer require 'sensio/distribution-bundle'
 
 Wnioski końcowe
 ---------------
