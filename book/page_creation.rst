@@ -387,7 +387,7 @@ tam plik ``number.html.twig`` z zawartością:
 
 .. configuration-block::
 
-    .. code-block:: twig
+    .. code-block:: jinja
        :linenos:
 
         {# app/Resources/views/lucky/number.html.twig #}
