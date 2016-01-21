@@ -98,8 +98,6 @@ wewnątrz akcji::
 
             $form = $this->createFormBuilder($task)
                 ->add('task', TextType::class)
-                // Jeśłi uzwasz PHP 5.3 lub 5.4 musisz użyć
-                // ->add('task', 'Symfony\Component\Form\Extension\Core\Type\TextType')
                 ->add('dueDate', DateType::class)
                 ->add('save', SubmitType::class, array('label' => 'Create Task'))
                 ->getForm();
@@ -1843,7 +1841,7 @@ Token CSRF może zostać dopasowany w konfiguracji formularza. Przykładowo::
                 'csrf_protection' => true,
                 'csrf_field_name' => '_token',
                 // a unique key to help generate the secret token
-                'intention'       => 'task_item',
+                'csrf_token_id'   => 'task_item',
             ));
         }
 
@@ -1858,14 +1856,19 @@ znajdziesz w rozdziale :ref:`Informacje o konfiguracji formularza<reference-fram
 
 .. note::
 
-    Opcja ``intention`` jest opcjonalna, ale znacznie zwiększa bezpieczeństwo
-    generowanego tokenu przez jego idywidualizację dla każdego formularza.
+    Opcja ``csrf_token_id`` jest opcjonalna, ale znacznie zwieksza bezpieczeństwo
+    generowanego tokenu, przez jego indywidualizację.
+
+.. versionadded:: 2.4
+    Opcja ``csrf_token_id`` została wprowadzona w Symfony 2.4. Wcześniej, trzeba
+    było wykorzystywać opcję ``intention``.
+    
 
 .. caution::
 
     Tokeny CSRF mają być różne dla każdego użytkownika. Dlatego też trzeba być
-    ostrożnym, jeśli próbuje się buforowac strony z formularzami zawierajacego ten
-    rodzaj ochrony. Wiecej informacji znajdziesz w artkule
+    ostrożnym, jeśli próbuje się buforować strony z formularzami zawierającymi ten
+    rodzaj ochrony. Wiecej informacji znajdziesz w artykule
     :doc:`/cookbook/cache/form_csrf_caching`.
 
 

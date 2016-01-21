@@ -36,8 +36,8 @@ Test funkcjonalny może być łatwy, jak to:
 .. code-block:: php
    :linenos:
 
-    // src/AppBundle/Tests/ApplicationAvailabilityFunctionalTest.php
-    namespace AppBundle\Tests;
+    // tests/AppBundle/ApplicationAvailabilityFunctionalTest.php
+    namespace Tests\AppBundle;
 
     use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
