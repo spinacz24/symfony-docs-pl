@@ -490,7 +490,7 @@ tylko kwestia przyzwyczajenia. W celu poznania więcej opcji przeczytaj
 
     .. code-block:: bash
 
-        $ php app/console cache:clear
+        $ php bin/console cache:clear
 
 .. _book-translation-fallback:
 
@@ -937,7 +937,7 @@ trzeba urychomić:
 
 .. code-block:: bash
 
-    $ php app/console debug:translation fr AppBundle
+    $ php bin/console debug:translation fr AppBundle
 
 Wynikiem będzie:
 
@@ -982,15 +982,15 @@ domeny:
 
 .. code-block:: bash
 
-    $ php app/console debug:translation en AppBundle --domain=messages
+    $ php bin/console debug:translation en AppBundle --domain=messages
 
 Gdy pakiety mają duzo komunikatów, przydatne jest wyswietlenie tylko nieużywanych
 lub brakujących komunikatów, używając przełącznika ``--only-unused`` lub ``--only-missing``:
 
 .. code-block:: bash
 
-    $ php app/console debug:translation en AppBundle --only-unused
-    $ php app/console debug:translation en AppBundle --only-missing
+    $ php bin/console debug:translation en AppBundle --only-unused
+    $ php bin/console debug:translation en AppBundle --only-missing
 
 
 Podsumowanie

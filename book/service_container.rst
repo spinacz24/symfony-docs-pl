@@ -930,21 +930,6 @@ inna usługa:
             array(new Reference('request_stack'))
         ));
 
-.. sidebar:: Dlaczego nie należy wstrzykiwać usługi ``request``?
-
-    Prawie wszystkie wbudowane w Symfony2 usługi zachowują się w ten sam sposób:
-    tworzona jest przez kontener pojedyncza instancja, którą kontener zwraca, gdy
-    pobiera sie usługę (``$this->get('nazwa_usługi'``), lub gdy usługa jest wstrzykiwana
-    do innej usługi (obiektu). Jest jeden wyjątek w standardowej aplikacji Symfony2:
-    usługa ``request``.
-
-    Jeśli spróbuje się wstrzyknąć ``request`` do usługi, to przypuszczalnie otrzyma
-    się wyjątek
-    :class:`Symfony\\Component\\DependencyInjection\\Exception\\ScopeWideningInjectionException`.
-    Jest tak, ponieważ ``request`` może się **zmieniać** w trakcie cyklu życia
-    kontenera (na przykład, gdy zostanie utworzone pod-żądanie).
-
-
 .. tip::
 
     Jeśli zdefiniuje się kontroler jako usługę to można pobrać obiekt ``Request``
@@ -1219,20 +1204,20 @@ polecenie:
 
 .. code-block:: bash
 
-    $ php app/console debug:container
+    $ php bin/console debug:container
 
 Domyślnie pokazywane są tylko publiczne usługi, ale można też wyświetlić usługi
 prywatne:
 
 .. code-block:: bash
 
-    $ php app/console debug:container --show-private
+    $ php bin/console debug:container --show-private
 
 .. note::
 
     Jeśli prywatna usługa jest wykorzystywana jako argument innej usługi,
     to nie zostanie ona wyświetlona przez polecenie ``debug:container``, nawet
-    jeśłi uzyje się opcji ``--show-private``.
+    jeśli uzyje się opcji ``--show-private``.
     Proszę przeczytać :ref:`Inline Private Services <inlined-private-services>`
     dla poznania szczegółów.
 
@@ -1242,7 +1227,7 @@ identyfikator:
 
 .. code-block:: bash
 
-    $ php app/console debug:container app.mailer
+    $ php bin/console debug:container app.mailer
 
 Czytaj więcej
 -------------
@@ -1254,7 +1239,6 @@ Czytaj więcej
 * :doc:`/components/dependency_injection/parentservices`
 * :doc:`/components/dependency_injection/tags`
 * :doc:`/cookbook/controller/service`
-* :doc:`/cookbook/service_container/scopes`
 * :doc:`/cookbook/service_container/compiler_passes`
 * :doc:`/components/dependency_injection/advanced`
 

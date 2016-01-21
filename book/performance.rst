@@ -81,19 +81,22 @@ Aby jej użyć, wystarczy dostosować plik kontrolera wejścia. Jeśli używa si
 dystrybucji, kod ten powinien już być dostępny w pliku w postaci komentarza::
 
     // app.php
+
     // ...
-
-    $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
-
-    // Use APC for autoloading to improve performance
-    // Change 'sf2' by the prefix you want in order
-    // to prevent key conflict with another application
+    $loader = require __DIR__.'/../app/autoload.php';
+    include_once __DIR__.'/../var/bootstrap.php.cache';
+    // Enable APC for autoloading to improve performance.
+    // You should change the ApcClassLoader first argument to a unique prefix
+    // in order to prevent cache key conflicts with other applications
+    // also using APC.
     /*
-    $loader = new ApcClassLoader('sf2', $loader);
-    $loader->register(true);
+    $apcLoader = new Symfony\Component\ClassLoader\ApcClassLoader(sha1(__FILE__), $loader);
+    $loader->unregister();
+    $apcLoader->register(true);
     */
 
     // ...
+    
 
 Więcej szczegółów w :doc:`/components/class_loader/cache_class_loader`.
 
@@ -126,7 +129,7 @@ Jeśli używa się Symfony Standard Edition, w takim przypadku zapewne używa si
 pliku rozruchowego. Aby to sprawdzić czy w kontrolerze wejścia
 (zwykle ``app.php``) istnieje następująca linia::
 
-    require_once __DIR__.'/../app/bootstrap.php.cache';
+    include_once __DIR__.'/../var/bootstrap.php.cache';
 
 Trzeba mieć na uwadze, że używanie pliku rozruchowego posiada dwie wady:
 

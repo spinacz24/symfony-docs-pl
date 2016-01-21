@@ -7,9 +7,18 @@
 Instalacja oraz konfiguracja Symfony
 ====================================
 
-Rozdział ten traktuje o sposobach pobierania i uruchomiania aplikacji
-zbudowanych na Symfony. W celu uproszczenia procesu tworzenia nowej aplikacji,
-Symfony dostarcza instalatora aplikacji. 
+Witamy w Symfony! Rozpoczęcie nowego projektu w Symfony jest łatwe. Faktycznie,
+może to zająć zaledwie kilka minut.
+
+.. seealso::
+
+    Czy preferujesz poradniki wideo? Sprawdź serię screencastów `Joyful Development with Symfony`_
+    z KnpUniversity.
+
+W celu uproszczenia procesu tworzenia nowej aplikacji, Symfony dostarcza instalatora
+aplikacji. Jego pobranie powinno być pierwszym krokiem.
+
+
 
 Instalowanie instalatora Symfony
 --------------------------------
@@ -102,15 +111,15 @@ Symfony, trzeba użyć opcjonalny, drugi argument polecenia ``symfony new``:
 .. code-block:: bash
 
     # użycie najbardziej aktualnych wersji w kazdej gałęzi Symfony
-    $ symfony new my_project_name 2.6
     $ symfony new my_project_name 2.8
+    $ symfony new my_project_name 3.0
 
     # użycie określonych wersji Symfony
     $ symfony new my_project_name 2.7.3
     $ symfony new my_project_name 2.8.1
 
     # użycie wersji beta lub RC (przydatne dla testowania nowych wersji Symfony)
-    $ symfony new my_project 2.8.0-BETA1
+    $ symfony new my_project 3.0.0-BETA1
     $ symfony new my_project 2.7.0-RC1
 
 Jeśli chce się, aby projekt oparty był o najnowszą :ref:`wersję LTS Symfony <releases-lts>`,
@@ -130,7 +139,7 @@ Tworzenie aplikacji Symfony bez instalatora
 -------------------------------------------
 
 Jeśli nadal uzywasz PHP 5.3 lub nie możesz usruchamiać instalatora z innych powodów,
-mozesz tworzyć aplikacje Symfony wykorzystując alternatywna meto de instalacji,
+możesz tworzyć aplikacje Symfony wykorzystując alternatywna meto de instalacji,
 opartą o `Composer`_.
 
 Composer jest menadżerem zależności używanym przez nowoczesne aplikacje PHP
@@ -158,7 +167,7 @@ drugi argument w poleceniu ``create-project``:
 
 .. code-block:: bash
 
-    $ composer create-project symfony/framework-standard-edition my_project_name "2.8.*"
+    $ composer create-project symfony/framework-standard-edition my_project_name "3.0.*"
 
 .. tip::
 
@@ -177,7 +186,7 @@ serwer internetowy:
 .. code-block:: bash
 
     $ cd my_project_name/
-    $ php app/console server:run
+    $ php bin/console server:run
 
 Następnie trzeba otworzyć przeglądarkę i odwiedzić adres
 ``http://localhost:8000/``,
@@ -208,7 +217,7 @@ polecenie ``server:stop``:
 
 .. code-block:: bash
 
-    $ php app/console server:stop
+    $ php bin/console server:stop
 
 Sprawdzanie konfiguracji i ustawień aplikacji Symfony
 -----------------------------------------------------
@@ -227,10 +236,10 @@ Jeśli są jakieś problemy, rozwiąż je teraz, zanim przejdziesz dalej.
 
 .. sidebar:: Ustawienie uprawnień
 
-    Jednym powszechnym problemem prz instalowaniu Symfony jest to, że katalogi
-    ``app/cache`` i ``app/logs`` muszą być zapisywalne zarówno przez serwer
+    Jednym powszechnym problemem przy instalowaniu Symfony jest to, że katalog
+    ``var/cache`` musi być mozliwy do zapisu, zarówno przez serwer
     internetowy jak i przez użytkownika linii poleceń. W systemach uniksowych,
-    gdy użytkownik serwera internetowego jest inny niż użytkownik linii poleceń,
+    gdy użytkownik serwera internetowego jest inny niż właściciel plików,
     spróbuj jedno z poniższych rozwiązań.
 
     **1. Użycie tego samego użytkownika dla CLI i serwera internetowego**
@@ -252,12 +261,11 @@ Jeśli są jakieś problemy, rozwiąż je teraz, zanim przejdziesz dalej.
 
     .. code-block:: bash
 
-        $ rm -rf app/cache/*
-        $ rm -rf app/logs/*
+         $ rm -rf var/cache/* var/logs/* var/sessions/*
 
         $ HTTPDUSER=`ps axo user,comm | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
-        $ sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
-        $ sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" app/cache app/logs
+        $ sudo chmod +a "$HTTPDUSER allow delete,write,append,file_inherit,directory_inherit" var
+        $ sudo chmod +a "`whoami` allow delete,write,append,file_inherit,directory_inherit" var
 
 
     **3. Użycie ACL w systemach, które nie obsługują chmod +a**
@@ -272,8 +280,8 @@ Jeśli są jakieś problemy, rozwiąż je teraz, zanim przejdziesz dalej.
        :linenos:
 
         $ HTTPDUSER=`ps axo user,comm | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1`
-        $ sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
-        $ sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX app/cache app/logs
+        $ sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var
+        $ sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:`whoami`:rwX var
 
     Jeśli to nie zadziała, spróbuj dodać opcję ``-n``.
 
@@ -283,7 +291,7 @@ Jeśli są jakieś problemy, rozwiąż je teraz, zanim przejdziesz dalej.
     tak aby katalogi *cache* i *log* były zapisywalne dla grupy lub każdego
     (w zależności od tego czy użytkownik serwera internetowego i użytkownik linii
     poleceń należą do tej samej grupy). Aby to osiągnąć należy wstawić następującą
-    linię na samym początku plików ``app/console``, ``web/app.php``
+    linię na samym początku plików ``bin/console``, ``web/app.php``
     i ``web/app_dev.php``::
 
         umask(0002); // This will let the permissions be 0775
@@ -314,7 +322,7 @@ wykonać poniższe polecenie:
     $ cd my_project_name/
     $ composer update
 
-W zależności od złożoności projektu, ten proces aktualozacji moze potrwać kilka
+W zależności od złożoności projektu, ten proces aktualozacji może potrwać kilka
 minut.
 
 .. tip::
@@ -324,7 +332,7 @@ minut.
 
     .. code-block:: bash
 
-        $ php app/console security:check
+        $ php bin/console security:check
 
     Dobrą praktyką jest wykonywanie tego polecenia regularnie, tak aby można było
     jak najszybciej zaktualizować zależności lub usunąć wykryte luki.
@@ -349,7 +357,7 @@ gdziekolwiek w swoim systemie:
     c:\projects\> php symfony demo
 
 Po pobraniu, przejdź do katalogu ``symfony_demo/`` i uruchom wbudowany serwer
-PHP, wykonując polecenie ``php app/console server:run``. Następnie w przeglądarce
+PHP, wykonując polecenie ``php bin/console server:run``. Następnie w przeglądarce
 odwiedź adres ``http://localhost:8000``, co uruchomi aplikację Symfony Demo.
 
 .. _installing-a-symfony2-distribution:
@@ -421,7 +429,7 @@ nowe aplikacji.
 Należy też zapoznać się z :doc:`Cookbook </cookbook/index>`, która to część zawiera
 szeroki wybór artykułów na temat rozwiązywania konkretnych problemów z Symfony.
 
-
+.. _`Joyful Development with Symfony`: http://knpuniversity.com/screencast/symfony
 .. _`wyjaśniono w tym wpisie`: http://fabien.potencier.org/article/73/signing-project-releases
 .. _`Composer`: https://getcomposer.org/
 .. _`Composer download page`: https://getcomposer.org/download/

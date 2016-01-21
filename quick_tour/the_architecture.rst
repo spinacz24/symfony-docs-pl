@@ -20,11 +20,20 @@ jest następująca:
 ``app/``
    Konfiguracja aplikacji, szablony i tłumaczenia.
 
+``bin/``
+    Pliki wykonywalne (np. ``bin/console``).   
+
 ``src/``
    Kod PHP projektu
+   
+``tests/``
+    Testy automatyczne (np. testy jednostkowe).
+    
+``var/``
+    Wygenerowane pliki (pamięć podręczna, dzienniki itd.).   
 
-``vendor/``B
-   iblioteki zewnętrzne;
+``vendor/``
+   Biblioteki zewnętrzne;
 
 ``web/``
    Katalog główny serwera.
@@ -38,7 +47,7 @@ umiejscowiony jest :term:`kontroler wejścia <kontroler wejścia>`, taki jak
 kontroler wejścia środowiska produkcyjnego, z takim kodem::
 
     // web/app.php
-    require_once __DIR__.'/../app/bootstrap.php.cache';
+    require_once __DIR__.'/../var/bootstrap.php.cache';
     require_once __DIR__.'/../app/AppKernel.php';
 
     use Symfony\Component\HttpFoundation\Request;
@@ -278,7 +287,7 @@ Symfony jest prawdopodobnie jednym z najszybszych pełnych frameworków PHP.
 Ale jak może tak szybko działać, skoro parsuje oraz interpretuje kilkadziesiąt
 plików YAML oraz XML dla każdego zapytania. Prędkość jest po części związana
 z systemem buforowania. Konfiguracja aplikacji jest parsowana tylko dla pierwszego
-żądania i przetwarzana do kodu PHP przechowywanego w katalogu ``app/cache/``.
+żądania i przetwarzana do kodu PHP przechowywanego w katalogu ``var/cache/``.
 
 W środowisku programistycznym, Symfony jest wystarczająco inteligentny aby czyścić
 pamięć podręczną po zmianie pliku. Natomiast w środowisku produkcyjnym, to do 
@@ -288,16 +297,16 @@ użyć tego poleenia:
 
 .. code-block:: bash
 
-    $ php app/console cache:clear --env=prod
+    $ php bin/console cache:clear --env=prod
 
 Podczas tworzenia aplikacji, dużo rzeczy może pójść źle. Pliki dzienników zdarzeń,
-znajdujące się w katalogu ``app/logs/``, informują o wszystkich żądaniach
+znajdujące się w katalogu ``var/logs/``, informują o wszystkich żądaniach
 i mogą pomóc w naprawieniu napotkanych problemów.
 
 Stosowanie interfejsu linii poleceń
 -----------------------------------
 
-Każda aplikacja posiada narzędzie interfejsu linii poleceń (``app/console``)
+Każda aplikacja posiada narzędzie interfejsu linii poleceń (``bin/console``)
 który pomaga w utrzymywaniu aplikacji. Udostępnia on polecenia które zwiększają
 wydajność prac programistycznych i administracyjnych poprzez automatyzację żmudnych
 i powtarzających się zadań.
@@ -306,13 +315,13 @@ Uruchom go bez żadnych argumentów aby dowiedzieć się więcej o jego możliwo
 
 .. code-block:: bash
 
-    php app/console
+    php bin/console
 
 Opcja ``--help`` pomaga w poznaniu dostępnych poleceń:
 
 .. code-block:: bash
 
-    php app/console debug:router --help
+    php bin/console debug:router --help
 
 Podsumowanie
 ------------
