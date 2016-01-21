@@ -974,7 +974,7 @@ rolę, trzeba użyć wbudowanej funkcji pomocniczej ``is_granted()``:
 
 .. configuration-block::
 
-    .. code-block:: html+twig
+    .. code-block:: html+jinja
        :linenos:
 
         {% if is_granted('ROLE_ADMIN') %}
@@ -994,7 +994,7 @@ rolę, trzeba użyć wbudowanej funkcji pomocniczej ``is_granted()``:
     ``is_granted()`` na stronie, która nie znajdowała się za zaporą, powodując
     wyjątek. Dlatego potrzeba również sprawdzać najpierw istnienie użytkownika:
 
-    .. code-block:: html+twig
+    .. code-block:: html+jinja
 
         {% if app.user and is_granted('ROLE_ADMIN') %}
 
@@ -1174,7 +1174,7 @@ W szablonie Twig obiekt ten może być dostępny poprzez klucz :ref:`app.user <r
 
 .. configuration-block::
 
-    .. code-block:: html+twig
+    .. code-block:: html+jinja
        :linenos:
 
         {% if is_granted('IS_AUTHENTICATED_FULLY') %}

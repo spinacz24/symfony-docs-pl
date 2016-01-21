@@ -709,7 +709,7 @@ czytaniu. Oznacza to też, że nasza przykładowa aplikacja może zawierać jesz
 mniej kodu. Dla przykładu przekształćmy szablon wykazu wpisów bloga na szablon
 napisany w Twigu:
 
-.. code-block:: html+twig
+.. code-block:: html+jinja
    :linenos:
 
     {# src/Acme/BlogBundle/Resources/views/Blog/list.html.twig #}
@@ -732,7 +732,7 @@ napisany w Twigu:
 
 Odpowiedni szablon ``layout.html.twig`` jest równie prosty:
 
-.. code-block:: html+twig
+.. code-block:: html+jinja
    :linenos:
 
     {# app/Resources/views/layout.html.twig #}
