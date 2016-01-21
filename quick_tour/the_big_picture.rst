@@ -13,120 +13,14 @@ powinien czuć się jak w domu.
 Jeśli nie, to zapraszamy do poznania zupełnie nowego sposobu tworzenia aplikacji
 internetowych.
 
-Jedynym wymaganiem do śledzenia wykonywanego tu przykładu jest posiadanie **na swoim
-komputerze instalacji PHP 5.4 lub wersji wyżej**. Jeśli używasz jakieś rozwiązanie
-pakietowe PHP, takie jak WAMP, XAMP lub MAMP, sprawdź, czy ta instalacja używa 
-PHP 5.4 lub wersji wyższej. Możesz również wykonać następujace polecenie w swoim
-terminalu lub konsoli poleceń, aby wyświetlić informację o zaistalowanej wersji
-PHP:
-
-.. code-block:: bash
-
-    $ php --version
-
 .. _installing-symfony2:
     
 Instalowanie Symfony
 --------------------
 
-W przeszłości musieliśmy instalować Symfony ręcznie, dla każdego nowego projektu.
-Teraz możemy wykorzystać **Symfony Installer**, który musi być najpierw zainstalowany
-na komputerze przed pierwszym użyciem Symfony.
-
-Na systemach **Linux** i **Mac OS X**, trzeba wykonać następujace polecenia konsolowe:
-
-.. code-block:: bash
-
-    $ curl -LsS http://symfony.com/installer > symfony.phar
-    $ sudo mv symfony.phar /usr/local/bin/symfony
-    $ chmod a+x /usr/local/bin/symfony
-
-Po zainstalowaniu instalatora Symfony, trzeba otworzyć nowe okno konsoli, aby
-wykonać nowe polecenie ``symfony``:
-
-.. code-block:: bash
-
-    $ symfony
-
-Na systemach **Windows**, trzeba wykonać następujące polecenie konsolowe:
-
-.. code-block:: bash
-
-    c:\> php -r "readfile('http://symfony.com/installer');" > symfony.phar
-
-Polecenie to pobierze plik o nazwie ``symfony.phar``, który zawiera instalatora
-Symfony. Zapisz lub przenieś ten plik do katalogu, w którym mają być tworzone
-projekty Symfony i następnie uruchom instalator Symfony, takim
-poleceniem:
-
-.. code-block:: bash
-
-    c:\> php symfony.phar
-
-Utworzenie pierwszego projektu Symfony
---------------------------------------
-
-Gdy już Symfony Installer jest ustawiony, można utworzyć nowy projekt Symfony,
-stosujac polecenie ``new``. Utwórzmy nowy projekt o nazwie ``myproject``:
-
-.. code-block:: bash
-
-    # Linux and Mac OS X
-    $ symfony new myproject
-
-    # Windows
-    c:\> php symfony.phar new myproject
-
-Polecenie to pobierze najnowszą stabilną wersję Symfony i utworzy pusty projekt
-w katalogu ``myproject/``, dzięki czemu od razu można rozpocząć tworzenie swojej
-aplikacji.
-
-.. _running-symfony2:
-
-Uruchomienie Symfony
---------------------
-
-W tym poradniku wykorzytujemy do uruchamiania aplikacji Symfony wewnętrzny serwer
-internetowy dostarczany przez PHP. Dlatego, uruchamianie aplikacji serwera sprowadza
-się do skonfigurowania się w katalogu projektu i wykonaniu polecenia:
-
-.. code-block:: bash
-
-    $ cd myproject/
-    $ php app/console server:run
-
-Otwórz przegladarkę i przejdź do adresu URL ``http://localhost:8000/app/example``,
-co powinno wyświetlić stronę powitalną :
-
-.. image:: /images/quick_tour/welcome.png
-   :align: center
-   :alt: Symfony Welcome Page
-
-Gratulujemy! Twój pierwszy projekt Symfony jest gotowy do pracy.
-
-.. note::
-
-    Zamiast strony powitalnej można czasem zobaczyć pustą stronę lub stronę błędu.
-    Jest to spowodowane błędem uprawnień dostępu do katalogu. Jest kilka
-    możliwych rozwiązań, w zależności od systemu operacyjnego. Sposoby te są
-    omówione w rozdziale :ref:`Ustawianie uprawnień <book-installation-permissions>`
-    podręcznika.
-
-    Jeśli strona powitalna nie została zrenderowana z aktywami CSS lub obrazów,
-    zainstaluj je:
-
-    .. code-block:: bash
-
-        $ php app/console assets:install
-
-Serwer internetowy można zatrzymać, po zakończeniu pracy z aplikacją Symfony,
-wciskając klucz Ctrl+C.
-
-.. tip::
-
-    Jeśli wolisz pracować z tradycyjnym serwerem internetowym, takim jak Apache
-    lub Nginx, przeczytaj artykuł
-    :doc:`/cookbook/configuration/web_server_configuration`.
+Przed dalszą lekturą tego rozdziału, upewnij suie że masz zaistalowane PHP jak
+i Symfony, tak jak wyjaśniono to w :doc:`rozdziale "Instalacja" </book/installation>`
+podręcznika Symfony.
 
 Podstawy
 --------
@@ -137,7 +31,7 @@ skrypcie wywołań bazy danych, znaczników HTML i logiki biznesowej. W celu zro
 jak to działa w Symfony, najpierw musisz poznać kilka podstawowych pojęć i terminów.
 
 Podczas tworzenia aplikacji Symfony, rola programisty polaga na napisaniu kodu,
-który odwzorowuje *żądanie* użytkownika (np.  ``http://localhost:8000/app/example``)
+który odwzorowuje *żądanie* użytkownika (np.  ``http://localhost:8000/``)
 na *zasób* związany z tym żądaniem (stron HTML ``Homepage``).
 
 Kod, który ma być wykonany, jest zdefiniowany w **akcjach** i **kontrolerach**.
@@ -166,7 +60,7 @@ zostanie to wyjaśnione w następnym rozdziale)::
     class DefaultController extends Controller
     {
         /**
-         * @Route("/app/example", name="homepage")
+         * @Route("/", name="homepage")
          */
         public function indexAction()
         {
@@ -218,7 +112,7 @@ się na trzech pierwszych liniach metody ``indexAction``::
     class DefaultController extends Controller
     {
         /**
-         * @Route("/app/example", name="homepage")
+         * @Route("/", name="homepage")
          */
         public function indexAction()
         {
@@ -234,15 +128,15 @@ rozpoczynają się od ``/**``, natomiast zwykłe komentarze od ``/*``.
 Pierwsza wartość adnoacji ``@Route()`` określa adres URL, która spowoduje wykonanie
 określonej akcji. ponieważ nie trzeba dodawać schematu i hosta z adresu URL
 (np. ``http://example.com``), te adresy URL są zawsze względne i nazywamy je
-*ściezkami*. W naszym przypadku, ścieżka ``/app/example`` odnosi się do aplikacji
+*ściezkami*. W naszym przypadku, ścieżka ``/`` odnosi się do aplikacji
 homepage. Druga wartość adnotacji ``@Route()`` (tj. ``name="homepage"``) jest
 opcjonalna i ustawia nazwę tej trasy. Na razie ta nazwa jest nieprzydatna, ale
 później stanie się potrzebna do linkowania stron.
 
-Uwzględniajac to wszystko, adnotacja ``@Route("/app/example", name="homepage")``
+Uwzględniajac to wszystko, adnotacja ``@Route("/", name="homepage")``
 tworzy nową trasę o nazwie ``homepage``, co powoduje, że Symfony wykonuje akcję
 ``index`` kontrolera ``Default``, gdy użytkownik odwiedzi adres URL aplikacji ze
-ścieżką ``/app/example``.
+ścieżką ``/``.
 
 .. tip::
 
@@ -274,7 +168,7 @@ temu kodowi:
     {% extends 'base.html.twig' %}
 
     {% block body %}
-        Homepage.
+        <h1>Witamy w Symfony</h1>
     {% endblock %}
 
 Szablon ten jest utworzony w `Twig`_, nowym silniku szablonowania, przeznaczonym
