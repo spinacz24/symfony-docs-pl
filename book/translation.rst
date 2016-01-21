@@ -391,7 +391,7 @@ Usługa translacyjna jest dostępna w szablonie PHP przy zastosowaniu helpera
 Nazwy zasobów (plików) translacyjnych i ich lokalizacja
 -------------------------------------------------------
 
-Symfony wyszukuje pliki komunikatów (czyli tłumaczenia) w następujących katalogach:
+Symfony wyszukuje pliki komunikatów (czyli tłumaczenia) w domyślnych katalogach:
 
 * ``app/Resources/translations``;
 
@@ -431,6 +431,52 @@ tylko kwestia przyzwyczajenia. W celu poznania więcej opcji przeczytaj
 :ref:`component-translator-message-catalogs`.
 
 .. note::
+    
+    W opcji ``paths`` konfiguracji można dodać dodatkowe katalogi:
+
+    .. configuration-block::
+
+        .. code-block:: yaml
+           :linenos:
+
+            # app/config/config.yml
+            framework:
+                translator:
+                    paths:
+                        - '%kernel.root_dir%/../translations'
+
+        .. code-block:: xml
+           :linenos:
+
+            <!-- app/config/config.xml -->
+            <?xml version="1.0" encoding="UTF-8" ?>
+            <container xmlns="http://symfony.com/schema/dic/services"
+                xmlns:framework="http://symfony.com/schema/dic/symfony"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-Instance"
+                xsi:schemaLocation="http://symfony.com/schema/dic/services
+                    http://symfony.com/schema/dic/services/services-1.0.xsd
+                    http://symfony.com/schema/dic/symfony
+                    http://symfony.com/schema/dic/symfony/symfony-1.0.xsd"
+            >
+
+                <framework:config>
+                    <framework:translator>
+                        <framework:path>%kernel.root_dir%/../translations</framework:path>
+                    </framework:translator>
+                </framework:config>
+            </container>
+
+        .. code-block:: php
+           :linenos:
+
+            // app/config/config.php
+            $container->loadFromExtension('framework', array(
+                'translator' => array(
+                    'paths' => array(
+                        '%kernel.root_dir%/../translations',
+                    ),
+                ),
+            ));
 
     Można również zapisać tłumaczenia w bazie danych lub innym miejscu, dostarczając
     własna klasę implementującą interfejs
@@ -464,10 +510,6 @@ Symfony w rzeczywistości sprawdza zasoby dla kilku różnych identyfikatorów n
 3. Jeśli tłumaczenie dalej nie zostało znalezione, Symfony używa parametru
    konfiguracyjnego ``fallback``, którego domyślna wartość , to ``en``.
    
-.. versionadded:: 2.6
-    W Symmy 2.6. wprowadzono możliwość rejestrowania brakujących tłumaczeń w dzienniku
-    zdarzeń. 
-
 .. note::
 
     Kiedy Symfony nie znajdzie tłumaczenia dla określonego ustawienia narodowego,
@@ -673,7 +715,7 @@ nie jest pusta, dodajmy następujący kod:
         Acme\BlogBundle\Entity\Author:
             properties:
                 name:
-                    - NotBlank: { message: "author.name.not_blank" }
+                    - NotBlank: { message: 'author.name.not_blank' }
 
     .. code-block:: php-annotations
        :linenos:
@@ -774,9 +816,6 @@ tej biblioteki.
 
 Debugowanie tłumaczeń
 ---------------------
-
-.. versionadded:: 2.6
-    Przed Symfony 2.6, polecenie tu opisywane miało nazwę ``translation:debug``.
 
 Podczas utrzymywania pakietu, mozna użyć lub usunąć komunikat translacyjny bez
 aktualizowania wszystkich katalogów komunikatów. Polecenie ``debug:translation``
@@ -972,8 +1011,7 @@ musi być bolesnym procesem i sprowadza się do kilku prostych kroków:
 * Zarządzanie ustawieniami narodowymi, których oznaczenia (identyfikatory) są
   przechowywane w żądaniu, ale mogą również być ustawione w sesji użytkownika.
 
-.. _`i18n`: http://en.wikipedia.org/wiki/Internationalization_and_localization
-.. _`ISO 3166-1 alpha-2`: http://en.wikipedia.org/wiki/ISO_3166-1#Current_codes
-.. _`ISO 639-1`: http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+.. _`i18n`: https://en.wikipedia.org/wiki/Internationalization_and_localization
+.. _`ISO 3166-1 alpha-2`: https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes
+.. _`ISO 639-1`: https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 .. _`Translatable Extension`: https://github.com/l3pp4rd/DoctrineExtensions
- 
