@@ -107,6 +107,7 @@ Dla przykladu utwórzmy punkt końcowy JSON. który zwraca szczęśliwą liczbę
 Wystarczy dodać drugą metodę do ``LuckyController``::
 
     // src/AppBundle/Controller/LuckyController.php
+    
     // ...
 
     class LuckyController
@@ -137,6 +138,7 @@ Spróbuj wyprowadzic to w przegladarce:
 Można to nawet skrócić przy użyciu poręcznej klasy :class:`Symfony\\Component\\HttpFoundation\\JsonResponse`::
 
     // src/AppBundle/Controller/LuckyController.php
+    
     // ...
 
     // --> don't forget this new use statement
@@ -232,6 +234,7 @@ Najlepsze jest to, że można uzyskać dostęp do tej wartości i stosować ten 
 w kontrolerze::
 
     // src/AppBundle/Controller/LuckyController.php
+    
     // ...
 
     class LuckyController
@@ -286,6 +289,7 @@ jest rozszerzenie bazowej klasy
 :class:`Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller` Symfony::
     
     // src/AppBundle/Controller/LuckyController.php
+    
     // ...
 
     // --> add this new use statement
@@ -309,6 +313,7 @@ komunikaty w dzienniku zdarzeń i innymi.
 W celu zrenderowania szablonu Twig trzeba użyć usługi o nazwie ``templating``::
 
     // src/AppBundle/Controller/LuckyController.php
+    
     // ...
 
     class LuckyController extends Controller
@@ -342,6 +347,7 @@ Usługę tą mozemy pobierać prościej. Wystarczy rozszerzyć klasę ``Controll
 i juz sie ma dostęþ do kilku skrótowych metod, takich jak ``render()``::
 
     // src/AppBundle/Controller/LuckyController.php
+    
     // ...
 
     /**
@@ -453,8 +459,7 @@ pracowaliśmy wewnątrz dwóch najważniejszych katalogów:
 dowiesz się, co można zrobić w każdym z tych katalogów.
 
 W katalogu ``app/`` jest przechowywanych również kilka innych rzeczy, takich jak
-katalog pamięci podręcznej ``app/cache/``, katalog dzienników zdarzeń ``app/logs/``
-czy plik ``app/AppKernel.php``, który można użyć, aby udostępnić nowe pakiety.
+plik ``app/AppKernel.php``, który można użyć, aby udostępnić nowe pakiety.
 
 Katalog ``src/`` ma tylko jeden podkatalog , ``src/AppBundle``, wraz z zawartością
 tego pakietu.
@@ -465,14 +470,27 @@ temat pakietów można przecztać w rozdziale :doc:`Pakiety </book/bundles>`.
 
 Co z innymi katalogami w projekcie?
 
-``vendor/``
-    Tutaj umieszczane są biblioteki "dostawców" (czyli firm zewnętrznych) pobierane
-    przy użyciu menadżera pakietów `Composer`_.
-
 ``web/``
     Jest to główny katalog dokumentów HTML projektu, zawierajacy wszystkie publicznie
     dostępne pliki, takie jak CSS, obrazy i :term:`kontrolery wejścia <kontroler wejścia>`,
     które wykonyje aplikacja (``app_dev.php`` i ``app.php``).
+
+``tests/``
+    Przechowywane są tu automatyczne testy (np. testy jednostkowe).
+
+``bin/``
+    Znajdują się tutaj pliki "binarne". Jednym z najważniejszych jest plik ``console``,
+    który jest używany do wykonywania poleceń Symfony z poziomu konsoli.
+
+``var/``
+    Jest to miejsce, w którym są tworzone automatycznie i przechowywane pliki
+    pamieci podręcznej (``var/cache/``) i pliki dziennika zdarzeń (``var/logs/``).
+
+
+``vendor/``
+    Tutaj umieszczane są biblioteki "dostawców" (czyli firm zewnętrznych) pobierane
+    przy użyciu menadżera pakietów `Composer`_.
+
 
 .. seealso::
 
@@ -492,6 +510,7 @@ konfiguracyjnym pakietów jest ``app/config/config.yml``:
        :linenos:
 
         # app/config/config.yml
+        
         # ...
 
         framework:
@@ -563,11 +582,11 @@ po prostu przez zmiane opcji w tym pliku konfiguracyjnym. wiecej na ten temat
 znajdziesz w rozdziale :doc:`Informator konfiguracji </reference/index>`.
 
 Pobranie większego zrzutu wszystkich ważniejszych opcji jest mozliwe przy użyciu
-polecenia ``app/console``:
+polecenia ``bin/console``:
 
 .. code-block:: bash
 
-    $ app/console config:dump-reference framework
+    $ bin/console config:dump-reference framework
 
 Jest dużo wiecej rzeczy do omówienia w ramach konfiguracji Symfony, takich jak
 środowiska, importowanie i parametry. Mozesz dowiedzieć się o tym w czasie lektury

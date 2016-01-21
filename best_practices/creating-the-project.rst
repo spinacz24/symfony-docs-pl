@@ -31,7 +31,6 @@ projektu Symfony) i wykonujemy następujące polecenia:
 
 .. code-block:: bash
 
-    # Linux, Mac OS X
     $ cd projects/
     $ symfony new blog
 
@@ -61,12 +60,17 @@ automatycznie wygenerowanych plików i katalogów:
 
     blog/
     ├─ app/
-    │  ├─ console
-    │  ├─ cache/
     │  ├─ config/
-    │  ├─ logs/
     │  └─ Resources/
+    ├─ bin
+    │  └─ console
     ├─ src/
+    │  └─ AppBundle/
+    ├─ var/
+    │  ├─ cache/
+    │  ├─ logs/
+    │  └─ sessions/
+    ├─ tests/
     │  └─ AppBundle/
     ├─ vendor/
     └─ web/
@@ -75,12 +79,14 @@ Ta hierarchia plików i katalogów jest konwencją przyjetą w Symfony w celu
 ustrukturyzowania aplikacji. Zalecane przeznaczenie poszczególnych katalogów
 jest następujące:
 
-* ``app/cache/``: przechowuje wszystkie buforowane pliki, wygenerowane przez aplikacje;
 * ``app/config/``: przchowuje wszystkie konfiguracje zdefiniowane dla każdego środowiska;
-* ``app/logs/``: przechowuje wszystkie pliki dzienników generowane przez aplikację;
 * ``app/Resources/``: przechowuje wszystkie szablony i pliki tłumaczeń aplikacji;
 * ``src/AppBundle/``: przechowuje specyficzny kod Symfony (kontrolery i trasy),
   kod domenowy (np. klasy Doctrine) i całą logikę biznesową;
+* ``var/cache/``: przechowuje wszystkie pliki pamięci podręcznej wygenerowane w aplikacji;
+* ``var/logs/``: przechowuje wszystkie pliki dziennikowe wygenerowane w aplikacji;
+* ``var/sessions/``: przechowuje wszystkie pliki sesji wygenerowane w aplikacji;
+* ``tests/AppBundle/``: przechowuje testy automatyczne (np. testy jednostkowe aplikacji.  
 * ``vendor/``: jest to katalog, w którym Composer instaluje zależności aplikacji
   i nie powinno się nigdy zmieniać zawartości tego katalogu;
 * ``web/``: Przechowuje wszystkie pliki kontrolera wejściowego (*ang. front controller*)
@@ -127,13 +133,18 @@ najlepsze praktyki Symfony:
 
     blog/
     ├─ app/
-    │  ├─ console
-    │  ├─ cache/
     │  ├─ config/
-    │  ├─ logs/
     │  └─ Resources/
+    ├─ bin/
+    │  └─ console
     ├─ src/
     │  └─ AppBundle/
+    ├─ tests/
+    │  └─ AppBundle/
+    ├─ var/
+    │  ├─ cache/
+    │  ├─ logs/
+       └─ sessions/
     ├─ vendor/
     └─ web/
        ├─ app.php
@@ -147,7 +158,7 @@ najlepsze praktyki Symfony:
 
     .. code-block:: bash
 
-        $ php app/console generate:bundle --namespace=AppBundle --dir=src --format=annotation --no-interaction
+        $ php bin/console generate:bundle --namespace=AppBundle --dir=src --format=annotation --no-interaction
 
 Rozszerzanie struktury katalogowej
 ----------------------------------
@@ -156,23 +167,6 @@ Jeśli projekt lub infrastruktura wymaga pewnych zmian w domyślnej strukturze
 katalogowej, to można
 :doc:`nadpisać lokalizację głównych katalogów </cookbook/configuration/override_dir_structure>`:
 ``cache/``, ``logs/`` i ``web/``.
-
-Trzeba zaznaczyć, że Symfony3 będzie używać nieco inną strukturę katalogową:
-
-.. code-block:: text
-
-    blog-symfony3/
-    ├─ app/
-    │  ├─ config/
-    │  └─ Resources/
-    ├─ bin/
-    │  └─ console
-    ├─ src/
-    ├─ var/
-    │  ├─ cache/
-    │  └─ logs/
-    ├─ vendor/
-    └─ web/
 
 Zmiany te są dość powierzchowne, ale teraz zalecamy, aby używać opisaną wcześniej
 strukturę katalogową Symfony.

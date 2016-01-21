@@ -563,7 +563,7 @@ Aby wyświetlić listę wszstkich dostępnych usług, nalezy użyć polecenia ko
 
 .. code-block:: bash
 
-    $ php app/console debug:container
+    $ php bin/console debug:container
 
 Więcej informacji można znaleźć w rozdziale :doc:`service_container`.
 
@@ -851,7 +851,7 @@ do sprawdzenia tokenu CSRF::
     }
 
     // isCsrfTokenValid() is equivalent to:
-    // $this->get('security.csrf.token_manager')->isTokenValid()
+    // $this->get('security.csrf.token_manager')->isTokenValid(
     //     new \Symfony\Component\Security\Csrf\CsrfToken\CsrfToken('token_id', $token)
     // );
 

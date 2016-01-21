@@ -27,6 +27,8 @@ W pakiecie tym mozna utworzyć takie katalogi, jakie sie chce:
     │  └─ AppBundle/
     │     └─ Utils/
     │        └─ MyClass.php
+    |─ tests/
+    ├─ var/
     ├─ vendor/
     └─ web/
 
@@ -46,6 +48,8 @@ nazw wewnątrz katalogu ``src/`` i wstawić tam swoje klasy:
     │  │   └─ Utils/
     │  │      └─ MyClass.php
     │  └─ AppBundle/
+    ├─ tests/
+    ├─ var/
     ├─ vendor/
     └─ web/
 
@@ -330,7 +334,7 @@ polecenia:
 
 .. code-block:: bash
 
-    $ php app/console doctrine:fixtures:load
+    $ php bin/console doctrine:fixtures:load
 
     Careful, database will be purged. Do you want to continue Y/N ? Y
       > purging database
