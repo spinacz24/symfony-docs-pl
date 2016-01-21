@@ -126,7 +126,7 @@ klasy ``AppKernel``. Każdy pakiet jest katalogiem zawierającym pojedyńczą kl
             new Symfony\Bundle\DoctrineBundle\DoctrineBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new AppBundle\AppBundle();
+            new AppBundle\AppBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -160,29 +160,29 @@ XML, czy też PHP. Wystarczy popatrzeć na domyślną konfigurację Symfony:
     framework:
         #esi:             ~
         #translator:      { fallbacks: ["%locale%"] }
-        secret:          "%secret%"
+        secret:          '%secret%'
         router:
-            resource: "%kernel.root_dir%/config/routing.yml"
-            strict_requirements: "%kernel.debug%"
+            resource: '%kernel.root_dir%/config/routing.yml'
+            strict_requirements: '%kernel.debug%'
         form:            true
         csrf_protection: true
         validation:      { enable_annotations: true }
         templating:      { engines: ['twig'] }
-        default_locale:  "%locale%"
+        default_locale:  '%locale%'
         trusted_proxies: ~
         session:         ~
 
     # Twig Configuration
     twig:
-        debug:            "%kernel.debug%"
-        strict_variables: "%kernel.debug%"
+        debug:            '%kernel.debug%'
+        strict_variables: '%kernel.debug%'
 
     # Swift Mailer Configuration
     swiftmailer:
-        transport: "%mailer_transport%"
-        host:      "%mailer_host%"
-        username:  "%mailer_user%"
-        password:  "%mailer_password%"
+        transport: '%mailer_transport%'
+        host:      '%mailer_host%'
+        username:  '%mailer_user%'
+        password:  '%mailer_password%'
         spool:     { type: memory }
 
     # ...
@@ -204,7 +204,7 @@ modyfikuje go w celu dodania narzędzi do debugowania:
         - { resource: config.yml }
 
     framework:
-        router:   { resource: "%kernel.root_dir%/config/routing_dev.yml" }
+        router:   { resource: '%kernel.root_dir%/config/routing_dev.yml' }
         profiler: { only_exceptions: false }
 
     web_profiler:
