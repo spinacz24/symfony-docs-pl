@@ -1097,7 +1097,7 @@ stosuje standardowy helper ``render`` do skonfigurowania znaczników ESI:
 
 .. configuration-block::
 
-    .. code-block:: twig
+    .. code-block:: jinja
        :linenos:
 
         {# app/Resources/views/static/about.html.twig #}
