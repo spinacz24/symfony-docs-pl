@@ -248,7 +248,7 @@ wysłania formularza z poziomu kontrolera wygląda następująco::
     public function updateAction(Request $request)
     {
         $author = new Author();
-        $form = $this->createForm(new AuthorType(), $author);
+        $form = $this->createForm(AuthorType::class, $author);
 
         $form->handleRequest($request);
 
@@ -333,8 +333,8 @@ usługi ``validator``.
 Ograniczenie to prosty obiekt PHP, który wykonuje wyrażenie asercyjne (*ang.
 assertive statement*). `Asercja`_ w programowaniu, to wyrażenie lub metoda pozwalająca
 sprawdzić  prawdziwość twierdzeń dokonanych odnośnie jakichś aspektów systemu lub
-jego elementów. W prawdziwym życiu, takim twierdzeniem może być zdanie: "Ciasto
-nie może być spalone". W Symfony, ograniczenia są podobne: są to twierdzenia
+jego elementów. W prawdziwym życiu, takim twierdzeniem może być zdanie: 'Ciasto
+nie może być spalone'. W Symfony, ograniczenia są podobne: są to twierdzenia
 (asercje), że warunek jest spełniony.
 
 Obsługiwane ograniczenia
@@ -574,7 +574,7 @@ klasy ``Author``, której wartość powinna mieć co najmniej 3 znaki.
     .. code-block:: php-annotations
        :linenos:
 
-        // AppBundle/Entity/Author.php
+        // src/AppBundle/Entity/Author.php
 
         // ...
         use Symfony\Component\Validator\Constraints as Assert;
@@ -672,7 +672,7 @@ i następnie zrobić załóżenie, że metoda ta musi zwrócić ``true``:
         class Author
         {
             /**
-             * @Assert\True(message = "The password cannot match your first name")
+             * @Assert\IsTrue(message = "The password cannot match your first name")
              */
             public function isPasswordLegal()
             {
@@ -687,7 +687,7 @@ i następnie zrobić załóżenie, że metoda ta musi zwrócić ``true``:
         AppBundle\Entity\Author:
             getters:
                 passwordLegal:
-                    - "True": { message: "The password cannot match your first name" }
+                    - 'IsTrue': { message: 'The password cannot match your first name' }
 
     .. code-block:: xml
        :linenos:
@@ -700,7 +700,7 @@ i następnie zrobić załóżenie, że metoda ta musi zwrócić ``true``:
 
             <class name="AppBundle\Entity\Author">
                 <getter property="passwordLegal">
-                    <constraint name="True">
+                    <constraint name="IsTrue">
                         <option name="message">The password cannot match your first name</option>
                     </constraint>
                 </getter>
@@ -720,7 +720,7 @@ i następnie zrobić załóżenie, że metoda ta musi zwrócić ``true``:
         {
             public static function loadValidatorMetadata(ClassMetadata $metadata)
             {
-                $metadata->addGetterConstraint('passwordLegal', new Assert\True(array(
+                $metadata->addGetterConstraint('passwordLegal', new Assert\IsTrue(array(
                     'message' => 'The password cannot match your first name',
                 )));
             }
@@ -778,14 +778,14 @@ rejestracji użytkownika jak i podczas aktualizowania jego informacji kontaktowy
         class User implements UserInterface
         {
             /**
-            * @Assert\Email(groups={"registration"})
-            */
+             * @Assert\Email(groups={"registration"})
+             */
             private $email;
 
             /**
-            * @Assert\NotBlank(groups={"registration"})
-            * @Assert\Length(min=7, groups={"registration"})
-            */
+             * @Assert\NotBlank(groups={"registration"})
+             * @Assert\Length(min=7, groups={"registration"})
+             */
             private $password;
 
             /**
@@ -967,17 +967,17 @@ uniknięcia wielu komunikatów o błędach).
         class User implements UserInterface
         {
             /**
-            * @Assert\NotBlank
-            */
+             * @Assert\NotBlank
+             */
             private $username;
 
             /**
-            * @Assert\NotBlank
-            */
+             * @Assert\NotBlank
+             */
             private $password;
 
             /**
-             * @Assert\True(message="The password cannot match your username", groups={"Strict"})
+             * @Assert\IsTrue(message="The password cannot match your username", groups={"Strict"})
              */
             public function isPasswordLegal()
             {
@@ -995,7 +995,7 @@ uniknięcia wielu komunikatów o błędach).
                 - Strict
             getters:
                 passwordLegal:
-                    - "True":
+                    - 'IsTrue':
                         message: "The password cannot match your username"
                         groups: [Strict]
             properties:
@@ -1023,7 +1023,7 @@ uniknięcia wielu komunikatów o błędach).
                 </property>
 
                 <getter property="passwordLegal">
-                    <constraint name="True">
+                    <constraint name="IsTrue">
                         <option name="message">The password cannot match your username</option>
                         <option name="groups">
                             <value>Strict</value>
@@ -1054,7 +1054,7 @@ uniknięcia wielu komunikatów o błędach).
                 $metadata->addPropertyConstraint('username', new Assert\NotBlank());
                 $metadata->addPropertyConstraint('password', new Assert\NotBlank());
 
-                $metadata->addGetterConstraint('passwordLegal', new Assert\True(array(
+                $metadata->addGetterConstraint('passwordLegal', new Assert\IsTrue(array(
                     'message' => 'The password cannot match your first name',
                     'groups'  => array('Strict'),
                 )));
@@ -1357,7 +1357,7 @@ Dalsza lektura
 
 * :doc:`Jak utworzyć własne ograniczenia walidacyjne</cookbook/validation/custom_constraint>`
 
-.. _`Validator`: https://github.com/symfony/Validator
+.. _`Validator`: https://github.com/symfony/validator
 .. _`JSR303 Bean Validation specification`: http://jcp.org/en/jsr/detail?id=303
 .. _`Walidacja`: http://pl.wikipedia.org/wiki/Walidacja_(technika)
 .. _`Asercja`: http://pl.wikipedia.org/wiki/Asercja_(informatyka)

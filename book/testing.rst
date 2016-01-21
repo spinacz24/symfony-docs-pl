@@ -505,10 +505,6 @@ Trzeba pamiętać, że to nie działa, jeśli izoluje się klienta lub jeśli u�
 warstwy HTTP. W celu uzyskania listy dostępnych w aplikacji usług, użyj zadania
 konsoli ``debug:container``.
 
-.. versionadded:: 2.6
-    W wersjacha poprzedzających Symfony 2.6 polecenie to było wywoływane jako
-    ``container:debug``.
-
 .. tip::
 
     Jeśli potrzebna Ci informacja jest dostępna z poziomu profilera, to go użyj
@@ -964,4 +960,4 @@ Dalsza lektura
 
 .. _`DemoControllerTest`: https://github.com/symfony/symfony-standard/blob/master/src/Acme/DemoBundle/Tests/Controller/DemoControllerTest.php
 .. _`$_SERVER`: http://php.net/manual/en/reserved.variables.server.php
-.. _`dokumentację`: http://www.phpunit.de/manual/3.8/en/
+.. _`dokumentację`: https://www.phpunit.de/manual/3.8/en/
