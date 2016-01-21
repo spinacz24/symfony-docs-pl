@@ -578,7 +578,7 @@ Najlepszym algorytmem jest ``bcrypt``:
 .. include:: /cookbook/security/_ircmaxwell_password-compat.rst.inc
 
 Oczywiście, trzeba teraz zakodować istniejące hasła tym algorytmem.
-Przy sztywno kodowanych użytkownikach, począwszy od wersji 2.7 wykorzystywać
+Przy sztywno kodowanych użytkownikach, począwszy od wersji 2.7 można wykorzystywać
 wbudowane polecenie:
 
 .. code-block:: bash
