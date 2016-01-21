@@ -575,15 +575,13 @@ Najlepszym algorytmem jest ``bcrypt``:
             // ...
         ));
 
-.. include:: /cookbook/security/_ircmaxwell_password-compat.rst.inc
-
 Oczywiście, trzeba teraz zakodować istniejące hasła tym algorytmem.
-Przy sztywno kodowanych użytkownikach, począwszy od wersji 2.7 wykorzystywać
+Przy sztywno kodowanych użytkownikach, począwszy od wersji 2.7 można wykorzystywać
 wbudowane polecenie:
 
 .. code-block:: bash
 
-    $ php app/console security:encode-password
+    $ php bin/console security:encode-password
     
 Daje to coś takiego:    
 
@@ -1473,7 +1471,7 @@ w zainstalowanych zależnościach:
 
 .. code-block:: bash
 
-    $ php app/console security:check
+    $ php bin/console security:check
 
 Dobrą praktyką jest regularne wykonywanie tego polecenia, tak aby móc aktualizować
  lub wymieniać zagrożone zależności tak szybko jak to jest możliwe. Wewnetrznie,

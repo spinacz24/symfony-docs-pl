@@ -80,11 +80,7 @@ aplikację demonstracyjną:
 
 .. code-block:: bash
 
-    # Linux and Mac OS X
     $ symfony demo
-
-    # Windows
-    c:\> php symfony demo
 
 **Aplikacja demo jest prostym silnikiem bloga**, bo pozwala to skupić się na
 koncepcji Symfony i jego funkcjonalnościach, bez konieczności wnikania w ukryte

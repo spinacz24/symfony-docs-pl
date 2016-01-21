@@ -129,13 +129,13 @@ konfiguracji dla FrameworkBundle:
 
 .. code-block:: bash
 
-    $ app/console config:dump-reference FrameworkBundle
+    $ php bin/console config:dump-reference FrameworkBundle
 
 Możne również wykorzystać alias rozszerzenia (klucz konfiguracyjny):
 
 .. code-block:: bash
 
-    $ app/console config:dump-reference framework
+    $ php bin/console config:dump-reference framework
 
 .. note::
 
@@ -184,7 +184,7 @@ plików pamięci podręcznej i ponownego ich odbudowania:
 
 .. code-block:: bash
 
-    $ php app/console cache:clear --env=prod --no-debug
+    $ php bin/console cache:clear --env=prod --no-debug
 
 .. note::
 

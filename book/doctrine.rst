@@ -123,7 +123,7 @@ do utworzenia bazy danych:
 
 .. code-block:: bash
 
-    $ php app/console doctrine:database:create
+    $ php bin/console doctrine:database:create
 
 .. sidebar:: Konfiguracja bazy danych do UTF8
 
@@ -136,8 +136,8 @@ do utworzenia bazy danych:
 
     .. code-block:: bash
        
-        $ php app/console doctrine:database:drop --force
-        $ php app/console doctrine:database:create
+        $ php bin/console doctrine:database:drop --force
+        $ php bin/console doctrine:database:create
 
     Nie ma sposobu aby skonfigurować te wartości domyślne wewnątrz Doctrine.
     Jedyną możliwością rozwiązania tego problemu jest skonfigurowanie tych wartości
@@ -237,7 +237,7 @@ klasa PHP.
     
     .. code-block:: bash
 
-       $ php app/console doctrine:generate:entity
+       $ php bin/console doctrine:generate:entity
 
 .. index::
     single: Doctrine; dodawanie metadanych odwzorowania
@@ -407,7 +407,7 @@ w wyniku polecenia:
 
 .. code-block:: bash
 
-    $ php app/console doctrine:generate:entities AppBundle/Entity/Product
+    $ php bin/console doctrine:generate:entities AppBundle/Entity/Product
 
 Zastosowanie tego polecenia daje pewność, że w klasie ``Product`` zostaną wygenerowane
 wszystkie niezbędne akcesory. Polecenie to jest bezpieczne – można uruchamiać je
@@ -448,10 +448,10 @@ w informacji odwzorowania Doctrine) lub w całej przestrzeni nazw:
 .. code-block:: bash
 
     # wygenerowanie wszystkich encji w AppBundle
-    $ php app/console doctrine:generate:entities AppBundle
+    $ php bin/console doctrine:generate:entities AppBundle
 
     # wygenerowanie wszystkich encji w rzestrzeni nazewniczej Acme
-    $ php app/console doctrine:generate:entities Acme
+    $ php bin/console doctrine:generate:entities Acme
 
 .. note::
 
@@ -477,7 +477,7 @@ wystarczy uruchomić polecenie:
 
 .. code-block:: bash
 
-    $ php app/console doctrine:schema:update --force
+    $ php bin/console doctrine:schema:update --force
 
 .. tip::
 
@@ -872,7 +872,7 @@ polecenia, które użyliśmy wcześniej do wygenerowania metod akcesorów:
 
 .. code-block:: bash
 
-    $ php app/console doctrine:generate:entities AppBundle
+    $ php bin/console doctrine:generate:entities AppBundle
 
 Następnie dodajemy nową metodę ``findAllOrderedByName()`` do nowo utworzonej klasy
 repozytorium. Metoda ta będzie przepytywać wszystkie encje ``Product`` w kolejności
@@ -929,7 +929,7 @@ utworzyła tą klasę.
 
 .. code-block:: bash
    
-    $ php app/console doctrine:generate:entity --no-interaction \
+    $ php bin/console doctrine:generate:entity --no-interaction \
         --entity="AppBundle:Category" \
         --fields="name:string(255)"
     
@@ -1090,7 +1090,7 @@ powiadamiająca Doctrine, aby wygenerowało brakujące metody akcesorów:
 
 .. code-block:: bash
 
-    $ php app/console doctrine:generate:entities AppBundle
+    $ php bin/console doctrine:generate:entities AppBundle
 
 Zignorujmy na moment metadane Doctrine. Teraz mamy dwie klasy, ``Category``
 i ``Product`` z naturalną relacją jeden-do-wielu. Klasa ``Category`` przechowuje
@@ -1118,7 +1118,7 @@ tablicy ``category`` i kolumnie ``product.category_id`` oraz nowym kluczu zewnę
 
 .. code-block:: bash
 
-    $ php app/console doctrine:schema:update --force
+    $ php bin/console doctrine:schema:update --force
 
 .. note::
 

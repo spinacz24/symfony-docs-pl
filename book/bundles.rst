@@ -115,6 +115,7 @@ Teraz, gdy został już utworzony pakiet, trzeba go włączyć w klasie ``AppKer
     {
         $bundles = array(
             // ...
+            
             // register your bundle
             new Acme\TestBundle\AcmeTestBundle(),
         );
@@ -123,14 +124,14 @@ Teraz, gdy został już utworzony pakiet, trzeba go włączyć w klasie ``AppKer
         return $bundles;
     }
 
-Chociaż pakie AcmeTestBundle nie robi na razie nic, jest gotowy do użycia.
+Chociaż pakiet AcmeTestBundle nie robi na razie nic, jest gotowy do użycia.
 
 Symfony dostarcza również interfejs linii poleceń dla generowania podstawowego
 szkieletu pakietu:
 
 .. code-block:: bash
 
-    $ php app/console generate:bundle --namespace=Acme/TestBundle
+    $ php bin/console generate:bundle --namespace=Acme/TestBundle
 
 Szkielet pakietu generuje podstawowy kontroler, szablon i źródło trasowania, ktore
 mozna dostosować. Później nauczymy sie więcej o narzędziach linii poleceń.

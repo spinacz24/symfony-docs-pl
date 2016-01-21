@@ -166,7 +166,7 @@ Buforowanie szablonów Twig
 
 Twig jest szybki. Każdy szablon Twiga jest kompilowany do natywnej klasy PHP
 przetwarzanej w czasie rzeczywistym. Skompilowane klasy są umieszczone w katalogu
-``app/cache/{environment}/twig`` (gdzie ``{environment}``, to środowisko, takie
+``var/cache/{environment}/twig`` (gdzie ``{environment}``, to środowisko, takie
 jak ``dev`` lub ``prod``) i w wielu przypadkach może być użyteczne podczas debugowania.
 W celu uzyskania więcej informacji proszę przeczytać rozdział :ref:`environments-summary`.
 
@@ -1300,7 +1300,7 @@ z bloku stylesheets z szablonu podstawowego.
 
 Można również dołączyć aktywa zlokalizowane w folderze ``Resources/public``
 swojego pakietu.
-Trzeba też będzie uruchomić polecenie ``php app/console assets:install target [--symlink]``,
+Trzeba też będzie uruchomić polecenie ``php bin/console assets:install target [--symlink]``,
 które przeniesie (lub dowiąże) pliki do prawidłowej lokalizacji. Parametr ``target``
 to domyślnie "web". Użycie parametru ``--symlink`` spowoduje utworzenie dowiązania
 symbolicznego.
@@ -1497,7 +1497,7 @@ będzie istniał, więc trzeba go utworzyć.
 .. caution::
 
     Jeśli doda się szablon w nowym miejscu, może okazać się konieczne wyczyszczenie
-    pamięci podręcznej ( ``php app/console cache:clear`` ), nawet jeśli się jest
+    pamięci podręcznej ( ``php bin/console cache:clear`` ), nawet jeśli się jest
     w trybie debugowania.
 
 Logika ta ma również zastosowanie do podstawowych szablonów pakietów. Załóżmy, że
@@ -1751,10 +1751,10 @@ Można sprawdzić poprawność składni w szablonie Twig stosując polecenie kon
 .. code-block:: bash
 
     # You can check by filename:
-    $ php app/console lint:twig app/Resources/views/article/recent_list.html.twig
+    $ php bin/console lint:twig app/Resources/views/article/recent_list.html.twig
 
     # or by directory:
-    $ php app/console lint:twig app/Resources/views
+    $ php bin/console lint:twig app/Resources/views
 
 Formaty szablonów
 -----------------

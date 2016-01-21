@@ -24,19 +24,16 @@ ale biblioteka ta ma świetną `dokumentację`_.
     rdzenia Symfony konieczna jest wersja 4.2 lub wyższa).
     
 Każdy test, czy to jednostkowy czy funkcjonalny, jest klasą PHP, która powinna się
-znajdować w podkatalogu ``Tests/`` własnego pakietu. Jeśli zastosuje się tą zasadę,
+znajdować w katalogu ``tests/`` swojej aplikacji. Jeśli zastosuje się tą zasadę,
 to będzie można uruchomić wszystkie testy swojej aplikacji, po wydaniu tego polecenia:
 
 
 .. code-block:: bash
 
-    # określenie katalogu konfiguracyjnego z linii poleceń
-    $ phpunit -c app/
+    $ phpunit
 
-
-Opcja ``-c`` informuje PHPUnit aby szukał plik konfiguracyjny w katalogu ``app/``.
-Jeśli jesteś ciekaw informacji o opcjach PHPUnit, przejrzyj plik ``app/phpunit.xml.dist``.
-
+PHPunit jest skonfigurowane w pliku ``phpunit.xml.dist`` w katalogu głównym
+aplikacji Symfony.
 
 .. tip::
 
@@ -59,7 +56,7 @@ Pisanie testów jednostkowych dla Symfony nie różni się niczym od pisania sta
 testów jednostkowych PHPUnit. Załóżmy, że mamy bardzo prostą klasę o nazwie ``Calculator``
 w katalogu ``Util/`` swojego pakietu::
    
-   / src/AppBundle/Util/Calculator.php
+    // src/AppBundle/Util/Calculator.php
     namespace AppBundle\Util;
 
     class Calculator
@@ -71,12 +68,12 @@ w katalogu ``Util/`` swojego pakietu::
     }
     
 Aby przetestowac powyższy kod, trzeba utworzyć plik ``CalculatorTest`` w katalogu
-``Tests/Util`` swojego pakietu::
+``tests/AppBundle/Util`` swojego pakietu::
 
 
-    // src/AppBundle/Tests/Util/CalculatorTest.php
-    namespace AppBundle\Tests\Util;
-
+    // tests/AppBundle/Util/CalculatorTest.php
+    namespace Tests\AppBundle\Util;
+    
     use AppBundle\Util\Calculator;
 
     class CalculatorTest extends \PHPUnit_Framework_TestCase
@@ -94,14 +91,14 @@ Aby przetestowac powyższy kod, trzeba utworzyć plik ``CalculatorTest`` w katal
 
 .. note::
 
-    Zgodnie z konwencją, podkatalog ``Tests/`` powinien replikować strukturę
-    katalogu pakietu. Więc, jeśli testowana jest klasa w katalogu ``Util/``
-    pakietu, to test powinien znajdować się w katalogu ``Tests/Util/``.
+    Zgodnie z konwencją, podkatalog ``Tests/AppBundle`` powinien replikować strukturę
+    katalogu pakietu. Więc, jeśli testowana jest klasa w katalogu ``AppBundle/Util/``
+    pakietu, to test powinien znajdować się w katalogu ``tests/AppBundle/Util/``.
 
 
 Podobnie jak w prawdziwej aplikacji, automatycznie jest włączane autoładowanie
-poprzez plik ``bootstrap.php.cache`` (jak skonfigurowano to domyślnie w pliku
-``app/phpunit.xml.dist``).
+poprzez plik ``autoload.php`` (jak skonfigurowano to domyślnie w pliku
+``phpunit.xml.dist``).
 
 Uruchomienie testów dla określonego pliku lub katalogu jest również bardzo proste:
 
@@ -109,16 +106,16 @@ Uruchomienie testów dla określonego pliku lub katalogu jest również bardzo p
 .. code-block:: bash
 
     # uruchomienie wszystkich testów aplikacji
-    $ phpunit -c app
+    $ phpunit
 
     # uruchomienie wszystkich testów w katalogu Util
-    $ phpunit -c app src/AppBundle/Tests/Util
+    $ phpunit tests/AppBundle/Util
 
     # uruchomienie testów dla klasy Calculator
-    $ phpunit -c app src/AppBundle/Tests/Util/CalculatorTest.php
+    $ phpunit tests/AppBundle/Util/CalculatorTest.php
 
     # uruchomienie wszystkich testów dla całego pakietu
-    $ phpunit -c app src/AppBundle/
+    $ phpunit tests/AppBundle/
 
 .. index::
    single: testy; testy funkcjonalne
@@ -142,14 +139,14 @@ Przykład testu funkcjonalnego
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Testy funkcjonalne, to proste pliki PHP, które zazwyczaj umieszcza się w katalogu
-``Tests/Controller`` pakietu. Jeśli chce się przetestować strony obsługiwane przez
+``tests/AppBundle/Controller`` pakietu. Jeśli chce się przetestować strony obsługiwane przez
 klasę ``PostController``, należy rozpocząć od utworzenia nowego pliku
 ``PostControllerTest.php``, który rozszerza klasę ``WebTestCase``.
 
 Dla przykładu, test może wyglądać tak::
 
-    // src/AppBundle/Tests/Controller/PostControllerTest.php
-    namespace AppBundle\Tests\Controller;
+    // tests/AppBundle/Controller/PostControllerTest.php
+    namespace Tests\AppBundle\Controller;
 
     use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
@@ -880,29 +877,25 @@ Można również zastąpić nagłówki HTTP odnoszące się do jednego żądania
 Konfiguracja PHPUnit
 ~~~~~~~~~~~~~~~~~~~~
 
-Każda aplikacja ma własną konfigurację PHPUnit, zapisaną w pliku ``app/phpunit.xml.dist``.
-Można edytować ten plik, zmieniając wartości domyślne lub utworzyć plik ``app/phpunit.xml``,
-aby zmienić konfigurację na swoim komputerze.
+Każda aplikacja ma własną konfigurację PHPUnit, zapisaną w pliku ``phpunit.xml.dist``.
+Można edytować ten plik, zmieniając wartości domyślne lub utworzyć plik ``phpunit.xml``,
+aby zmienić konfigurację na swoim komputerze lokalnym.
 
 .. tip::
 
-    Przechowuj plik ``app/phpunit.xml.dist`` w repozytorium kodu i ignoruj plik ``app/phpunit.xml``.
+    Przechowuj plik ``phpunit.xml.dist`` w repozytorium kodu i ignoruj plik ``phpunit.xml``.
 
-Domyślnie, poleceniem ``phpunit`` uruchamiane są tylko testy przechowywane
-w standardowych katalogach swoich własnych pakietów:
-``src/*/*Bundle/Tests``, ``src/*/Bundle/*Bundle/Tests``, ``src/*Bundle/Tests``,
-tak jak skonfigurowano to w pliku ``app/phpunit.xml.dist``:
+Domyślnie, polecenie ``phpunit`` uruchamia tylko testy przechowywane w katalogu
+``/tests``, tak jak skonfigurowano to w pliku ``phpunit.xml.dist``:
 
 .. code-block:: xml
 
-    <!-- app/phpunit.xml.dist -->
+    <!-- phpunit.xml.dist -->
     <phpunit>
         <!-- ... -->
         <testsuites>
             <testsuite name="Project Test Suite">
-                <directory>../src/*/*Bundle/Tests</directory>
-                <directory>../src/*/Bundle/*Bundle/Tests</directory>
-                <directory>../src/*Bundle/Tests</directory>
+                <directory>tests</directory>
             </testsuite>
         </testsuites>
         <!-- ... -->
@@ -913,7 +906,7 @@ testy z własnego katalogu ``lib/tests``:
 
 .. code-block:: xml
 
-    <!-- app/phpunit.xml.dist -->
+    <!-- phpunit.xml.dist -->
     <phpunit>
         <!-- ... -->
         <testsuites>
@@ -930,7 +923,7 @@ trzeba także edytować sekcje ``<filter>``:
 
 .. code-block:: xml
 
-    <!-- app/phpunit.xml.dist -->
+    <!-- phpunit.xml.dist -->
     <phpunit>
         <!-- ... -->
         <filter>

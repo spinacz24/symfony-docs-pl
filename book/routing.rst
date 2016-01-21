@@ -1470,7 +1470,7 @@ Polecenie należy wykonać głównym katalogu projektu, tak jak poniżej:
 
 .. code-block:: bash
 
-    $ php app/console debug:router
+    $ php bin/console debug:router
 
 Polecenie to wyświetli na ekranie listę wszystkich skonfigurowanych
 tras aplikacji:
@@ -1489,13 +1489,13 @@ jej nazwę do powyższego polecenia:
 
 .. code-block:: bash
 
-    $ php app/console debug:router article_show
+    $ php bin/console debug:router article_show
     
 Można sprawdzić czy trasa pasuje do ścieżki posługując się poleceniem konsoli ``router:match``:
 
 .. code-block:: bash
       
-   $ php app/console router:match /blog/my-latest-post
+   $ php bin/console router:match /blog/my-latest-post
 
 
 Polecenie to wydrukuje dopasowana do ścieżki URL trasę.
