@@ -130,7 +130,7 @@ Tworzenie aplikacji Symfony bez instalatora
 -------------------------------------------
 
 Jeśli nadal uzywasz PHP 5.3 lub nie możesz usruchamiać instalatora z innych powodów,
-mozesz tworzyć aplikacje Symfony wykorzystując alternatywna meto de instalacji,
+możesz tworzyć aplikacje Symfony wykorzystując alternatywna meto de instalacji,
 opartą o `Composer`_.
 
 Composer jest menadżerem zależności używanym przez nowoczesne aplikacje PHP
@@ -306,7 +306,7 @@ od zewnętrznych bibliotek. Ładowane są one do katalogu ``vendor/`` i zarządz
 za pomocą Composer.
 
 Częste aktualizowanie tych zewnetrznych bibliotek jest dobrą praktyką, gdyż
-zabezpiecza aplikacje przed błedami i lukami bezpieczeństwa. W tym celu trzeba
+zabezpiecza aplikacje przed błędami i lukami bezpieczeństwa. W tym celu trzeba
 wykonać poniższe polecenie:
 
 .. code-block:: bash
@@ -314,7 +314,7 @@ wykonać poniższe polecenie:
     $ cd my_project_name/
     $ composer update
 
-W zależności od złożoności projektu, ten proces aktualozacji moze potrwać kilka
+W zależności od złożoności projektu, ten proces aktualizacji może potrwać kilka
 minut.
 
 .. tip::
