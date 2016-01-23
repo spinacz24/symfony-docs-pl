@@ -3,6 +3,7 @@
 
 .. index::
     single: bezpieczeństwo; wystawca uwierzytelniania
+    single: wystawca uwierzytelniania
 
 Jak utworzyć własnego wystawcę uwierzytelniania w logowaniu formularzowym
 =========================================================================
