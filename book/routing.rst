@@ -1607,7 +1607,7 @@ stosując pomocnicze funkcje szablonów:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         <a href="{{ path('blog_show', {'slug': 'my-blog-post'}) }}">
@@ -1650,7 +1650,7 @@ W PHP trzeba przekazać ``true`` do  ``generate()``:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         <a href="{{ url('blog_show', {'slug': 'my-blog-post'}) }}">

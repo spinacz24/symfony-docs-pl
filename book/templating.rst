@@ -62,7 +62,7 @@ Pakiety Symfony są wyposażone w jeszcze bardziej silniejszy język szablonowan
 o nazwie `Twig`_. Twig pozwala pisać zwięzłe, czytelne szablony na kilka sposobów,
 które są bardziej przyjazne dla projektantów stron i są bardziej wydajne niż szablony PHP:
 
-.. code-block:: html+jinja
+.. code-block:: html+twig
    :linenos:
 
     <!DOCTYPE html>
@@ -96,7 +96,7 @@ Twig zawiera również **filtry**, które modyfikuja zawartość przed rozpoczę
 renderowania. Poniższe działanie powoduje zmianę znaków wartości zmiennej ``title``
 na duże litery, przed renderowaniem:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {{ title|upper }}
 
@@ -115,7 +115,7 @@ mogą być łatwo dodawane przez użytkownika. Na przyjkład, w poniższym kodzi
 użyto standardowy znacznik ``for`` i funkcję ``cycle`` do wydrukowania dziesięciu
 znaczników div, na przemian z klasami ``odd``, ``even``:
 
-.. code-block:: html+jinja
+.. code-block:: html+twig
    :linenos:
 
     {% for i in 0..10 %}
@@ -147,7 +147,7 @@ W tym rozdziale przykłady szablonów będą pokazywane zarówno jako szablony T
     przystępnym. Rozpatrzmy następujący przykład, który łączy pętlę z wyrażeniem
     logicznym ``if``:
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         <ul>
@@ -201,7 +201,7 @@ Po pierwsze, zbuduj podstawowy plik układu strony:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# app/Resources/views/base.html.twig #}
@@ -272,7 +272,7 @@ Szablon potomny może wyglądać tak:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# app/Resources/views/blog/index.html.twig #}
@@ -371,7 +371,7 @@ Oto kilka wskazówek o których trzeba pamietać przy pracy z dziedziczeniem sza
   użyć funkcji ``{{ parent() }}``. Jest to przydatne, gdy chce się dodać treść
   bloku nadrzędnego zamiast go całkowicie przesłonić:
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {% block sidebar %}
@@ -527,7 +527,7 @@ być wykorzystywany wielokrotnie.
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# src/AppBundle/Resources/views/Article/articleDetails.html.twig #}
@@ -553,7 +553,7 @@ Dołączanie tego szablonu do innego jest proste:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# src/AppBundle/Resources/views/Article/list.html.twig #}
@@ -641,7 +641,7 @@ Szablon ``recentList`` jest bardzo prosty:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# app/Resources/views/article/recent_list.html.twig #}
@@ -673,7 +673,7 @@ Dla dołączenia kontrolera, trzeba się do niego odwołać używając standardo
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# app/Resources/views/base.html.twig #}
@@ -722,7 +722,7 @@ do konfigurowania znaczników ``hinclude.js``:
 
 .. configuration-block::
 
-    .. code-block:: jinja
+    .. code-block:: twig
        :linenos:
 
         {{ render_hinclude(controller('...')) }}
@@ -840,7 +840,7 @@ wszystkie zdefiniowane globalne szablony):
 
 .. configuration-block::
 
-    .. code-block:: jinja
+    .. code-block:: twig
        :linenos:
 
         {{ render_hinclude(controller('...'),  {
@@ -862,7 +862,7 @@ albo można również określić łańcuch tekstowy do wyświetlenia jako domyś
 
 .. configuration-block::
 
-    .. code-block:: jinja
+    .. code-block:: twig
        
         {{ render_hinclude(controller('...'), {'default': 'Loading...'}) }}
 
@@ -960,7 +960,7 @@ do odpowiedniej trasy:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
         <a href="{{ path('_welcome') }}">Home</a>
 
@@ -1037,7 +1037,7 @@ jak i wartość parametru ``{slug}``. Używając tej trasy, przeróbmy szablon
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# app/Resources/views/article/recent_list.html.twig #}
@@ -1065,14 +1065,14 @@ jak i wartość parametru ``{slug}``. Używając tej trasy, przeróbmy szablon
 
     Można również wygenerować bezwzględny adres URL stosując funkcję ``url``:
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
         <a href="{{ url('_welcome') }}">Home</a>
 
     To samo można zrobić w szablonach PHP przez przekazanie do metody trzeciego
     argumentu ``generate()``:
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
         <a href="{{ url('_welcome') }}">Home</a>
     
@@ -1107,7 +1107,7 @@ poprzez funkcję ``assets``:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
         <img src="{{ asset('images/logo.png') }}" alt="Symfony!" />
 
@@ -1140,7 +1140,7 @@ Jeśli chce się ustawić wersję dla określonego aktywa, można ustawić czwar
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
         <img src="{{ asset('images/logo.png', version='3.0') }}" alt="Symfony!" />
 
@@ -1163,7 +1163,7 @@ argument (lub argument ``absolute``) na ``true``:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
         <img src="{{ absolute_url(asset('images/logo.png')) }}" alt="Symfony!" />
 
@@ -1214,7 +1214,7 @@ potrzebne w całej witrynie:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# app/Resources/views/base.html.twig #}
@@ -1263,7 +1263,7 @@ Wewnątrz szablonu strony kontaktowej trzeba zrobić co następuje:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# app/Resources/views/contact/contact.html.twig #}
@@ -1307,7 +1307,7 @@ symbolicznego.
 
 Wiersz linkujący w szablonie w naszym przykładzie teraz wyglądał będzie tak:
 
-.. code-block:: html+jinja
+.. code-block:: html+twig
 
    <link href="{{ asset('bundles/css/contact.css') }}" type="text/css" rel="stylesheet" />
 
@@ -1346,7 +1346,7 @@ dającej automatyczny dostęp do określonych zmiennych:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         <p>Username: {{ app.user.username }}</p>
@@ -1553,7 +1553,7 @@ Ta metoda działa doskonale z trzema różnymi typami szablonów, które właśn
   miałby szablon o nazwie ``AppBundle::layout.html.twig``, zawierający tylko
   elementy specyficzne dla blogu:
 
-  .. code-block:: html+jinja
+  .. code-block:: html+twig
      :linenos:
 
       {# app/Resources/views/blog/layout.html.twig #}
@@ -1569,7 +1569,7 @@ Ta metoda działa doskonale z trzema różnymi typami szablonów, które właśn
   Na przykład, strona "index" będzie wywoływana przez coś takiego, jak
   ``AppBundle:Blog:index.html.twig`` i zawierać będzie wykaz aktualnych wpisów blogu:
 
-  .. code-block:: html+jinja
+  .. code-block:: html+twig
      :linenos:
 
       {# app/Resources/views/blog/index.html.twig #}
@@ -1606,7 +1606,7 @@ przykład:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
         Hello {{ name }}
 
@@ -1658,7 +1658,7 @@ zawierają kod HTML. Domyślnie Twig będzie zabezpieczał ciało artykułu.
 
 Aby to normalnie przetworzyć (bez zamiany na encje), trzeba dodać filtr ``raw``:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {{ article.body|raw }}
 
@@ -1725,7 +1725,7 @@ na przykład wewnątrz kontrolera::
 
 Ten sam mechanizm może zostać uzyty w szablonach Twig dzięki funkcji ``dump``:
 
-.. code-block:: html+jinja
+.. code-block:: html+twig
    :linenos:
 
     {# app/Resources/views/article/recent_list.html.twig #}
@@ -1796,7 +1796,7 @@ z parametrem asocjacyjnym:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         <a href="{{ path('article_show', {'id': 123, '_format': 'pdf'}) }}">

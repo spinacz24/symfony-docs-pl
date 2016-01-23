@@ -281,7 +281,7 @@ Szablony Twig
 Symfony zapewnia wyspecjalizowane znaczniki Twig (``trans`` i ``transchoice``)
 w celu pomocy z tłumaczeniem komunikatów w postaci *statycznych bloków tekstu*:
 
-.. code-block:: jinja
+.. code-block:: twig
    :linenos:
 
     {% trans %}Hello %name%{% endtrans %}
@@ -306,7 +306,7 @@ użycia symbolu zastępczego zgodnego ze wzorcem ``%var%``.
 
 Można również określić domenę komunikatu i przekazać kilka dodatkowych zmiennych:
 
-.. code-block:: jinja
+.. code-block:: twig
    :linenos:
 
     {% trans with {'%name%': 'Fabien'} from "app" %}Hello %name%{% endtrans %}
@@ -322,7 +322,7 @@ Można również określić domenę komunikatu i przekazać kilka dodatkowych zm
 Filtry ``trans`` i ``transchoice`` mogą zostać użyte do przetłumaczenia *zmiennych*
 i złożonych wyrażeń:
 
-.. code-block:: jinja
+.. code-block:: twig
    :linenos:
 
     {{ message|trans }}
@@ -341,7 +341,7 @@ i złożonych wyrażeń:
     pewność, że przetłumaczony komunikat nie został zabezpieczony na wyjściu znakami
     ucieczki, trzeba zastosować filtr `raw`` po filtrze translacyjnym:
 
-    .. code-block:: jinja
+    .. code-block:: twig
        :linenos:
 
             {# text translated between tags is never escaped #}
@@ -359,7 +359,7 @@ i złożonych wyrażeń:
 
     Można ustawić domenę translacyjną dla całego szablonu Twig w pojedynczym znaczniku:
 
-    .. code-block:: jinja
+    .. code-block:: twig
 
            {% trans_default_domain "app" %}
 
@@ -827,7 +827,7 @@ awaryjne (może to wskazywać na komunikaty nieprawidłowo przetłumaczone).
 
 Polecenie to wykrywa znaczniki translacyjne lub filtry w szablonie Twig:
 
-.. code-block:: jinja
+.. code-block:: twig
 
     {% trans %}Symfony is great{% endtrans %}
 
@@ -853,7 +853,7 @@ Wykrywa ono również następujące translatory użyte w szablonach PHP:
     Dynamiczne tłumaczenia obejmujące zmienne lub wyrażenia nie są wykrywane w
     szablonach, co oznacza że, poniższy przykład nie zostanie przeanalizowany:
 
-    .. code-block:: jinja
+    .. code-block:: twig
 
         {% set message = 'Symfony is great' %}
         {{ message|trans }}
