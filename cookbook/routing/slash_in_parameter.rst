@@ -1,39 +1,58 @@
 .. index::
-   single: Routing; Allow / in route parameter
+   single: trasowanie; znak ukośnika w parametrach
 
-Jak zezwolić na używanie znaku "/" w parametrach routingu
-========================================================
+Jak zezwolić na używanie znaku ukosnika w parametrach trasowania
+================================================================
 
-Czasami możesz chcieć aby parametry URLi zawierały znak ``/``. 
-Weźmy dla przykładu ``/hello/Fabien`` będzie pasował do tego routingu
-ale już ``/hello/Fabien/Kris`` nie. Dzieje się tak ponieważ Symfony
-używa tego znaku jako separatora części routingu.
+Czasami potrzeba tworzyć ścieżki URL z parametremi zawierającymi znak
+ukośnika  (``/``). 
+Dla przykładu, rozważmy klasyczną trasę ``/hello/{username}``. Domyślnie, ścieżka
+``/hello/Fabien`` będzie pasowała do tej trasy, ale już ``/hello/Fabien/Kris`` nie.
+Dzieje się tak ponieważ Symfony używa tego znaku jako separatora części trasy.
 
-Niniejszy poradnik pokaże Ci jak możesz zmodyfikować routing
-aby ``/hello/Fabien/Kris`` pasowało do routingu ``/helo/{name}``,
-gdzie ``{name}`` będzie zawierać ``Fabien/Kris``.
+W tym artkule wyjaśniamy jak można zmodyfikować trasę tak, aby ścieżka
+``/hello/Fabien/Kris`` pasowała do routingu ``/helo/{username}``, gdzie ``{username}``
+odpowiada ciągowi ``Fabien/Kris``.
 
-Konfiguracja Routingu
----------------------
+Konfiguracja trasowania
+-----------------------
 
-Domyślnie komponenty routingu symfony, wymagają aby parametry 
-były zgodne z wzorcem regexp ``[^/]+``. Oznacza to że mogą wystąpić w nim
-wszystkie znaki oprócz ``/``.
+Domyślnie, komponent Routing Symfony wymagaja aby parametry 
+zgodne były wzorcem wyrazeniem regularnym ``[^/]+``. Oznacza to, że dozwolone
+sa wszystkie znaki z wyjątkiem ``/``.
 
-Musisz wyraźnie zezwolić na używanie ``/`` jako części parametru
-poprzez bardziej liberalny wzorzec regexp.
+Trzeba jawnie zezwolić, aby znak ``/`` był częścią parametru, określając bardziej
+liberalny wzorzec ścieżki.
 
 .. configuration-block::
 
+    .. code-block:: php-annotations
+       :linenos:
+
+        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+
+        class DemoController
+        {
+            /**
+             * @Route("/hello/{username}", name="_hello", requirements={"username"=".+"})
+             */
+            public function helloAction($username)
+            {
+                // ...
+            }
+        }
+
     .. code-block:: yaml
+       :linenos:
 
         _hello:
-            pattern: /hello/{name}
-            defaults: { _controller: AcmeDemoBundle:Demo:hello }
+            path:     /hello/{username}
+            defaults: { _controller: AppBundle:Demo:hello }
             requirements:
-                name: ".+"
+                username: .+
 
     .. code-block:: xml
+       :linenos:
 
         <?xml version="1.0" encoding="UTF-8" ?>
 
@@ -41,39 +60,25 @@ poprzez bardziej liberalny wzorzec regexp.
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-            <route id="_hello" pattern="/hello/{name}">
-                <default key="_controller">AcmeDemoBundle:Demo:hello</default>
-                <requirement key="name">.+</requirement>
+            <route id="_hello" path="/hello/{username}">
+                <default key="_controller">AppBundle:Demo:hello</default>
+                <requirement key="username">.+</requirement>
             </route>
         </routes>
 
     .. code-block:: php
+       :linenos:
 
         use Symfony\Component\Routing\RouteCollection;
         use Symfony\Component\Routing\Route;
 
         $collection = new RouteCollection();
-        $collection->add('_hello', new Route('/hello/{name}', array(
-            '_controller' => 'AcmeDemoBundle:Demo:hello',
+        $collection->add('_hello', new Route('/hello/{username}', array(
+            '_controller' => 'AppBundle:Demo:hello',
         ), array(
-            'name' => '.+',
+            'username' => '.+',
         )));
 
         return $collection;
 
-    .. code-block:: php-annotations
-
-        use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
-        class DemoController
-        {
-            /**
-             * @Route("/hello/{name}", name="_hello", requirements={"name" = ".+"})
-             */
-            public function helloAction($name)
-            {
-                // ...
-            }
-        }
-
-To wszystko! Teraz, parametr ``{name}`` może zawierać znak ``/``.
+To wszystko! Teraz, parametr ``{username}`` może zawierać znak ``/``.

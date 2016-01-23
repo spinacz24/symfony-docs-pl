@@ -684,7 +684,7 @@ komunikatu ``notice``:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {% for flashMessage in app.session.flashbag.get('notice') %}
