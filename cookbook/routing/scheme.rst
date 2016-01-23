@@ -5,7 +5,7 @@ Jak wymuszać trasy z protokołem HTTPS lub HTTP
 ==============================================
 
 Czasami zachodzi potrzeba zabezpieczenia niektórych tras tak, aby zawsze były
-dostęþne tylko przez protokół HTTPS. Komponent Routing umożliwia wymuszenia
+dostępne tylko przez protokół HTTPS. Komponent Routing umożliwia wymuszenia
 schematu URI poprzez ustawienie opcji ``_scheme``:
 
 .. configuration-block::

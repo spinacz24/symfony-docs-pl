@@ -4,7 +4,7 @@
 Jak zezwolić na używanie znaku ukosnika w parametrach trasowania
 ================================================================
 
-Czasami potrzeba, aby tworzyć ścieżki URL z parametrami zawierajacymi znak
+Czasami potrzeba tworzyć ścieżki URL z parametremi zawierającymi znak
 ukośnika  (``/``). 
 Dla przykładu, rozważmy klasyczną trasę ``/hello/{username}``. Domyślnie, ścieżka
 ``/hello/Fabien`` będzie pasowała do tej trasy, ale już ``/hello/Fabien/Kris`` nie.
