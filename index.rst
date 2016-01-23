@@ -113,4 +113,9 @@ Chcesz storzyć swój własny framework oparty na Symfony? Tu znajdziesz przepis
 
 .. include:: /create_framework/map.rst.inc
 
-   
+
+Indeksy i słowniki
+------------------
+
+* :ref:`genindex`
+* :ref:`glossary`   
