@@ -1,7 +1,7 @@
 .. index::
    single: trasowanie; znak ukośnika w parametrach
 
-Jak zezwolić na używanie znaku ukosnika w parametrach trasowania
+Jak zezwolić na używanie znaku ukośnika w parametrach trasowania
 ================================================================
 
 Czasami potrzeba tworzyć ścieżki URL z parametremi zawierającymi znak

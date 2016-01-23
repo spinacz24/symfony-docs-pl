@@ -8,7 +8,7 @@ publikowanej na stronach http://symfony.com/. Prace nad tym tłumaczeniem
 <<<<<<< HEAD
 są jeszcze w toku, ale podstawowe części zostały już przetłumaczone do wersji 2.8,
 i 3.0. Zapraszamy do współpracy - odwiedź
-=======
+=========================================
 są jeszcze w toku, ale podstawowe części zostały już przetłumaczone do wersji 2.7,
 2.8 i 3.0. Zapraszamy do współpracy - odwiedź
 >>>>>>> refs/heads/#103
@@ -118,4 +118,9 @@ Chcesz storzyć swój własny framework oparty na Symfony? Tu znajdziesz przepis
 
 .. include:: /create_framework/map.rst.inc
 
+Indeksy i słowniki
+------------------
+
+* :ref:`genindex`
+* :ref:`glossary`
    
