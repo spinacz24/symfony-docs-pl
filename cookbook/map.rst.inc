@@ -157,7 +157,7 @@
   * :doc:`/cookbook/routing/redirect_trailing_slash`
   * :doc:`/cookbook/routing/extra_information`
 
-* :doc:`Uwierzytelnianie(identyfikacja i logowanie użytkownika) </cookbook/security/index>`
+* :doc:`Uwierzytelnianie (identyfikacja i logowanie użytkownika) </cookbook/security/index>`
 
   * :doc:`/cookbook/security/form_login_setup`
   * :doc:`/cookbook/security/entity_provider`
