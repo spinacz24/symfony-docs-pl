@@ -1852,10 +1852,6 @@ Token CSRF może zostać dopasowany w konfiguracji formularza. Przykładowo::
     
 .. _form-disable-csrf:
 
-Aby wyłączyć ochronę przed CSRF, trzeba ustawić opcję ``csrf_protection`` na ``false``.
-Dostosowanie może być również wykonane globalnie dla całego projektu. Więcej informacji
-znajdziesz w rozdziale :ref:`Informacje o konfiguracji formularza<reference-framework-form>`.
-
 .. note::
 
     Opcja ``csrf_token_id`` jest opcjonalna, ale znacznie zwieksza bezpieczeństwo
