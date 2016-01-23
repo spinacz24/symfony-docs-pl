@@ -1,5 +1,7 @@
 :orphan:
 
+.. _glossary:
+
 Słownik
 =======
 
@@ -133,14 +135,6 @@ Słownik
       *Acme* jest prostą, przykładową nazwą firmy użytej w demo Symfony oraz dokumentacji.
       Jest użyta w przestrzeni nazw gdzie zwykle stosowana jest nazwa Twojej firmy
       (np. ``Acme\BlogBundle``).
-
-   akcja
-      (*ang. action*)
-      
-      *Akcja* jest funkcją lub metodą PHP która jest wykonywana, na przykład,
-      gdy zostaje dopasowana przekazana trasa. Termin *akcja* jest synonimem z słowa
-      *kontroler*, choć kontroler może również odnosić się do całej klasy PHP która
-      zawiera kilka akcji. Zobacz :doc:`Rozdział o Kontrolerze </book/controller>`.
 
    zasób
       (*ang. resource*)
