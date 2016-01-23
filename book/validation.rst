@@ -195,7 +195,7 @@ Jeśli zachodzi taka potrzeba, to można w szablonie wyprowadzić listę błęd�
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# app/Resources/views/author/validation.html.twig #}
