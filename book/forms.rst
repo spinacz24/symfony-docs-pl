@@ -158,7 +158,7 @@ formularza:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# app/Resources/views/default/new.html.twig #}
@@ -467,7 +467,7 @@ w formularzu odpowiednio wydrukowane komunikaty o błędach.
    
    .. configuration-block::
 
-       .. code-block:: html+jinja
+       .. code-block:: html+twig
 
            {# app/Resources/views/default/new.html.twig #}
            {{ form(form, {'attr': {'novalidate': 'novalidate'}}) }}
@@ -823,7 +823,7 @@ formularza:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# app/Resources/views/default/new.html.twig #}
@@ -868,7 +868,7 @@ może zostać dopasowane na różnych poziomach.
 
     .. configuration-block::
 
-        .. code-block:: jinja
+        .. code-block:: twig
 
             {{ form.vars.value.task }}
 
@@ -889,7 +889,7 @@ poniższej prezentowanego kodu są takie same, jak dla funkcji ``form_row``:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {{ form_start(form) }}
@@ -943,7 +943,7 @@ ją jawnie:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
         {{ form_label(form.task, 'Task Description') }}
 
@@ -959,7 +959,7 @@ pola tekstowego:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
         {{ form_widget(form.task, {'attr': {'class': 'task_field'}}) }}
 
@@ -975,7 +975,7 @@ Na przykład, aby pobrać wartość ``id``:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
         {{ form.task.vars.id }}
 
@@ -989,7 +989,7 @@ Aby pobrać wartość używaną w atrybucie nazwy pola formularza potrzeba uży�
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
         {{ form.task.vars.full_name }}
 
@@ -1050,7 +1050,7 @@ pomocniczych ``form()`` lub ``form_start()``:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
 
         {# app/Resources/views/default/new.html.twig #}
         {{ form_start(form, {'action': path('target_route'), 'method': 'GET'}) }}
@@ -1414,7 +1414,7 @@ pól ``Task``:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# ... #}
@@ -1486,7 +1486,7 @@ nowy plik szablonowy, który zawierać będzie nowy znacznik:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# app/Resources/views/form/fields.html.twig #}
@@ -1516,7 +1516,7 @@ części szablonu:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
         {# app/Resources/views/default/new.html.twig #}
@@ -1704,7 +1704,7 @@ globalnie przy określaniu wyjścia formularza.
     W Twig można również dostosować blok formularza bezpośrednio w szablonie,
     gdy takie dostosowanie jest potrzebne:
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:  
 
         {% extends 'base.html.twig' %}
