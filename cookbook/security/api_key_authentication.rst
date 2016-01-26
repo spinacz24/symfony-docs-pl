@@ -128,34 +128,34 @@ uwierzytelnia.
 ~~~~~~~~~~~~~~~~~~~~
 
 Jeśli ``supportsToken()`` zwraca ``true``, Symfony bedzie teraz wywoływał ``authenticateToken()``.
-Jedną częścią klucza jest zmienna ``$userProvider``, wskazująca zewnętrzną klasę
+Jedną częścią klucza jest parametr ``$userProvider``, wskazujący zewnętrzną klasę
 pomagającą załadować informacje o użytkowniku. Więcej na ten temat w dalszej części
 artykułu.
 
-In this specific example, the following things happen in ``authenticateToken()``:
+W tym konkretnym przykładzie, w ``authenticateToken()`` dzieją się następujace rzeczy:
 
-#. First, you use the ``$userProvider`` to somehow look up the ``$username`` that
-   corresponds to the ``$apiKey``;
-#. Second, you use the ``$userProvider`` again to load or create a ``User``
-   object for the ``$username``;
-#. Finally, you create an *authenticated token* (i.e. a token with at least one
-   role) that has the proper roles and the User object attached to it.
+#. Po pierwsze, wykorzytywany jest ``$userProvider``, aby jakoś zajrzeć
+   do ``$username`` korespondujacego z ``$apiKey``;
+#. Po drugie, ponownie użyty zostaje ``$userProvider`` do załadowania lub stworzenia
+   obiektu ``User`` dla ``$username``;
+#. Wreszcie, tworzony jest *token uwierzytelniania* (czyli token z co najmniej
+   jedną rolą), który ma odpowiednie role i załączony obiekt User.
 
-The goal is ultimately to use the ``$apiKey`` to find or create a ``User``
-object. *How* you do this (e.g. query a database) and the exact class for
-your ``User`` object may vary. Those differences will be most obvious in your
-user provider.
+Ostatecznym celem jest wykorzystanie ``$apiKey`` do odnalezienia lub utworzenia
+obiektu ``User``. Sposób zrobienia tego (np. zapytania do bazy danych) i konkretna
+klasa obiektu ``User`` mogą być różne. Różnice te staną się bardziej widoczne przy
+omawianiu dostawcy użytkowników.
 
-The User Provider
-~~~~~~~~~~~~~~~~~
+Dostawca użytkowników
+~~~~~~~~~~~~~~~~~~~~~
 
-The ``$userProvider`` can be any user provider (see :doc:`/cookbook/security/custom_provider`).
-In this example, the ``$apiKey`` is used to somehow find the username for
-the user. This work is done in a ``getUsernameForApiKey()`` method, which
-is created entirely custom for this use-case (i.e. this isn't a method that's
-used by Symfony's core user provider system).
+Wartością ``$userProvider`` może być każdy dostawca użytkowników (patrz :doc:`/cookbook/security/custom_provider`).
+W naszym przykładzie, ``$apiKey`` został użyty do odnalezienia nazwy użytkownika
+dla konkretnego użytkownika. Wykonywane jest to w metodzie ``getUsernameForApiKey()``
+)nie jest to metoda stosowana w rdzennym mechaniźmie dostawcy użytkowników
+Symfony).
 
-The ``$userProvider`` might look something like this::
+Kod ``$userProvider`` może mieć taką postać::
 
     // src/AppBundle/Security/ApiKeyUserProvider.php
     namespace AppBundle\Security;
@@ -202,11 +202,12 @@ The ``$userProvider`` might look something like this::
         }
     }
 
-Now register your user provider as a service:
+Teraz zarejestrujemy naszego dostawcę użytkowników jako usługę:
 
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/services.yml
         services:
@@ -214,6 +215,7 @@ Now register your user provider as a service:
                 class: AppBundle\Security\ApiKeyUserProvider
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/services.xml -->
         <?xml version="1.0" ?>
@@ -230,6 +232,7 @@ Now register your user provider as a service:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/services.php
 
@@ -239,33 +242,33 @@ Now register your user provider as a service:
 
 .. note::
 
-    Read the dedicated article to learn
-    :doc:`how to create a custom user provider </cookbook/security/custom_provider>`.
+    Proszę przeczytać dedykowany artykuł, aby dowiedzieć sie
+    :doc:`jak utworzyć własnego dostawcę użytkowników </cookbook/security/custom_provider>`.
 
-The logic inside ``getUsernameForApiKey()`` is up to you. You may somehow transform
-the API key (e.g. ``37b51d``) into a username (e.g. ``jondoe``) by looking
-up some information in a "token" database table.
+Logika wewnątrz ``getUsernameForApiKey()`` jest czytelna. Można przekształcić
+klucz API (np. ``37b51d``) do nazwy użytkownika (np. ``jondoe``) poprzez spawdzenie
+informacji w tabeli bazy danych "token".
 
-The same is true for ``loadUserByUsername()``. In this example, Symfony's core
-:class:`Symfony\\Component\\Security\\Core\\User\\User` class is simply created.
-This makes sense if you don't need to store any extra information on your
-User object (e.g. ``firstName``). But if you do, you may instead have your *own*
-user class which you create and populate here by querying a database. This
-would allow you to have custom data on the ``User`` object.
+To samo odnosi się do ``loadUserByUsername()``. W tym przykładzie, wykorzystaliśmy
+rdzenna klasę :class:`Symfony\\Component\\Security\\Core\\User\\User`.
+Ma to sens, gdy nie trzeba przechowywać jakichś dodatkowych informacje w obiekcie
+User (np. ``firstName``). Jeśli zachodzi taka potrzeba, można stworzyć własną
+klasę użytkownika i wypełnić ją tutaj wykorzystując zapytanie do bazy danych.
+Umożliwi to posiadanie własnych danych w obiekcie ``User``.
 
-Finally, just make sure that ``supportsClass()`` returns ``true`` for User
-objects with the same class as whatever user you return in ``loadUserByUsername()``.
-If your authentication is stateless like in this example (i.e. you expect
-the user to send the API key with every request and so you don't save the
-login to the session), then you can simply throw the ``UnsupportedUserException``
-exception in ``refreshUser()``.
+Na koniec, trzeba sie upwenić, że ``supportsClass()`` zwraca ``true`` dla obiektu
+User tej samej klasy, co obiekt użytkownika zwracany w ``loadUserByUsername()``.
+Jeśli uwierzytelnianie jest bezstanowe, tak jak w tym przykładzie (czyli można
+oczekiwać, że użytkownik przesyła klucz API w kazdym żądaniu i dlatego nie zapisywać
+loginu w sesji), można po prostu zrzucić wyjątek ``UnsupportedUserException``
+w ``refreshUser()``.
 
 .. note::
 
-    If you *do* want to store authentication data in the session so that
-    the key doesn't need to be sent on every request, see :ref:`cookbook-security-api-key-session`.
+    Jeśli chcesz przechowywć dane uwierzytelniania w sesji, tak aby nie trzeba
+    było przesyłać klucza przy każdym żądaniu, przeczytaj :ref:`cookbook-security-api-key-session`.
 
-Handling Authentication Failure
+Obsługa błędów uwierzytelniania
 -------------------------------
 
 In order for your ``ApiKeyAuthenticator`` to correctly display a 403
