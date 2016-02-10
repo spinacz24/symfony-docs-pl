@@ -54,7 +54,7 @@ Słownik
       *implementują* pojedyńczą funkcjonalność (blog, forum itp.). W Symfony, (*prawie*)
       wszystko jest umieszczone w pakietach. (zobacz :ref:`page-creation-bundles`).
       W PHP koncepcja *pakietu*, od wersji PHP 5.3, odnosi się do *przestrzeni
-      nazw* - każdy pakiet Symfony dwa tworzy własna *przestrzeń nazw*.  
+      nazw* - każdy pakiet Symfony tworzy własną *przestrzeń nazw*.  
 
    kontroler wejścia
    kontroler frontowy
