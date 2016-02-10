@@ -123,7 +123,7 @@ Teraz, gdy został już utworzony pakiet, trzeba go włączyć w klasie ``AppKer
         return $bundles;
     }
 
-Chociaż pakie AcmeTestBundle nie robi na razie nic, jest gotowy do użycia.
+Chociaż pakiet AcmeTestBundle nie robi na razie nic, jest gotowy do użycia.
 
 Symfony dostarcza również interfejs linii poleceń dla generowania podstawowego
 szkieletu pakietu:

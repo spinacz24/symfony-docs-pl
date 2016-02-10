@@ -45,15 +45,16 @@ Słownik
       Drugi, to katalog zawierający *konfigurację* dla danego zestawu
       *pakietów*.
 
+   pakiet funkcjonalny
    pakiet
       (*ang. bundle*)
       
-      *Pakiet* jest katalogiem zawierającym zestaw plików (plików PHP,
-      arkuszy atylów, plików JavaScript, obrazów ...) które *implementują*
-      pojedyńczą funkcjonalność (blog, forum itp.). W Symfony, (*prawie*)
+      *Pakiet funkcjonalny*, w skrócie pakiet, jest katalogiem zawierającym zestaw
+      plików (plików PHP, arkuszy atylów, plików JavaScript, obrazów ...) które
+      *implementują* pojedyńczą funkcjonalność (blog, forum itp.). W Symfony, (*prawie*)
       wszystko jest umieszczone w pakietach. (zobacz :ref:`page-creation-bundles`).
       W PHP koncepcja *pakietu*, od wersji PHP 5.3, odnosi się do *przestrzeni
-      nazw* - każdy pakiet Symfony dwa tworzy własna *przestrzeń nazw*.  
+      nazw* - każdy pakiet Symfony tworzy własną *przestrzeń nazw*.  
 
    kontroler wejścia
    kontroler frontowy
