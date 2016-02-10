@@ -2,8 +2,8 @@
    single: bezpieczeństwo; access_control
    single: konfiguracja; access_control
 
-Jak działa access_control?
-==========================
+Jak działa access_control
+=========================
 
 Przy każdym żądaniu Symfony sprawdza w pliku ``security.yml`` sekcję ``access_control``
 w celu znalezienia takiego jednego wpisu, który pasuje do bieżącego żądania. Jak tylko

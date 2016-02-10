@@ -9,10 +9,11 @@
 System pakietów
 ===============
 
-Pakiety (*ang. bundles*) są podobne do wtyczek w innych programach, ale sa od
-nich lepsze. Zasadnicza różnica polega na tym, że całe Symfony jest zbudowane
-z pakietów, łącznie z rdzeniem frameworka i kodem, który piszesz dla aplikacji.
-W Symfony, pakiety są "obywatelem numer jeden". Zapewnia to elastyczność we
+Pakiety funkcjonalne (*ang. bundles*), w skrócie pakiety, są podobne do wtyczek
+w innych programach, ale są od nich lepsze.
+Zasadnicza różnica polega na tym, że całe Symfony jest zbudowane z takich pakietów,
+łącznie z rdzeniem frameworka i kodem, który sie tworzy dla aplikacji.
+W Symfony, pakiety są "obywatelem numer jeden". Zapewniaja one elastyczność we
 wstępnym budowaniu funkcjonalności w oparciu o `pakiety osób trzecich`_ lub
 w dystrybucji własnych pakietów. Sprawia to łatwość w doborze funkcjonalności,
 które trzeba udostępnić w aplikacji i umożliwia ich zoptymalizowanie w sposób,
@@ -26,13 +27,13 @@ jaki się chce.
    które omawiają zagadnienia związane z prganizacją i najlepszymi praktykami
    w tym zakresie.
 
-Pakiet jest ustrukturyzowanym zestawem plików w odrębnym katalagu, implementujacych
-jakąś pojedynczą funkcjonalność. Można utworzyć BlogBundle, ForumBundle lub pakiet
-do zarządzania użytkownikami (wiele z nich już istnieje jako pakiety osób trzecich).
-Każdy katalog zawiera wszystko, co zwiazane jest z dana funkcjonalnością, włączając
-w to pliki PHP, szablony, arkusze stylów, pliki JavaScript, testy itd..
-Kazdy aspekt funkcjonalności istnieje w pakiecie i każda funkcjonalność umieszczona
-jest w pakiecie.
+Pakiet funkcjonalny jest ustrukturyzowanym zestawem plików w odrębnym katalagu,
+implementujacych jakąś pojedynczą funkcjonalność. Można utworzyć BlogBundle,
+ForumBundle lub pakiet do zarządzania użytkownikami (wiele z nich już istnieje
+jako pakiety osób trzecich). Każdy katalog zawiera wszystko, co zwiazane jest
+z dana funkcjonalnością, włączając w to pliki PHP, szablony, arkusze stylów,
+pliki JavaScript, testy itd.. Każdy aspekt funkcjonalności istnieje w pakiecie
+i każda funkcjonalność umieszczana jest w pakiecie.
 
 Pakiety po ich zainstalowaniu trzeba włączyć, rejestrując je w metodzie
 ``registerBundles()`` klasy ``AppKernel``::
@@ -62,7 +63,7 @@ Pakiety po ich zainstalowaniu trzeba włączyć, rejestrując je w metodzie
     }
 
 Przy pomocy metody ``registerBundles()`` ma się całkowitą kontrolę nad tym, które
-pakiety sa używane w aplikacji (łącznie z pakietami rdzenia Symfony).
+pakiety są używane w aplikacji (łącznie z pakietami rdzenia Symfony).
 
 .. tip::
 

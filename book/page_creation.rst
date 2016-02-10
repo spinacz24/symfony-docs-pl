@@ -68,7 +68,7 @@ Zanim do tego przejdziemy, wykonajmy test!
 
 .. tip::
 
-    Jeśli skonfigurowało sie właściwie wirtualny host w 
+    Jeśli skonfigurowało się właściwie wirtualny host w 
     :doc:`Apache lub Nginx </cookbook/configuration/web_server_configuration>`,
     trzeba zamienić ``http://localhost:8000`` na nazwę swojego hosta, taką jak
     na przykład ``http://symfony.dev/app_dev.php/lucky/number``.
@@ -89,22 +89,22 @@ i jest miejscem, w którym buduje się stronę. Jedyną zasadą jest to, że akc
 
 .. sidebar:: Co to jest ``app_dev.php`` w adresie URL?
 
-    Dobre pytanie! Dołaczając ``app_dev.php`` w adresie URL wykonuje sie kod
-    Symfony poprzez plik ``web/app_dev.php``, który dokonuje rozuchu w :term:`środowisku <środowisko>`
-    ``dev``. Środowisko to udostępnia doskonałe narzedzia debugowania i automatycznej
+    Dobre pytanie! Dołaczając ``app_dev.php`` w adresie URL wykonuje się kod
+    Symfony poprzez plik ``web/app_dev.php``, który dokonuje rozruchu w :term:`środowisku <środowisko>`
+    ``dev``. Środowisko to udostępnia doskonałe narzędzia debugowania i automatycznej
     przebudowy plików pamięci podręcznej. W środowisku produkcyjnym trzeba używać
     czystych adresów URL, takich jak ``http://localhost:8000/lucky/number``, co
     wykonuje inny plik, ``app.php``, który jest zoptymalizowany ze względu na prędkość.
-    Wiecej na ten temat możesz sie dowiedzieć w :ref:`book-page-creation-prod-cache-clear`.
+    Więcej na ten temat możesz się dowiedzieć w rozdziale :ref:`book-page-creation-prod-cache-clear`.
 
 Tworzenie odpowiedzi JSON
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Obiekt ``Response`` zwracany przez kontroler może zawierać kod HTML, JSON
 oraz nawet plik binarny, taki jak obraz lub PDF. Można łatwo ustawić nagłówki
-HTTP lub kod stanów.
+HTTP lub kod stanu (*ang. status code*).
 
-Dla przykladu utwórzmy punkt końcowy JSON. który zwraca szczęśliwą liczbę.
+Dla przykładu utwórzmy punkt końcowy JSON. który zwraca szczęśliwą liczbę.
 Wystarczy dodać drugą metodę do ``LuckyController``::
 
     // src/AppBundle/Controller/LuckyController.php
@@ -270,7 +270,7 @@ i zmienna w akcji są takie same.
 System trasowania może dużo więcej, jak obsługa wielu wieloznaczników
 (np. ``/blog/{category}/{page})``), czynienie wieloznaczników opcjonalnymi
 i wymuszanie, aby wieloznacznik dopasowywał wyrażenie regularne (np. aby ``{count}``
- *musiało być* liczbą).
+*musiało być* liczbą).
 
 Wszystkie informacje o tym można znaleźć w rozdziale :doc:`Trasowanie </book/routing>`.
 
@@ -339,8 +339,8 @@ wykorzystując metodę ``get()`` z odpowiednią nazwą usługi, taką jak ``temp
 lub ``logger``. Usługa ``templating`` jest instancją klasy :class:`Symfony\\Bundle\\TwigBundle\\TwigEngine`
 i ma metodę ``render()``.
 
-Usługę tą mozemy pobierać prościej. Wystarczy rozszerzyć klasę ``Controller``
-i juz sie ma dostęþ do kilku skrótowych metod, takich jak ``render()``::
+Usługę tą możemy pobierać prościej. Wystarczy rozszerzyć klasę ``Controller``
+i już się ma dostęþ do kilku skrótowych metod, takich jak ``render()``::
 
     // src/AppBundle/Controller/LuckyController.php
     // ...
@@ -368,12 +368,12 @@ i juz sie ma dostęþ do kilku skrótowych metod, takich jak ``render()``::
         );
     }
 
-Wiecej na temat metod skrótowych i o tym jak one działają, mozna przeczytać
+Wiecej na temat metod skrótowych i o tym jak one działają, można przeczytać
 w rozdziale :doc:`Kontroler </book/controller>`.
 
 .. tip::
 
-    Dla bardziej zaawansowanych użytkowników: mozna również
+    Dla bardziej zaawansowanych użytkowników: można również
     :doc:`zarejestrować swój kontroler jako usługę </cookbook/controller/service>`.
 
 Tworzenie szablonu
@@ -458,8 +458,9 @@ katalog pamięci podręcznej ``app/cache/``, katalog dzienników zdarzeń ``app/
 czy plik ``app/AppKernel.php``, który można użyć, aby udostępnić nowe pakiety.
 
 Katalog ``src/`` ma tylko jeden podkatalog , ``src/AppBundle``, wraz z zawartością
-tego pakietu.
-Pakiet jest podobny do "wtyczki". Możesz `znaleźć otwarto-źródłowe pakiety`_
+tego pakietu funkcjonalnego.
+Pakiet funkcjonalny (*ang. bundle*), w skrócie pakiet, jest podobny do "wtyczki".
+Możesz `znaleźć otwarto-źródłowe pakiety`_
 i je zainstalować w swoim projekcie. Nawet *Twój* kod jest umieszczany w pakiecie,
 chociażby w ``AppBundle`` (ale jest to tylko pakiet demonstracyjny). Więcej na
 temat pakietów można przecztać w rozdziale :doc:`Pakiety </book/bundles>`.
@@ -587,7 +588,7 @@ Czas do końca opanować podstawy czytając rozdziały:
 * :doc:`/book/routing`
 * :doc:`/book/templating`
 
-Następnie nauczysz sie o :doc:`kontenerze usług </book/service_container>`
+Następnie nauczysz się o :doc:`kontenerze usług </book/service_container>`
 Symfony, :doc:`systemie formularzy </book/forms>` i używaniu :doc:`Doctrine </book/doctrine>`,
 (co pozwoli Ci na używanie zapytań do bazy danych) i jeszcze więcej, studiując
 dalej :doc:`Podręcznik Symfony </book/index>`.
