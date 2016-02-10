@@ -711,9 +711,9 @@ Proces autoryzacji ma dwa aspekty:
 .. tip::
 
     Oprócz ról (np. ``ROLE_ADMIN``), do ochrony zasobów można wykorzystywać
-    inne atrybuty (ciągi znakowe) (np. ``EDIT``) oraz używać wyborców lub systemu
-    ACL Symfony. Może to być przydatne, jeśli potrzeba sprawdzić, czy użytkownik A
-    może edytować ("EDIT") jakiś obiekt B (np. Product z id 5).
+    inne atrybuty (ciągi znakowe) (np. ``EDIT``) oraz używać usług wybierających
+    (*ang. voters*) lub systemu ACL Symfony. Może to być przydatne, jeśli potrzeba
+    sprawdzić, czy użytkownik A może edytować ("EDIT") jakiś obiekt B (np. Product z id 5).
     Zobacz :ref:`security-secure-objects`.
 
 .. index::
@@ -936,7 +936,7 @@ Można łatwo zablokować dostęp do akcji kontrolera::
 
 .. versionadded:: 2.6
     Usługa ``security.authorization_checker`` została wprowadzona w Symfony 2.6. Wcześnie
-    trzeba było uzywać metody ``isGranted()`` usługi ``security.context``.
+    trzeba było używać metody ``isGranted()`` usługi ``security.context``.
 
 W obu przypadkach zrzucany jest specjalny wyjątek
 :class:`Symfony\\Component\\Security\\Core\\Exception\\AccessDeniedException`,
@@ -1046,14 +1046,14 @@ istnieją trzy specjalne atrybuty, takie jak ten:
 
 * ``IS_AUTHENTICATED_REMEMBERED``: Atrybut ten posiadają *wszyscy* zalogowani
   użytkownicy, nawet jeśli są zalogowani z powodu "remember me cookie". Można to
-  też uzywać do sprawdzeniam, czy użytkownik jest zalogowany, nawet gdy nie używa
+  też używać do sprawdzeniam, czy użytkownik jest zalogowany, nawet gdy nie używa
   się :doc:`funkcjonalności "remember me" </cookbook/security/remember_me>`.
 
 * ``IS_AUTHENTICATED_FULLY``: Jest to podobne do ``IS_AUTHENTICATED_REMEMBERED``,
   ale silniejsze. Uzytkownicy, którzy są zalogowani z powodu "remember me cookie"
   beda mieć atrybut ``IS_AUTHENTICATED_REMEMBERED``, ale nie ``IS_AUTHENTICATED_FULLY``.
 
-* ``IS_AUTHENTICATED_ANONYMOUSLY``: Atrybut ten posiadaja *wszyscy* uzytkownicy
+* ``IS_AUTHENTICATED_ANONYMOUSLY``: Atrybut ten posiadaja *wszyscy* użytkownicy
   (nawet ci anonimowi) - jest on przydatny, gdy dostęp jest zapewniany z adresów
   *whitelisting* - pewne szczegóły są omówione w :doc:`/cookbook/security/access_control`.
 
@@ -1096,7 +1096,7 @@ edytowania *wszystkich* komentarzy.
 
 Można to zrobić na dwa sposoby:
 
-* :doc:`Używanie tzw. wyborców (ang. voters) </cookbook/security/voters>` umożliwia
+* :doc:`Używanie tzw. usług wybierajacych (ang. voters) </cookbook/security/voters>` umożliwia
   napisanie własnej logiki biznesowej (np. użytkownik może edytować wpis, ponieważ
   jest autorem) do ustalenia dostępu. Przypuszczalnie wybierzesz ten sposób,
   wystarczająco elastyczny, aby rozwązać powyższą sytuację.
@@ -1118,7 +1118,7 @@ Pobieranie obiektu użytkownika
 
 .. versionadded:: 2.6
      Usługa ``security.token_storage`` została wprowadzona w Symfony 2.6. Wcześniej
-     trzeba było uzywac metody ``getToken()`` usługi ``security.context``.
+     trzeba było używac metody ``getToken()`` usługi ``security.context``.
 
 Po uwierzytelnieniu użytkownika jest dostępny związany z nim obiekt ``User`` poprzez
 usługę ``security.token_storage``. Od wnętrza akcji kontrolera wygląda to podobnie
@@ -1167,17 +1167,17 @@ Wskazówka jest taka: przed użyciem obiektu User zawsze sprawdzaj, czy użytkow
 jest zalogowany i używaj do tego metody ``isGranted``
 (lub :ref:`access_control <security-authorization-access-control>`)::
 
-    // Do sprawdzania, czy uzytkownik jest zalogowany, uzywaj tego
+    // Do sprawdzania, czy użytkownik jest zalogowany, używaj tego
     if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
         throw $this->createAccessDeniedException();
     }
 
-    // Nigdy nie używaj obiektu User do sprawdzenia zalogowania się uzytkownika
+    // Nigdy nie używaj obiektu User do sprawdzenia zalogowania się użytkownika
     if ($this->getUser()) {
 
     }
 
-Pobieranie uzytkownika w szablonie
+Pobieranie użytkownika w szablonie
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 W szablonie Twig obiekt ten może być dostępny poprzez klucz :ref:`app.user <reference-twig-global-app>`:
@@ -1320,7 +1320,7 @@ Po wylogowaniu, użytkownik zostanie przekierowany na ścieżkę określoną w p
 Dynamiczne kodowanie hasła
 --------------------------
 
-Jeśli, na przykład, przechowuje się uzytkowników w bazie danych, trzeba zakodować
+Jeśli, na przykład, przechowuje się użytkowników w bazie danych, trzeba zakodować
 hasła użytkowników przed ich wstawieniem do bazy danych. Bez względu na używany
 algorytm szyfrowania hasła dla obiektu użytkownika, zakodowane hasło może być
 zawsze określone w następujący sposób::
@@ -1345,7 +1345,7 @@ Obiekt ``$encoder`` ma też metodę ``isPasswordValid``, która pobiera obiekt
 
 .. caution::
 
-    Gdy zezwala się na wysyłanie przez uzytkowników haseł w zwykłym tekście
+    Gdy zezwala się na wysyłanie przez użytkowników haseł w zwykłym tekście
     (np. formularz rejestracyjny, formularz zmiany hasła), trzeba zastosować walidację
     gwarantujaca, że hasło ma 4096 znaków lub ,niej. Więcej szczegółów znajduje się
     w artykule :ref:`Jak zaimplementować prosty formularz rejestracyjny <cookbook-registration-password-max>`.
@@ -1517,7 +1517,7 @@ Dalsza lektura
 --------------
 
 * :doc:`Wymuszanie HTTP/HTTPS </cookbook/security/force_https>`
-* :doc:`Jak podszywać sie pod uzytkownika? </cookbook/security/impersonating_user>`
+* :doc:`Jak podszywać się pod użytkownika? </cookbook/security/impersonating_user>`
 * :doc:`/cookbook/security/voters`
 * :doc:`Listy kontroli dostęþu (ACL) </cookbook/security/acl>`
 * :doc:`/cookbook/security/remember_me`
