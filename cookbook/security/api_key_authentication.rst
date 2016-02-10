@@ -17,7 +17,7 @@ URL lub w nagłówku HTTP.
 Wystawca uwierzytelniającego klucza API
 ---------------------------------------
 
-Uwierzytelnianie użytkownika w oparciu o informacje z żądania powinno byc realizowane
+Uwierzytelnianie użytkownika w oparciu o informacje z żądania powinno być realizowane
 poprzez mechanizm wstępnego uwierzytelniania. Interfejs
 :class:`Symfony\\Component\\Security\\Core\\Authentication\\SimplePreAuthenticatorInterface`
 pozwala w bardzo łatwy sposób zaimplementować taki schemat.
@@ -110,10 +110,10 @@ przypuszczalnie sie różnić:
 ~~~~~~~~~~~~~~
 
 Na początku cyklu przetwarzania żądania, Symfony wywołuje metodę ``createToken()``.
-Zadaniem programisty jest tutaj stworzenie obiektu tokenu, który bedzie zawierał
+Zadaniem programisty jest tutaj stworzenie obiektu tokenu, który będzie zawierał
 wszystkie informacje z żądania, na podstawie którego dokonywane jest uwierzytelnienie
 użytkownika (np. paraetr zapytania ``apikey``). Jeśli tej informacji nie ma,
-zrzucany bedzie wyjątek
+zrzucany będzie wyjątek
 :class:`Symfony\\Component\\Security\\Core\\Exception\\BadCredentialsException`.
 Trzeba sie wiec zabezpieczyć i w takiej sytuacji zwracać ``null``, aby pominąć
 uwierzytelnianie i ewentualnie skierować Symfony awaryjnie na inna metodę
@@ -127,7 +127,7 @@ uwierzytelnia.
 3. authenticateToken
 ~~~~~~~~~~~~~~~~~~~~
 
-Jeśli ``supportsToken()`` zwraca ``true``, Symfony bedzie teraz wywoływał ``authenticateToken()``.
+Jeśli ``supportsToken()`` zwraca ``true``, Symfony będzie teraz wywoływał ``authenticateToken()``.
 Jedną częścią klucza jest parametr ``$userProvider``, wskazujący zewnętrzną klasę
 pomagającą załadować informacje o użytkowniku. Więcej na ten temat w dalszej części
 artykułu.
@@ -144,15 +144,15 @@ W tym konkretnym przykładzie, w ``authenticateToken()`` dzieją się następuja
 Ostatecznym celem jest wykorzystanie ``$apiKey`` do odnalezienia lub utworzenia
 obiektu ``User``. Sposób zrobienia tego (np. zapytania do bazy danych) i konkretna
 klasa obiektu ``User`` mogą być różne. Różnice te staną się bardziej widoczne przy
-omawianiu dostawcy użytkowników.
+omawianiu operatora użytkowników.
 
-Dostawca użytkowników
+Operator użytkowników
 ~~~~~~~~~~~~~~~~~~~~~
 
-Wartością ``$userProvider`` może być każdy dostawca użytkowników (patrz :doc:`/cookbook/security/custom_provider`).
+Wartością ``$userProvider`` może być każdy operator użytkowników (patrz :doc:`/cookbook/security/custom_provider`).
 W naszym przykładzie, ``$apiKey`` został użyty do odnalezienia nazwy użytkownika
 dla konkretnego użytkownika. Wykonywane jest to w metodzie ``getUsernameForApiKey()``
-)nie jest to metoda stosowana w rdzennym mechaniźmie dostawcy użytkowników
+(nie jest to metoda stosowana w rdzennym mechaniźmie dostawcy użytkowników
 Symfony).
 
 Kod ``$userProvider`` może mieć taką postać::
@@ -271,13 +271,15 @@ w ``refreshUser()``.
 Obsługa błędów uwierzytelniania
 -------------------------------
 
-In order for your ``ApiKeyAuthenticator`` to correctly display a 403
-http status when either bad credentials or authentication fails you will
-need to implement the :class:`Symfony\\Component\\Security\\Http\\Authentication\\AuthenticationFailureHandlerInterface` on your
-Authenticator. This will provide a method ``onAuthenticationFailure`` which
-you can use to create an error ``Response``.
+W celu poprawnego wyświetlania stanu 403 HTTP przez ``ApiKeyAuthenticator``, kiedy
+nieprawidłowe są poświadczenia albo uwierzylenianie, trzeba zaimplementować klasę
+:class:`Symfony\\Component\\Security\\Http\\Authentication\\AuthenticationFailureHandlerInterface`
+w swoim mechanizmie uwierzytelniania. Interfejs ten dostarcza metodę
+``onAuthenticationFailure``, którą można wykorzystać do utworzenia obiektu
+``Response`` dla błędu.
 
 .. code-block:: php
+   :linenos:
 
     // src/AppBundle/Security/ApiKeyAuthenticator.php
     namespace AppBundle\Security;
@@ -300,16 +302,18 @@ you can use to create an error ``Response``.
 
 .. _cookbook-security-api-key-config:
 
-Configuration
--------------
+Konfiguracja
+------------
 
-Once you have your ``ApiKeyAuthenticator`` all setup, you need to register
-it as a service and use it in your security configuration (e.g. ``security.yml``).
-First, register it as a service.
+Gdy ma się już gotową całą konfigurację ``ApiKeyAuthenticator``, trzeba tą klasę
+zarejestrować jako usługę i zastosować ją w konfiguracji bezpieczeństwa
+(np. ``security.yml``). 
+Najpierw, zarejestrujmy tą klasę jako usługę:
 
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         services:
@@ -320,6 +324,7 @@ First, register it as a service.
                 public: false
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" ?>
@@ -337,6 +342,7 @@ First, register it as a service.
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         use Symfony\Component\DependencyInjection\Definition;
@@ -348,13 +354,14 @@ First, register it as a service.
         $definition->setPublic(false);
         $container->setDefinition('apikey_authenticator', $definition);
 
-Now, activate it and your custom user provider (see :doc:`/cookbook/security/custom_provider`)
-in the ``firewalls`` section of your security configuration
-using the ``simple_preauth`` and ``provider`` keys respectively:
+Po aktywowaniu usługi, nasz własny operator użytkowników (patrz :doc:`/cookbook/security/custom_provider`)
+będzie teraz wykorzystywał, w sekcji ``firewalls`` konfiguracji bezpieczeństwa, odpowiednio klucze
+``simple_preauth`` i ``provider``:
 
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -373,6 +380,7 @@ using the ``simple_preauth`` and ``provider`` keys respectively:
                     id: api_key_user_provider
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -397,6 +405,7 @@ using the ``simple_preauth`` and ``provider`` keys respectively:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
 
@@ -420,31 +429,32 @@ using the ``simple_preauth`` and ``provider`` keys respectively:
             ),
         ));
 
-That's it! Now, your ``ApiKeyAuthenticator`` should be called at the beginning
-of each request and your authentication process will take place.
+Od teraz, ``ApiKeyAuthenticator`` powinien być wywoływany na początku
+każdego żądania i będzie inicjować proces uwierzytelniania.
 
-The ``stateless`` configuration parameter prevents Symfony from trying to
-store the authentication information in the session, which isn't necessary
-since the client will send the ``apikey`` on each request. If you *do* need
-to store authentication in the session, keep reading!
+Parametr konfiguracyjny ``stateless`` zabezpiecza Symfony przed próbami przechowywania
+informacji uwierzytelniania w sesji, co nie jest konieczne, gdyż klient będzie
+wysyłał ``apikey`` przy każdym żądaniu. Jeśli zachodzi konieczność przechowywania
+danych uwierzytelniania w sesji, to proszę zapoznać sie z następnym rozdziałem.
 
 .. _cookbook-security-api-key-session:
 
-Storing Authentication in the Session
--------------------------------------
+Przechowywanie danych uwierzytelniania w sesji
+----------------------------------------------
 
-So far, this entry has described a situation where some sort of authentication
-token is sent on every request. But in some situations (like an OAuth flow),
-the token may be sent on only *one* request. In this case, you will want to
-authenticate the user and store that authentication in the session so that
-the user is automatically logged in for every subsequent request.
+Dotychczas, w artykule tym opisywano sytuację, w której przy kazdym żądaniu przesyłany
+był jakiś rodzaj tokenu uwierzytelniania. Występuja jednak sytuacje(jak w OAuth),
+że token może być wysłany tylko przy jednym żądaniu. W takim przypadku, trzeba
+uwierzytelnić użytkownika i przechowywać dane uwierzytelniania w sesji, tak aby
+użytkownik mógł być automatycznie logowany przy każdym kolejnym żądaniu.
 
-To make this work, first remove the ``stateless`` key from your firewall
-configuration or set it to ``false``:
+Dla zrobienia tego, trzeba najpierw usunąć klucz ``stateless``z konfiguracji zapory
+lub ustawić tą opcję na ``false``:
 
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/security.yml
         security:
@@ -463,6 +473,7 @@ configuration or set it to ``false``:
                     id: api_key_user_provider
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
@@ -487,6 +498,7 @@ configuration or set it to ``false``:
         </srv:container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/security.php
 
@@ -509,10 +521,11 @@ configuration or set it to ``false``:
             ),
         ));
 
-Even though the token is being stored in the session, the credentials - in this
-case the API key (i.e. ``$token->getCredentials()``) - are not stored in the session
-for security reasons. To take advantage of the session, update ``ApiKeyAuthenticator``
-to see if the stored token has a valid User object that can be used::
+Nawet jeśli token jest przechowywany w sesji, poświadczenia, w naszym przypadku
+klucz API key (czyli ``$token->getCredentials()``), nie są przechowywane w sesji
+ze względów bezpieczeństwa. Dla wykorzystania sesji, trzeba zaktualizować ``ApiKeyAuthenticator``,
+aby sprawdzić, czy przechowywany token ma prawidłowy obiekt User, który można
+użyć::
 
     // src/AppBundle/Security/ApiKeyAuthenticator.php
     // ...
@@ -563,19 +576,19 @@ to see if the stored token has a valid User object that can be used::
         // ...
     }
 
-Storing authentication information in the session works like this:
+Przechowywanie danych uwierzytelniania w sesji działa w poniższy sposób:
 
-#. At the end of each request, Symfony serializes the token object (returned
-   from ``authenticateToken()``), which also serializes the ``User`` object
-   (since it's set on a property on the token);
-#. On the next request the token is deserialized and the deserialized ``User``
-   object is passed to the ``refreshUser()`` function of the user provider.
+#. Na końcu przetwarzania każdego żądania, Symfony serializuje obiekt tokenu (zwracanego przez
+   ``authenticateToken()``), który serializuje również obiekt ``User`` (ponieważ
+   jest on ustawiany przez właściwość w obiekcie tokenu);
+#. Przy następnym żądaniu token jest deserializowany i zdeserializowany obiekt
+   ``User`` jest przekazywany do funkcji ``refreshUser()`` operatora użytkowników.
 
-The second step is the important one: Symfony calls ``refreshUser()`` and passes
-you the user object that was serialized in the session. If your users are
-stored in the database, then you may want to re-query for a fresh version
-of the user to make sure it's not out-of-date. But regardless of your requirements,
-``refreshUser()`` should now return the User object::
+Drugi krok jest ważny: Symfony wywołuje ``refreshUser()`` i przekazuje obiekt
+użytkownika, który został zserializowany w sesji. Jeśli użytkownicy są przechowywani
+w bazie danych, to można wykonać ponownie zapytanie, w celu odświeżenia wersji
+użytkownika, aby mieć pewność, że obiekt użytkownika nie zdeaktualizował sie.
+Niezależnie od wymagań, ``refreshUser()`` powinien teraz zwracać obiekt użytkownika::
 
     // src/AppBundle/Security/ApiKeyUserProvider.php
 
@@ -601,21 +614,21 @@ of the user to make sure it's not out-of-date. But regardless of your requiremen
 
 .. note::
 
-    You'll also want to make sure that your ``User`` object is being serialized
-    correctly. If your ``User`` object has private properties, PHP can't serialize
-    those. In this case, you may get back a User object that has a ``null``
-    value for each property. For an example, see :doc:`/cookbook/security/entity_provider`.
+    Warto również upewnić się, że obieky ``User`` jest poprawnie serializowany.
+    Jeśli obiekt ``User`` ma prywatne własności, PHP nie będzie mógł go zserializować.
+    W takim przypadku, można odzyskać obiekt User, którego wszystkie właściwości
+    mają wartość ``null``. Dla przykładu proszę przeczytać artykuł :doc:`/cookbook/security/entity_provider`.
 
-Only Authenticating for Certain URLs
-------------------------------------
+Uwierzytelnianie tylko z niektórych adresów URL
+-----------------------------------------------
 
-This entry has assumed that you want to look for the ``apikey`` authentication
-on *every* request. But in some situations (like an OAuth flow), you only
-really need to look for authentication information once the user has reached
-a certain URL (e.g. the redirect URL in OAuth).
+W tym artykule założono również, że chce się sprawdzać uwierzytelnianie ``apikey``
+dla każdego żądania. Jednak w niektórych sytuacjach (jak w przypadku OAuth),
+trzeba w rzeczywistości sprawdzać dane uwierzytelniania, które użytkownik dostarczył
+tylko z określonego adresu URL (np. adres URL przekierowania w OAuth).
 
-Fortunately, handling this situation is easy: just check to see what the
-current URL is before creating the token in ``createToken()``::
+Na szczęście, obsługa takiej sytuacji jest łatwa: wystarczy sprawdzić, jaki
+adres URL pojawił się tuż przed utworzeniem tokenu w ``createToken()``::
 
     // src/AppBundle/Security/ApiKeyAuthenticator.php
 
@@ -645,17 +658,18 @@ current URL is before creating the token in ``createToken()``::
         }
     }
 
-This uses the handy :class:`Symfony\\Component\\Security\\Http\\HttpUtils`
-class to check if the current URL matches the URL you're looking for. In this
-case, the URL (``/login/check``) has been hardcoded in the class, but you
-could also inject it as the second constructor argument.
+W kodzie tym, do sprawdzenia, czy aktualna ścieżka URL zgodny jest z wyszukiwanym
+adresem, użyto przydatnej klasy :class:`Symfony\\Component\\Security\\Http\\HttpUtils`.
+W naszym przypadku, ścieżka URL (``/login/check``) został sztywno zakodowana w klasie,
+ale mozna go również wstrzyknąć jako drugi argument konstruktora.
 
-Next, just update your service configuration to inject the ``security.http_utils``
-service:
+Następnie, wystarczy skonfigurować swoja usługę, wstrzykując w niej usługę
+``security.http_utils``:
 
 .. configuration-block::
 
     .. code-block:: yaml
+       :linenos:
 
         # app/config/config.yml
         services:
@@ -667,6 +681,7 @@ service:
                 public:    false
 
     .. code-block:: xml
+       :linenos:
 
         <!-- app/config/config.xml -->
         <?xml version="1.0" ?>
@@ -687,6 +702,7 @@ service:
         </container>
 
     .. code-block:: php
+       :linenos:
 
         // app/config/config.php
         use Symfony\Component\DependencyInjection\Definition;
@@ -703,4 +719,4 @@ service:
         $definition->setPublic(false);
         $container->setDefinition('apikey_authenticator', $definition);
 
-That's it! Have fun!
+To wszystko. Przyjemnej zabawy!
