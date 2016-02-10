@@ -715,9 +715,9 @@ Proces autoryzacji ma dwa aspekty:
 .. tip::
 
     Oprócz ról (np. ``ROLE_ADMIN``), do ochrony zasobów można wykorzystywać
-    inne atrybuty (ciągi znakowe) (np. ``EDIT``) oraz używać wyborców lub systemu
-    ACL Symfony. Może to być przydatne, jeśli potrzeba sprawdzić, czy użytkownik A
-    może edytować ("EDIT") jakiś obiekt B (np. Product z id 5).
+    inne atrybuty (ciągi znakowe) (np. ``EDIT``) oraz używać usług wybierających
+    lub systemu ACL Symfony. Może to być przydatne, jeśli potrzeba sprawdzić,
+    czy użytkownik A może edytować ("EDIT") jakiś obiekt B (np. Product z id 5).
     Zobacz :ref:`security-secure-objects`.
 
 .. index::
@@ -1045,7 +1045,7 @@ istnieją trzy specjalne atrybuty, takie jak ten:
   ale silniejsze. Uzytkownicy, którzy są zalogowani z powodu "remember me cookie"
   beda mieć atrybut ``IS_AUTHENTICATED_REMEMBERED``, ale nie ``IS_AUTHENTICATED_FULLY``.
 
-* ``IS_AUTHENTICATED_ANONYMOUSLY``: Atrybut ten posiadaja *wszyscy* uzytkownicy
+* ``IS_AUTHENTICATED_ANONYMOUSLY``: Atrybut ten posiadają *wszyscy* uzytkownicy
   (nawet ci anonimowi) - jest on przydatny, gdy dostęp jest zapewniany z adresów
   *whitelisting* - pewne szczegóły są omówione w :doc:`/cookbook/security/access_control`.
 
@@ -1081,16 +1081,16 @@ Więcej szczegółów o wyrażeniach i bezpieczeństwie można znaleźć w rozdz
 Listy kontroli dostępu (ACL): zabezpieczanie poszczególnych obiektów bazy danych
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Wyobraź sobie, że projktujesz blog, gdzie użytkownicy mogą komentować wpisy.
+Wyobraź sobie, że projektujesz blog, gdzie użytkownicy mogą komentować wpisy.
 Chcesz też, aby użytkownik mógł edytować swoje komentarze, ale nie komentarze
 innych użytkowników. Ponadto, Ty jako administrator, też chcesz mieć możliwość
 edytowania *wszystkich* komentarzy.
 
 Można to zrobić na dwa sposoby:
 
-* :doc:`Używanie tzw. wyborców (ang. voters) </cookbook/security/voters>` umożliwia
-  napisanie własnej logiki biznesowej (np. użytkownik może edytować wpis, ponieważ
-  jest autorem) do ustalenia dostępu. Przypuszczalnie wybierzesz ten sposób,
+* :doc:`Używanie tzw. usług wybierajacych (ang. voters) </cookbook/security/voters>`
+  umożliwia napisanie własnej logiki biznesowej (np. użytkownik może edytować wpis,
+  ponieważ jest autorem) do ustalenia dostępu. Przypuszczalnie wybierzesz ten sposób,
   wystarczająco elastyczny, aby rozwązać powyższą sytuację.
 
 * :doc:`Listy ACL </cookbook/security/acl>` pozwalaja utworzyć strukturę danych
@@ -1474,8 +1474,8 @@ w zainstalowanych zależnościach:
     $ php bin/console security:check
 
 Dobrą praktyką jest regularne wykonywanie tego polecenia, tak aby móc aktualizować
- lub wymieniać zagrożone zależności tak szybko jak to jest możliwe. Wewnetrznie,
-polecenie to używa publicznej `bazy danych biuletynów zabeczeń`_ publikowanych
+ lub wymieniać zagrożone zależności tak szybko jak to jest możliwe. Wewnętrznie,
+polecenie to używa publicznej `bazy danych biuletynów bezpieczeństwa`_ publikowanych
 przez organizację FriendsOfPHP.
 
 .. tip::
@@ -1496,10 +1496,10 @@ przez organizację FriendsOfPHP.
 Wnioski końcowe
 ---------------
 
-Teraz znasz juz trochę więcej niż tylko podstawy bezpieczeństwa. Nie omówilismy
+Teraz znasz już trochę więcej niż tylko podstawy bezpieczeństwa. Nie omówilismy
 tu trudniejszych zagadnień związanych z bezpieczeństwem, które będzie się potrzebowało
 w przypadku indywidualnych wymagań, takich jak własna strategia uwierzytelniania
-(np. tokeny API), złożona ligika autoryzacji i wiele innych rzeczy (ponieważ
+(np. tokeny API), złożona logika autoryzacji i wiele innych rzeczy (ponieważ
 tematyka bezpieczeństwa jest skomplikowana!).
 
 Na szczęście, istnieje
@@ -1513,11 +1513,11 @@ Dalsza lektura
 * :doc:`Wymuszanie HTTP/HTTPS </cookbook/security/force_https>`
 * :doc:`Jak podszywać sie pod uzytkownika? </cookbook/security/impersonating_user>`
 * :doc:`/cookbook/security/voters`
-* :doc:`Listy kontroli dostęþu (ACL) </cookbook/security/acl>`
+* :doc:`Listy kontroli dostępu (ACL) </cookbook/security/acl>`
 * :doc:`/cookbook/security/remember_me`
 * :doc:`/cookbook/security/multiple_user_providers`
 
 .. _`narzędzie online`: https://www.dailycred.com/blog/12/bcrypt-calculator
 .. _`dokumentacji FrameworkExtraBundle`: https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/index.html
-.. _`bazy danych biuletynów zabeczeń`: https://github.com/FriendsOfPHP/security-advisories
+.. _`bazy danych biuletynów bezpieczeństwa`: https://github.com/FriendsOfPHP/security-advisories
 .. _`HWIOAuthBundle`: https://github.com/hwi/HWIOAuthBundle
