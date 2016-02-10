@@ -144,12 +144,12 @@ W tym konkretnym przykładzie, w ``authenticateToken()`` dzieją się następuja
 Ostatecznym celem jest wykorzystanie ``$apiKey`` do odnalezienia lub utworzenia
 obiektu ``User``. Sposób zrobienia tego (np. zapytania do bazy danych) i konkretna
 klasa obiektu ``User`` mogą być różne. Różnice te staną się bardziej widoczne przy
-omawianiu operatora użytkowników.
+omawianiu dostawcy użytkowników.
 
 Operator użytkowników
 ~~~~~~~~~~~~~~~~~~~~~
 
-Wartością ``$userProvider`` może być każdy operator użytkowników (patrz :doc:`/cookbook/security/custom_provider`).
+Wartością ``$userProvider`` może być każdy dostawca użytkowników (patrz :doc:`/cookbook/security/custom_provider`).
 W naszym przykładzie, ``$apiKey`` został użyty do odnalezienia nazwy użytkownika
 dla konkretnego użytkownika. Wykonywane jest to w metodzie ``getUsernameForApiKey()``
 (nie jest to metoda stosowana w rdzennym mechaniźmie dostawcy użytkowników
@@ -354,7 +354,7 @@ Najpierw, zarejestrujmy tą klasę jako usługę:
         $definition->setPublic(false);
         $container->setDefinition('apikey_authenticator', $definition);
 
-Po aktywowaniu usługi, nasz własny operator użytkowników (patrz :doc:`/cookbook/security/custom_provider`)
+Po aktywowaniu usługi, nasz własny dostawca użytkowników (patrz :doc:`/cookbook/security/custom_provider`)
 będzie teraz wykorzystywał, w sekcji ``firewalls`` konfiguracji bezpieczeństwa, odpowiednio klucze
 ``simple_preauth`` i ``provider``:
 
@@ -582,7 +582,7 @@ Przechowywanie danych uwierzytelniania w sesji działa w poniższy sposób:
    ``authenticateToken()``), który serializuje również obiekt ``User`` (ponieważ
    jest on ustawiany przez właściwość w obiekcie tokenu);
 #. Przy następnym żądaniu token jest deserializowany i zdeserializowany obiekt
-   ``User`` jest przekazywany do funkcji ``refreshUser()`` operatora użytkowników.
+   ``User`` jest przekazywany do funkcji ``refreshUser()`` dostawcy użytkowników.
 
 Drugi krok jest ważny: Symfony wywołuje ``refreshUser()`` i przekazuje obiekt
 użytkownika, który został zserializowany w sesji. Jeśli użytkownicy są przechowywani
