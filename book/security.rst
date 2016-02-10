@@ -717,9 +717,9 @@ Proces autoryzacji ma dwa aspekty:
 .. tip::
 
     Oprócz ról (np. ``ROLE_ADMIN``), do ochrony zasobów można wykorzystywać
-    inne atrybuty (ciągi znakowe) (np. ``EDIT``) oraz używać wyborców lub systemu
-    ACL Symfony. Może to być przydatne, jeśli potrzeba sprawdzić, czy użytkownik A
-    może edytować ("EDIT") jakiś obiekt B (np. Product z id 5).
+    inne atrybuty (ciągi znakowe) (np. ``EDIT``) oraz używać usług wybierających
+    (*ang. voters*) lub systemu ACL Symfony. Może to być przydatne, jeśli potrzeba
+    sprawdzić, czy użytkownik A może edytować ("EDIT") jakiś obiekt B (np. Product z id 5).
     Zobacz :ref:`security-secure-objects`.
 
 .. index::
@@ -1047,7 +1047,7 @@ istnieją trzy specjalne atrybuty, takie jak ten:
   ale silniejsze. Uzytkownicy, którzy są zalogowani z powodu "remember me cookie"
   beda mieć atrybut ``IS_AUTHENTICATED_REMEMBERED``, ale nie ``IS_AUTHENTICATED_FULLY``.
 
-* ``IS_AUTHENTICATED_ANONYMOUSLY``: Atrybut ten posiadaja *wszyscy* uzytkownicy
+* ``IS_AUTHENTICATED_ANONYMOUSLY``: Atrybut ten posiadają *wszyscy* użytkownicy
   (nawet ci anonimowi) - jest on przydatny, gdy dostęp jest zapewniany z adresów
   *whitelisting* - pewne szczegóły są omówione w :doc:`/cookbook/security/access_control`.
 
@@ -1083,16 +1083,16 @@ Więcej szczegółów o wyrażeniach i bezpieczeństwie można znaleźć w rozdz
 Listy kontroli dostępu (ACL): zabezpieczanie poszczególnych obiektów bazy danych
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Wyobraź sobie, że projktujesz blog, gdzie użytkownicy mogą komentować wpisy.
+Wyobraź sobie, że projektujesz blog, gdzie użytkownicy mogą komentować wpisy.
 Chcesz też, aby użytkownik mógł edytować swoje komentarze, ale nie komentarze
 innych użytkowników. Ponadto, Ty jako administrator, też chcesz mieć możliwość
 edytowania *wszystkich* komentarzy.
 
 Można to zrobić na dwa sposoby:
 
-* :doc:`Używanie tzw. wyborców (ang. voters) </cookbook/security/voters>` umożliwia
-  napisanie własnej logiki biznesowej (np. użytkownik może edytować wpis, ponieważ
-  jest autorem) do ustalenia dostępu. Przypuszczalnie wybierzesz ten sposób,
+* :doc:`Używanie tzw. usług wybierajacych (ang. voters) </cookbook/security/voters>`
+  umożliwia napisanie własnej logiki biznesowej (np. użytkownik może edytować wpis,
+  ponieważ jest autorem) do ustalenia dostępu. Przypuszczalnie wybierzesz ten sposób,
   wystarczająco elastyczny, aby rozwązać powyższą sytuację.
 
 * :doc:`Listy ACL </cookbook/security/acl>` pozwalaja utworzyć strukturę danych
@@ -1157,12 +1157,12 @@ Wskazówka jest taka: przed użyciem obiektu User zawsze sprawdzaj, czy użytkow
 jest zalogowany i używaj do tego metody ``isGranted``
 (lub :ref:`access_control <security-authorization-access-control>`)::
 
-    // Do sprawdzania, czy uzytkownik jest zalogowany, uzywaj tego
+    // Do sprawdzania, czy użytkownik jest zalogowany, uzywaj tego
     if (!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
         throw $this->createAccessDeniedException();
     }
 
-    // Nigdy nie używaj obiektu User do sprawdzenia zalogowania się uzytkownika
+    // Nigdy nie używaj obiektu User do sprawdzenia zalogowania się użytkownika
     if ($this->getUser()) {
 
     }
@@ -1310,7 +1310,7 @@ Po wylogowaniu, użytkownik zostanie przekierowany na ścieżkę określoną w p
 Dynamiczne kodowanie hasła
 --------------------------
 
-Jeśli, na przykład, przechowuje się uzytkowników w bazie danych, trzeba zakodować
+Jeśli, na przykład, przechowuje się użytkowników w bazie danych, trzeba zakodować
 hasła użytkowników przed ich wstawieniem do bazy danych. Bez względu na używany
 algorytm szyfrowania hasła dla obiektu użytkownika, zakodowane hasło może być
 zawsze określone w następujący sposób::
@@ -1332,7 +1332,7 @@ Obiekt ``$encoder`` ma też metodę ``isPasswordValid``, która pobiera obiekt
 
 .. caution::
 
-    Gdy zezwala się na wysyłanie przez uzytkowników haseł w zwykłym tekście
+    Gdy zezwala się na wysyłanie przez użytkowników haseł w zwykłym tekście
     (np. formularz rejestracyjny, formularz zmiany hasła), trzeba zastosować walidację
     gwarantujaca, że hasło ma 4096 znaków lub ,niej. Więcej szczegółów znajduje się
     w artykule :ref:`Jak zaimplementować prosty formularz rejestracyjny <cookbook-registration-password-max>`.
@@ -1476,7 +1476,7 @@ w zainstalowanych zależnościach:
     $ php app/console security:check
 
 Dobrą praktyką jest regularne wykonywanie tego polecenia, tak aby móc aktualizować
- lub wymieniać zagrożone zależności tak szybko jak to jest możliwe. Wewnetrznie,
+lub wymieniać zagrożone zależności tak szybko jak to jest możliwe. Wewnętrznie,
 polecenie to używa publicznej `bazy danych biuletynów zabeczeń`_ publikowanych
 przez organizację FriendsOfPHP.
 
@@ -1498,10 +1498,10 @@ przez organizację FriendsOfPHP.
 Wnioski końcowe
 ---------------
 
-Teraz znasz juz trochę więcej niż tylko podstawy bezpieczeństwa. Nie omówilismy
+Teraz znasz już trochę więcej niż tylko podstawy bezpieczeństwa. Nie omówilismy
 tu trudniejszych zagadnień związanych z bezpieczeństwem, które będzie się potrzebowało
 w przypadku indywidualnych wymagań, takich jak własna strategia uwierzytelniania
-(np. tokeny API), złożona ligika autoryzacji i wiele innych rzeczy (ponieważ
+(np. tokeny API), złożona logika autoryzacji i wiele innych rzeczy (ponieważ
 tematyka bezpieczeństwa jest skomplikowana!).
 
 Na szczęście, istnieje
@@ -1513,7 +1513,7 @@ Dalsza lektura
 --------------
 
 * :doc:`Wymuszanie HTTP/HTTPS </cookbook/security/force_https>`
-* :doc:`Jak podszywać sie pod uzytkownika? </cookbook/security/impersonating_user>`
+* :doc:`Jak podszywać sie pod użytkownika? </cookbook/security/impersonating_user>`
 * :doc:`/cookbook/security/voters`
 * :doc:`Listy kontroli dostęþu (ACL) </cookbook/security/acl>`
 * :doc:`/cookbook/security/remember_me`
