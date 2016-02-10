@@ -1053,7 +1053,7 @@ istnieją trzy specjalne atrybuty, takie jak ten:
   ale silniejsze. Uzytkownicy, którzy są zalogowani z powodu "remember me cookie"
   beda mieć atrybut ``IS_AUTHENTICATED_REMEMBERED``, ale nie ``IS_AUTHENTICATED_FULLY``.
 
-* ``IS_AUTHENTICATED_ANONYMOUSLY``: Atrybut ten posiadaja *wszyscy* użytkownicy
+* ``IS_AUTHENTICATED_ANONYMOUSLY``: Atrybut ten posiadają *wszyscy* użytkownicy
   (nawet ci anonimowi) - jest on przydatny, gdy dostęp jest zapewniany z adresów
   *whitelisting* - pewne szczegóły są omówione w :doc:`/cookbook/security/access_control`.
 
@@ -1089,7 +1089,7 @@ Więcej szczegółów o wyrażeniach i bezpieczeństwie można znaleźć w rozdz
 Listy kontroli dostępu (ACL): zabezpieczanie poszczególnych obiektów bazy danych
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Wyobraź sobie, że projktujesz blog, gdzie użytkownicy mogą komentować wpisy.
+Wyobraź sobie, że projektujesz blog, gdzie użytkownicy mogą komentować wpisy.
 Chcesz też, aby użytkownik mógł edytować swoje komentarze, ale nie komentarze
 innych użytkowników. Ponadto, Ty jako administrator, też chcesz mieć możliwość
 edytowania *wszystkich* komentarzy.
@@ -1489,7 +1489,7 @@ w zainstalowanych zależnościach:
     $ php app/console security:check
 
 Dobrą praktyką jest regularne wykonywanie tego polecenia, tak aby móc aktualizować
- lub wymieniać zagrożone zależności tak szybko jak to jest możliwe. Wewnetrznie,
+ lub wymieniać zagrożone zależności tak szybko jak to jest możliwe. Wewnętrznie,
 polecenie to używa publicznej `bazy danych biuletynów zabeczeń`_ publikowanych
 przez organizację FriendsOfPHP.
 
@@ -1502,10 +1502,10 @@ przez organizację FriendsOfPHP.
 Wnioski końcowe
 ---------------
 
-Teraz znasz juz trochę więcej niż tylko podstawy bezpieczeństwa. Nie omówilismy
+Teraz znasztrochę więcej niż tylko podstawy bezpieczeństwa. Nie omówilismy
 tu trudniejszych zagadnień związanych z bezpieczeństwem, które będzie się potrzebowało
 w przypadku indywidualnych wymagań, takich jak własna strategia uwierzytelniania
-(np. tokeny API), złożona ligika autoryzacji i wiele innych rzeczy (ponieważ
+(np. tokeny API), złożona logika autoryzacji i wiele innych rzeczy (ponieważ
 tematyka bezpieczeństwa jest skomplikowana!).
 
 Na szczęście, istnieje
@@ -1525,5 +1525,5 @@ Dalsza lektura
 
 .. _`narzędzie online`: https://www.dailycred.com/blog/12/bcrypt-calculator
 .. _`dokumentacji FrameworkExtraBundle`: https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/index.html
-.. _`bazy danych biuletynów zabeczeń`: https://github.com/FriendsOfPHP/security-advisories
+.. _`bazy danych biuletynów bezpieczeństwa`: https://github.com/FriendsOfPHP/security-advisories
 .. _`HWIOAuthBundle`: https://github.com/hwi/HWIOAuthBundle
