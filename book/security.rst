@@ -1490,7 +1490,7 @@ w zainstalowanych zależnościach:
 
 Dobrą praktyką jest regularne wykonywanie tego polecenia, tak aby móc aktualizować
  lub wymieniać zagrożone zależności tak szybko jak to jest możliwe. Wewnętrznie,
-polecenie to używa publicznej `bazy danych biuletynów zabeczeń`_ publikowanych
+polecenie to używa publicznej `bazy danych biuletynów bezpieczeństwa`_ publikowanych
 przez organizację FriendsOfPHP.
 
 .. tip::
