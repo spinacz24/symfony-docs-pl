@@ -1475,7 +1475,7 @@ w zainstalowanych zależnościach:
 
 Dobrą praktyką jest regularne wykonywanie tego polecenia, tak aby móc aktualizować
  lub wymieniać zagrożone zależności tak szybko jak to jest możliwe. Wewnętrznie,
-polecenie to używa publicznej `bazy danych biuletynów zabeczeń`_ publikowanych
+polecenie to używa publicznej `bazy danych biuletynów bezpieczeństwa`_ publikowanych
 przez organizację FriendsOfPHP.
 
 .. tip::
@@ -1519,5 +1519,5 @@ Dalsza lektura
 
 .. _`narzędzie online`: https://www.dailycred.com/blog/12/bcrypt-calculator
 .. _`dokumentacji FrameworkExtraBundle`: https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/index.html
-.. _`bazy danych biuletynów zabeczeń`: https://github.com/FriendsOfPHP/security-advisories
+.. _`bazy danych biuletynów bezpieczeństwa`: https://github.com/FriendsOfPHP/security-advisories
 .. _`HWIOAuthBundle`: https://github.com/hwi/HWIOAuthBundle
