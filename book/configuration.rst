@@ -120,10 +120,10 @@ się znaczenia poszczególnych opcji konfiguracyjnych dla każdej funkcjonalnoś
     * *PHP*: Bardzo zaawansowany, ale mniej czytelny niż standardowe formaty
       konfiguracyjne.
 
-Dmomyślny zrzut konfiguracji
+Zrzut domyślnej konfiguracji
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Można zrzucić na konsoli domyślną konfiguracje dla jakiegoś pakietu w formacie
+Można zrzucić na konsoli domyślną konfigurację dla jakiegoś pakietu w formacie
 YAML używając polecenia ``config:dump-reference``. Oto przykład zrzutu domyślnej
 konfiguracji dla FrameworkBundle:
 
