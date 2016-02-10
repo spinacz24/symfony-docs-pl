@@ -155,7 +155,7 @@ Odwzorowanie URL na kontroler
 -----------------------------
 
 Nowy kontroler zwraca prostą stronę HTML. Aby móc zobaczyć tą stronę w przeglądarce,
-trzeba utworzyć trasę (*ang. route*) odwzorowującą wzorzec ścieżki URL na kontroler:
+trzeba utworzyć trasę (*ang. route*) odwzorowującą wzorzec ścieżki URL na akcję kontrolera:
 
 .. configuration-block::
 
@@ -412,9 +412,9 @@ podpowiadając jego typ jako **Request**::
     :ref:`"Dostęp do informacji z żądania" <component-http-foundation-request>`.
 
 .. index::
-   single: kontroler; podstawowa klasa kontrolera
+   single: kontroler; bazowa klasa kontrolera
 
-Podstawowa klasa kontrolera
+Bazowa klasa kontrolera
 ---------------------------
 
 Symfony udostępnia klasę ``Controller`` będącą klasą bazową dla kontrolerów
