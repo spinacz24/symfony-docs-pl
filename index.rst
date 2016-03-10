@@ -5,13 +5,8 @@ Dokumentacja Symfony
 
 Jest to polskie tłumczenie oficjalnej dokumentacji frameworka PHP Symfony,
 publikowanej na stronach http://symfony.com/. Prace nad tym tłumaczeniem
-<<<<<<< HEAD
-są jeszcze w toku, ale podstawowe części zostały już przetłumaczone do wersji 2.8,
-i 3.0. Zapraszamy do współpracy - odwiedź
-=========================================
 są jeszcze w toku, ale podstawowe części zostały już przetłumaczone do wersji 2.7,
 2.8 i 3.0. Zapraszamy do współpracy - odwiedź
->>>>>>> refs/heads/#103
 nas na `GitHub <https://github.com/symfony-docs-pl/symfony-docs-pl/>`_.
  
 
