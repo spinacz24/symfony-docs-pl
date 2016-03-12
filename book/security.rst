@@ -28,10 +28,10 @@ takich jak :ref:`wylogowywanie <book-security-logging-out>` czy
 :ref:`kodowanie haseł użytkowników <security-encoding-password>`.
 
 .. index::
-   zapory, uwierzylenianie
+   zapory, uwierzytelnianie
    single: bezpieczeństwo; uwierzytelnianie
    single: bezpieczeństwo; zapory
-   single: uwierzylenianie; zapory
+   single: uwierzytelnianie; zapory
 
 .. _book-security-firewalls:
 
