@@ -1,8 +1,8 @@
 .. index::
    single: bezpieczeństwo; ścieżka przekierowania
 
-Jak zmienić domyślne zachowanie docelowej ścieżki
-=================================================
+Jak zmienić domyślne zachowanie metody setTargetPath
+====================================================
 
 Domyślnie, komponent Security zachowuje informacje o ścieżce URI z ostaniego żądania
 w zmiennej sesji o nazwie ``_security.main.target_path`` (gdzie ``main`` jest
