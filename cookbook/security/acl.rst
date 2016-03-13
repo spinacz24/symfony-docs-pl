@@ -9,7 +9,7 @@ Jak używać list kontroli dostępu (ACL)
 
 W skomplikowanych aplikacjach, pojawia się często problem, że decyzje o dostępie
 nie mogą opierać się tylko na osobie (tokenie) żądającej dostępu, ale również
-obejmować obiekt domenowy, do którego jest zgłaszany dostęp. W tym miejscu pojawia
+obejmować obiekt domeny, do którego jest zgłaszany dostęp. W tym miejscu pojawia
 się system ACL.
 
 .. sidebar:: Alternatywy dla list ACL
@@ -29,7 +29,7 @@ Proszę sobie wyobrazić, że projektujemy system blogu, gdzie użytkownicy mog�
 komentować wpisy. Chcemy też, aby użytkownik mógł edytować swoje komentarze,
 ale nie komentarze innych użytkowników. Poza tym, chcemy, aby administrator
 mógł edytować wszystkie komentarze. W tym scenariuszu, ``Comment`` będzie obiektem
-domenowym, do którego chcemy ograniczyć dostęp. Można wypróbować kilka sposobów,
+domeny, do którego chcemy ograniczyć dostęp. Można wypróbować kilka sposobów,
 aby osiągnąć ten cel w Symfony. Są dwa podstawowe podejścia:
 
 - *Wymuszanie bezpieczeństwa w metodach biznesowych*: Zasadniczo, oznacza to
@@ -43,7 +43,7 @@ aby osiągnąć ten cel w Symfony. Są dwa podstawowe podejścia:
 Oba podejscia są całkowicie poprawne. Jednak, autoryzacja oparta na kodzie logiki
 biznesowej nie nadaje się do wielokrotnego stosowania i także utrudnia wykonanie
 testów jednostkowych. Poza tym, można napotkać problemy z wydajnością, jeśli wielu
-użytkowników będzie miało dostęp do pojedynczego obiektu domenowego.
+użytkowników będzie miało dostęp do pojedynczego obiektu domeny.
 
 Na szczęście istnieje lepszy sposób, który omówimy teraz.
 
@@ -99,7 +99,7 @@ Po pierwsze, trzeba skonfigurować połączenie dla systemu ACL, który ma być 
     System ACL wymaga połączenia z Doctrine DBAL (stosowane domyślnie) albo
     z Doctrine MongoDB (stsosowane w `MongoDBAclBundle`_). Jednak nie oznacza to,
     że koniecznie trzeba stosować Doctrine ORM lub ODM dla mapowania obiektów
-    domenowych. Można stosować jakiegokolwiek mapowania dla swoich obiektów:
+    domeny. Można stosować jakiegokolwiek mapowania dla swoich obiektów:
     Doctrine ORM, MongoDB ODM, Propel, surowego SQL itd.
 
 Po skonfigurowaniu połączenia można zaimportować strukturę bazy danych.
@@ -175,9 +175,9 @@ W tym fragmencie kodu istnieje kilka ważnych decyzji implementacyjnych.
 Na razie zajmiemy się tylko dwoma.
 
 Po pierwsze, można zauważyć, że metoda ``->createAcl()`` nie akceptuje bezpośrednio
-obiektów domenowych, ale tylko implementuje ``ObjectIdentityInterface``.
+obiektów domeny, ale tylko implementuje ``ObjectIdentityInterface``.
 Ten dodatkowy krok pośredni pozwala na pracę z listami ACL, nawet gdy faktycznie
-nie ma żadnego obiektu domenowego. Jest to niezwykle pomocne, gdy chce się sprawdzić
+nie ma żadnego obiektu domeny. Jest to niezwykle pomocne, gdy chce się sprawdzić
 uprawnienia dla większej ilości obiektów bez faktycznego przygotowania tych obiektów.
 
 Drugą interesującą częścią jest wywołanie ``->insertObjectAce()``. W tym przykładzie,
@@ -234,7 +234,7 @@ Skumulowane uprawnienia
 
 W pierwszym przykładzie, przyznaliźmy użytkownikowi podstawowe uprawnienie ``OWNER``.
 Jednocześnie pozwoliliśmy, aby użytkownik mógł wykonywać każdą operację, taką jak
-``view``, ``edit`` itd., na obiekcie domenowym. Istnieją przypadki w których
+``view``, ``edit`` itd., na obiekcie domeny. Istnieją przypadki w których
 potrzeba udzielić tych uprawnień w sposób jawny.
 
 ``MaskBuilder`` może zostać użyty do tworzenia masek bitowych przez łączenie
