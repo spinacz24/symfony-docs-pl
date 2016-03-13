@@ -9,7 +9,7 @@ Jak używać list kontroli dostępu (ACL)
 
 W skomplikowanych aplikacjach, pojawia się często problem, że decyzje o dostępie
 nie mogą opierać się tylko na osobie (tokenie) żądającej dostępu, ale również
-obejmować obiekt domeny, do którego jest zgłaszany dostęp. W tym miejscu pojawia
+powinny obejmować obiekt domeny, do którego jest zgłaszany dostęp. W tym miejscu pojawia
 się system ACL.
 
 .. sidebar:: Alternatywy dla list ACL
