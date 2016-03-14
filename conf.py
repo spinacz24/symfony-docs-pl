@@ -39,7 +39,7 @@ extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.todo',
                'sensio.sphinx.bestpractice', 'symfonycom.sphinx']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_theme/_templates']
+templates_path = ['_theme/_templ']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
