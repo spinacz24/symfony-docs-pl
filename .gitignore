@@ -3,4 +3,5 @@
 .settings
 .git
 _build
+_theme/_templates
 *.pyc
