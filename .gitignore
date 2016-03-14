@@ -4,4 +4,5 @@
 .git
 _build
 _theme/_templates
+_theme/_templ
 *.pyc
