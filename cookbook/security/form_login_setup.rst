@@ -210,11 +210,6 @@ formularz logowania::
         );
     }
 
-.. versionadded:: 2.6
-    Usługa ``security.authentication_utils`` i klasa
-    :class:`Symfony\\Component\\Security\\Http\\Authentication\\AuthenticationUtils`
-    zostały wprowadzone w Symfony 2.6.
-
 W tej akcji nie ma żadnej obsługi błedów. Jak zobaczysz za momoent, podczas zgłaszania
 formularza przez użytkownika, system bezpieczeństwa automatycznie obsługuje
 zgłaszanie formularza. Jeśli użytkownik złożył nieprawidłową nazwę uzytkownika lub
@@ -263,7 +258,9 @@ Na koniec utwórzmy szablon:
             <div><?php echo $error->getMessage() ?></div>
         <?php endif ?>
 
-        <form action="<?php echo $view['router']->generate('login_check') ?>" method="post">
+        <!-- W Symfony 2.8 wprowadzono metodę path(). Wcześnie trzeba było
+             używać metode generate(). -->
+        <form action="<?php echo $view['router']->path('login_check') ?>" method="post">
             <label for="username">Username:</label>
             <input type="text" id="username" name="_username" value="<?php echo $last_username ?>" />
 
