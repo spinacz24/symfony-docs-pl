@@ -150,7 +150,7 @@ Uruchamiając polecenie:
 
 .. code-block:: bash
 
-    $ php app/console doctrine:generate:entities AppBundle/Entity/User
+    $ php bin/console doctrine:generate:entities AppBundle/Entity/User
 
 można :ref:`wygenerować <book-doctrine-generating-getters-and-setters>`
 wszystkie metody akcesorów getter i setter.
@@ -159,7 +159,7 @@ Następnie trzeba się upewnić, że :ref:`stworzona została tabela bazy danych
 
 .. code-block:: bash
 
-    $ php app/console doctrine:schema:update --force
+    $ php bin/console doctrine:schema:update --force
 
 Co to jest UserInterface?
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -210,7 +210,7 @@ do nazwy użytkownika i sprawdzać hasło (o haśle więcej za moment):
     .. code-block:: yaml
        :linenos:
 
-        # app/config/security.yml
+        # bin/config/security.yml
         security:
             encoders:
                 AppBundle\Entity\User:
@@ -237,7 +237,7 @@ do nazwy użytkownika i sprawdzać hasło (o haśle więcej za moment):
     .. code-block:: xml
        :linenos:
 
-        <!-- app/config/security.xml -->
+        <!-- bin/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
         <srv:container xmlns="http://symfony.com/schema/dic/security"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -267,7 +267,7 @@ do nazwy użytkownika i sprawdzać hasło (o haśle więcej za moment):
     .. code-block:: php
        :linenos:
 
-        // app/config/security.php
+        // bin/config/security.php
         $container->loadFromExtension('security', array(
             'encoders' => array(
                 'AppBundle\Entity\User' => array(
@@ -304,7 +304,6 @@ Nazwa ``our_db_provider`` nie jest istotna: jest ona potrzebna tylko do dopasowa
 wartości klucza ``provider`` w naszej zaporze. Jeśli nie ustawi się w zaporze
 klucza ``provider``, zostanie użyty automatycznie pierwszy "dostawca użytkowników".
 
-.. include:: /cookbook/security/_ircmaxwell_password-compat.rst.inc
 
 Utworzenie pierwszego użytkownika
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -441,20 +440,18 @@ natywny dostawca encji umożliwia obsługę zapytań z wykorzystaniem tylko jedn
 właściwości obiektu użytkownika.
 
 W celu zrobienie tego wykonamy ``UserRepository`` implementując specjalną klasę
-:class:`Symfony\\Component\\Security\\Core\\User\\UserProviderInterface`.
-Interfejs ten wymaga trzech metod : ``loadUserByUsername($username)``,
-``refreshUser(UserInterface $user)`` i ``supportsClass($class)``::
+:class:`Symfony\\Bridge\\Doctrine\\Security\\User\\UserLoaderInterface`.
+Interfejs ten wymaga tylko jednej metosy ``loadUserByUsername($username)``::
 
     // src/AppBundle/Entity/UserRepository.php
     namespace AppBundle\Entity;
 
+    use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
     use Symfony\Component\Security\Core\User\UserInterface;
-    use Symfony\Component\Security\Core\User\UserProviderInterface;
     use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-    use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
     use Doctrine\ORM\EntityRepository;
 
-    class UserRepository extends EntityRepository implements UserProviderInterface
+    class UserRepository extends EntityRepository implements UserLoaderInterface
     {
         public function loadUserByUsername($username)
         {
@@ -475,28 +472,12 @@ Interfejs ten wymaga trzech metod : ``loadUserByUsername($username)``,
 
             return $user;
         }
-
-        public function refreshUser(UserInterface $user)
-        {
-            $class = get_class($user);
-            if (!$this->supportsClass($class)) {
-                throw new UnsupportedUserException(
-                    sprintf(
-                        'Instances of "%s" are not supported.',
-                        $class
-                    )
-                );
-            }
-
-            return $this->find($user->getId());
-        }
-
-        public function supportsClass($class)
-        {
-            return $this->getEntityName() === $class
-                || is_subclass_of($class, $this->getEntityName());
-        }
     }
+
+.. versionadded:: 2.8
+    W Symfony 2.8 został wprowadzony interfejs
+    :class:`Symfony\\Bridge\\Doctrine\\Security\\User\\UserLoaderInterface`.
+    Wcześniej trzeba było implementować ``Symfony\Component\Security\Core\User\UserProviderInterface``.
 
 Więcej szczegółów dotyczących tych metod znajdziesz analizując interfejs
 :class:`Symfony\\Component\\Security\\Core\\User\\UserProviderInterface`.
@@ -514,7 +495,7 @@ w ``security.yml``:
     .. code-block:: yaml
        :linenos:
 
-        # app/config/security.yml
+        # bin/config/security.yml
         security:
             # ...
 
@@ -526,7 +507,7 @@ w ``security.yml``:
     .. code-block:: xml
        :linenos:
 
-        <!-- app/config/security.xml -->
+        <!-- bin/config/security.xml -->
         <?xml version="1.0" encoding="UTF-8"?>
         <srv:container xmlns="http://symfony.com/schema/dic/security"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -546,7 +527,7 @@ w ``security.yml``:
     .. code-block:: php
        :linenos:
 
-        // app/config/security.php
+        // bin/config/security.php
         $container->loadFromExtension('security', array(
             // ...
 

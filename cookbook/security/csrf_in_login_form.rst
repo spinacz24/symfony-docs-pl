@@ -36,7 +36,7 @@ był dostawca domyślny, dostępny w komponencie Security:
                     # ...
                     form_login:
                         # ...
-                        csrf_provider: security.csrf.token_manager
+                        csrf_token_generator: security.csrf.token_manager
 
     .. code-block:: xml
        :linenos:
@@ -54,7 +54,7 @@ był dostawca domyślny, dostępny w komponencie Security:
 
                 <firewall name="secured_area">
                     <!-- ... -->
-                    <form-login csrf-provider="security.csrf.token_manager" />
+                    <form-login csrf-token-generator="security.csrf.token_manager" />
                 </firewall>
             </config>
         </srv:container>
@@ -71,11 +71,17 @@ był dostawca domyślny, dostępny w komponencie Security:
                     // ...
                     'form_login' => array(
                         // ...
-                        'csrf_provider' => 'security.csrf.token_manager',
+                        'csrf_token_generator' => 'security.csrf.token_manager',
                     ),
                 ),
             ),
         ));
+
+. versionadded:: 2.4
+    Opcja ``csrf_token_generator`` została wprowadzona w Symfony 2.4. Wcześniej,
+    trzeba było stosować opcję ``csrf_provider``.
+
+
 
 Komponent Security można skonfigurować bardziej, ale dla zabezpieczenia formularza
 logowania przed atakami CSRF, to całkowicie wystarczy.
@@ -92,10 +98,10 @@ formularza logowania:
 
 .. configuration-block::
 
-    .. code-block:: html+jinja
+    .. code-block:: html+twig
        :linenos:
 
-        {# src/Acme/SecurityBundle/Resources/views/Security/login.html.twig #}
+        {# src/AppBundle/Resources/views/Security/login.html.twig #}
 
         {# ... #}
         <form action="{{ path('login_check') }}" method="post">
@@ -111,10 +117,12 @@ formularza logowania:
     .. code-block:: html+php
        :linenos:
 
-        <!-- src/Acme/SecurityBundle/Resources/views/Security/login.html.php -->
+        <!-- src/AppBundle/Resources/views/Security/login.html.php -->
 
         <!-- ... -->
-        <form action="<?php echo $view['router']->generate('login_check') ?>" method="post">
+        <!-- The path() method was introduced in Symfony 2.8. Prior to 2.8, you
+             had to use generate(). -->
+        <form action="<?php echo $view['router']->path('login_check') ?>" method="post">
             <!-- ... the login fields -->
 
             <input type="hidden" name="_csrf_token"
@@ -130,7 +138,7 @@ Teraz, formularz logowania jest już zabezpieczony przed atakami CSRF.
 
     Można zmienić nazwę pola przechowującego token przez zmianę ustawienia
     ``csrf_parameter`` oraz zmianę identyfikatora tokenu, ustawiając w konfiguracji
-    opcje ``intention``:
+    opcje ``csrf_token_id``:
 
     .. configuration-block::
 
@@ -147,7 +155,7 @@ Teraz, formularz logowania jest już zabezpieczony przed atakami CSRF.
                         form_login:
                             # ...
                             csrf_parameter: _csrf_security_token
-                            intention: a_private_string
+                            csrf_token_id: a_private_string
 
         .. code-block:: xml
            :linenos:
@@ -166,7 +174,7 @@ Teraz, formularz logowania jest już zabezpieczony przed atakami CSRF.
                     <firewall name="secured_area">
                         <!-- ... -->
                         <form-login csrf-parameter="_csrf_security_token"
-                            intention="a_private_string"
+                            csrf-token-id="a_private_string"
                         />
                     </firewall>
                 </config>
@@ -185,11 +193,17 @@ Teraz, formularz logowania jest już zabezpieczony przed atakami CSRF.
                         'form_login' => array(
                             // ...
                             'csrf_parameter' => '_csrf_security_token',
-                            'intention'      => 'a_private_string',
+                            'csrf_token_id'     => 'a_private_string'
                         ),
                     ),
                 ),
             ));
+
+.. versionadded:: 2.4
+    Opcja ``csrf_token_id`` została wprowadzona w Symfony 2.4. Wcześniej, trzeba
+    było stosować opcje ``intention``.
+
+
 
 .. _`Cross-site request forgery`: https://pl.wikipedia.org/wiki/Cross-site_request_forgery
 .. _`Forging Login Requests`: https://en.wikipedia.org/wiki/Cross-site_request_forgery#Forging_login_requests

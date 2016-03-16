@@ -47,6 +47,14 @@ Identyfikacje bezpieczeństwa
 Jest to analogiczne do identyfikacji obiektu, ale reprezentuje użytkownika lub
 rolę w aplikacji. Każda rola lub użytkownik mają własną identyfikację bezpieczeństwa.
 
+.. caution::
+
+    W przypadku użytkowników, identyfikacja bezpieczeństwa jest oparta na nazwie
+    użytkownika. Oznacza to, że jeżeli z jakichś powodów zostanie zmieniona nazwa
+    uzytkownika, trzeba również zaktualizowac identyfikację bezpieczeństwa.
+    Do tego celu jest przeznaczona metoda
+    :method:`MutableAclProvider::updateUserSecurityIdentity() <Symfony\\Component\\Security\\Acl\\Dbal\\MutableAclProvider::updateUserSecurityIdentity>`.
+   
 Struktura tabel bazy danych
 ---------------------------
 
