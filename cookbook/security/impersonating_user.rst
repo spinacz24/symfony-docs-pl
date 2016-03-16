@@ -95,11 +95,11 @@ wyświetlania odnośnika do opuszczenia podszywania się:
        :linenos:
 
         <?php if ($view['security']->isGranted('ROLE_PREVIOUS_ADMIN')): ?>
-            <a
-                href="<?php echo $view['router']->generate('homepage', array(
-                    '_switch_user' => '_exit',
-                ) ?>"
-            >
+            <!-- W Symfony 2.8 została wprowadzona metoda path(). Wcześniej trzeba
+                 było stosować metodę generate(). -->
+            <a href="<?php echo $view['router']->path('homepage', array(
+                '_switch_user' => '_exit',
+            ) ?>">
                 Exit impersonation
             </a>
         <?php endif ?>

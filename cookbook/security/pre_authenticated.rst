@@ -103,9 +103,6 @@ zapory x509.
 Uwierzytelnianie oparte na REMOTE_USER
 --------------------------------------
 
-.. versionadded:: 2.6
-    Zaporę wczesnego uwierzytelniania REMOTE_USER wprowadzono w Symfony 2.6.
-
 Wiele modułów uwierzytelniania, takich jak ``auth_kerb`` w Apache, dostarcza
 nazwę użytkownika przy użyciu zmiennej środowiskowej ``REMOTE_USER``.
 Zmienna ta może być zaufanadla aplikacji, ponieważ uwierzytelnianie następuje

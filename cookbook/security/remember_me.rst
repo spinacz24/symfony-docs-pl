@@ -25,7 +25,7 @@ celu sekcję ``remember_me`` zapory:
                 default:
                     # ...
                     remember_me:
-                        key:      "%secret%"
+                        secret:      "%secret%"
                         lifetime: 604800 # 1 week in seconds
                         path:     /
                         # by default, the feature is enabled by checking a
@@ -52,7 +52,7 @@ celu sekcję ``remember_me`` zapory:
 
                     <!-- 604800 is 1 week in seconds -->
                     <remember-me
-                        key="%secret%"
+                        secret="%secret%"
                         lifetime="604800"
                         path="/" />
                     <!-- by default, the feature is enabled by checking a checkbox
@@ -73,7 +73,7 @@ celu sekcję ``remember_me`` zapory:
                 'default' => array(
                     // ...
                     'remember_me' => array(
-                        'key'      => '%secret%',
+                        'secret'      => '%secret%',
                         'lifetime' => 604800, // 1 week in seconds
                         'path'     => '/',
                         // by default, the feature is enabled by checking a
@@ -87,7 +87,11 @@ celu sekcję ``remember_me`` zapory:
 
 Sekcja ``remember_me`` zapory posiada następujące opcje:
 
-``key`` (**wymagane**)
+``secret`` (**required**)
+    .. versionadded:: 2.8
+        Opcja ``secret`` została wprowadzona w Symfony 2.8. Wcześniej opcja ta
+        nazywała się ``key``.
+
     Wartość stosowana do szyfrowania treści ciasteczka. Jest tu powszechnie stosowana
     wartość ``secret``, zdefiniowana w pliku ``app/config/parameters.yml`` file.
 
@@ -178,7 +182,9 @@ będzie automatycznie logowany. Tak więc, formularz logowania może wyglądać 
             <div><?php echo $error->getMessage() ?></div>
         <?php endif ?>
 
-        <form action="<?php echo $view['router']->generate('login_check') ?>" method="post">
+        <!-- W Symfony 2.8 została wprowadzona metoda path(). Wcześniej stosowało
+             sie metodę generate(). -->
+        <form action="<?php echo $view['router']->path('login_check') ?>" method="post">
             <label for="username">Username:</label>
             <input type="text" id="username"
                    name="_username" value="<?php echo $last_username ?>" />

@@ -9,6 +9,12 @@
 Jak uwierzytelniać użytkowników kluczami API
 ============================================
 
+.. tip::
+
+    Proszę zapoznać sie z artykułem :doc:`/cookbook/security/guard-authentication`
+    w celu rozważenia zastosowania prostszego i bardziej elastycznego sposobu
+    realizacji własnych rozwiazań uwierzytelniania, niż ten.
+
 Obecnie, jest dość niezwykłe uwierzytelnianie użytkownika poprzez klucz API
 (na przykład, podczas tworzenia serwisu internetowego). Klucza API jest dostarczany
 przy każdym żądaniu i jest przekazywany jako parametr łańcucha zapytań w adresie
@@ -17,9 +23,14 @@ URL lub w nagłówku HTTP.
 Wystawca uwierzytelniającego klucza API
 ---------------------------------------
 
+.. versionadded:: 2.8
+   W Symfony 2.8, interfejs ``SimplePreAuthenticatorInterface`` został przeniesiony
+   do przestrzeni nazewniczej ``Symfony\Component\Security\Http\Authentication``.
+   Wcześniej uzywana była przestrzeń ``Symfony\Component\Security\Core\Authentication``.
+
 Uwierzytelnianie użytkownika w oparciu o informacje z żądania powinno być realizowane
 poprzez mechanizm wstępnego uwierzytelniania. Interfejs
-:class:`Symfony\\Component\\Security\\Core\\Authentication\\SimplePreAuthenticatorInterface`
+:class:`Symfony\\Component\\Security\\Http\\Authentication\\SimplePreAuthenticatorInterface`
 pozwala w bardzo łatwy sposób zaimplementować taki schemat.
 
 Twoja sytuacja może odbiegać od tego, co przyjęliśmy tutaj - w niżej prezentowanym
@@ -30,13 +41,14 @@ obiekt User::
     // src/AppBundle/Security/ApiKeyAuthenticator.php
     namespace AppBundle\Security;
 
-    use Symfony\Component\Security\Core\Authentication\SimplePreAuthenticatorInterface;
+    use Symfony\Component\HttpFoundation\Request;
+    use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
     use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
     use Symfony\Component\Security\Core\Exception\AuthenticationException;
-    use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
-    use Symfony\Component\HttpFoundation\Request;
-    use Symfony\Component\Security\Core\User\UserProviderInterface;
+    use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
     use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+    use Symfony\Component\Security\Core\User\UserProviderInterface;
+    use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface;
 
     class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
     {
@@ -77,7 +89,10 @@ obiekt User::
             $username = $userProvider->getUsernameForApiKey($apiKey);
 
             if (!$username) {
-                throw new AuthenticationException(
+                // UWAGA: ten komunikat bedzie zwracany do klienta
+                // (więc nie umieszczaj tutaj żadnych nie zaufanych komunikatów
+                // i łańcuchów tekstowych błędów)
+                throw new CustomUserMessageAuthenticationException(
                     sprintf('API Key "%s" does not exist.', $apiKey)
                 );
             }
@@ -97,6 +112,12 @@ obiekt User::
             return $token instanceof PreAuthenticatedToken && $token->getProviderKey() === $providerKey;
         }
     }
+
+.. versionadded:: 2.8
+    Klasa ``CustomUserMessageAuthenticationException`` jest nowościa w Symfony 2.8
+    i pomaga zwracać własne komunikaty uwierzytelniania. W Symfony 2.7 i wersjach
+    wcześniejszych, zrzucany był wyjątek ``AuthenticationException`` lub jakaś
+    podklasa (mozna to dalej robić w wersji 2.8).
 
 Po :ref:`skonfigurowaniu <cookbook-security-api-key-config>` wszystkiego, będzie
 są w stanie wykonywać uwierzutelnianie, przez dodawanie parametru ``apikey`` do
@@ -284,9 +305,9 @@ w swoim mechanizmie uwierzytelniania. Interfejs ten dostarcza metodę
     // src/AppBundle/Security/ApiKeyAuthenticator.php
     namespace AppBundle\Security;
 
-    use Symfony\Component\Security\Core\Authentication\SimplePreAuthenticatorInterface;
     use Symfony\Component\Security\Core\Exception\AuthenticationException;
     use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+    use Symfony\Component\Security\Http\Authentication\SimplePreAuthenticatorInterface;
     use Symfony\Component\HttpFoundation\Response;
     use Symfony\Component\HttpFoundation\Request;
 
@@ -296,7 +317,11 @@ w swoim mechanizmie uwierzytelniania. Interfejs ten dostarcza metodę
 
         public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
         {
-            return new Response("Authentication Failed.", 403);
+            return new Response(
+                // this contains information about *why* authentication failed
+                // use it, or return your own message
+                strtr($exception->getMessageKey(), $exception->getMessageData())
+            , 403)
         }
     }
 
@@ -528,8 +553,8 @@ aby sprawdzić, czy przechowywany token ma prawidłowy obiekt User, który możn
 użyć::
 
     // src/AppBundle/Security/ApiKeyAuthenticator.php
-    // ...
 
+    // ...
     class ApiKeyAuthenticator implements SimplePreAuthenticatorInterface
     {
         // ...
@@ -559,7 +584,8 @@ użyć::
             }
 
             if (!$username) {
-                throw new AuthenticationException(
+                // this message will be returned to the client
+                throw new CustomUserMessageAuthenticationException(
                     sprintf('API Key "%s" does not exist.', $apiKey)
                 );
             }
