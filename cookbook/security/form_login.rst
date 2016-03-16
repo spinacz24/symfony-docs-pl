@@ -269,7 +269,9 @@ kod:
             <div><?php echo $error->getMessage() ?></div>
         <?php endif ?>
 
-        <form action="<?php echo $view['router']->generate('login_check') ?>" method="post">
+        <!-- W Symfony 2.8 została wprowadzona metoda path(). Wczesniej, trzeba
+             było uzywać metode generate(). -->
+        <form action="<?php echo $view['router']->path('login_check') ?>" method="post">
             <label for="username">Username:</label>
             <input type="text" id="username" name="_username" value="<?php echo $last_username ?>" />
 

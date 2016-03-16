@@ -1,3 +1,6 @@
+.. highlight:: php
+   :linenothreshold: 2
+
 .. index::
    single: bezpieczeństwo; wyborcy autoryzacji
    single: autoryzacja; wyborcy
@@ -17,7 +20,7 @@ uwierzytelniania" (*ang. voters*), które są podobne do prostych wyrażeń waru
 
 .. tip::
 
-    Proszę zapożnać się z rozdziałem
+    Proszę zapoznać się z rozdziałem
     :doc:`Autoryzacja </components/security/authorization>`,
     który pomaga w zrozumieniu wyborców autoryzacji.
 
@@ -44,124 +47,185 @@ Intefejs Voter
 
 We własnej klasie wyborcy autoryzacji trzeba zaimplementowac interfejs
 :class:`Symfony\\Component\\Security\\Core\\Authorization\\Voter\\VoterInterface`
-lub rozszerzyć klasę :class:`Symfony\\Component\\Security\\Core\\Authorization\\Voter\\AbstractVoter`,
+lub rozszerzyć klasę :class:`Symfony\\Component\\Security\\Core\\Authorization\\Voter\\Voter`,
 co znacznie ułatwia tworzenie klasy wyborcy.
 
 .. code-block:: php
    :linenos:
-
-    abstract class AbstractVoter implements VoterInterface
+   
+   abstract class Voter implements VoterInterface
     {
-        abstract protected function getSupportedClasses();
-        abstract protected function getSupportedAttributes();
-        abstract protected function isGranted($attribute, $object, $user = null);
+        abstract protected function supports($attribute, $subject);
+        abstract protected function voteOnAttribute($attribute, $subject, TokenInterface $token);
     }
 
-W naszym przykładzie, wyborcy będą sprawdzać, czy użytkownik ma dostęp do
-określonego obiektu, zgodnie z własnymi warunkami (np. muszą być one właścicielem
-obiektu). Jeśli warunek nie będzie spełniony, klasa zwracać będzie
-``VoterInterface::ACCESS_DENIED`` a w przeciwnym przypadku ``VoterInterface::ACCESS_GRANTED``.
-W przypadku, gdy odpowiedzialność za decyzję nie należy do wyborcy, zwróci on
-``VoterInterface::ACCESS_ABSTAIN``.
+.. versionadded:: 2.8
+    Klasa pomocnicza ``Voter`` została wprowadzona w Symfony 2.8. we wcześniejszych
+    wersjach stosowana była klasa ``AbstractVoter`` o podobnym zachowaniu.    
+
+.. _how-to-use-the-voter-in-a-controller:
+
+Konfiguracja: Sprawdzanie dostępu do kontrolera
+-----------------------------------------------
+
+Załóżmy, że mamy obiekt ``Post`` i potrzebujemy zadecydować, czy bieżący użytkownik
+może edytować lub przeglądać obiekt. W kontrolerze można sprawdzić dostęp następujaco::
+
+    // src/AppBundle/Controller/PostController.php
+    // ...
+
+    class PostController extends Controller
+    {
+        /**
+         * @Route("/posts/{id}", name="post_show")
+         */
+        public function showAction($id)
+        {
+            // get a Post object - e.g. query for it
+            $post = ...;
+
+            // check for "view" access: calls all voters
+            $this->denyAccessUnlessGranted('view', $post);
+
+            // ...
+        }
+
+        /**
+         * @Route("/posts/{id}/edit", name="post_edit")
+         */
+        public function editAction($id)
+        {
+            // get a Post object - e.g. query for it
+            $post = ...;
+
+            // check for "edit" access: calls all voters
+            $this->denyAccessUnlessGranted('edit', $post);
+
+            // ...
+        }
+    }
+
+Metoda ``denyAccessUnlessGranted()`` (jak równiez prostsza metoda ``isGranted()``)
+wywołuje mechanizm "wyborcy autoryzacji" (*ang. voter*). W tej chwili żaden
+wyborca autoryzacji nie głosuje, czy użytkownik może uruchamiać metodę przegladania
+lub edytowania obiektu ``Post``. Lecz można utworzyć własnego wyborcę
+autoryzacji, który będzie o tym decydował.
+
+.. tip::
+
+    Funkcje ``denyAccessUnlessGranted()`` i ``isGranted()`` są obie skrótem
+    do wywoływania ``isGranted()`` w usłudzue ``security.authorization_checker``.
+    
 
 Tworzenie własnych wyborców autoryzacji
 ---------------------------------------
 
-Naszym celem jest stworzenie wyborcy autoryzacji, który sparwdza, czy użytkownik
-ma dostęp do widoku lub edycji określonego obiektu. Oto przykład implementacji:
+Przyjmijmy, że mamy logikę do decydowania, czy użytkownik może przeglądać lub edytować
+obiekt ``Post``, która jest dość skomplikowana. Na przykład, ``User`` może zawsze
+edytować lub przeglądać obiekty ``Post``, których jest autorem. Jeśli obiekt
+``Post`` jest oznaczony jako "public", przeglądać go mogą wszyscy. W tej sytuacji,
+wyborca autoryzacji bedzie wyglądał podobnie do tego::
 
-.. code-block:: php
-   :linenos:
+    // src/AppBundle/Security/PostVoter.php
+    namespace AppBundle\Security;
 
-    // src/AppBundle/Security/Authorization/Voter/PostVoter.php
-    namespace AppBundle\Security\Authorization\Voter;
-
-    use Symfony\Component\Security\Core\Authorization\Voter\AbstractVoter;
+    use AppBundle\Entity\Post;
     use AppBundle\Entity\User;
-    use Symfony\Component\Security\Core\User\UserInterface;
+    use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+    use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
-    class PostVoter extends AbstractVoter
+    class PostVoter extends Voter
     {
+        // these strings are just invented: you can use anything
         const VIEW = 'view';
         const EDIT = 'edit';
 
-        protected function getSupportedAttributes()
+        protected function supports($attribute, $subject)
         {
-            return array(self::VIEW, self::EDIT);
-        }
-
-        protected function getSupportedClasses()
-        {
-            return array('AppBundle\Entity\Post');
-        }
-
-        protected function isGranted($attribute, $post, $user = null)
-        {
-            // make sure there is a user object (i.e. that the user is logged in)
-            if (!$user instanceof UserInterface) {
+            // jeśli $attributw nie jest tym, co obsługujemy, zwracane jest false
+            if (!in_array($attribute, array(self::VIEW, self::EDIT))) {
                 return false;
             }
 
-            // double-check that the User object is the expected entity.
-            // It always will be, unless there is some misconfiguration of the
-            // security system.
-            if (!$user instanceof User) {
-                throw new \LogicException('The user is somehow not our User class!');
+            // głosowanie tylko na obiekt Post
+            if (!$subject instanceof Post) {
+                return false;
             }
+
+            return true;
+        }
+
+        protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+        {
+            $user = $token->getUser();
+
+            if (!$user instanceof User) {
+                // the user must be logged in; if not, deny access
+                return false;
+            }
+
+            // you know $subject is a Post object, thanks to supports
+            /** @var Post $post */
+            $post = $subject;
 
             switch($attribute) {
                 case self::VIEW:
-                    // the data object could have for example a method isPrivate()
-                    // which checks the Boolean attribute $private
-                    if (!$post->isPrivate()) {
-                        return true;
-                    }
-
-                    break;
+                    return $this->canView($post, $user);
                 case self::EDIT:
-                    // this assumes that the data object has a getOwner() method
-                    // to get the entity of the user who owns this data object
-                    if ($user->getId() === $post->getOwner()->getId()) {
-                        return true;
-                    }
-
-                    break;
+                    return $this->canEdit($post, $user);
             }
-            
-            return false;
+
+            throw new \LogicException('This code should not be reached!');
+        }
+
+        private function canView(Post $post, User $user)
+        {
+            // if they can edit, they can view
+            if ($this->canEdit($post, $user)) {
+                return true;
+            }
+
+            // the Post object could have, for example, a method isPrivate()
+            // that checks a boolean $private property
+            return !$post->isPrivate();
+        }
+
+        private function canEdit(Post $post, User $user)
+        {
+            // this assumes that the data object has a getOwner() method
+            // to get the entity of the user who owns this data object
+            return $user === $post->getOwner();
         }
     }
 
-To jest to! Wyborca autoryzacji został wykonany. Następnym krokiem jest wstrzyknięcie
-wyborcy do warstwy bezpieczeństwa.
+To jest to! Wyborca autoryzacji został wykonany. Następnie musimy go
+:ref:`skonfigurować <declaring-the-voter-as-a-service>`
 
-Dla przypomnienia, oto co możemy oczekiwać od trzech abstarkcyjnych metod:
+Dla przypomnienia, oto co możemy oczekiwać od tych dwóch abstrakcyjnych metod:
 
-:method:`Symfony\\Component\\Security\\Core\\Authorization\\Voter\\AbstractVoter::getSupportedClasses`
-    Informuje Symfony, że wyborca powinien zostać wywołany, gdy obiekt jednej
-    z podanych klas został przekazany do metody ``isGranted()``. Na przykład,
-    jeśli zwrócona zostanie tablica ``array('AppBundle\Model\Product')``, Symfony
-    wywoła wyborcę, gdy obiekt ``Product`` zostanie przekazany do ``isGranted()``.
+``Voter::supports($attribute, $subject)``
+    Gdy wywoływana jest metoda ``isGranted()`` (lub ``denyAccessUnlessGranted()``),
+    jako pierwszy argument jest przekazywana tutaj zmienna ``$attribute`` (np.
+    ``ROLE_USER``, ``edit``) a jako drugi argument (jeśli istnieje) zmienna
+    ``$subject`` (np. ``null``, obiekt ``Post``). Zadaniem tych argumentów jest
+    określenie, jak wyborca powinien "głosować". Jeśli zwrócimy
+    ``true``, wywoływana będzie metoda ``voteOnAttribute()``. W przeciwnym razie,
+    wyborca nie bedzie głosował: niektóre inne usługi wyborcze to jeszcze przetwarzają.
+    W naszym przykładzie, zwracamy ``true``, jeśli ``$attribut`` ma wartość ``view``
+    lub ``edit`` i jeśli obiekt jest instancją ``Post``.
 
-:method:`Symfony\\Component\\Security\\Core\\Authorization\\Voter\\AbstractVoter::getSupportedAttributes`
-    Powiadamia Symfony, że wyborca powinien zostać wywołany, gdy jeden z podanych
-    łańcuchów tekststowych został przekazany jako pierwszy argument metody ``isGranted()``.
-    Na przykład, jeśli zwracana jest tablica ``array('CREATE', 'READ')``, Symfony
-    wywoła wyborcę, gdy jeden z elementów tej tablicy został przekazany do metody
-    ``isGranted()``.
+``voteOnAttribute($attribute, $subject, TokenInterface $token)``
+    Metoda ta zostaje wywołana, jeśli metoda ``supports()`` zwraca ``true``.
+    Nasze zadanie jest proste: zwrócić ``true``, aby zezwolić na dostęp a ``false``,
+    aby zabronić dostępu.
+    Argument ``$token`` można wykorzystać do znalezienia bieżącego obiektu użytkownika
+    (jeśli istnieje). W naszym przykładzie, cała złożonona logika biznesowa została
+    dołączona w celu określenia dostępu.
 
-:method:`Symfony\\Component\\Security\\Core\\Authorization\\Voter\\AbstractVoter::isGranted`
-    Implementuje logikę biznesową, która sprawdza, czy dany użytkownik jest uprawniony
-    do dostępu do podanego atrybutu (np. ``CREATE`` lub ``READ``) w danym obiekcie.
-    Metoda ta musi zwracać wartość logiczną.
+.. _declaring-the-voter-as-a-service:
 
-.. note::
-
-    Obecnie, aby używać bazową klasę ``AbstractVoter``, trzeba utworzyć klasę
-    wyborcy, której obiekt jest zawsze przekazywany do metody ``isGranted()``.
-
-Deklarowanie wyborcy autoryzacji jako usługi
---------------------------------------------
+Konfigurowanie wyborcy autoryzacji
+----------------------------------
 
 Do wstrzykniecia klasy wyborcy do wartswy bezpieczeństwa trzeba zadeklarować ją
 jako usługę i oflagować tagiem ``security.voter``:
@@ -173,9 +237,110 @@ jako usługę i oflagować tagiem ``security.voter``:
 
         # app/config/services.yml
         services:
-            security.access.post_voter:
-                class:      AppBundle\Security\Authorization\Voter\PostVoter
-                public:     false
+            app.post_voter:
+                class: AppBundle\Security\PostVoter
+                tags:
+                    - { name: security.voter }
+                # small performance boost
+                public: false
+
+    .. code-block:: xml
+       :linenos:
+
+        <!-- app/config/services.xml -->
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <container xmlns="http://symfony.com/schema/dic/services"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://symfony.com/schema/dic/services
+                http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+            <services>
+                <service id="app.post_voter"
+                    class="AppBundle\Security\PostVoter"
+                    public="false"
+                >
+
+                    <tag name="security.voter" />
+                </service>
+            </services>
+        </container>
+
+    .. code-block:: php
+       :linenos:
+
+        // app/config/services.php
+        use Symfony\Component\DependencyInjection\Definition;
+
+        $container->register('app.post_voter', 'AppBundle\Security\PostVoter')
+            ->setPublic(false)
+            ->addTag('security.voter')
+        ;
+
+Teraz, gdy wywoła się :ref:`isGranted() z view/edit i obiektem Post object <how-to-use-the-voter-in-a-controller>`,
+wykonany zostanie wyborca autoryzacji i będzie można autoryzować użytkownika.
+
+.. index::
+   single: autoryzacja; role wewnątrz wyborców 
+
+Sprawdzanie ról wewnątrz wyborców
+---------------------------------
+
+.. versionadded:: 2.8
+    W Symfony 2.8 wprowadzono możliwość wstrzykiwania ``AccessDecisionManager``,
+    co powodowało wcześniej zrzucenie wyjątku CircularReferenceException.
+    We wcześniejszych wersjach, dla możliwości użycia ``isGranted()``, trzeba było
+    wstrzykiwać sam ``service_container`` i wyprowadzać ``security.authorization_checker``.
+
+Co zrobić, jeśli chce się wywołać ``isGranted()`` z wnętrza wyborcy autoryzacji,
+np. jeśli chce się  zobaczyć, czy bieżący użytkownik ma rolę ``ROLE_SUPER_ADMIN``.
+Jest to możliwe przez wstrzyknięcie
+:class:`Symfony\\Component\\Security\\Core\\Authorization\\AccessDecisionManager`
+do klasy wyborcy. Można to używać, na przykład, aby *zawsze* umożliwiać dostęp
+dla użytkownika z rolą ``ROLE_SUPER_ADMIN``::
+
+    // src/AppBundle/Security/PostVoter.php
+
+    // ...
+    use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+
+    class PostVoter extends Voter
+    {
+        // ...
+
+        private $decisionManager;
+
+        public function __construct(AccessDecisionManagerInterface $decisionManager)
+        {
+            $this->decisionManager = $decisionManager;
+        }
+
+        protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
+        {
+            // ...
+
+            // ROLE_SUPER_ADMIN can do anything! The power!
+            if ($this->decisionManager->decide($token, array('ROLE_SUPER_ADMIN'))) {
+                return true;
+            }
+
+            // ... all the normal voter logic
+        }
+    }
+
+Następnie, trzeba zaktualizować ``services.yml``, wstrzykując usługę
+``security.access.decision_manager``:
+
+.. configuration-block::
+
+    .. code-block:: yaml
+       :linenos:
+
+        # app/config/services.yml
+        services:
+            app.post_voter:
+                class: AppBundle\Security\PostVoter
+                arguments: ['@security.access.decision_manager']
+                public: false
                 tags:
                     - { name: security.voter }
 
@@ -190,9 +355,11 @@ jako usługę i oflagować tagiem ``security.voter``:
                 http://symfony.com/schema/dic/services/services-1.0.xsd">
 
             <services>
-                <service id="security.access.post_voter"
-                    class="AppBundle\Security\Authorization\Voter\PostVoter"
-                    public="false">
+                <service id="app.post_voter"
+                    class="AppBundle\Security\PostVoter"
+                    public="false"
+                >
+                    <argument type="service" id="security.access.decision_manager"/>
 
                     <tag name="security.voter" />
                 </service>
@@ -204,52 +371,25 @@ jako usługę i oflagować tagiem ``security.voter``:
 
         // app/config/services.php
         use Symfony\Component\DependencyInjection\Definition;
-        
-        $definition = new Definition('AppBundle\Security\Authorization\Voter\PostVoter');
-        $definition
+        use Symfony\Component\DependencyInjection\Reference;
+
+        $container->register('app.post_voter', 'AppBundle\Security\PostVoter')
+            ->addArgument(new Reference('security.access.decision_manager'))
             ->setPublic(false)
             ->addTag('security.voter')
         ;
 
-        $container->setDefinition('security.access.post_voter', $definition);
+To wszystko! Wywołanie ``decide()`` na ``AccessDecisionManager`` jest w zasadzie
+tym samym, co wywołanie ``isGranted()`` z poziomu kontrolera lub innego miejsca 
+(to jest tylko nieco niższy poziom, co jest niezbędne dla wyborców).
 
-Jak stosować wyborców autoryzacji w kontrolerze
------------------------------------------------
+.. note::
 
-Zarejestrowana usługa wyborcy jest odpytywana zawsze, gdy wywoływana zostaje metoda
-``isGranted()`` z usługi sprawdzania autoryzacji ``security.authorization_checker``
-Symfony.
-
-.. code-block:: php
-   :linenos:
-
-    // src/AppBundle/Controller/PostController.php
-    namespace AppBundle\Controller;
-
-    use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-    use Symfony\Component\HttpFoundation\Response;
-
-    class PostController extends Controller
-    {
-        public function showAction($id)
-        {
-            // get a Post instance
-            $post = ...;
-
-            $authChecker = $this->get('security.authorization_checker');
-
-            $this->denyAccessUnlessGranted('view', $post, 'Unauthorized access!');
-
-            return new Response('<h1>'.$post->getName().'</h1>');
-        }
-    }
-
-.. versionadded:: 2.6
-    Usługa ``security.authorization_checker`` została wprowadzona w Symfony 2.6.
-    Wcześniej trzeba było stosować metodę ``isGranted()`` usługi
-    ``security.context``.
-
-To takie proste, prawda?
+    Usługa ``security.access.decision_manager`` jest prywatna. Oznacza to, że
+    nie mozna jest wywołać bezpośrednio z poziomu kontrolera - można ja tylko
+    wstrzyknąć do innych usług. Jest właściwe, aby zamiast tego stosować
+    ``security.authorization_checker`` we wszystkich przypadkach, z wyjątkiem
+    wyborców autoryzacji.
 
 .. index::
    single: autoryzacja; strategie decyzyjne
@@ -259,11 +399,15 @@ To takie proste, prawda?
 Zmienianie strategii decyzyjnej dostępu
 ---------------------------------------
 
-Proszę sobie wyobrazić, że mamy wielu wyborców autoryzacji dla jednej akcji obiektu.
-Na przykład, mamy jednego wyborcę, który sprawdza, czy użytkownik jest członkiem
-witryny oraz drugiego wyborcę, który sprawdza, czy użytkownik skończył 18 lat.
+Zwykle, w jednym momencie "głosuje" tylko jeden wyborca (reszta będzie się "wstrzymywać",
+co oznacza, że będa one zwracać ``false`` w metodzie ``supports()``).
+Lecz teoretycznie, mozna przeprowadzić "głosowanie" wielu wyborców dla jednej akcji
+lub obiektu. Dla przykładu przyjmijmy, że mamy jednego wyborcę, ktry sprawdza, czy
+uzytkownik jest członkiem witryny i drugiego, który sprawdza czy uzytkownik skończył
+18 lat.
 
-Dla rozwiązania takich przypadków, menadżer decyzji dostępu używa strategii decyzyjnej
+Dla rozwiązania takich przypadków, menadżer decyzji dostępu
+(``security.access.decision_manager``) używa strategii decyzyjnej
 dostępu. Można je dostosować do własnych potrzeb. Dostępne są trzy strategie:
 
 ``affirmative`` (pozytywna, będąca strategią domyślną)
