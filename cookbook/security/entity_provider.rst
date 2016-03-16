@@ -441,20 +441,18 @@ natywny dostawca encji umożliwia obsługę zapytań z wykorzystaniem tylko jedn
 właściwości obiektu użytkownika.
 
 W celu zrobienie tego wykonamy ``UserRepository`` implementując specjalną klasę
-:class:`Symfony\\Component\\Security\\Core\\User\\UserProviderInterface`.
-Interfejs ten wymaga trzech metod : ``loadUserByUsername($username)``,
-``refreshUser(UserInterface $user)`` i ``supportsClass($class)``::
+:class:`Symfony\\Bridge\\Doctrine\\Security\\User\\UserLoaderInterface`.
+Interfejs ten wymaga tylko jednej metosy ``loadUserByUsername($username)``::
 
     // src/AppBundle/Entity/UserRepository.php
     namespace AppBundle\Entity;
 
+    use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
     use Symfony\Component\Security\Core\User\UserInterface;
-    use Symfony\Component\Security\Core\User\UserProviderInterface;
     use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-    use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
     use Doctrine\ORM\EntityRepository;
 
-    class UserRepository extends EntityRepository implements UserProviderInterface
+    class UserRepository extends EntityRepository implements UserLoaderInterface
     {
         public function loadUserByUsername($username)
         {
@@ -475,28 +473,12 @@ Interfejs ten wymaga trzech metod : ``loadUserByUsername($username)``,
 
             return $user;
         }
-
-        public function refreshUser(UserInterface $user)
-        {
-            $class = get_class($user);
-            if (!$this->supportsClass($class)) {
-                throw new UnsupportedUserException(
-                    sprintf(
-                        'Instances of "%s" are not supported.',
-                        $class
-                    )
-                );
-            }
-
-            return $this->find($user->getId());
-        }
-
-        public function supportsClass($class)
-        {
-            return $this->getEntityName() === $class
-                || is_subclass_of($class, $this->getEntityName());
-        }
     }
+
+.. versionadded:: 2.8
+    W Symfony 2.8 został wprowadzony interfejs
+    :class:`Symfony\\Bridge\\Doctrine\\Security\\User\\UserLoaderInterface`.
+    Wcześniej trzeba było implementować ``Symfony\Component\Security\Core\User\UserProviderInterface``.
 
 Więcej szczegółów dotyczących tych metod znajdziesz analizując interfejs
 :class:`Symfony\\Component\\Security\\Core\\User\\UserProviderInterface`.
