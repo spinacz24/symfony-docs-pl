@@ -77,7 +77,7 @@ był dostawca domyślny, dostępny w komponencie Security:
             ),
         ));
 
-. versionadded:: 2.4
+.. versionadded:: 2.4
     Opcja ``csrf_token_generator`` została wprowadzona w Symfony 2.4. Wcześniej,
     trzeba było stosować opcję ``csrf_provider``.
 
