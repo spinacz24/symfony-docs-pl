@@ -9,6 +9,7 @@ Uwierzytelnianie (identyfikacja i logowanie użytkownika)
 
     form_login_setup
     entity_provider
+    guard-authentication
     remember_me
     impersonating_user
     form_login

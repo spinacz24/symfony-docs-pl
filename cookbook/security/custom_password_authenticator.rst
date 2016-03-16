@@ -8,34 +8,42 @@
 Jak utworzyć własnego wystawcę uwierzytelniania w logowaniu formularzowym
 =========================================================================
 
+.. tip::
+
+    Proszę przeczytać artykuł :doc:`/cookbook/security/guard-authentication`,
+    aby poznać prostszy i bardziej eleastyczny sposób wykonania własnego
+    rozwiązania niż tu opisano.
+
+
 Wyobraźmy sobie, że chcemy umożliwić dostęp do swojej witryny internetowej tylko
-między godziną 2pm a 4pm UTC. Przed Symfony 2.4, trzeba było w tym celu utworzyć
-własny token, wytwórnię, nasłuch i dostawcę. W tym artykule dowiesz się, jak
+między godziną 2pm a 4pm UTC. W tym artykule dowiesz się, jak
 można to zrobić dla logowania formularzowego (czyli gdy użytkownik zgłasza poprzez
 formularz swój login i hasło).
-Przed Symfony 2.6, trzeba było używać kodera do uwierzyteniania hasła użytkownika.
+
 
 Wystawca uwierzytelniania
 -------------------------
 
-.. versionadded:: 2.6
-    Interfejs ``UserPasswordEncoderInterface`` został wprowadzony w Symfony 2.6.
+.. versionadded:: 2.8
+    W Symfony 2.8 interfejs ``SimpleFormAuthenticatorInterface`` został przeniesiony
+    do przestrzeni nazewniczej ``Symfony\Component\Security\Http\Authentication``.
+    Wcześniej był on umieszczony w przestrzeni ``Symfony\Component\Security\Core\Authentication``.
 
 Najpierw utworzymy klasę implementującą interfejs
-:class:`Symfony\\Component\\Security\\Core\\Authentication\\SimpleFormAuthenticatorInterface`.
+:class:`Symfony\\Component\\Security\\Http\\Authentication\\SimpleFormAuthenticatorInterface`.
 Pozwoli ona stworzyć własną logikę dla uwierzytelniania użytkownika::
 
     // src/Acme/HelloBundle/Security/TimeAuthenticator.php
     namespace Acme\HelloBundle\Security;
 
     use Symfony\Component\HttpFoundation\Request;
-    use Symfony\Component\Security\Core\Authentication\SimpleFormAuthenticatorInterface;
     use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
     use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
     use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-    use Symfony\Component\Security\Core\Exception\AuthenticationException;
+    use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
     use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
     use Symfony\Component\Security\Core\User\UserProviderInterface;
+    use Symfony\Component\Security\Http\Authentication\SimpleFormAuthenticatorInterface;
 
     class TimeAuthenticator implements SimpleFormAuthenticatorInterface
     {
@@ -51,7 +59,9 @@ Pozwoli ona stworzyć własną logikę dla uwierzytelniania użytkownika::
             try {
                 $user = $userProvider->loadUserByUsername($token->getUsername());
             } catch (UsernameNotFoundException $e) {
-                throw new AuthenticationException('Invalid username or password');
+                // UWAGA: komunikat ten będzie zwracany do klienta
+                // (tak więc nie należy tu wstawiać niezaufanych komunikatów / komunikatów o błędach)
+                throw new CustomUserMessageAuthenticationException('Invalid username or password');
             }
 
             $passwordValid = $this->encoder->isPasswordValid($user, $token->getCredentials());
@@ -59,7 +69,9 @@ Pozwoli ona stworzyć własną logikę dla uwierzytelniania użytkownika::
             if ($passwordValid) {
                 $currentHour = date('G');
                 if ($currentHour < 14 || $currentHour > 16) {
-                    throw new AuthenticationException(
+                    // UWAGA: komunikat ten będzie zwracany do klienta
+                    // (tak więc nie należy tu wstawiać niezaufanych komunikatów / komunikatów o błędach)
+                    throw new CustomUserMessageAuthenticationException(
                         'You can only log in between 2 and 4!',
                         100
                     );
@@ -73,7 +85,9 @@ Pozwoli ona stworzyć własną logikę dla uwierzytelniania użytkownika::
                 );
             }
 
-            throw new AuthenticationException('Invalid username or password');
+            // UWAGA: komunikat ten będzie zwracany do klienta
+            // (tak więc nie należy tu wstawiać niezaufanych komunikatów / komunikatów o błędach)
+            throw new CustomUserMessageAuthenticationException('Invalid username or password');
         }
 
         public function supportsToken(TokenInterface $token, $providerKey)
@@ -87,6 +101,13 @@ Pozwoli ona stworzyć własną logikę dla uwierzytelniania użytkownika::
             return new UsernamePasswordToken($username, $password, $providerKey);
         }
     }
+
+.. versionadded:: 2.8
+    Klasa ``CustomUserMessageAuthenticationException`` jest nowościa w Symfony 2.8
+    i ma pomagać w zwracaniu komunikatów uwierzytelniania. Wcześniej zrzucany
+    był wyjatek ``AuthenticationException`` lub jakaś podklasa (co można nadal
+    stosować w Symfony 2.8).
+
 
 Jak to działa
 -------------

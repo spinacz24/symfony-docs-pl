@@ -107,7 +107,7 @@ Wystarczy uruchomić następujące polecenie konsolowe:
 
 .. code-block:: bash
 
-    $ php app/console init:acl
+    $ php bin/console init:acl
 
 .. index::
    single: bezpieczeństwo; ACE

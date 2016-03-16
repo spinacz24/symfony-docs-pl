@@ -10,6 +10,7 @@ Jak utworzyć własnego wystawcę uwierzytelniania
     omawia ten proces. Jednak, w zależności od potrzeb, możesz rozwiązać swój
     problem w prostszy sposób lub wykorzystać jakiś pakiet społecznościowy:
 
+    * :doc:`/cookbook/security/guard-authentication`
     * :doc:`/cookbook/security/custom_password_authenticator`
     * :doc:`/cookbook/security/api_key_authentication`
     * W celu uwierzytelniania poprzez OAuth z wykorzystanie usług zewnętrznych,
@@ -224,8 +225,7 @@ minut i czy wartość nagłówka ``PasswordDigest`` jest zgodna z hasłem użytk
     use Symfony\Component\Security\Core\Exception\NonceExpiredException;
     use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
     use AppBundle\Security\Authentication\Token\WsseUserToken;
-    use Symfony\Component\Security\Core\Util\StringUtils;
-
+    
     class WsseProvider implements AuthenticationProviderInterface
     {
         private $userProvider;
@@ -284,7 +284,7 @@ minut i czy wartość nagłówka ``PasswordDigest`` jest zgodna z hasłem użytk
             // sprawdzenie sekretu
             $expected = base64_encode(sha1(base64_decode($nonce).$created.$secret, true));
 
-            return StringUtils::equals($expected, $digest);
+            return hash_equals($expected, $digest);
         }
 
         public function supports(TokenInterface $token)
@@ -302,13 +302,6 @@ minut i czy wartość nagłówka ``PasswordDigest`` jest zgodna z hasłem użytk
     tokenu trzeba stosować tego wystawcę. W przypadku wielu wystawców, menadżer
     uwierzytelniania będzie się następnie przenosił do kolejnego wystawcy na liście .
 
-.. note::
-
-    W porównaniu oczekiwanych i dostarczonych haseł Digest wykorzystuje się stałe
-    porównanie czasowe realizowane przez metodę
-    :method:`Symfony\\Component\\Security\\Core\\Util\\StringUtils::equals`
-    klasy ``StringUtils``. Jest to używana w celu ograniczenia ewentualnych
-    `ataków czasowych`_.
 
 Wytwórnia
 ---------
