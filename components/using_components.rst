@@ -10,7 +10,7 @@
 Jak zainstalować i stosować komponety Symfony
 =============================================
 
-Jeśli rozpoczyna się nowy projekt (lub już ma się rozpczęty projekt). który wykorzystuje
+Jeśli rozpoczyna się nowy projekt (lub już ma się rozpczęty projekt), który wykorzystuje
 jeden lub więcej komponentów, to najłatwiejszym sposobem zintegrowania wszystkiego
 jest `Composer`_.
 Composer jest na tyle inteligentny, że umożliwia pobranie komponentów, które są
@@ -44,7 +44,7 @@ komponentu.
 **3.** Pisz swój kod!
 
 Po pobraniu przez Composer komponentu (komponentów), wszystko co trzeba zrobić,
-to dołączyć plik ``vendor/autoload.php``, który został wugenerowany przez Composer.
+to dołączyć plik ``vendor/autoload.php``, który został wygenerowany przez Composer.
 Plik ten ładuje automatycznie wszystkie potrzebne biblioteki, dzięki czemu możesz
 je użyć w projekcie natychmiast::
 
