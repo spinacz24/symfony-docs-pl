@@ -103,7 +103,7 @@ indywidualni wyborcy autoryzacji lub listy ACL.
       użytkownika poprzez interfejs administracyjny, użyj list ACL Symfony.
 
 .. index::
-   single: adnontacje; @Security 
+   single: adnotacje; @Security 
 
 .. _best-practices-security-annotation:
 
