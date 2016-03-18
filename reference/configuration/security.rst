@@ -5,7 +5,7 @@ Konfiguracja systemu bezpieczeństwa
 ===================================
 
 System bezpieczeństwa jest jedną z najpotężniejszych części Symfony i może
-w dużej mierze być kontrolowane poprzez konfigurację.
+w dużej mierze być kontrolowany poprzez konfigurację.
 
 Pełna domyślna konfiguracja
 ---------------------------
