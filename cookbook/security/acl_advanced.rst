@@ -36,7 +36,7 @@ Tożsamości obiektów
 System ACL jest całkowicie oddzielony od obiektów domeny. Nie muszą być one
 nawet przechowywane w tej samej bazie danych lub na tym samym serwerze. W celu
 spełnienia tego oddzielenia, obiekty w systemie ACL są reprezentowane przez 
-obiekt identyfikujący obiekty. Za każdym razem, gdy chce się pobrać listę ACL dla
+obiekt tożasmosci obiektu. Za każdym razem, gdy chce się pobrać listę ACL dla
 obiektu domeny, system ACL najpierw utworzy tożsamość obiektu z obiektu
 domeny i następnie przekaże tą tozsamość do dostawcy ACL w celu dalszego
 przetwarzania.
