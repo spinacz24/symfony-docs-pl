@@ -2,7 +2,7 @@
    single: bezpieczeństwo; ACL
    single: autoryzacja; ACL
    single: lista kontroli dostępu (ACL); koncepcje
-   single: ACL
+   
    
 Jak wykorzystywać zaawansowane koncepcje ACL
 ============================================
