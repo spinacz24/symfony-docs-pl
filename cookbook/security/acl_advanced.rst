@@ -30,28 +30,28 @@ ważne, ponieważ każda lista ACL może mieć kilka wpisów ACE i dziedziczyć 
 list ACL w trybie drzewiastej. Dlatego system ACL nie opiera się żadnym mechaniźmie
 ORM. Domyślna implementacja wykorzystuje połączenie z DBAL Doctrine.
 
-Identyfikacje obiektów
-~~~~~~~~~~~~~~~~~~~~~~
+Tożsamości obiektów
+~~~~~~~~~~~~~~~~~~~
 
 System ACL jest całkowicie oddzielony od obiektów domeny. Nie muszą być one
 nawet przechowywane w tej samej bazie danych lub na tym samym serwerze. W celu
 spełnienia tego oddzielenia, obiekty w systemie ACL są reprezentowane przez 
-obiekt identyfikujący obiekty. Za każdym razem, gdy chce się pobrać listę ACL dla
-obiektu domeny, system ACL najpierw utworzy identyfikację obiektu z obiektu
-domeny i następnie przekaże tą identyfikację do dostawcy ACL w celu dalszego
+obiekt tożasmosci obiektu. Za każdym razem, gdy chce się pobrać listę ACL dla
+obiektu domeny, system ACL najpierw utworzy tożsamość obiektu z obiektu
+domeny i następnie przekaże tą tozsamość do dostawcy ACL w celu dalszego
 przetwarzania.
 
-Identyfikacje bezpieczeństwa
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Tożsamości bezpieczeństwa
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Jest to analogiczne do identyfikacji obiektu, ale reprezentuje użytkownika lub
-rolę w aplikacji. Każda rola lub użytkownik mają własną identyfikację bezpieczeństwa.
+Jest to analogiczne do tożsamość obiektu, ale reprezentuje użytkownika lub
+rolę w aplikacji. Każda rola lub użytkownik mają własną tozsamość bezpieczeństwa.
 
 .. caution::
 
-    W przypadku użytkowników, identyfikacja bezpieczeństwa jest oparta na nazwie
+    W przypadku użytkowników, tożsamość bezpieczeństwa jest oparta na nazwie
     użytkownika. Oznacza to, że jeżeli z jakichś powodów zostanie zmieniona nazwa
-    uzytkownika, trzeba również zaktualizowac identyfikację bezpieczeństwa.
+    uzytkownika, trzeba również zaktualizowac tozsamość bezpieczeństwa.
     Do tego celu jest przeznaczona metoda
     :method:`MutableAclProvider::updateUserSecurityIdentity() <Symfony\\Component\\Security\\Acl\\Dbal\\MutableAclProvider::updateUserSecurityIdentity>`.
    
@@ -60,9 +60,9 @@ Struktura tabel bazy danych
 
 Domyślna implementacja używa pięć tabel bazy danych, jak wymieniono poniżej:
 
-- *acl_security_identities*: Tabela rejestrująca wszystkie identyfikacje
+- *acl_security_identities*: Tabela rejestrująca wszystkie tozsamości
   bezpieczeństwa (SID), które utrzymują wpisy ACE. Domyślna implementacja
-  dostarcza dwie identyfikacje bezpieczeństwa:
+  dostarcza dwie tozsamości bezpieczeństwa:
   
   - :class:`Symfony\\Component\\Security\\Acl\\Domain\\RoleSecurityIdentity`,
   - :class:`Symfony\\Component\\Security\\Acl\\Domain\\UserSecurityIdentity`.
@@ -179,7 +179,7 @@ takie możliwości. Proszę zapoznać sie z dokumentacją tego pakietu.
 Proces podejmowania decyzji autoryzacyjnych
 -------------------------------------------
 
-Klasa ACL dostarcza dwie metody dla określania, czy identyfikacja bezpieczeństwa
+Klasa ACL dostarcza dwie metody dla określania, czy tożsamość bezpieczeństwa
 ma wymagane maski bitowe: ``isGranted`` i ``isFieldGranted``. Gdy ACL otrzymuje
 żądanie autoryzacji za pomocą jednej z tych metod, deleguje to żądanie do
 implementacji
