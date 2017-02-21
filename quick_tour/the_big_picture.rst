@@ -14,7 +14,7 @@ Jeśli nie, to zapraszamy do poznania zupełnie nowego sposobu tworzenia aplikac
 internetowych.
 
 .. _installing-symfony2:
-    
+
 Instalowanie Symfony
 --------------------
 
@@ -83,7 +83,7 @@ i definiuje metodę ``indexAction``.
    anglojezycznej. Np. mówiąc, że "trasa odwzorowuje żądanie użytkownika na kontroler",
    trzeba to rozumieć, że "trasa odwzorowuje żądanie użytkownika na odpowiednią
    metodę kontrolera, czyli na akcję. Tak więc, czytajac o "kontrolerze" proszę
-   zwracać uwagę na kontekst.    
+   zwracać uwagę na kontekst.
 
 Kod akcji jest zazwyczaj bardzo krótki - około 10-15 linii kodu - ponieważ akcje
 odwołują się do innych części aplikacji, w celu pobrania lub wygenerowania
@@ -102,7 +102,7 @@ przekierowań", w Symfony obsługuje żądania klienta, dopasowując ścieżkę 
 właściwej akcji.
 Otwórzmy ponownie plik ``src/AppBundle/Controller/DefaultController.php`` i skupmy
 się na trzech pierwszych liniach metody ``indexAction``::
-   
+
    // src/AppBundle/Controller/DefaultController.php
     namespace AppBundle\Controller;
 
@@ -188,7 +188,7 @@ przyjaciel programisty.
 
 .. image:: /images/quick_tour/web_debug_toolbar.png
    :align: center
-   
+
 To co teraz można zobaczyć, jest tylko „wierzchołkiem góry lodowej”.
 Klikniecie na jakąkolwiek sekcję paska otworzy profiler i będzie można uzyskać
 znacznie więcej informacji o żądaniu, parametrach zapytania, szczegółach zabezpieczeń
@@ -254,7 +254,7 @@ pasek narzędziowy debugowania.
 
 Po odwiedzeniu w przegladarce pliku``app_dev.php``, wykonuje się aplikację Symfony
 w środowisku ``dev``. W celu uruchomienia aplikacji w środowisku ``prod``, trzeba
-odwiedzić zamiast plik ``app.php``. 
+natomiast odwiedzić plik ``app.php``.
 
 Więcej szczegółów o środowiskach można znaleźć w artykule
 ":ref:`Środowidka i kontroler wejścia <page-creation-environments>`".
