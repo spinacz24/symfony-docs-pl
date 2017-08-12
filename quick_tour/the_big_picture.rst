@@ -18,7 +18,7 @@ internetowych.
 Instalowanie Symfony
 --------------------
 
-Przed dalszą lekturą tego rozdziału, upewnij suie że masz zaistalowane PHP jak
+Przed dalszą lekturą tego rozdziału, upewnij się że masz zaistalowane PHP jak
 i Symfony, tak jak wyjaśniono to w :doc:`rozdziale "Instalacja" </book/installation>`
 podręcznika Symfony.
 
