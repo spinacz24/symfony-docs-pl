@@ -195,7 +195,7 @@ W rzeczywistości PHP zwalnia Cię po części z takiej konieczności::
     echo 'The URI requested is: '.$uri;
     echo 'The value of the "foo" parameter is: '.$foo;
 
-Choć brzmi to dziwnie, ta mała aplikacja jest rzeczywistości pobiera informację z
+Choć brzmi to dziwnie, ta mała aplikacja jest w rzeczywistości pobiera informację z
 żądania HTTP i używa ją do utworzenia odpowiedzi HTTP. Zamiast parsować surowy
 komunikat żądania HTTP, PHP przygotowuje super globalne zmienne, takie jak
 ``$_SERVER`` i ``$_GET``, które zawierają wszystkie informacje o żądaniu.
@@ -268,9 +268,9 @@ wartości w PHP wskazujące na to, czy użytkownik wykorzystuje bezpieczne poł�
     :method:`Symfony\\Component\\HttpFoundation\\ParameterBag::all` i więcej.
     W rzeczywistości każda publiczna właściwość użyta w poprzednim przykładzie
     jest instancją klasy ParameterBag.
-    
+
     .. _book-fundamentals-attributes:
-      
+
     Klasa Request ma również publiczną właściwość attributes, która przechowuje
     specjalne dane dotyczące tego, jak aplikacja działa wewnętrznie.
     We frameworku Symfony właściwość ``attributes`` przechowuje wartości zwracane
@@ -292,7 +292,7 @@ interfejsu do tworzenia odpowiedzi, jakie mają być zwracane klientowi::
 
     // prints the HTTP headers followed by the content
     $response->send();
-    
+
 Gdyby Symfony nie oferował nic ponadto, to miałbyś już narzędzie do łatwego
 uzyskiwania dostępu do informacji żądania i obiektowo zorientowany interfejs do
 tworzenia odpowiedzi. Nawet jak nauczysz się wykorzystywać wiele zaawansowanych
@@ -304,7 +304,7 @@ możliwości Symfony, to pamiętaj, że celem aplikacji jest zawsze *interpretac
     Klasy ``Request`` i ``Response`` są częścią niezależnego komponentu włączonego
     do Symfony o nazwie HttpFoundation. Jest to komponent niezależny i może
     być stosowany poza Symfony, dostarczając klas dla obsługi sesji i wysyłania plików.
-    
+
 
 Podróż od żądania do odpowiedzi
 -------------------------------
@@ -356,7 +356,7 @@ Na przykład:
     Wykorzystując ``moduł mod_rewrite` Apache (lub równoważny dla innych serwerów
     internetowych), można używać tzw. przyjaznych adresów URL, takich jak ``/``,
     ``/contact`` czy ``/blog``.
-    
+
 Teraz każde żądanie jest obsługowane dokładnie w taki sam sposób. Zamiast
 pojedynczych lokalizatorów URL wskazujących różne pliki PHP, jest *zawsze* wykonywany
 kontroler wejścia a trasowanie różnych ścieżek URL do różnych części aplikacji
@@ -376,7 +376,7 @@ Można to zrobić szybko i brzydko::
     // index.php
     use Symfony\Component\HttpFoundation\Request;
     use Symfony\Component\HttpFoundation\Response;
-    
+
     $request = Request::createFromGlobals();
     $path = $request->getPathInfo(); // the URI path being requested
 
@@ -407,7 +407,7 @@ stać się łatwiejsze. Symfony stosuje taki sam prosty wzorzec dla każdego ż�
 Przychodzące żądania są interpretowane przez trasowanie (ang. routing) i przekazywane
 są do funkcji (metody) kontrolera, który zwraca obiekt Response.
 
-Każda "strona" witryny jest zdefiniowana w pliku konfiguracji trasowania, który 
+Każda "strona" witryny jest zdefiniowana w pliku konfiguracji trasowania, który
 odwzorowuje ścieżkę URL na funkcje PHP. Zadaniem każdej takiej funkcji
 PHP, nazywanej :term:`kontrolerem<kontroler>`, jest wykorzystanie informacji z żądania
 (wraz z wielu innymi narzędziami udostępnionymi w Symfony) dla utworzenia i
@@ -481,7 +481,7 @@ jest określony kontroler. Jak można się dowiedzieć w :doc:`rozdziale Trasowa
 
     // src/Acme/DemoBundle/Controller/MainController.php
     namespace Acme\DemoBundle\Controller;
-    
+
     use Symfony\Component\HttpFoundation\Response;
 
     class MainController
