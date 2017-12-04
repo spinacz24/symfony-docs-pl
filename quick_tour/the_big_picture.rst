@@ -35,7 +35,7 @@ który odwzorowuje *żądanie* użytkownika (np.  ``http://localhost:8000/``)
 na *zasób* związany z tym żądaniem (stron HTML ``Homepage``).
 
 Kod, który ma być wykonany, jest zdefiniowany w **akcjach** i **kontrolerach**.
-Odzwzorowanie pomiędzy żądaniem użytkownika a tym kodem jest zdefiniowane w
+Odwzorowanie pomiędzy żądaniem użytkownika a tym kodem jest zdefiniowane w
 konfiguracji **trasowania** .
 Treści wyświetlane w przeglądarce są zazwyczaj renderowane przy użyciu **szablonów**.
 
