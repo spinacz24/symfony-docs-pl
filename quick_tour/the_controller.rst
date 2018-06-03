@@ -334,7 +334,7 @@ przed przekierowaniem użytkownika na inną stronę::
         $this->addFlash('notice', 'Congratulations, your action succeeded!');
     }
 
-Następnie mozna wyświetlić ten komunikat w szabloni, tak jak tu:
+Następnie mozna wyświetlić ten komunikat w szablonie, tak jak tu:
 
 .. code-block:: html+jinja
    :linenos:
