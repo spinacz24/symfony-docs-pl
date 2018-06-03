@@ -176,7 +176,7 @@ Wykorzytywanie warstwy utrwalania
 ---------------------------------
 
 Symfony jest frameworkiem, który dba tylko o generowanie odpowiedzi HTTP dla
-każdego żądania HTTP. Dlatego Symfony nie zaoewnia sposobu na prozumienie z warstwą
+każdego żądania HTTP. Dlatego Symfony nie zapewnia sposobu na prozumienie z warstwą
 utrwalania (np. bazą danych, zewnętrznym API). Można wybrać jakąkolwiek bibliotekę
 lub strategię, jaką się chce.
 

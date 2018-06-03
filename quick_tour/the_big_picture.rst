@@ -254,7 +254,7 @@ pasek narzędziowy debugowania.
 
 Po odwiedzeniu w przegladarce pliku``app_dev.php``, wykonuje się aplikację Symfony
 w środowisku ``dev``. W celu uruchomienia aplikacji w środowisku ``prod``, trzeba
-odwiedzić zamiast plik ``app.php``.
+natomiast odwiedzić plik ``app.php``.
 
 Więcej szczegółów o środowiskach można znaleźć w artykule
 ":ref:`Środowidka i kontroler wejścia <page-creation-environments>`".
